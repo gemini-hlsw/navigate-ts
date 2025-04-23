@@ -1,5 +1,5 @@
 import { useConfiguration } from '@gql/configs/Configuration';
-import type { UpdateInstrumentMutationVariables } from '@gql/configs/gen/graphql';
+import type { Instrument } from '@gql/configs/gen/graphql';
 import { useInstrument, useUpdateInstrument } from '@gql/configs/Instrument';
 import { Title, TitleDropdown } from '@Shared/Title/Title';
 import { Button } from 'primereact/button';
@@ -7,11 +7,10 @@ import { Divider } from 'primereact/divider';
 import type { InputNumberProps } from 'primereact/inputnumber';
 import { InputNumber } from 'primereact/inputnumber';
 import { InputText } from 'primereact/inputtext';
-import { useCallback, useId } from 'react';
+import { useCallback, useEffect, useId, useMemo, useState } from 'react';
 
 import { useSetImportInstrument } from '@/components/atoms/instrument';
-import { List } from '@/components/Icons';
-import { isNotNullish } from '@/Helpers/functions';
+import { FloppyDisk, List } from '@/components/Icons';
 
 export function Instrument({ canEdit }: { canEdit: boolean }) {
   const { data: configurationData, loading: configurationLoading } = useConfiguration();
@@ -29,22 +28,62 @@ export function Instrument({ canEdit }: { canEdit: boolean }) {
 
   const instrument = data?.instrument;
 
+  const [auxInstrument, setAuxInstrument] = useState<Instrument | undefined>(undefined);
+
+  useEffect(() => {
+    setAuxInstrument(instrument ?? undefined);
+  }, [instrument]);
+
   const loading = configurationLoading || instrumentLoading || updateInstrumentLoading;
 
   const onUpdateInstrument = useCallback(
-    (variables: Omit<UpdateInstrumentMutationVariables, 'pk'>) => {
-      if (isNotNullish(instrument?.pk)) void updateInstrument({ variables: { ...variables, pk: instrument.pk } });
+    (variables: Partial<Instrument>) => {
+      if (auxInstrument)
+        setAuxInstrument({
+          ...auxInstrument,
+          ...variables,
+        });
     },
-    [updateInstrument, instrument?.pk],
+    [auxInstrument],
+  );
+
+  const onClickSave = useCallback(() => {
+    if (auxInstrument && instrument)
+      void updateInstrument({
+        variables: {
+          ...instrument,
+          ...auxInstrument,
+          pk: instrument.pk,
+        },
+      });
+  }, [auxInstrument, instrument, updateInstrument]);
+
+  // Check if any of the auxInstrument properties are different from the server instrument data. If so the save button is enabled
+  const hasUnsavedChanges = useMemo(
+    () =>
+      !!instrument &&
+      !!auxInstrument &&
+      Object.entries(auxInstrument).some(([key, value]) => instrument[key as keyof Instrument] !== value),
+    [auxInstrument, instrument],
   );
 
   if (!instrument?.name || !configuration?.obsInstrument) {
     return null;
   }
 
+  const saveButton = (
+    <Button
+      className="save-instrument"
+      disabled={!hasUnsavedChanges}
+      loading={loading}
+      onClick={onClickSave}
+      icon={<FloppyDisk />}
+    />
+  );
+
   return (
     <div className="instrument">
-      <Title title="Instrument">
+      <Title title="Instrument" rightSide={saveButton}>
         <TitleDropdown icon={<List />}>
           <Button
             disabled={!canEdit}
@@ -74,25 +113,25 @@ export function Instrument({ canEdit }: { canEdit: boolean }) {
           label="Origin X"
           value={instrument.originX}
           disabled={!canEdit || loading}
-          onValueChange={(e) => onUpdateInstrument({ originX: e.value })}
+          onChange={(e) => onUpdateInstrument({ originX: e.value! })}
         />
         <InstrumentInputNumber
           label="Origin Y"
           value={instrument.originY}
           disabled={!canEdit || loading}
-          onValueChange={(e) => onUpdateInstrument({ originY: e.value })}
+          onChange={(e) => onUpdateInstrument({ originY: e.value! })}
         />
         <InstrumentInputNumber
           label="Focus Offset"
           value={instrument.focusOffset}
           disabled={!canEdit || loading}
-          onValueChange={(e) => onUpdateInstrument({ focusOffset: e.value })}
+          onChange={(e) => onUpdateInstrument({ focusOffset: e.value! })}
         />
         <InstrumentInputNumber
           label="IAA"
           value={instrument.iaa}
           disabled={!canEdit || loading}
-          onValueChange={(e) => onUpdateInstrument({ iaa: e.target.value })}
+          onChange={(e) => onUpdateInstrument({ iaa: e.value! })}
         />
       </div>
     </div>

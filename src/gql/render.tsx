@@ -8,6 +8,7 @@ import type { ComponentRenderOptions } from 'vitest-browser-react';
 import { render } from 'vitest-browser-react';
 
 import { GET_SLEW_FLAGS } from './configs/SlewFlags';
+import type { MockedResponseOf } from './util';
 
 interface CreateOptions<T> {
   mocks?: MockedResponse[];
@@ -77,7 +78,7 @@ const mocks: MockedResponse[] = [
         },
       },
     },
-  },
+  } satisfies MockedResponseOf<typeof GET_SLEW_FLAGS>,
 ];
 
 // Some typescript magic here 🧙

@@ -1,4 +1,5 @@
 import type { DocumentNode, OperationVariables, QueryHookOptions } from '@apollo/client';
+import type { MockedResponse } from '@apollo/client/testing';
 import type { ResultOf, VariablesOf } from '@graphql-typed-document-node/core';
 
 import type { TargetType } from '@/types';
@@ -21,3 +22,5 @@ export function isP1Target(target: Pick<TargetType, 'type'>) {
 export function isP2Target(target: Pick<TargetType, 'type'>) {
   return target.type === 'PWFS2';
 }
+
+export type MockedResponseOf<T extends DocumentNode> = MockedResponse<ResultOf<T>, VariablesOf<T>>;

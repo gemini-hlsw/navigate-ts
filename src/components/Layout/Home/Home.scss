@@ -14,7 +14,8 @@
 
     .title {
       position: relative;
-      display: block;
+      display: flex;
+      justify-content: space-between;
       text-align: center;
       padding: 2px 0;
       background-color: var(--surface-c);
@@ -22,9 +23,14 @@
       font-size: 0.9rem;
 
       > .title-dropdown {
-        position: absolute;
         left: 5px;
         cursor: pointer;
+      }
+
+      > .title-title {
+        justify-self: center;
+        margin-left: auto;
+        margin-right: auto;
       }
 
       .absolute-right-btn {
@@ -62,7 +68,7 @@
       font-family: var(--font-family);
 
       .title {
-        display: block;
+        display: flex;
         text-align: center;
         padding: 2px 0;
         background-color: var(--surface-c);

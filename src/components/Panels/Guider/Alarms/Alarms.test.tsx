@@ -4,6 +4,7 @@ import type { RenderResultWithStore } from '@gql/render';
 import { renderWithContext } from '@gql/render';
 import { GUIDE_QUALITY_SUBSCRIPTION } from '@gql/server/GuideQuality';
 import { GUIDE_STATE_QUERY, GUIDE_STATE_SUBSCRIPTION } from '@gql/server/GuideState';
+import type { MockedResponseOf } from '@gql/util';
 import { page, userEvent } from '@vitest/browser/context';
 
 import { guideAlarmSoundAtom } from '@/components/atoms/alarm';
@@ -62,7 +63,7 @@ const mocks: MockedResponse[] = [
         },
       },
     },
-  },
+  } satisfies MockedResponseOf<typeof GET_GUIDE_ALARMS>,
   {
     request: {
       query: GUIDE_QUALITY_SUBSCRIPTION,
@@ -87,7 +88,7 @@ const mocks: MockedResponse[] = [
         },
       },
     },
-  },
+  } satisfies MockedResponseOf<typeof GUIDE_QUALITY_SUBSCRIPTION>,
   {
     request: {
       query: UPDATE_GUIDE_ALARM,
@@ -102,7 +103,7 @@ const mocks: MockedResponse[] = [
         },
       },
     },
-  },
+  } satisfies MockedResponseOf<typeof UPDATE_GUIDE_ALARM>,
   {
     request: {
       query: GUIDE_STATE_QUERY,
@@ -122,7 +123,7 @@ const mocks: MockedResponse[] = [
         },
       },
     },
-  },
+  } satisfies MockedResponseOf<typeof GUIDE_STATE_QUERY>,
   {
     request: {
       query: GUIDE_STATE_SUBSCRIPTION,
@@ -143,5 +144,5 @@ const mocks: MockedResponse[] = [
         },
       },
     },
-  },
+  } satisfies MockedResponseOf<typeof GUIDE_STATE_SUBSCRIPTION>,
 ];

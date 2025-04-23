@@ -1,3 +1,4 @@
+import { clsx } from 'clsx';
 import { OverlayPanel } from 'primereact/overlaypanel';
 import type { MouseEventHandler } from 'react';
 import { useRef } from 'react';
@@ -5,13 +6,14 @@ import { useRef } from 'react';
 import { ChevronLeft, ChevronRight } from '@/components/Icons';
 
 type ParamsInterface = React.PropsWithChildren<{
-  title: string;
+  title: React.ReactNode;
   prevPanel?: MouseEventHandler<HTMLButtonElement>;
   nextPanel?: MouseEventHandler<HTMLButtonElement>;
+  rightSide?: React.ReactNode;
   className?: string;
 }>;
 
-export function Title({ title, prevPanel, nextPanel, children, className = '' }: ParamsInterface) {
+export function Title({ title, prevPanel, nextPanel, children, rightSide, className = '' }: ParamsInterface) {
   let prevPanelDisplay = null;
   if (prevPanel) {
     prevPanelDisplay = (
@@ -36,10 +38,11 @@ export function Title({ title, prevPanel, nextPanel, children, className = '' }:
     );
   }
   return (
-    <div className={`title ${className}`}>
+    <div className={clsx(className, 'title')}>
       {children}
       {prevPanelDisplay}
-      <span>{title}</span>
+      <span className="title-title">{title}</span>
+      {rightSide}
       {nextPanelDisplay}
     </div>
   );
