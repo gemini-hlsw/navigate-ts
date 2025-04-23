@@ -1,6 +1,5 @@
-import type { QueryHookOptions } from '@apollo/client';
 import { useQuery } from '@apollo/client';
-import type { ResultOf, VariablesOf } from '@graphql-typed-document-node/core';
+import type { OptionsOf } from '@gql/util';
 
 import { graphql } from './gen';
 
@@ -10,8 +9,6 @@ export const GET_VERSION = graphql(`
   }
 `);
 
-export function useVersion(
-  options: QueryHookOptions<ResultOf<typeof GET_VERSION>, VariablesOf<typeof GET_VERSION>> = {},
-) {
+export function useVersion(options?: OptionsOf<typeof GET_VERSION>) {
   return useQuery(GET_VERSION, options);
 }

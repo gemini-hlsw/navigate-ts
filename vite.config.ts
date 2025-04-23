@@ -111,7 +111,7 @@ export default defineConfig(({ mode }) => ({
   plugins: [react({}), mkcert({ hosts: ['localhost', 'local.lucuma.xyz', 'navigate.lucuma.xyz'] }), buildVersionFile],
   test: {
     globals: true,
-    setupFiles: ['vitest-browser-react'],
+    setupFiles: ['src/gql/dev-messages.ts', 'vitest-browser-react'],
     browser: {
       enabled: true,
       provider: 'playwright',

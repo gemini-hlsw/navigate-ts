@@ -3,6 +3,7 @@ import { GET_CONFIGURATION } from '@gql/configs/Configuration';
 import { GET_INSTRUMENT, UPDATE_INSTRUMENT } from '@gql/configs/Instrument';
 import type { RenderResultWithStore } from '@gql/render';
 import { renderWithContext } from '@gql/render';
+import type { MockedResponseOf } from '@gql/util';
 import { userEvent } from '@vitest/browser/context';
 
 import { importInstrumentAtom } from '@/components/atoms/instrument';
@@ -63,10 +64,11 @@ const mocks: MockedResponse[] = [
           obsId: 'o-2790',
           obsInstrument: 'GMOS_NORTH',
           obsSubtitle: null,
+          obsReference: 'G-2025A-ENG-GMOSN-01-0004',
         },
       },
     },
-  },
+  } satisfies MockedResponseOf<typeof GET_CONFIGURATION>,
   {
     request: {
       query: GET_INSTRUMENT,
@@ -89,7 +91,7 @@ const mocks: MockedResponse[] = [
         },
       },
     },
-  },
+  } satisfies MockedResponseOf<typeof GET_INSTRUMENT>,
   {
     request: {
       query: UPDATE_INSTRUMENT,
@@ -114,5 +116,5 @@ const mocks: MockedResponse[] = [
         },
       },
     },
-  },
+  } satisfies MockedResponseOf<typeof UPDATE_INSTRUMENT>,
 ];

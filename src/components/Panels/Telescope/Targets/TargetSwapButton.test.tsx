@@ -1,4 +1,3 @@
-import type { MockedResponse } from '@apollo/client/testing';
 import { GET_CONFIGURATION } from '@gql/configs/Configuration';
 import type { Target } from '@gql/configs/gen/graphql';
 import { GET_INSTRUMENT } from '@gql/configs/Instrument';
@@ -6,7 +5,7 @@ import { GET_ROTATOR } from '@gql/configs/Rotator';
 import { renderWithContext } from '@gql/render';
 import { NAVIGATE_STATE, NAVIGATE_STATE_SUBSCRIPTION } from '@gql/server/NavigateState';
 import { RESTORE_TARGET_MUTATION, SWAP_TARGET_MUTATION } from '@gql/server/TargetSwap';
-import type { ResultOf, VariablesOf } from '@graphql-typed-document-node/core';
+import type { MockedResponseOf } from '@gql/util';
 import type { RenderResult } from 'vitest-browser-react';
 
 import { TargetSwapButton } from './TargetSwapButton';
@@ -110,7 +109,7 @@ const oiSelected = {
   createdAt: '2024-09-25T11:57:29.410Z',
 };
 
-const getRotatorMock: MockedResponse<ResultOf<typeof GET_ROTATOR>> = {
+const getRotatorMock: MockedResponseOf<typeof GET_ROTATOR> = {
   request: {
     query: GET_ROTATOR,
     variables: {},
@@ -126,7 +125,7 @@ const getRotatorMock: MockedResponse<ResultOf<typeof GET_ROTATOR>> = {
   },
 };
 
-const getInstrumentMock: MockedResponse<ResultOf<typeof GET_INSTRUMENT>> = {
+const getInstrumentMock: MockedResponseOf<typeof GET_INSTRUMENT> = {
   request: {
     query: GET_INSTRUMENT,
   },
@@ -163,7 +162,7 @@ const navigateStatesMock = (onSwappedTarget: boolean) => [
         },
       },
     },
-  } satisfies MockedResponse<ResultOf<typeof NAVIGATE_STATE>>,
+  } satisfies MockedResponseOf<typeof NAVIGATE_STATE>,
   {
     delay: 300,
     request: {
@@ -178,13 +177,10 @@ const navigateStatesMock = (onSwappedTarget: boolean) => [
         },
       },
     },
-  } satisfies MockedResponse<ResultOf<typeof NAVIGATE_STATE_SUBSCRIPTION>>,
+  } satisfies MockedResponseOf<typeof NAVIGATE_STATE_SUBSCRIPTION>,
 ];
 
-const swapTargetMock: MockedResponse<
-  ResultOf<typeof SWAP_TARGET_MUTATION>,
-  VariablesOf<typeof SWAP_TARGET_MUTATION>
-> = {
+const swapTargetMock: MockedResponseOf<typeof SWAP_TARGET_MUTATION> = {
   request: {
     query: SWAP_TARGET_MUTATION,
     variables: {
@@ -211,10 +207,7 @@ const swapTargetMock: MockedResponse<
   result: vi.fn().mockImplementation(() => ({ data: { swapTarget: { result: 'SUCCESS', msg: '' } } })),
 };
 
-const restoreTargetMock: MockedResponse<
-  ResultOf<typeof RESTORE_TARGET_MUTATION>,
-  VariablesOf<typeof RESTORE_TARGET_MUTATION>
-> = {
+const restoreTargetMock: MockedResponseOf<typeof RESTORE_TARGET_MUTATION> = {
   request: {
     query: RESTORE_TARGET_MUTATION,
     variables: {
@@ -259,7 +252,7 @@ const restoreTargetMock: MockedResponse<
   result: vi.fn().mockImplementation(() => ({ data: { restoreTarget: { result: 'SUCCESS', msg: '' } } })),
 };
 
-const getConfigurationMock: MockedResponse<ResultOf<typeof GET_CONFIGURATION>> = {
+const getConfigurationMock: MockedResponseOf<typeof GET_CONFIGURATION> = {
   request: {
     query: GET_CONFIGURATION,
   },
@@ -280,6 +273,7 @@ const getConfigurationMock: MockedResponse<ResultOf<typeof GET_CONFIGURATION>> =
         obsId: 'o-1e1',
         obsInstrument: 'GMOS_NORTH',
         obsSubtitle: null,
+        obsReference: 'G-2025A-ENG-GMOSN-01-0004',
       },
     },
   },

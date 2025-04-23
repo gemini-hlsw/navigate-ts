@@ -9,6 +9,7 @@ import {
   faChevronLeft,
   faChevronRight,
   faChevronUp,
+  faFloppyDisk,
   faGear,
   faKey,
   faList,
@@ -58,9 +59,12 @@ export const ChevronRight = iconFactory(faChevronRight);
 export const ChevronUp = iconFactory(faChevronUp);
 export const Crosshairs = iconFactory(faLocationCrosshairs);
 export const CrosshairsSlash = iconFactory(faLocationCrosshairsSlash);
+export const FloppyDisk = iconFactory(faFloppyDisk);
+export const Gear = iconFactory(faGear);
 export const Info = iconFactory(faInfoCircle);
 export const Key = iconFactory(faKey);
 export const KeySolid = iconFactory(faKeySolid);
+export const List = iconFactory(faList);
 export const Map = iconFactory(faMap);
 export const Moon = iconFactory(faMoon);
 export const Parking = iconFactory(faSquareParking);
@@ -76,5 +80,3 @@ export const User = iconFactory(faUser);
 export const Volume = iconFactory(faVolume);
 export const VolumeSlash = iconFactory(faVolumeSlash);
 export const XMark = iconFactory(faXmark);
-export const Gear = iconFactory(faGear);
-export const List = iconFactory(faList);
