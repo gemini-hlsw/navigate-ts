@@ -13,14 +13,14 @@ import { Instrument } from './Instrument';
 describe(Instrument.name, () => {
   let sut: RenderResultWithStore;
   beforeEach(() => {
-    sut = renderWithContext(<Instrument canEdit={true} />, { mocks });
+    sut = renderWithContext(<Instrument canEdit={true} />, { mocks: [...mocks, updateInstrumentMock] });
   });
 
   it('should render', async () => {
     await expect.element(sut.getByText('Instrument')).toBeInTheDocument();
   });
 
-  it('should call updateInstrument when originX is changed', async () => {
+  it('should update instrument values when typing', async () => {
     const originXInput = sut.getByLabelText('Origin X');
 
     await userEvent.clear(originXInput);
@@ -28,6 +28,8 @@ describe(Instrument.name, () => {
 
     await expect.element(originXInput).not.toBeDisabled();
     await expect.element(originXInput).toHaveValue('0.20');
+    await expect.element(sut.getByRole('button')).not.toBeDisabled();
+    expect(updateInstrumentMock.result).not.toHaveBeenCalled();
   });
 
   it('opens the instrument modal when the import button is clicked', async () => {
@@ -39,6 +41,18 @@ describe(Instrument.name, () => {
     await userEvent.click(importInstrumentButton);
 
     expect(sut.store.get(importInstrumentAtom)).true;
+  });
+
+  it('should call updateInstrument when save button is clicked', async () => {
+    const originXInput = sut.getByLabelText('Origin X');
+
+    await userEvent.clear(originXInput);
+    await userEvent.type(originXInput, '0.2{Enter}');
+
+    const saveButton = sut.getByRole('button');
+    await userEvent.click(saveButton, { timeout: 500 });
+
+    expect(updateInstrumentMock.result).toHaveBeenCalledOnce();
   });
 });
 
@@ -92,29 +106,27 @@ const mocks: MockedResponse[] = [
       },
     },
   } satisfies MockedResponseOf<typeof GET_INSTRUMENT>,
-  {
-    request: {
-      query: UPDATE_INSTRUMENT,
-      variables: {
-        pk: 1,
-        originX: 0.2,
-      },
-    },
-    result: {
-      data: {
-        updateInstrument: {
-          pk: 1,
-          name: 'GMOS_NORTH',
-          iaa: 359.877,
-          issPort: 3,
-          focusOffset: 0,
-          wfs: 'NONE',
-          originX: 0.2,
-          originY: 0,
-          ao: false,
-          extraParams: {},
-        },
-      },
-    },
-  } satisfies MockedResponseOf<typeof UPDATE_INSTRUMENT>,
 ];
+
+const updateInstrumentMock = {
+  request: {
+    query: UPDATE_INSTRUMENT,
+  },
+  variableMatcher: () => true,
+  result: vi.fn().mockImplementation(() => ({
+    data: {
+      updateInstrument: {
+        pk: 1,
+        name: 'GMOS_NORTH',
+        iaa: 359.877,
+        issPort: 3,
+        focusOffset: 0,
+        wfs: 'NONE',
+        originX: 0.2,
+        originY: 0,
+        ao: false,
+        extraParams: {},
+      },
+    },
+  })),
+} satisfies MockedResponseOf<typeof UPDATE_INSTRUMENT>;
