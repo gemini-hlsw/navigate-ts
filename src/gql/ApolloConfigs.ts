@@ -69,9 +69,23 @@ export function createClient(env: Environment) {
   const subscriptionClient = new SubscriptionClient(withAbsoluteUri(env.navigateServerWsURI, true), {
     reconnect: true,
   });
-  subscriptionClient.onConnected(() => store.set(wsIsConnectedAtom, true));
-  subscriptionClient.onDisconnected(() => store.set(wsIsConnectedAtom, false));
-  subscriptionClient.onReconnected(() => store.set(wsIsConnectedAtom, true));
+
+  // How long to wait until we assume the websocket is disconnected
+  const disconnectTimeoutMs = 250;
+  let wsIsConnectedTimer: NodeJS.Timeout | undefined;
+
+  const setWebSocketConnected = () => {
+    clearTimeout(wsIsConnectedTimer);
+    store.set(wsIsConnectedAtom, true);
+  };
+  const setWebsocketDisconnected = () => {
+    clearTimeout(wsIsConnectedTimer);
+    wsIsConnectedTimer = setTimeout(() => store.set(wsIsConnectedAtom, false), disconnectTimeoutMs);
+  };
+  subscriptionClient.onConnected(setWebSocketConnected);
+  subscriptionClient.onDisconnected(setWebsocketDisconnected);
+  subscriptionClient.onReconnected(setWebSocketConnected);
+
   const wsLink = new WebSocketLink(subscriptionClient);
 
   return new ApolloClient({
