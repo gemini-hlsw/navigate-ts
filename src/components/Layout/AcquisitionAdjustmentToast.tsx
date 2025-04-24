@@ -1,5 +1,7 @@
 import './AcquisitionAdjustmentToast.css';
 
+import offsetsReceivedMp3 from '@assets/sounds/offsets-received.mp3';
+import offsetsReceivedWebm from '@assets/sounds/offsets-received.webm';
 import { useAcquisitionAdjustment, useAcquisitionAdjustmentState } from '@gql/server/AcquisitionAdjustment';
 import type { AcquisitionAdjustmentInput } from '@gql/server/gen/graphql';
 import { Button } from 'primereact/button';
@@ -7,6 +9,7 @@ import { ButtonGroup } from 'primereact/buttongroup';
 import type { ToastMessage } from 'primereact/toast';
 import { useEffect } from 'react';
 
+import { useAudio } from '@/Helpers/hooks';
 import { useToast } from '@/Helpers/toast';
 
 import { Check, XMark } from '../Icons';
@@ -20,6 +23,8 @@ export function AcquisitionAdjustmentToast() {
 
   const { data } = useAcquisitionAdjustmentState();
 
+  const alarmAudio = useAudio(offsetsReceivedMp3, offsetsReceivedWebm);
+
   useEffect(() => {
     if (data?.acquisitionAdjustmentState.command === 'ASK_USER') {
       const acquisitionAdjustmentToast: ToastMessage = {
@@ -30,9 +35,14 @@ export function AcquisitionAdjustmentToast() {
         sticky: true,
       };
       toast?.show(acquisitionAdjustmentToast);
-      return () => toast?.remove(acquisitionAdjustmentToast);
+      void alarmAudio.play();
+
+      return () => {
+        alarmAudio.pause();
+        toast?.remove(acquisitionAdjustmentToast);
+      };
     }
-  }, [data, toast]);
+  }, [data, toast, alarmAudio]);
 
   return <></>;
 }

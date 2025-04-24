@@ -1,21 +1,15 @@
 import alarmSoundMp3 from '@assets/sounds/alarm.mp3';
 import alarmSoundWebm from '@assets/sounds/alarm.webm';
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
+
+import { useAudio } from '@/Helpers/hooks';
 
 import { useAlarmValue } from '../atoms/alarm';
 
 export function AlarmAudio() {
   const alarm = useAlarmValue();
 
-  const alarmAudio = useMemo(() => {
-    const audio = selectPlayableAlarm();
-    audio.loop = true;
-
-    // Be nicer to developers' ears
-    if (import.meta.env.DEV) audio.volume = 0.3;
-
-    return audio;
-  }, []);
+  const alarmAudio = useAudio(alarmSoundMp3, alarmSoundWebm, { loop: true });
 
   useEffect(() => {
     const checkAlarm = () => {
@@ -45,17 +39,4 @@ export function AlarmAudio() {
   }, [alarm, alarmAudio]);
 
   return <></>;
-}
-
-/**
- * use mp3 if possible, otherwise use webm
- */
-function selectPlayableAlarm(): HTMLAudioElement {
-  const mp3 = new Audio(alarmSoundMp3);
-  const webm = new Audio(alarmSoundWebm);
-
-  if (mp3.canPlayType('audio/mpeg')) return mp3;
-  else if (webm.canPlayType('audio/webm')) return webm;
-  // If neither can play, at least we'll try mp3
-  else return mp3;
 }
