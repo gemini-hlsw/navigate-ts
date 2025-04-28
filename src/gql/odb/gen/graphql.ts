@@ -2139,12 +2139,21 @@ export type FilterTypeMeta = {
   tag: FilterType;
 };
 
+/** Flamingos2 Decker */
+export type Flamingos2Decker =
+  /** Flamingos2Decker Imaging */
+  | 'IMAGING'
+  /** Flamingos2Decker LongSlit */
+  | 'LONG_SLIT'
+  /** Flamingos2Decker MOS */
+  | 'MOS';
+
 /** Flamingos2 Disperser */
 export type Flamingos2Disperser =
   /** Flamingos2Disperser R=1200 (H + K) grism */
-  | 'R1200HK'
+  | 'R1200_HK'
   /** Flamingos2Disperser R=1200 (J + H) grism */
-  | 'R1200JH'
+  | 'R1200_JH'
   /** Flamingos2Disperser R=3000 (J or H or K) grism */
   | 'R3000';
 
@@ -2187,6 +2196,157 @@ export type Flamingos2Fpu =
   | 'PINHOLE'
   /** Flamingos2Fpu Sub-Pixel Pinhole Gr */
   | 'SUB_PIX_PINHOLE';
+
+/** Flamingos2 South Long Slit mode */
+export type Flamingos2LongSlit = {
+  __typename?: 'Flamingos2LongSlit';
+  /**
+   * The decker field is either explicitly specified in explicitDecker or else taken
+   * from defaultDecker
+   */
+  decker: Flamingos2Decker;
+  /** Default decker, calculated based on the exposure time */
+  defaultDecker: Flamingos2Decker;
+  /** Default read mode, calculated based on the exposure time */
+  defaultReadMode: Flamingos2ReadMode;
+  /** Default readout mode, science */
+  defaultReadoutMode: Flamingos2ReadoutMode;
+  /**
+   * Default reads, calculated from the selected read mode which in
+   * turn is based on the exposure time
+   */
+  defaultReads: Flamingos2Reads;
+  /** The disperser field must be specified.  It cannot be unset with a null value. */
+  disperser: Flamingos2Disperser;
+  /**
+   * Optional explicitly specified F2 Decker. If set it overrides the
+   * default.
+   */
+  explicitDecker?: Maybe<Flamingos2Decker>;
+  /**
+   * Optional explicitly specified F2 ReadMode. If set it overrides the
+   * default.
+   */
+  explicitReadMode?: Maybe<Flamingos2ReadMode>;
+  /**
+   * Optional explicitly specified F2 Readout mode. If set it overrides the
+   * default.
+   */
+  explicitReadoutMode?: Maybe<Flamingos2ReadoutMode>;
+  /**
+   * Optional explicitly specified F2 Reads. If set it overrides the
+   * default.
+   */
+  explicitReads?: Maybe<Flamingos2Reads>;
+  /** The filter field must be specified.  It cannot be unset with a null value. */
+  filter: Flamingos2Filter;
+  /** The fpu field must be either specified or skipped altogether.  It cannot be unset with a null value. */
+  fpu: Flamingos2Fpu;
+  /**
+   * The disperser as it was initially selected.  See the `disperser` field for the
+   * disperser that will be used in the observation.
+   */
+  initialDisperser: Flamingos2Disperser;
+  /**
+   * The filter as it was initially selected (if any).  See the `filter` field
+   * for the filter that will be used in the observation.
+   */
+  initialFilter: Flamingos2Filter;
+  /**
+   * The FPU as it was initially selected.  See the `fpu` field for the FPU that
+   * will be used in the observation.
+   */
+  initialFpu: Flamingos2Fpu;
+  /**
+   * The read mode is either explicitly specified in explicitReadMode or else taken
+   * from defaultReadMode
+   */
+  readMode: Flamingos2ReadMode;
+  /**
+   * The readoutMode field is either explicitly specified in explicitReadoutMode or else taken
+   * from defaultReadoutMode
+   */
+  readoutMode: Flamingos2ReadoutMode;
+  /**
+   * F2 reads, either explicitly specified in explicitReads or else taken
+   * from the defaultXReads
+   */
+  reads: Flamingos2Reads;
+};
+
+/** Edit or create Flamingos2 Long Slit advanced configuration */
+export type Flamingos2LongSlitInput = {
+  /** The disperser field must be specified.  It cannot be unset with a null value. */
+  disperser?: InputMaybe<Flamingos2Disperser>;
+  /** The decker field may be unset by assigning a null value, or ignored by skipping it altogether */
+  explicitDecker?: InputMaybe<Flamingos2Decker>;
+  /** The read mode field may be unset by assigning a null value, or ignored by skipping it altogether */
+  explicitReadMode?: InputMaybe<Flamingos2ReadMode>;
+  /** The readoutMode field may be unset by assigning a null value, or ignored by skipping it altogether */
+  explicitReadoutMode?: InputMaybe<Flamingos2ReadoutMode>;
+  /** The reads field may be unset by assigning a null value, or ignored by skipping it altogether */
+  explicitReads?: InputMaybe<Flamingos2Reads>;
+  /** The filter field may be unset by assigning a null value, or ignored by skipping it altogether */
+  filter?: InputMaybe<Flamingos2Filter>;
+  /** The fpu field must be specified.  It cannot be unset with a null value. */
+  fpu?: InputMaybe<Flamingos2Fpu>;
+};
+
+/** Flamingos2 Read Mode */
+export type Flamingos2ReadMode =
+  /** Flamingos2ReadMode Bright */
+  | 'BRIGHT'
+  /** Flamingos2ReadMode Faint */
+  | 'FAINT'
+  /** Flamingos2ReadMode Medium */
+  | 'MEDIUM';
+
+/** Flamingos2 Readout Mode */
+export type Flamingos2ReadoutMode =
+  /** Flamingos2ReadoutMode Engineering */
+  | 'ENGINEERING'
+  /** Flamingos2ReadoutMode Science */
+  | 'SCIENCE';
+
+/** Flamingos2 Reads */
+export type Flamingos2Reads =
+  /** Flamingos2Reads Reads 1 */
+  | 'READS_1'
+  /** Flamingos2Reads Reads 3 */
+  | 'READS_3'
+  /** Flamingos2Reads Reads 4 */
+  | 'READS_4'
+  /** Flamingos2Reads Reads 5 */
+  | 'READS_5'
+  /** Flamingos2Reads Reads 6 */
+  | 'READS_6'
+  /** Flamingos2Reads Reads 7 */
+  | 'READS_7'
+  /** Flamingos2Reads Reads 8 */
+  | 'READS_8'
+  /** Flamingos2Reads Reads 9 */
+  | 'READS_9'
+  /** Flamingos2Reads Reads 10 */
+  | 'READS_10'
+  /** Flamingos2Reads Reads 11 */
+  | 'READS_11'
+  /** Flamingos2Reads Reads 12 */
+  | 'READS_12'
+  /** Flamingos2Reads Reads 13 */
+  | 'READS_13'
+  /** Flamingos2Reads Reads 14 */
+  | 'READS_14'
+  /** Flamingos2Reads Reads 15 */
+  | 'READS_15'
+  /** Flamingos2Reads Reads 16 */
+  | 'READS_16';
+
+/** Flamingos2 Window Cover */
+export type Flamingos2WindowCover =
+  /** Flamingos2WindowCover CLOSE */
+  | 'CLOSE'
+  /** Flamingos2WindowCover Open */
+  | 'OPEN';
 
 /** Flux density entry */
 export type FluxDensity = {
@@ -4549,6 +4709,8 @@ export type ObserveClass =
 /** Base science mode */
 export type ObservingMode = {
   __typename?: 'ObservingMode';
+  /** Flamingos 2 Long Slit mode */
+  flamingos2LongSlit?: Maybe<Flamingos2LongSlit>;
   /** GMOS North Long Slit mode */
   gmosNorthLongSlit?: Maybe<GmosNorthLongSlit>;
   /** GMOS South Long Slit mode */
@@ -4587,6 +4749,8 @@ export type ObservingModeGroupSelectResult = {
 
 /** Edit or create an observation's observing mode */
 export type ObservingModeInput = {
+  /** The flamingos2LongSlit field must be either specified or skipped altogether.  It cannot be unset with a null value. */
+  flamingos2LongSlit?: InputMaybe<Flamingos2LongSlitInput>;
   /** The gmosNorthLongSlit field must be either specified or skipped altogether.  It cannot be unset with a null value. */
   gmosNorthLongSlit?: InputMaybe<GmosNorthLongSlitInput>;
   /** The gmosSouthLongSlit field must be either specified or skipped altogether.  It cannot be unset with a null value. */
@@ -4595,6 +4759,8 @@ export type ObservingModeInput = {
 
 /** ObservingMode */
 export type ObservingModeType =
+  /** ObservingModeType Flamingos2LongSlit */
+  | 'FLAMINGOS_2LONG_SLIT'
   /** ObservingModeType GmosNorthLongSlit */
   | 'GMOS_NORTH_LONG_SLIT'
   /** ObservingModeType GmosSouthLongSlit */
@@ -7268,7 +7434,7 @@ export type TimeAndCountExposureTimeModeInput = {
   at: WavelengthInput;
   /** Exposure count. */
   count: Scalars['NonNegInt']['input'];
-  /** Exposure time. */
+  /** Exposure time, which must be greater than zero. */
   time: TimeSpanInput;
 };
 
@@ -7317,11 +7483,16 @@ export type TimeChargeCorrectionOp =
  */
 export type TimeChargeDaylightDiscount = TimeChargeDiscount & {
   __typename?: 'TimeChargeDaylightDiscount';
+  /** Time amount to discount from the program. */
+  amount: TimeSpan;
   /** Additional detail. */
   comment: Scalars['String']['output'];
   /** The interval during which this discount applies. */
   interval: TimestampInterval;
-  /** Time amount to discount from the program. */
+  /**
+   * Time amount to discount from the program.
+   * @deprecated renamed to 'amount'
+   */
   program: TimeSpan;
   /** The site where the observation was executed. */
   site: Site;
@@ -7332,11 +7503,16 @@ export type TimeChargeDaylightDiscount = TimeChargeDiscount & {
  * the associated time is subtracted and then added to uncharged.
  */
 export type TimeChargeDiscount = {
+  /** Time amount to discount from the program. */
+  amount: TimeSpan;
   /** Additional detail. */
   comment: Scalars['String']['output'];
   /** The interval during which this discount applies. */
   interval: TimestampInterval;
-  /** Time amount to discount from the program. */
+  /**
+   * Time amount to discount from the program.
+   * @deprecated renamed to 'amount'
+   */
   program: TimeSpan;
 };
 
@@ -7366,23 +7542,55 @@ export type TimeChargeInvoice = {
  */
 export type TimeChargeNoDataDiscount = TimeChargeDiscount & {
   __typename?: 'TimeChargeNoDataDiscount';
+  /** Time amount to discount from the program. */
+  amount: TimeSpan;
   /** Additional detail. */
   comment: Scalars['String']['output'];
   /** The interval during which this discount applies. */
   interval: TimestampInterval;
+  /**
+   * Time amount to discount from the program.
+   * @deprecated renamed to 'amount'
+   */
+  program: TimeSpan;
+};
+
+/**
+ * A time charge discount that is applied when part of the observation is executed
+ * after an overlapping chargeable observation is started.  For example, when
+ * writing out datasets while slewing to a new target.
+ */
+export type TimeChargeOverlapDiscount = TimeChargeDiscount & {
+  __typename?: 'TimeChargeOverlapDiscount';
   /** Time amount to discount from the program. */
+  amount: TimeSpan;
+  /** Additional detail. */
+  comment: Scalars['String']['output'];
+  /** The interval during which this discount applies. */
+  interval: TimestampInterval;
+  /** The overlapping observation. */
+  observation: Observation;
+  /**
+   * Time amount to discount from the program.
+   * @deprecated renamed to 'amount'
+   */
   program: TimeSpan;
 };
 
 export type TimeChargeQaDiscount = TimeChargeDiscount & {
   __typename?: 'TimeChargeQaDiscount';
+  /** Time amount to discount from the program. */
+  amount: TimeSpan;
   /** Additional detail. */
   comment: Scalars['String']['output'];
   /** Datasets associated with the discount. */
   datasets: Array<Dataset>;
   /** The interval during which this discount applies. */
   interval: TimestampInterval;
-  /** Time amount to discount from the program. */
+  /**
+   * Time amount to discount from the program.
+   * @deprecated renamed to 'amount'
+   */
   program: TimeSpan;
 };
 
