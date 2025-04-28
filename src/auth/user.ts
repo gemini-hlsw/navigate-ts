@@ -15,16 +15,16 @@ interface ServiceUser extends BaseUser {
 interface StandardRole {
   type: 'pi' | 'ngo' | 'staff' | 'admin';
   id: string;
-  partner: string | undefined;
+  partner?: string;
 }
 
-interface OrcidProfile {
+export interface OrcidProfile {
   orcidId: string;
   profile: {
-    givenName: string | undefined;
-    familyName: string | undefined;
-    creditName: string | undefined;
-    primaryEmail: string | undefined;
+    givenName?: string;
+    familyName?: string;
+    creditName?: string;
+    primaryEmail?: string;
   };
 }
 
