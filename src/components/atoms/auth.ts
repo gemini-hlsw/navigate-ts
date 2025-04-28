@@ -19,7 +19,12 @@ export const useOdbTokenValue = () => useAtomValue(odbTokenAtom);
 
 // Below are all atoms derived from the odbTokenAtom
 
-const decodedTokenPayloadAtom = atom((get) => {
+export interface OdbTokenPayload {
+  'lucuma-user': User;
+  exp: number;
+}
+
+export const decodedTokenPayloadAtom = atom((get) => {
   const token = get(odbTokenAtom);
   if (!token) return null;
 
@@ -27,22 +32,20 @@ const decodedTokenPayloadAtom = atom((get) => {
   if (!payload) return null;
 
   const decodedPayload = atob(payload);
-  return JSON.parse(decodedPayload) as {
-    'lucuma-user': User;
-    exp: number;
-  };
+
+  return JSON.parse(decodedPayload) as OdbTokenPayload;
 });
 
-const userAtom = atom((get) => get(decodedTokenPayloadAtom)?.['lucuma-user']);
+export const userAtom = atom((get) => get(decodedTokenPayloadAtom)?.['lucuma-user'] ?? null);
 export const useUser = () => useAtomValue(userAtom);
 
-const tokenExpAtom = atom((get) => {
+export const tokenExpAtom = atom((get) => {
   const exp = get(decodedTokenPayloadAtom)?.exp;
   return exp ? new Date(exp * 1000) : null;
 });
 export const useTokenExp = () => useAtomValue(tokenExpAtom);
 
-const isLoggedInAtom = atom((get) => {
+export const isLoggedInAtom = atom((get) => {
   const user = get(userAtom);
   const exp = get(tokenExpAtom);
   // There is a user and the token is not expired
@@ -50,5 +53,5 @@ const isLoggedInAtom = atom((get) => {
 });
 export const useIsLoggedIn = () => useAtomValue(isLoggedInAtom);
 
-const canEditAtom = atom((get) => get(isLoggedInAtom) && get(userAtom)?.type !== 'guest');
+export const canEditAtom = atom((get) => get(isLoggedInAtom) && get(userAtom)?.type !== 'guest');
 export const useCanEdit = () => useAtomValue(canEditAtom);
