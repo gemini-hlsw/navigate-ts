@@ -90,6 +90,13 @@ describe('auth atoms', () => {
       expect(store.get(canEditAtom)).toBe(true);
     });
 
+    it('is true if the user is logged in as admin', () => {
+      const { token } = createStandardUserToken(Date.now() / 1000 + 60, { role: { type: 'admin', id: '123' } });
+
+      store.set(odbTokenAtom, token);
+      expect(store.get(canEditAtom)).toBe(true);
+    });
+
     it('is false if the user is not staff', () => {
       const { token } = createStandardUserToken(Date.now() / 1000 + 60, { role: { type: 'pi', id: '123' } });
       store.set(odbTokenAtom, token);

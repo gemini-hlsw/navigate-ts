@@ -57,7 +57,10 @@ export const canEditAtom = atom((get) => {
   const isLoggedIn = get(isLoggedInAtom);
   const user = get(userAtom);
 
-  // User is logged in and is either a service user or a staff user
-  return isLoggedIn && (user?.type === 'service' || (user?.type === 'standard' && user.role.type === 'staff'));
+  // User is logged in and is either a service user or a staff/admin role
+  return (
+    isLoggedIn &&
+    (user?.type === 'service' || (user?.type === 'standard' && ['staff', 'admin'].includes(user.role.type)))
+  );
 });
 export const useCanEdit = () => useAtomValue(canEditAtom);
