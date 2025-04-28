@@ -8,8 +8,8 @@ import { getMainDefinition } from '@apollo/client/utilities';
 import { Kind, OperationTypeNode } from 'graphql/language';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
 
+import { odbTokenAtom } from '@/components/atoms/auth';
 import { wsIsConnectedAtom } from '@/components/atoms/connection';
-import { odbTokenAtom } from '@/components/atoms/odb';
 import { store } from '@/components/atoms/store';
 import type { Environment } from '@/Helpers/environment';
 import { toastAtom } from '@/Helpers/toast';
@@ -56,12 +56,15 @@ export function createClient(env: Environment) {
     if (!token) {
       store.get(toastAtom)?.show({
         severity: 'warn',
-        summary: 'ODB Token',
-        detail: 'Provide an ODB token before querying ODB',
+        summary: 'Login required',
+        detail: 'Login before querying ODB',
       });
     }
 
-    return { headers: { ...(headers as Record<string, string>), Authorization: token ? `Bearer ${token}` : '' } };
+    const prevHeaders = (headers ?? {}) as Record<string, string>;
+    return {
+      headers: token ? { ...prevHeaders, Authorization: `Bearer ${token}` } : prevHeaders,
+    };
   });
 
   const odbLink = new HttpLink({ uri: withAbsoluteUri(env.odbURI) });

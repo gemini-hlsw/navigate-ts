@@ -65,6 +65,6 @@ export default config(
     },
   },
   {
-    ignores: ['node_modules', 'dist', 'public', 'reports', 'src/gql/*/gen/*.ts'],
+    ignores: ['node_modules', 'dist', 'public', 'reports', 'src/gql/*/gen/*.ts', 'target'],
   },
 );

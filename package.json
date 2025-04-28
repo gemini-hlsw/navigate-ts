@@ -43,6 +43,7 @@
     "@vitest/ui": "3.1.1",
     "@xyflow/react": "12.6.0",
     "clsx": "2.1.1",
+    "date-fns": "4.1.0",
     "eslint": "9.25.1",
     "eslint-import-resolver-typescript": "4.3.4",
     "eslint-plugin-import-x": "4.11.0",

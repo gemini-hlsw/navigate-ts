@@ -6,11 +6,11 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 
 import { App } from './App';
-import { getEnvironment } from './Helpers/environment';
+import { environment } from './Helpers/environment';
 
 const root = createRoot(document.getElementById('root')!);
 
-const client = createClient(getEnvironment());
+const client = createClient(environment);
 
 root.render(
   <StrictMode>
