@@ -5,6 +5,8 @@ import { useSetOdbToken } from '@/components/atoms/auth';
 import { environment } from '@/Helpers/environment';
 import { useToast } from '@/Helpers/toast';
 
+import type { StandardRole } from './user';
+
 /**
  * Hook to get the SSO login page URL
  */
@@ -61,6 +63,32 @@ export function useRefreshToken() {
     }
   }, [setToken]);
   return refreshToken;
+}
+
+export function useSetRole() {
+  const setToken = useSetOdbToken();
+  const toast = useToast();
+
+  const setRole = useCallback(
+    async (role: StandardRole) => {
+      const setRoleURL = new URL('/auth/v1/set-role', environment.ssoURI);
+      setRoleURL.searchParams.set('role', role.id);
+      const res = await fetch(setRoleURL, { method: 'GET', credentials: 'include' });
+      if (res.ok) {
+        const data = await res.text();
+        if (data) setToken(data);
+      } else {
+        toast?.show({
+          severity: 'error',
+          summary: 'Error',
+          detail: `Error while switching to role ${role.type} ${await res.text()}`,
+        });
+      }
+    },
+    [setToken, toast],
+  );
+
+  return setRole;
 }
 
 interface LocationInterface {
