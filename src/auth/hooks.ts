@@ -81,7 +81,7 @@ export function useSetRole() {
         toast?.show({
           severity: 'error',
           summary: 'Error',
-          detail: `Error while switching to role ${role.type} ${await res.text()}`,
+          detail: `Error while switching to role ${role.type}.\n${await res.text()}`,
         });
       }
     },
