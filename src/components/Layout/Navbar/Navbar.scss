@@ -49,6 +49,11 @@
     }
   }
 
+  .p-splitbutton .menu-button-not-logged-in {
+    animation: blink 1s infinite;
+    color: var(--purple-200);
+  }
+
   .right {
     text-align: right;
     width: 33%;

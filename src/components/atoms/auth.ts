@@ -1,31 +1,54 @@
-import { Authentication } from '@Contexts/Auth/Authentication';
-import type { Getter, Setter } from 'jotai';
-import { atom, useAtomValue } from 'jotai';
-import { useAtomCallback } from 'jotai/utils';
+import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai';
+import { atomWithStorage, createJSONStorage } from 'jotai/utils';
 
-export const canEditAtom = atom(Authentication.canEdit());
-export const useCanEdit = () => useAtomValue(canEditAtom);
+import type { User } from '@/auth/user';
 
-const userAtom = atom(Authentication.getUser());
+const lucumaRefreshTokenKey = 'lucuma-refresh-token';
+const initialStoredLucumaRefreshToken = sessionStorage.getItem(lucumaRefreshTokenKey);
+
+// Atom backed by sessionStorage, default value is retrieved from sessionStorage
+export const odbTokenAtom = atomWithStorage<string | null>(
+  lucumaRefreshTokenKey,
+  initialStoredLucumaRefreshToken ? (JSON.parse(initialStoredLucumaRefreshToken) as string) : null,
+  createJSONStorage(() => window.sessionStorage),
+);
+
+export const useOdbToken = () => useAtom(odbTokenAtom);
+export const useSetOdbToken = () => useSetAtom(odbTokenAtom);
+export const useOdbTokenValue = () => useAtomValue(odbTokenAtom);
+
+// Below are all atoms derived from the odbTokenAtom
+
+const decodedTokenPayloadAtom = atom((get) => {
+  const token = get(odbTokenAtom);
+  if (!token) return null;
+
+  const payload = token.split('.')?.[1];
+  if (!payload) return null;
+
+  const decodedPayload = atob(payload);
+  return JSON.parse(decodedPayload) as {
+    'lucuma-user': User;
+    exp: number;
+  };
+});
+
+const userAtom = atom((get) => get(decodedTokenPayloadAtom)?.['lucuma-user']);
 export const useUser = () => useAtomValue(userAtom);
 
-const isLoggedInAtom = atom((get) => !!get(userAtom));
+const tokenExpAtom = atom((get) => {
+  const exp = get(decodedTokenPayloadAtom)?.exp;
+  return exp ? new Date(exp * 1000) : null;
+});
+export const useTokenExp = () => useAtomValue(tokenExpAtom);
+
+const isLoggedInAtom = atom((get) => {
+  const user = get(userAtom);
+  const exp = get(tokenExpAtom);
+  // There is a user and the token is not expired
+  return user !== null && (exp ? exp > new Date() : false);
+});
 export const useIsLoggedIn = () => useAtomValue(isLoggedInAtom);
 
-const signInF = async (_get: Getter, set: Setter, username: string, password: string) => {
-  const [user] = await Authentication.signin(username, password);
-  if (!user) return false;
-  set(userAtom, user);
-
-  // Check if user can edit
-  set(canEditAtom, true);
-  return true;
-};
-export const useSignIn = () => useAtomCallback(signInF);
-
-const signoutF = async (_get: Getter, set: Setter) => {
-  await Authentication.signout();
-  set(userAtom, null);
-  set(canEditAtom, false);
-};
-export const useSignout = () => useAtomCallback(signoutF);
+const canEditAtom = atom((get) => get(isLoggedInAtom) && get(userAtom)?.type !== 'guest');
+export const useCanEdit = () => useAtomValue(canEditAtom);

@@ -1,8 +1,9 @@
 import { renderWithContext } from '@gql/render';
 import { page } from '@vitest/browser/context';
 
-import { canEditAtom } from '@/components/atoms/auth';
+import { odbTokenAtom } from '@/components/atoms/auth';
 import { slewVisibleAtom } from '@/components/atoms/slew';
+import { expiredJwt } from '@/test/helpers';
 
 import { SlewFlags } from './SlewFlags';
 
@@ -18,7 +19,7 @@ describe(SlewFlags.name, () => {
     renderWithContext(<SlewFlags />, {
       initialValues: [
         [slewVisibleAtom, true],
-        [canEditAtom, false],
+        [odbTokenAtom, expiredJwt],
       ],
     });
 

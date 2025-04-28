@@ -3,15 +3,18 @@ import './Navbar.scss';
 import { useConfiguration } from '@gql/configs/Configuration';
 import { clsx } from 'clsx';
 import { Button } from 'primereact/button';
+import type { MenuItem } from 'primereact/menuitem';
 import { SplitButton } from 'primereact/splitbutton';
-import { Link, useNavigate } from 'react-router';
+import { useCallback } from 'react';
+import { Link } from 'react-router';
 
+import { useNavigateToLogin, useSignout } from '@/auth/hooks';
+import { displayName } from '@/auth/user';
 import { useSetAboutVisible } from '@/components/atoms/about';
 import { useAlarmValue } from '@/components/atoms/alarm';
-import { useIsLoggedIn, useSignout, useUser } from '@/components/atoms/auth';
-import { useOdbTokenValue } from '@/components/atoms/odb';
+import { useIsLoggedIn, useUser } from '@/components/atoms/auth';
 import { useTheme } from '@/components/atoms/theme';
-import { ChevronDown, Info, Key, KeySolid, Map, Moon, SignIn, SignOut, Sun, User } from '@/components/Icons';
+import { ChevronDown, Info, Map, Moon, SignIn, SignOut, Sun, User } from '@/components/Icons';
 
 import { ConnectionLost } from './ConnectionLost';
 
@@ -20,27 +23,25 @@ export default function Navbar() {
   const [theme, toggleTheme] = useTheme();
   const user = useUser();
   const isLoggedIn = useIsLoggedIn();
-  const signout = useSignout();
-  const navigate = useNavigate();
-  const toggleAboutVisible = useSetAboutVisible();
 
-  // Will be removed in the future
-  const odbToken = useOdbTokenValue();
+  const signout = useSignout();
+  const toggleAboutVisible = useSetAboutVisible();
+  const navigateToSignIn = useNavigateToLogin();
 
   const alarm = useAlarmValue();
 
   const ThemeIcon = theme === 'dark' ? Moon : Sun;
   const SignInIcon = isLoggedIn ? SignIn : SignOut;
 
-  function userSession() {
+  const userSession = useCallback(() => {
     if (isLoggedIn) {
-      return signout();
+      void signout();
     } else {
-      return navigate('/login');
+      void navigateToSignIn();
     }
-  }
+  }, [isLoggedIn, navigateToSignIn, signout]);
 
-  const items = [
+  const items: MenuItem[] = [
     {
       label: 'Switch theme',
       icon: <ThemeIcon className="p-menuitem-icon" />,
@@ -50,11 +51,6 @@ export default function Navbar() {
       label: isLoggedIn ? 'Logout' : 'Login',
       icon: <SignInIcon className="p-menuitem-icon" />,
       command: userSession,
-    },
-    {
-      label: 'ODB Token',
-      icon: <KeySolid className="p-menuitem-icon" />,
-      command: () => navigate('/token'),
     },
     {
       label: 'About',
@@ -90,16 +86,14 @@ export default function Navbar() {
       </div>
       <div className="right">
         <ConnectionLost />
-        {!odbToken && (
-          <Link to="/token" style={{ animation: 'blink 1s infinite' }}>
-            <Key />
-          </Link>
-        )}
+
         <SplitButton
-          label={user ? user.displayName : 'Guest'}
+          label={user ? displayName(user) : 'Login'}
           icon={<User size="lg" />}
           className="p-button-text nav-btn"
+          buttonClassName={clsx(!user && 'menu-button-not-logged-in')}
           model={items}
+          onClick={() => (!user ? void navigateToSignIn() : undefined)}
           dropdownIcon={<ChevronDown size="lg" />}
         ></SplitButton>
       </div>

@@ -35,6 +35,7 @@ import {
   faSquareParking,
   faSquareParkingSlash,
   faSun,
+  faUserAstronaut,
 } from '@fortawesome/pro-solid-svg-icons';
 import type { FontAwesomeIconProps } from '@fortawesome/react-fontawesome';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -47,6 +48,7 @@ const iconFactory = (icon: IconDefinition) => {
   return renderFontAwesomeIcon;
 };
 
+export const Astronaut = iconFactory(faUserAstronaut);
 export const Camera = iconFactory(faCamera);
 export const CaretDown = iconFactory(faCaretDown);
 export const CaretLeft = iconFactory(faCaretLeft);

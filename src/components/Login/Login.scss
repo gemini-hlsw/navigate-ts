@@ -13,6 +13,9 @@
     border-radius: 5px;
     padding: 20px;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     .title {
       overflow: hidden;
       width: 70%;
@@ -42,19 +45,24 @@
       animation-delay: 0.2s;
       animation-fill-mode: forwards;
     }
-    .login-buttons {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 4px;
-      .p-component.p-button {
-        width: 100%;
-        padding: 10px;
-        font-size: 1rem;
-        max-width: 200px;
-      }
-      .p-component.p-button:nth-child(0) {
-        float: right;
-      }
+    .user-login-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 1em;
+    }
+  }
+
+  .orcid-login-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5em;
+    height: 1em;
+  }
+  .orcid-login-link {
+    padding-right: 0.25em;
+    .p-button {
+      width: 100%;
     }
   }
 }

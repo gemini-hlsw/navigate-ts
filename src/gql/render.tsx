@@ -7,6 +7,9 @@ import type { PropsWithChildren, ReactElement } from 'react';
 import type { ComponentRenderOptions } from 'vitest-browser-react';
 import { render } from 'vitest-browser-react';
 
+import { odbTokenAtom } from '@/components/atoms/auth';
+import { longExpirationJwt } from '@/test/helpers';
+
 import { GET_SLEW_FLAGS } from './configs/SlewFlags';
 import type { MockedResponseOf } from './util';
 
@@ -34,9 +37,15 @@ export function renderWithContext<T extends AtomTuples>(
   options?: ComponentRenderOptions,
 ) {
   const store = createStore();
+
+  // Add the default atom values to the initial value, if they are not already present
+  const initialValues = createOptions?.initialValues?.find(([atom]) => atom === odbTokenAtom)
+    ? createOptions.initialValues
+    : ([[odbTokenAtom, longExpirationJwt], ...(createOptions.initialValues ?? [])] as InferAtomTuples<T>);
+
   const renderResult = render(
     <Provider store={store}>
-      <HydrateAtoms initialValues={createOptions.initialValues ?? ([] as InferAtomTuples<T>)}>
+      <HydrateAtoms initialValues={initialValues}>
         <MockedProvider mocks={[...mocks, ...(createOptions.mocks ?? [])]} addTypename={false}>
           {ui}
         </MockedProvider>
