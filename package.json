@@ -56,7 +56,7 @@
     "lint-staged": "15.5.1",
     "lucuma-core": "0.125.0",
     "lucuma-schemas": "0.130.2",
-    "lucuma-ui-css": "0.139.2",
+    "lucuma-ui-css": "0.140.0",
     "playwright": "1.52.0",
     "prettier": "3.5.3",
     "primereact": "10.9.5",
