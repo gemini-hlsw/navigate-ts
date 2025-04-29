@@ -32,8 +32,8 @@ describe('Title test with args', () => {
   });
 
   it('should have prev and next panel buttons', async () => {
-    await expect.element(page.getByText('Previous panel')).toBeInTheDocument();
-    await expect.element(page.getByText('Next panel')).toBeInTheDocument();
+    await expect.element(page.getByTitle('Previous panel')).toBeInTheDocument();
+    await expect.element(page.getByTitle('Next panel')).toBeInTheDocument();
   });
 
   it('should show children', async () => {
@@ -41,8 +41,8 @@ describe('Title test with args', () => {
   });
 
   it('functions should be called', async () => {
-    await userEvent.click(page.getByText('Next panel'));
-    await userEvent.click(page.getByText('Previous panel'));
+    await userEvent.click(page.getByTitle('Next panel'));
+    await userEvent.click(page.getByTitle('Previous panel'));
 
     expect(nextPanelFunction).toHaveBeenCalledOnce();
     expect(prevPanelFunction).toHaveBeenCalledOnce();
@@ -67,9 +67,9 @@ describe('Title test with args', () => {
       </Title>,
     );
     await expect.element(page.getByText(title)).toBeInTheDocument();
-    await userEvent.click(page.getByText('Next panel'));
+    await userEvent.click(page.getByTitle('Next panel'));
 
-    await userEvent.click(page.getByText('Previous panel'));
+    await userEvent.click(page.getByTitle('Previous panel'));
 
     expect(nextPanelMock).toHaveBeenCalledOnce();
     expect(prevPanelMock).toHaveBeenCalledOnce();
