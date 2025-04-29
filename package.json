@@ -54,7 +54,7 @@
     "husky": "9.1.7",
     "jotai": "2.12.3",
     "lint-staged": "15.5.1",
-    "lucuma-core": "0.124.0",
+    "lucuma-core": "0.125.0",
     "lucuma-schemas": "0.130.2",
     "lucuma-ui-css": "0.139.2",
     "playwright": "1.52.0",
