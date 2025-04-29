@@ -2173,6 +2173,8 @@ export type Flamingos2Filter =
   | 'K_BLUE'
   /** Flamingos2Filter K-long (2.20 um) */
   | 'K_LONG'
+  /** Flamingos2Filter K-red (2.31 um) */
+  | 'K_RED'
   /** Flamingos2Filter K-short (2.15 um) */
   | 'K_SHORT'
   /** Flamingos2Filter Y (1.02 um) */
@@ -2216,7 +2218,7 @@ export type Flamingos2LongSlit = {
    * turn is based on the exposure time
    */
   defaultReads: Flamingos2Reads;
-  /** The disperser field must be specified.  It cannot be unset with a null value. */
+  /** Flamingos2 Disperser */
   disperser: Flamingos2Disperser;
   /**
    * Optional explicitly specified F2 Decker. If set it overrides the
@@ -2238,9 +2240,9 @@ export type Flamingos2LongSlit = {
    * default.
    */
   explicitReads?: Maybe<Flamingos2Reads>;
-  /** The filter field must be specified.  It cannot be unset with a null value. */
+  /** Flamingos2 Filter */
   filter: Flamingos2Filter;
-  /** The fpu field must be either specified or skipped altogether.  It cannot be unset with a null value. */
+  /** Flamingos2 FPU */
   fpu: Flamingos2Fpu;
   /**
    * The disperser as it was initially selected.  See the `disperser` field for the
