@@ -41,21 +41,28 @@ export function Authentication() {
 
   // If the user has staff role available, switch to it
   useEffect(() => {
+    let toastMessage: ToastMessage | null = null;
+
     if (user && user.type === 'standard' && user.role.type !== 'staff') {
       const staffRole = user.otherRoles.find((role) => role.type === 'staff');
       if (staffRole) {
         console.log('Switching to staff role');
         void setRole(staffRole);
       } else {
-        const t: ToastMessage = {
+        toastMessage = {
           severity: 'warn',
           summary: 'Warning',
           detail: `You are not a staff user (${user.role.type}). Some functionality might be unavailable.`,
         };
-        toast?.show(t);
-        return () => toast?.remove(t);
+        toast?.show(toastMessage);
       }
     }
+
+    return () => {
+      if (toastMessage) {
+        toast?.remove(toastMessage);
+      }
+    };
   }, [user, setRole, toast]);
 
   return <></>;
