@@ -17,11 +17,10 @@ export function Title({ title, prevPanel, nextPanel, children, rightSide, classN
   let prevPanelDisplay = null;
   if (prevPanel) {
     prevPanelDisplay = (
-      <button className="p-panel" onClick={prevPanel}>
+      <button title="Previous panel" className="p-panel" onClick={prevPanel}>
         <i>
           <ChevronLeft />
         </i>
-        <span className="sr-only">Previous panel</span>
       </button>
     );
   }
@@ -29,11 +28,10 @@ export function Title({ title, prevPanel, nextPanel, children, rightSide, classN
   let nextPanelDisplay = null;
   if (nextPanel) {
     nextPanelDisplay = (
-      <button className="n-panel" onClick={nextPanel}>
+      <button title="Next panel" className="n-panel" onClick={nextPanel}>
         <i>
           <ChevronRight />
         </i>
-        <span className="sr-only">Next panel</span>
       </button>
     );
   }
