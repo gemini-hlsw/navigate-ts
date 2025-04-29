@@ -33,6 +33,7 @@ describe(TargetSwapButton.name, () => {
 
     it('should render', async () => {
       await expect.element(sut.getByRole('button')).toHaveTextContent('Point to Guide Star');
+      await expect.element(sut.getByRole('button')).not.toHaveClass('p-button-danger');
     });
 
     it('should swap target when onSwappedTarget is false', async () => {
@@ -62,6 +63,7 @@ describe(TargetSwapButton.name, () => {
 
     it('should restore target', async () => {
       await expect.element(sut.getByRole('button')).toHaveTextContent('Point to Base');
+      await expect.element(sut.getByRole('button')).toHaveClass('p-button-danger');
 
       await sut.getByRole('button').click();
 

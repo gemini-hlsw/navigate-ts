@@ -61,6 +61,7 @@ export function TargetSwapButton({
   const disabled = !canEdit;
 
   const label = data?.onSwappedTarget ? 'Point to Base' : 'Point to Guide Star';
+  const severity = data?.onSwappedTarget ? 'danger' : undefined;
 
   const onClick = () => {
     if (selectedTarget?.id && instrument && rotator && oiSelected && acInst) {
@@ -174,5 +175,14 @@ export function TargetSwapButton({
     }
   };
 
-  return <Button disabled={disabled} className="footer w-100" label={label} onClick={onClick} loading={loading} />;
+  return (
+    <Button
+      disabled={disabled}
+      className="footer w-100"
+      label={label}
+      onClick={onClick}
+      severity={severity}
+      loading={loading}
+    />
+  );
 }
