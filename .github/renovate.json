@@ -8,6 +8,9 @@
     "enabled": true
   },
   "schedule": ["every weekend"],
+  "github-actions": {
+    "extends": [":preserveSemverRanges"]
+  },
   "packageRules": [
     {
       "matchDepTypes": ["devDependencies"],
