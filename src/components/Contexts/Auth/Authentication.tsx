@@ -1,8 +1,11 @@
 import { subSeconds } from 'date-fns';
 import { useInterval, useMountEffect } from 'primereact/hooks';
+import type { ToastMessage } from 'primereact/toast';
+import { useEffect } from 'react';
 
-import { useRefreshToken } from '@/auth/hooks';
-import { useTokenExp } from '@/components/atoms/auth';
+import { useRefreshToken, useSetRole } from '@/auth/hooks';
+import { useTokenExp, useUser } from '@/components/atoms/auth';
+import { useToast } from '@/Helpers/toast';
 
 const expirationAnticipationSeconds = 30;
 
@@ -11,8 +14,11 @@ const expirationAnticipationSeconds = 30;
  */
 export function Authentication() {
   const exp = useTokenExp();
+  const user = useUser();
+  const toast = useToast();
 
   const refreshToken = useRefreshToken();
+  const setRole = useSetRole();
 
   // On mount, check if the token is expired and refresh it if necessary
   useMountEffect(() => {
@@ -32,5 +38,32 @@ export function Authentication() {
       }
     }
   }, 1000);
+
+  // If the user has staff role available, switch to it
+  useEffect(() => {
+    let toastMessage: ToastMessage | null = null;
+
+    if (user && user.type === 'standard' && user.role.type !== 'staff') {
+      const staffRole = user.otherRoles.find((role) => role.type === 'staff');
+      if (staffRole) {
+        console.log('Switching to staff role');
+        void setRole(staffRole);
+      } else {
+        toastMessage = {
+          severity: 'warn',
+          summary: 'Warning',
+          detail: `You are not a staff user (${user.role.type}). Some functionality might be unavailable.`,
+        };
+        toast?.show(toastMessage);
+      }
+    }
+
+    return () => {
+      if (toastMessage) {
+        toast?.remove(toastMessage);
+      }
+    };
+  }, [user, setRole, toast]);
+
   return <></>;
 }

@@ -3,16 +3,16 @@ interface BaseUser {
   id: string;
 }
 
-interface GuestUser extends BaseUser {
+export interface GuestUser extends BaseUser {
   type: 'guest';
 }
 
-interface ServiceUser extends BaseUser {
+export interface ServiceUser extends BaseUser {
   type: 'service';
   name: string;
 }
 
-interface StandardRole {
+export interface StandardRole {
   type: 'pi' | 'ngo' | 'staff' | 'admin';
   id: string;
   partner?: string;
@@ -28,7 +28,7 @@ export interface OrcidProfile {
   };
 }
 
-interface StandardUser extends BaseUser {
+export interface StandardUser extends BaseUser {
   type: 'standard';
   role: StandardRole;
   otherRoles: StandardRole[];

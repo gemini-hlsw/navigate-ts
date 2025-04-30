@@ -53,5 +53,22 @@ export const isLoggedInAtom = atom((get) => {
 });
 export const useIsLoggedIn = () => useAtomValue(isLoggedInAtom);
 
-export const canEditAtom = atom((get) => get(isLoggedInAtom) && get(userAtom)?.type !== 'guest');
+export const canEditAtom = atom((get) => {
+  const isLoggedIn = get(isLoggedInAtom);
+  if (!isLoggedIn) {
+    return false;
+  }
+
+  const user = get(userAtom);
+  switch (user?.type) {
+    case 'standard':
+      return ['staff', 'admin'].includes(user.role.type);
+    case 'service':
+      return true;
+    case 'guest':
+      return false;
+    default:
+      return false;
+  }
+});
 export const useCanEdit = () => useAtomValue(canEditAtom);

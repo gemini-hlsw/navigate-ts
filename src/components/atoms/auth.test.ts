@@ -1,6 +1,6 @@
 import { createStore } from 'jotai';
 
-import type { OrcidProfile } from '@/auth/user';
+import type { GuestUser, ServiceUser, StandardUser } from '@/auth/user';
 
 import {
   canEditAtom,
@@ -20,7 +20,7 @@ describe('auth atoms', () => {
 
   describe('decodedTokenPayloadAtom', () => {
     it('should decode the token payload', () => {
-      const { token, payload } = createJwt(Date.now() / 1000 + 60);
+      const { token, payload } = createStandardUserToken(Date.now() / 1000 + 60);
 
       store.set(odbTokenAtom, token);
       expect(store.get(decodedTokenPayloadAtom)).toEqual(payload);
@@ -39,7 +39,7 @@ describe('auth atoms', () => {
 
   describe('userAtom', () => {
     it('gets the user from the payload', () => {
-      const { token, payload } = createJwt();
+      const { token, payload } = createStandardUserToken();
 
       store.set(odbTokenAtom, token);
       expect(store.get(userAtom)).toEqual(payload['lucuma-user']);
@@ -49,7 +49,7 @@ describe('auth atoms', () => {
   describe('tokenExpAtom', () => {
     it('gets the expiration date from the payload', () => {
       const expDate = Date.now();
-      const { token } = createJwt(expDate / 1000);
+      const { token } = createStandardUserToken(expDate / 1000);
 
       store.set(odbTokenAtom, token);
       expect(store.get(tokenExpAtom)).toEqual(new Date(expDate));
@@ -63,14 +63,14 @@ describe('auth atoms', () => {
 
   describe('isLoggedInAtom', () => {
     it('is true if the user is logged in and the token is not expired', () => {
-      const { token } = createJwt(Date.now() / 1000 + 60);
+      const { token } = createStandardUserToken(Date.now() / 1000 + 60);
 
       store.set(odbTokenAtom, token);
       expect(store.get(isLoggedInAtom)).toBe(true);
     });
 
     it('is false if the user is logged in and the token is expired', () => {
-      const { token } = createJwt(Date.now() / 1000 - 60);
+      const { token } = createStandardUserToken(Date.now() / 1000 - 60);
 
       store.set(odbTokenAtom, token);
       expect(store.get(isLoggedInAtom)).toBe(false);
@@ -83,41 +83,98 @@ describe('auth atoms', () => {
   });
 
   describe('canEditAtom', () => {
-    it('is true if the user is logged in and not a guest', () => {
-      const { token } = createJwt();
+    it('is true if the user is logged in as staff', () => {
+      const { token } = createStandardUserToken(Date.now() / 1000 + 60, { role: { type: 'staff', id: '123' } });
 
       store.set(odbTokenAtom, token);
       expect(store.get(canEditAtom)).toBe(true);
+    });
+
+    it('is true if the user is logged in as admin', () => {
+      const { token } = createStandardUserToken(Date.now() / 1000 + 60, { role: { type: 'admin', id: '123' } });
+
+      store.set(odbTokenAtom, token);
+      expect(store.get(canEditAtom)).toBe(true);
+    });
+
+    it('is false if the user is not staff', () => {
+      const { token } = createStandardUserToken(Date.now() / 1000 + 60, { role: { type: 'pi', id: '123' } });
+      store.set(odbTokenAtom, token);
+      expect(store.get(canEditAtom)).toBe(false);
     });
 
     it('is false if the user is not logged in', () => {
       store.set(odbTokenAtom, null);
       expect(store.get(canEditAtom)).toBe(false);
     });
+
+    it('is false if the user is logged in as guest', () => {
+      const { token } = createGuestUserToken();
+
+      store.set(odbTokenAtom, token);
+      expect(store.get(canEditAtom)).toBe(false);
+    });
+
+    it('is true if the user is logged in as service user', () => {
+      const { token } = createServiceUserToken({});
+
+      store.set(odbTokenAtom, token);
+      expect(store.get(canEditAtom)).toBe(true);
+    });
   });
 });
 
-function createJwt(overrideExp = Date.now() / 1000 + 60, overrideProfile: Partial<OrcidProfile> = {}) {
+function createGuestUserToken(overrides: Partial<GuestUser> = {}) {
+  const payload: OdbTokenPayload = {
+    exp: Date.now() / 1000 + 60,
+    'lucuma-user': {
+      type: 'guest',
+      id: '123',
+      ...overrides,
+    },
+  };
+  return createJwt(payload);
+}
+
+function createStandardUserToken(overrideExp = Date.now() / 1000 + 60, overrides: Partial<StandardUser> = {}) {
   const payload: OdbTokenPayload = {
     exp: overrideExp,
     'lucuma-user': {
       id: '123',
       type: 'standard',
+      otherRoles: [],
+      ...overrides,
       role: {
         type: 'pi',
         id: '123',
+        ...overrides?.role,
       },
-      otherRoles: [],
       profile: {
         orcidId: '0000-0000-0000-0000',
-        ...overrideProfile,
+        ...overrides?.profile,
         profile: {
-          ...overrideProfile?.profile,
+          ...overrides?.profile?.profile,
         },
       },
     },
   };
+  return createJwt(payload);
+}
 
+function createServiceUserToken(overrides: Partial<ServiceUser>) {
+  const payload: OdbTokenPayload = {
+    exp: Date.now() / 1000 + 60,
+    'lucuma-user': {
+      type: 'service',
+      id: '123',
+      name: 'service-npa',
+      ...overrides,
+    },
+  };
+  return createJwt(payload);
+}
+
+function createJwt<T>(payload: T) {
   const base64Payload = btoa(JSON.stringify(payload));
   const base64Header = btoa(JSON.stringify({ typ: 'JWT', alg: 'RS512' }));
   const signature = 'signature'; // Placeholder for the signature
