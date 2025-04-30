@@ -56,7 +56,7 @@
     "vitest-browser-react": "0.1.1"
   },
   "bundlemon": {
-    "baseDir": "./dist/navigate-ui",
+    "baseDir": "./dist",
     "pathLabels": {
       "hash": "[a-zA-Z0-9\\-_]+"
     },

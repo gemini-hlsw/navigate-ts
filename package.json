@@ -32,7 +32,5 @@
   },
   "lint-staged": {
     "*.{js,mjs,ts,tsx,jsx,css,md,json,yml}": "prettier --write"
-  },
-  "keywords": [],
-  "author": ""
+  }
 }
