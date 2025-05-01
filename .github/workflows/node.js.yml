@@ -67,11 +67,11 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: ${{ env.REGISTRY_IMAGE }}
-
       - uses: actions/download-artifact@v4
         with:
           name: dist-artifact
           path: packages/ui/dist
+      - run: ls -la packages/ui/dist
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
