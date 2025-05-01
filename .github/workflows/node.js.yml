@@ -45,18 +45,43 @@ jobs:
   publish:
     name: Publish Artifacts
     needs: [build]
-    if: github.event_name != 'pull_request' && (startsWith(github.ref, 'refs/tags/v'))
+    # if: github.event_name != 'pull_request' && (startsWith(github.ref, 'refs/tags/v'))
     runs-on: ubuntu-latest
-
+    env:
+      REGISTRY_USERNAME: 'noirlab'
+      REGISTRY_IMAGE: noirlab/gpp-nav-ui
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - name: Log in to the Container registry
+        if: ${{ startsWith(github.ref, 'refs/tags/v') }}
+        uses: docker/login-action@v3
+        with:
+          username: ${{ env.REGISTRY_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_TOKEN }}
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY_IMAGE }}
+
       - uses: actions/download-artifact@v4
         with:
           name: dist-artifact
           path: packages/ui/dist
 
-      - name: Build and publish docker image
-        # TODO
-        run: exit 1
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: packages/ui
+          # Only push on releases
+          push: ${{ startsWith(github.ref, 'refs/tags/v') }}
+          labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ steps.meta.outputs.tags }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          load: true
