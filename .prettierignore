@@ -6,4 +6,4 @@ reports/
 .metals
 .bloop
 target
-src/gql/*/gen
+packages/*/src/gql/*/gen
