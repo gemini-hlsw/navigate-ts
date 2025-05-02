@@ -1,0 +1,18 @@
+node_modules
+.git
+.gitignore
+.github
+*.md
+dist
+gen/prisma
+tasks
+!tasks/healthcheck.js
+.vscode
+.github
+*.svg
+.env*
+eslint.config.js
+Dockerfile
+# Don't copy the UI project for configs build, saves some install time
+packages/ui
+.npmrc

@@ -16,7 +16,6 @@
     "lint:prettier": "prettier --check .",
     "prepare": "node .husky/install.js"
   },
-  "dependencies": {},
   "devDependencies": {
     "@eslint/js": "9.25.1",
     "eslint": "9.25.1",
@@ -32,5 +31,10 @@
   },
   "lint-staged": {
     "*.{js,mjs,ts,tsx,jsx,css,md,json,yml}": "prettier --write"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@prisma/client"
+    ]
   }
 }

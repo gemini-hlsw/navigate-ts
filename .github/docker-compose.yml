@@ -1,0 +1,35 @@
+# Smoke test to ensure the configs service is running correctly
+services:
+  database:
+    image: postgres
+    container_name: navigate-db
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+      POSTGRES_DB: ${DB_NAME}
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready', '-d', 'configs']
+      interval: 5s
+      timeout: 20s
+      retries: 5
+    networks:
+      - postgres
+
+  configs:
+    image: nlsoftware/navigate-configs:${CONFIGS_VERSION}
+    build:
+      context: ../
+      dockerfile: packages/configs/Dockerfile
+    container_name: navigate-configs
+    environment:
+      DATABASE_URL: postgresql://${DB_USER}:${DB_PASS}@navigate-db:5432/${DB_NAME}
+    depends_on:
+      database:
+        condition: service_healthy
+    ports:
+      - 4000:4000
+    networks:
+      - postgres
+networks:
+  postgres:
+    driver: bridge

@@ -1,0 +1,51 @@
+{
+  "name": "navigate-configs",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "license": "BSD-3-Clause",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gemini-hlsw/navigate-ui.git",
+    "directory": "packages/configs"
+  },
+  "scripts": {
+    "test": "pnpm test:integration",
+    "test:integration": "node --test --enable-source-maps --test-timeout 20000 'dist/integration/**/*.test.js'",
+    "generate": "prisma generate",
+    "prebuild": "pnpm generate",
+    "build": "tsc",
+    "start": "pnpm build && pnpm preview",
+    "preview": "node --enable-source-maps ./dist/index.js",
+    "populate": "prisma migrate deploy && prisma db seed",
+    "dev": "node --env-file=.env --watch --enable-source-maps ./dist/index.js",
+    "codegen": "graphql-codegen --config tasks/codegen.ts",
+    "codegen:watch": "pnpm codegen --watch 'src/graphql/**/*.ts'",
+    "lint:eslint": "eslint ."
+  },
+  "dependencies": {
+    "@apollo/server": "4.12.0",
+    "@prisma/client": "6.7.0",
+    "graphql": "16.11.0",
+    "graphql-scalars": "1.24.2",
+    "lucuma-core": "0.125.0",
+    "prisma": "6.7.0"
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "5.0.5",
+    "@graphql-codegen/typescript": "4.1.6",
+    "@graphql-codegen/typescript-resolvers": "4.5.0",
+    "@parcel/watcher": "2.5.1",
+    "@testcontainers/postgresql": "10.25.0",
+    "@types/node": "22.15.3",
+    "execa": "9.5.2"
+  },
+  "prisma": {
+    "seed": "pnpm preview populate"
+  },
+  "files": [
+    "dist",
+    "prisma",
+    "src"
+  ]
+}
