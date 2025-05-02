@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react';
 
 import { useCanEdit } from '@/components/atoms/auth';
 import { useOdbVisible } from '@/components/atoms/odb';
+import { extractMagnitude } from '@/Helpers/bands';
 import { useToast } from '@/Helpers/toast';
 import type { ConfigurationType, OdbObservationType, SiteType, TargetInput } from '@/types';
 
@@ -211,15 +212,6 @@ export function OdbImport() {
       }
     </Dialog>
   );
-}
-
-function extractMagnitude(sourceProfile: SourceProfile | undefined) {
-  if (!sourceProfile?.point?.bandNormalized?.brightnesses.length) return null;
-
-  const brigthness =
-    sourceProfile.point?.bandNormalized?.brightnesses.find((b) => b.band === 'SLOAN_G') ??
-    sourceProfile.point?.bandNormalized?.brightnesses[0];
-  return typeof brigthness.value === 'string' ? parseFloat(brigthness.value) : brigthness.value;
 }
 
 function extractGuideTargets(data: GetGuideEnvironmentQuery | undefined) {
