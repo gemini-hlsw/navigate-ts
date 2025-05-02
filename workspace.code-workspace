@@ -8,9 +8,22 @@
       "path": "packages/ui",
       "name": "ui",
     },
+    {
+      "path": "packages/schema",
+      "name": "schema",
+    },
+    {
+      "path": "packages/configs",
+      "name": "configs",
+    },
   ],
   "extensions": {
-    "recommendations": ["dbaeumer.vscode-eslint", "esbenp.prettier-vscode", "ms-playwright.playwright"],
+    "recommendations": [
+      "dbaeumer.vscode-eslint",
+      "esbenp.prettier-vscode",
+      "ms-playwright.playwright",
+      "prisma.prisma",
+    ],
   },
   "settings": {
     "editor.codeActionsOnSave": {

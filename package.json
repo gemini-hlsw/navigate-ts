@@ -8,15 +8,16 @@
   "private": true,
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/gemini-hlsw/navigate-ui.git"
+    "url": "git+https://github.com/gemini-hlsw/navigate-ts.git"
   },
   "scripts": {
     "ui": "pnpm --filter navigate-ui",
+    "schema": "pnpm --filter navigate-schema",
+    "configs": "pnpm --filter navigate-configs",
     "lint": "pnpm lint:prettier && pnpm -r lint:eslint",
     "lint:prettier": "prettier --check .",
     "prepare": "node .husky/install.js"
   },
-  "dependencies": {},
   "devDependencies": {
     "@eslint/js": "9.25.1",
     "eslint": "9.25.1",
@@ -27,10 +28,15 @@
     "husky": "9.1.7",
     "lint-staged": "15.5.1",
     "prettier": "3.5.3",
-    "typescript": "5.8.3",
+    "typescript": "catalog:",
     "typescript-eslint": "8.31.1"
   },
   "lint-staged": {
-    "*.{js,mjs,ts,tsx,jsx,css,md,json,yml}": "prettier --write"
+    "*.{js,mjs,ts,tsx,jsx,css,md,json,yml,yaml}": "prettier --write"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@prisma/client"
+    ]
   }
 }

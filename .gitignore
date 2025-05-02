@@ -11,12 +11,10 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+*.tsbuildinfo
 *.local
 
 # Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-!.vscode/tasks.json
 .idea
 .DS_Store
 *.suo
@@ -36,3 +34,5 @@ coverage/
 target/
 metals.sbt
 .bsp/
+
+/packages/configs/gen/prisma

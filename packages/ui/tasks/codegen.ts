@@ -1,4 +1,5 @@
 import type { CodegenConfig } from '@graphql-codegen/cli';
+import { typeDefs } from 'navigate-schema';
 
 // Simple mapping of scalar types to their TypeScript representation
 // Some of these might be wrong or incomplete, feel free to adjust as needed
@@ -66,12 +67,6 @@ const fetchedConfig: CodegenConfig['generates'] = {
     config: sharedConfig,
     preset: 'client',
   },
-  './src/gql/configs/gen/': {
-    schema: 'http://localhost:4000',
-    documents: './src/gql/configs/*.{ts,tsx}',
-    config: sharedConfig,
-    preset: 'client',
-  },
 };
 
 const config: CodegenConfig = {
@@ -80,6 +75,12 @@ const config: CodegenConfig = {
       schema: require.resolve('lucuma-schemas/odb'),
       config: sharedConfig,
       documents: './src/gql/odb/*.{ts,tsx}',
+      preset: 'client',
+    },
+    './src/gql/configs/gen/': {
+      schema: typeDefs,
+      documents: './src/gql/configs/*.{ts,tsx}',
+      config: sharedConfig,
       preset: 'client',
     },
     // Don't fetch config in CI as there's no server running

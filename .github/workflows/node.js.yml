@@ -16,7 +16,6 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -27,8 +26,8 @@ jobs:
           cache: 'pnpm'
       - run: pnpm install --frozen-lockfile
       - run: pnpm -w ui exec playwright install chromium
-      - run: pnpm -r codegen --check
       - run: pnpm -r build
+      - run: pnpm -r codegen --check
       - run: pnpm lint
       - run: pnpm -r test
       - name: Archive production artifacts
@@ -41,6 +40,68 @@ jobs:
         uses: lironer/bundlemon-action@v1
         with:
           working-directory: 'packages/ui'
+
+  build-docker:
+    runs-on: ubuntu-latest
+    env:
+      REGISTRY_USERNAME: 'nlsoftware'
+      REGISTRY_IMAGE: nlsoftware/navigate-configs
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+
+      - name: Log in to the Container registry
+        if: ${{ startsWith(github.ref, 'refs/tags/v') }}
+        uses: docker/login-action@v3
+        with:
+          username: ${{ env.REGISTRY_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY_IMAGE }}
+
+      - name: Set version
+        if: ${{ startsWith(github.ref, 'refs/tags/v') }}
+        run: |
+          cd packages/configs
+          pnpm pkg set version="${VERSION:11}+$(date +'%Y%m%d').$(git rev-parse --short HEAD)"
+        env:
+          VERSION: ${{ github.ref }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        id: build
+        with:
+          context: .
+          file: packages/configs/Dockerfile
+          # Only push on releases
+          push: ${{ startsWith(github.ref, 'refs/tags/v') }}
+          labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ steps.meta.outputs.tags }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          load: true
+
+      - name: Smoke test
+        run: |
+          echo "Smoke test for version ${CONFIGS_VERSION}"
+          docker compose -f .github/docker-compose.yml up -d --no-build --wait
+
+          ./packages/configs/tasks/healthcheck.js
+
+          echo "Smoke test successful!"
+          docker compose -f .github/docker-compose.yml down
+        env:
+          CONFIGS_VERSION: ${{ steps.meta.outputs.version }}
+          DB_USER: jimmy
+          DB_PASS: banana
+          DB_NAME: configs
 
   publish-ui:
     name: Publish UI Artifacts

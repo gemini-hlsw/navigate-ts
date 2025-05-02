@@ -1,0 +1,248 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../gen/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  pk   Int    @id @default(autoincrement())
+  name String
+}
+
+model Configuration {
+  pk               Int         @id @default(autoincrement())
+  site             SiteType    @default(GN)
+  selectedTarget   Int?
+  selectedOiTarget Int?
+  selectedP1Target Int?
+  selectedP2Target Int?
+  oiGuidingType    GuidingType
+  p1GuidingType    GuidingType
+  p2GuidingType    GuidingType
+  obsTitle         String?
+  obsId            String?
+  obsInstrument    String?
+  obsSubtitle      String?
+  obsReference     String?
+}
+
+enum SiteType {
+  GN
+  GS
+}
+
+enum GuidingType {
+  NORMAL
+}
+
+model Target {
+  pk         Int        @id @default(autoincrement())
+  id         String?
+  name       String     @default("Test")
+  coord1     Float // RA or Az
+  coord2     Float // Dec or El
+  magnitude  Float?
+  epoch      String     @default("J2000.000")
+  type       TargetType @default(SCIENCE) // FIXED | SCIENCE | BLINDOFFSET | OIWFS | PWFS1 | PWFS2
+  wavelength Int?
+  createdAt  DateTime   @default(now())
+}
+
+enum TargetType {
+  FIXED
+  SCIENCE
+  BLINDOFFSET
+  OIWFS
+  PWFS1
+  PWFS2
+}
+
+model Instrument {
+  pk          Int     @id @default(autoincrement())
+  name        String
+  iaa         Float   @default(0.0)
+  issPort     Int
+  focusOffset Float   @default(0.0)
+  wfs         WfsType @default(NONE)
+  originX     Float   @default(0.0)
+  originY     Float   @default(0.0)
+  ao          Boolean @default(false)
+  extraParams Json
+}
+
+enum WfsType {
+  NONE
+  PWFS1
+  PWFS2
+  OIWFS
+}
+
+model Rotator {
+  pk       Int          @id @default(autoincrement())
+  angle    Float        @default(0.0)
+  tracking TrackingType @default(TRACKING)
+}
+
+enum TrackingType {
+  TRACKING
+  FIXED
+}
+
+model SlewFlags {
+  pk                       Int     @id @default(autoincrement())
+  zeroChopThrow            Boolean
+  zeroSourceOffset         Boolean
+  zeroSourceDiffTrack      Boolean
+  zeroMountOffset          Boolean
+  zeroMountDiffTrack       Boolean
+  shortcircuitTargetFilter Boolean
+  shortcircuitMountFilter  Boolean
+  resetPointing            Boolean
+  stopGuide                Boolean
+  zeroGuideOffset          Boolean
+  zeroInstrumentOffset     Boolean
+  autoparkPwfs1            Boolean
+  autoparkPwfs2            Boolean
+  autoparkOiwfs            Boolean
+  autoparkGems             Boolean
+  autoparkAowfs            Boolean
+}
+
+model Mechanism {
+  pk                Int    @id @default(autoincrement())
+  mcs               Status
+  mcsPark           Status
+  mcsUnwrap         Status
+  scs               Status
+  crcs              Status
+  crcsPark          Status
+  crcsUnwrap        Status
+  pwfs1             Status
+  pwfs1Park         Status
+  pwfs1Unwrap       Status
+  pwfs2             Status
+  pwfs2Park         Status
+  pwfs2Unwrap       Status
+  oiwfs             Status
+  oiwfsPark         Status
+  odgw              Status
+  odgwPark          Status
+  aowfs             Status
+  aowfsPark         Status
+  dome              Status
+  domePark          Status
+  domeMode          String
+  shutters          Status
+  shuttersPark      Status
+  shutterMode       String
+  shutterAperture   Int
+  wVGate            Status
+  wVGateClose       Status
+  wVGateValue       Int
+  eVGate            Status
+  eVGateClose       Status
+  eVGateValue       Int
+  agScienceFoldPark Status
+  agAoFoldPark      Status
+  agAcPickoffPark   Status
+  agParkAll         Status
+}
+
+enum Status {
+  PENDING
+  ACTIVE
+  DONE
+  ERROR
+}
+
+model AltairInstrument {
+  pk             Int     @id @default(autoincrement())
+  beamsplitter   String
+  startMagnitude Float
+  seeing         Float
+  windSpeed      Float
+  forceMode      Boolean
+  ndFilter       Boolean
+  fieldLens      Boolean
+  deployAdc      Boolean
+  adjustAdc      Boolean
+  lgs            Boolean
+}
+
+model GemsInstrument {
+  pk              Int     @id @default(autoincrement())
+  adc             Boolean
+  beamsplitter    String
+  astrometricMode String
+}
+
+model GuideLoop {
+  pk                        Int     @id @default(autoincrement())
+  m2TipTiltEnable           Boolean
+  m2TipTiltSource           String
+  m2FocusEnable             Boolean
+  m2FocusSource             String
+  m2TipTiltFocusLink        Boolean
+  m2ComaEnable              Boolean
+  m1CorrectionsEnable       Boolean
+  m2ComaM1CorrectionsSource String
+  mountOffload              Boolean
+  daytimeMode               Boolean
+  probeTracking             String
+  lightPath                 String
+}
+
+model AltairGuideLoop {
+  pk        Int     @id @default(autoincrement())
+  aoEnabled Boolean
+  oiBlend   Boolean
+  focus     Boolean
+  p1Ttf     Boolean
+  strap     Boolean
+  oiTtf     Boolean
+  ttgs      Boolean
+  sfo       Boolean
+}
+
+model GemsGuideLoop {
+  pk        Int     @id @default(autoincrement())
+  aoEnabled Boolean
+  focus     Boolean
+  rotation  Boolean
+  tipTilt   Boolean
+  anisopl   Boolean
+  flexure   Boolean
+}
+
+model GuideAlarm {
+  wfs     WfsType @id
+  limit   Int
+  enabled Boolean @default(true)
+}
+
+// model pwfs1 {
+//   pk Int @id @default(autoincrement())
+//   filter String
+//   filterStop Float
+// }
+
+// model pwfs2 {
+//   pk Int @id @default(autoincrement())
+//   filter String
+//   filterStop Float
+// }
+
+// model acHr {
+//   pk Int @id @default(autoincrement())
+//   lens String
+//   filter String
+//   neuralDensity String
+//   roi String
+// }

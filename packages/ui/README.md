@@ -56,17 +56,3 @@ Once compiled, to run the server
 ```
 navigate_web_server/reStart
 ```
-
-## Publishing
-
-In order to publish the project as static assets, run:
-
-```bash
-pnpm build
-pnpm publish --access public
-```
-
-The project is automatically published by [Github actions](./.github/workflows/node.js.yml) when a new tag is pushed. Two packages are published:
-
-- https://npmjs.com/package/navigate-ui
-- `edu.gemini:navigate-ui` on Sonatype. This is an empty package that contains the static assets in the `META-INF/resources/navigate-ui` resource directory. It is used by the backend to serve the static assets.
