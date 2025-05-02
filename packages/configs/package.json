@@ -47,6 +47,9 @@
   "files": [
     "dist",
     "prisma",
-    "src"
+    "src",
+    "tasks",
+    "gen",
+    "start-server.sh"
   ]
 }

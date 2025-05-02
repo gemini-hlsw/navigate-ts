@@ -38,9 +38,6 @@ ENV COREPACK_ENABLE_NETWORK=0
 
 # Copy built files
 COPY --from=build --chown=software:software /usr/src/app/pruned /usr/src/app
-COPY --from=build --chown=software:software /usr/src/app/packages/configs/gen /usr/src/app/gen
-COPY --from=build --chown=software:software /usr/src/app/packages/configs/tasks /usr/src/app/tasks
-COPY --from=build --chown=software:software /usr/src/app/packages/configs/start-server.sh /usr/src/app/start-server.sh
 
 EXPOSE 4000
 
