@@ -6,7 +6,7 @@
   "type": "module",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/gemini-hlsw/navigate-ui.git",
+    "url": "git+https://github.com/gemini-hlsw/navigate-ts.git",
     "directory": "packages/configs"
   },
   "scripts": {

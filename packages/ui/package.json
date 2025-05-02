@@ -6,7 +6,7 @@
   "license": "BSD-3-Clause",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/gemini-hlsw/navigate-ui.git",
+    "url": "git+https://github.com/gemini-hlsw/navigate-ts.git",
     "directory": "packages/ui"
   },
   "scripts": {
