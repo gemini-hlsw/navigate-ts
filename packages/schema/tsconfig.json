@@ -8,7 +8,6 @@
     "moduleResolution": "NodeNext",
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    "types": ["node"],
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true,
@@ -17,12 +16,8 @@
     "declarationMap": true,
     "isolatedModules": true,
     "skipLibCheck": true,
-    "strict": true
+    "strict": true,
+    "composite": true
   },
-  "include": ["src"],
-  "references": [
-    {
-      "path": "../schema"
-    }
-  ]
+  "include": ["src"]
 }

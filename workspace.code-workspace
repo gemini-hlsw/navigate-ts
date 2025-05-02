@@ -9,6 +9,10 @@
       "name": "ui",
     },
     {
+      "path": "packages/schema",
+      "name": "schema",
+    },
+    {
       "path": "packages/configs",
       "name": "configs",
     },

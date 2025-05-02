@@ -1,0 +1,23 @@
+{
+  "name": "navigate-schema",
+  "description": "Graphql schema for navigate-configs",
+  "version": "1.0.0",
+  "type": "module",
+  "license": "BSD-3-Clause",
+  "main": "dist/index.js",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gemini-hlsw/navigate-ui.git",
+    "directory": "packages/schema"
+  },
+  "scripts": {
+    "build": "tsc -b"
+  },
+  "dependencies": {
+    "graphql-scalars": "1.24.2"
+  },
+  "devDependencies": {
+    "graphql": "16.11.0"
+  }
+}
