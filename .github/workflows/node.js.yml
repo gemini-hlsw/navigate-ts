@@ -49,7 +49,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       REGISTRY_USERNAME: 'nlsoftware'
-      REGISTRY_IMAGE: noirlab/gpp-nav-ui
+      REGISTRY_IMAGE: noirlab/gpp-nav
     steps:
       - uses: actions/checkout@v4
         with:
