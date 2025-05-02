@@ -67,6 +67,7 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: ${{ env.REGISTRY_IMAGE }}
+          context: packages/ui
 
       - uses: actions/download-artifact@v4
         with:
