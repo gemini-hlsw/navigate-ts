@@ -8,6 +8,9 @@
     "enabled": true
   },
   "schedule": ["every weekend"],
+  "dockerfile": {
+    "extends": [":preserveSemverRanges"]
+  },
   "github-actions": {
     "extends": [":preserveSemverRanges"]
   },
@@ -25,11 +28,7 @@
     },
     {
       "groupName": "GraphQL packages",
-      "matchPackageNames": ["@graphql-codegen/**", "@graphql-typed-document-node/**", "**graphql**"]
-    },
-    {
-      "groupName": "Jotai packages",
-      "matchPackageNames": ["jotai", "@swc-jotai/**"]
+      "matchPackageNames": ["@graphql-codegen/**", "@graphql-typed-document-node/**", "**graphql**", "@apollo/**"]
     },
     {
       "groupName": "Types",
