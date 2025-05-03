@@ -43,7 +43,7 @@
     "jotai": "2.12.3",
     "lucuma-core": "catalog:",
     "lucuma-schemas": "0.131.1",
-    "lucuma-ui-css": "0.140.0",
+    "lucuma-ui-css": "0.140.2",
     "navigate-schema": "workspace:*",
     "playwright": "1.52.0",
     "primereact": "10.9.5",
