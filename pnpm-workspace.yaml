@@ -6,7 +6,7 @@ catalog:
   'graphql': '16.11.0'
   '@graphql-codegen/cli': '5.0.5'
   '@parcel/watcher': '2.5.1'
-  'lucuma-core': '0.125.0'
+  'lucuma-core': '0.126.0'
   'typescript': '5.8.3'
 
 injectWorkspacePackages: true
