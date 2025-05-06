@@ -1,3 +1,3 @@
-FROM noirlab/gpp-nav
+FROM noirlab/gpp-nav-server
 
 COPY ./dist /navigate-ui
