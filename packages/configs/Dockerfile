@@ -38,6 +38,7 @@ ENV COREPACK_ENABLE_NETWORK=0
 
 # Copy built files
 COPY --from=build --chown=software:software /usr/src/app/pruned /usr/src/app
+RUN pnpx prisma generate
 
 EXPOSE 4000
 
