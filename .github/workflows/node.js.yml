@@ -45,7 +45,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       REGISTRY_USERNAME: 'nlsoftware'
-      REGISTRY_IMAGE: nlsoftware/navigate-configs
+      REGISTRY_IMAGE: noirlab/gpp-nav-configs
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4

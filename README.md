@@ -6,6 +6,14 @@ This repository is a [monorepo](https://monorepo.tools/) for Navigate projects w
 - [navigate-configs](./packages/configs): Backend api to manage configurations database using TypeScript, Graphql and Prisma.
 - [navigate-schema](./packages/schema): GraphQL schema for navigate-configs. Shared package between UI and Configs projects.
 
+# Running a docker Navigate instance (Production and Staging)
+
+You can install a navigate cluster using the installation script provided in the deploy directory and in [this link](https://raw.githubusercontent.com/gemini-hlsw/navigate-ts/refs/heads/main/deploy/install.sh).
+
+A running docker service is required to install navigate, also the user installing navigate should have permissions to run docker commands.
+
+After running the install.sh script, the `navigate` command will be enabled to `start`, `stop` and `update` the cluster. For more information try the command `navigate help`.
+
 ## Getting started
 
 Open the VS Code workspace in the root of the repository. You can use the command line or the GUI.
