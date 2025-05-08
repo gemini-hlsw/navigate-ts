@@ -51,7 +51,7 @@ echo "  site.jks - To configure TLS certificate"
 echo 
 
 # Creating symbolic link to run navigate as a command
-# ln -s ~/bin/navigate ~/navigate/navigate.sh
+ln -s ~/bin/navigate ~/navigate/navigate.sh
 echo "Navigate command installed"
 echo "For more information run"
 echo "  >> ${bold}navigate help${normal}"
