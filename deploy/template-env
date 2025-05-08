@@ -1,0 +1,26 @@
+# Database
+DB_NAME=
+DB_USER=
+DB_PASS=
+EXPOSE_DB_PORT=5432
+
+# Configs API
+SERVER_PORT=4000
+
+# Server
+NAVIGATE_EXPOSE_PORT=9070
+CONFIG_DIR=/home/software/navigate-server-conf
+SITE=
+
+# Pgadmin (Optional)
+PGADMIN_EMAIL=
+PGADMIN_PASS=
+EXPOSE_PORT_PGA=
+
+# ODB Token
+ODB_SERVICE_JWT=
+ODB_SSO_PUBLIC_KEY=
+
+# ODB Token
+ODB_URL=
+OBSERVE_URL=
