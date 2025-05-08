@@ -16,7 +16,7 @@ services:
       - postgres
 
   configs:
-    image: nlsoftware/navigate-configs:${CONFIGS_VERSION}
+    image: noirlab/gpp-nav-configs:${CONFIGS_VERSION}
     build:
       context: ../
       dockerfile: packages/configs/Dockerfile
