@@ -24,7 +24,7 @@ services:
         max-size: '2m'
         max-file: '5'
   configs:
-    image: 'nlsoftware/navigate-configs:latest'
+    image: 'noirlab/gpp-nav-configs:latest'
     container_name: navigate-configs
     restart: unless-stopped
     environment:
