@@ -42,15 +42,6 @@
     "navigateServerWsURI": "/navigate/ws",
     "navigateConfigsURI": "/db",
     "odbURI": "https://lucuma-postgres-odb-staging.herokuapp.com/odb",
-    "ssoURI": "https://sso.gpp.lucuma.xyz"
-  },
-  {
-    "hostName": "navigate.lucuma.xyz",
-    "environment": "Gemini Global",
-    "navigateServerURI": "/navigate/graphql",
-    "navigateServerWsURI": "/navigate/ws",
-    "navigateConfigsURI": "/db",
-    "odbURI": "https://lucuma-postgres-odb-staging.herokuapp.com/odb",
-    "ssoURI": "https://sso.gpp.lucuma.xyz"
+    "ssoURI": "https://sso-test.gpp.gemini.edu"
   }
 ]
