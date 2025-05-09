@@ -15,17 +15,17 @@ option="$1"
 case "$option" in
     start)
         echo "Starting Navigate"
-        docker compose -f ~/navigate/docker-compose.yml --env-file .env up -d
+        docker compose -f ~/navigate/docker-compose.yml --env-file ~/navigate/.env up -d
         ;;
     stop)
         echo "Stoping Navigate"
-        docker compose -f ~/navigate/docker-compose.yml --env-file .env down
+        docker compose -f ~/navigate/docker-compose.yml --env-file ~/navigate/.env down
         ;;
     update)
         echo "Updating Navigate"
-        docker compose -f ~/navigate/docker-compose.yml --env-file .env down
+        docker compose -f ~/navigate/docker-compose.yml --env-file ~/navigate/.env down
         docker rmi noirlab/gpp-nav-configs:latest noirlab/gpp-nav:latest
-        docker compose -f ~/navigate/docker-compose.yml --env-file .env up -d
+        docker compose -f ~/navigate/docker-compose.yml --env-file ~/navigate/.env up -d
         ;;
     help)
         echo "To run Navigate you should provide a valid agument"
