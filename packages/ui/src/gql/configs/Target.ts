@@ -62,7 +62,7 @@ const UPDATE_TARGET = graphql(`
     $name: String
     $coord1: Float
     $coord2: Float
-    $magnitude: Float
+    $magnitude: String
     $epoch: String
     $type: TargetType
     $wavelength: Int
@@ -122,7 +122,7 @@ const CREATE_TARGET = graphql(`
     $az: Float
     $dec: Float
     $el: Float
-    $magnitude: Float
+    $magnitude: String
     $epoch: String
     $type: TargetType!
     $wavelength: Int
