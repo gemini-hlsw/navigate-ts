@@ -4,7 +4,7 @@ packages:
 # Versions of packages that are the same across all packages
 catalog:
   'graphql': '16.11.0'
-  '@graphql-codegen/cli': '5.0.5'
+  '@graphql-codegen/cli': '5.0.6'
   '@parcel/watcher': '2.5.1'
   'lucuma-core': '0.126.0'
   'typescript': '5.8.3'
