@@ -35,6 +35,7 @@ type Documents = {
     "\n  query version {\n    serverVersion\n  }\n": typeof types.VersionDocument,
     "\n  mutation oiwfsObserve($period: TimeSpanInput!) {\n    oiwfsObserve(period: $period) {\n      result\n      msg\n    }\n  }\n": typeof types.OiwfsObserveDocument,
     "\n  mutation oiwfsStopObserve {\n    oiwfsStopObserve {\n      result\n      msg\n    }\n  }\n": typeof types.OiwfsStopObserveDocument,
+    "\n  mutation wfsSky($period: TimeSpanInput!, $wfs: GuideProbe!) {\n    wfsSky(period: $period, wfs: $wfs) {\n      result\n      msg\n    }\n  }\n": typeof types.WfsSkyDocument,
     "\n  mutation changeMountState($enable: Boolean!) {\n    mountFollow(enable: $enable) {\n      result\n      msg\n    }\n  }\n": typeof types.ChangeMountStateDocument,
     "\n  mutation changeRotatorState($enable: Boolean!) {\n    rotatorFollow(enable: $enable) {\n      result\n      msg\n    }\n  }\n": typeof types.ChangeRotatorStateDocument,
     "\n  mutation changeScsState($enable: Boolean!) {\n    scsFollow(enable: $enable) {\n      result\n      msg\n    }\n  }\n": typeof types.ChangeScsStateDocument,
@@ -65,6 +66,7 @@ const documents: Documents = {
     "\n  query version {\n    serverVersion\n  }\n": types.VersionDocument,
     "\n  mutation oiwfsObserve($period: TimeSpanInput!) {\n    oiwfsObserve(period: $period) {\n      result\n      msg\n    }\n  }\n": types.OiwfsObserveDocument,
     "\n  mutation oiwfsStopObserve {\n    oiwfsStopObserve {\n      result\n      msg\n    }\n  }\n": types.OiwfsStopObserveDocument,
+    "\n  mutation wfsSky($period: TimeSpanInput!, $wfs: GuideProbe!) {\n    wfsSky(period: $period, wfs: $wfs) {\n      result\n      msg\n    }\n  }\n": types.WfsSkyDocument,
     "\n  mutation changeMountState($enable: Boolean!) {\n    mountFollow(enable: $enable) {\n      result\n      msg\n    }\n  }\n": types.ChangeMountStateDocument,
     "\n  mutation changeRotatorState($enable: Boolean!) {\n    rotatorFollow(enable: $enable) {\n      result\n      msg\n    }\n  }\n": types.ChangeRotatorStateDocument,
     "\n  mutation changeScsState($enable: Boolean!) {\n    scsFollow(enable: $enable) {\n      result\n      msg\n    }\n  }\n": types.ChangeScsStateDocument,
@@ -172,6 +174,10 @@ export function graphql(source: "\n  mutation oiwfsObserve($period: TimeSpanInpu
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  mutation oiwfsStopObserve {\n    oiwfsStopObserve {\n      result\n      msg\n    }\n  }\n"): (typeof documents)["\n  mutation oiwfsStopObserve {\n    oiwfsStopObserve {\n      result\n      msg\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation wfsSky($period: TimeSpanInput!, $wfs: GuideProbe!) {\n    wfsSky(period: $period, wfs: $wfs) {\n      result\n      msg\n    }\n  }\n"): (typeof documents)["\n  mutation wfsSky($period: TimeSpanInput!, $wfs: GuideProbe!) {\n    wfsSky(period: $period, wfs: $wfs) {\n      result\n      msg\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
