@@ -256,6 +256,7 @@ export type MutationCreateInstrumentArgs = {
 
 export type MutationCreateTargetArgs = {
   az?: InputMaybe<Scalars['Float']['input']>;
+  band?: InputMaybe<Scalars['String']['input']>;
   dec?: InputMaybe<Scalars['Float']['input']>;
   el?: InputMaybe<Scalars['Float']['input']>;
   epoch?: InputMaybe<Scalars['String']['input']>;
@@ -457,6 +458,7 @@ export type MutationUpdateSlewFlagsArgs = {
 
 
 export type MutationUpdateTargetArgs = {
+  band?: InputMaybe<Scalars['String']['input']>;
   coord1?: InputMaybe<Scalars['Float']['input']>;
   coord2?: InputMaybe<Scalars['Float']['input']>;
   epoch?: InputMaybe<Scalars['String']['input']>;
@@ -581,6 +583,7 @@ export type StatusType =
 export type Target = {
   __typename?: 'Target';
   az?: Maybe<Az>;
+  band?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['DateTime']['output'];
   dec?: Maybe<Dec>;
   el?: Maybe<El>;
@@ -595,6 +598,7 @@ export type Target = {
 };
 
 export type TargetInput = {
+  band?: InputMaybe<Scalars['String']['input']>;
   coord1?: InputMaybe<Scalars['Float']['input']>;
   coord2?: InputMaybe<Scalars['Float']['input']>;
   epoch?: InputMaybe<Scalars['String']['input']>;
@@ -1044,6 +1048,7 @@ export type SlewFlagsResolvers<ContextType = ApolloContext, ParentType extends R
 
 export type TargetResolvers<ContextType = ApolloContext, ParentType extends ResolversParentTypes['Target'] = ResolversParentTypes['Target']> = {
   az?: Resolver<Maybe<ResolversTypes['Az']>, ParentType, ContextType>;
+  band?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   dec?: Resolver<Maybe<ResolversTypes['Dec']>, ParentType, ContextType>;
   el?: Resolver<Maybe<ResolversTypes['El']>, ParentType, ContextType>;
