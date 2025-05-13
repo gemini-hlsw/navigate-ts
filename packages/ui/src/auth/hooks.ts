@@ -67,6 +67,7 @@ export function useRefreshToken() {
 
 export function useSetRole() {
   const setToken = useSetOdbToken();
+  const refreshToken = useRefreshToken();
   const toast = useToast();
 
   const setRole = useCallback(
@@ -76,7 +77,7 @@ export function useSetRole() {
       const res = await fetch(setRoleURL, { method: 'GET', credentials: 'include' });
       if (res.ok) {
         const data = await res.text();
-        if (data) setToken(data);
+        if (data) refreshToken();
       } else {
         toast?.show({
           severity: 'error',

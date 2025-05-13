@@ -84,7 +84,7 @@ export default defineConfig(({ mode }) => ({
     host: '0.0.0.0',
     proxy: {
       '^/navigate/graphql': {
-        target: 'http://navigate.lucuma.xyz:9070',
+        target: 'http://navigate.gemini.edu:9090',
         changeOrigin: true,
       },
       '^/db': {
@@ -96,7 +96,7 @@ export default defineConfig(({ mode }) => ({
         changeOrigin: true,
       },
       '^/navigate/ws': {
-        target: 'ws://localhost:9070',
+        target: 'ws://localhost:9090',
         changeOrigin: true,
         ws: true,
       },
