@@ -8,6 +8,8 @@
 
   .p-button {
     margin: 0;
+    width: 100%;
+    justify-content: center;
     padding: 2px;
     font-size: 0.8rem;
   }
@@ -61,16 +63,16 @@
 
         > .controls {
           display: grid;
-          grid-template-columns: 35px 1fr 30px;
+          grid-template-columns: 35px 1fr 40px;
           grid-template-rows: repeat(3, 26px);
           grid-template-areas:
             'g11 g12 g13'
             'g21 g22 g23'
             'g3 g3 g3';
-          // gap: 4px;
+          gap: 0 4px;
           justify-items: center;
           align-items: center;
-          padding: 2px;
+          padding: 2px 4px;
         }
 
         > span {
@@ -114,12 +116,13 @@
 
         > .controls {
           display: grid;
-          grid-template-columns: 35px 1fr 35px 30px 30px 30px;
-          grid-template-areas: 'g1 g2 g3 g4 g5 g6';
+          grid-template-columns: 35px 75px 1fr 35px 20px 40px 40px;
+          grid-template-areas: 'g1 g2 g3 g4 g5 g6 g7';
           grid-template-rows: 26px;
           align-items: center;
           justify-items: center;
-          padding: 2px;
+          gap: 0 4px;
+          padding: 2px 4px;
         }
 
         > span {

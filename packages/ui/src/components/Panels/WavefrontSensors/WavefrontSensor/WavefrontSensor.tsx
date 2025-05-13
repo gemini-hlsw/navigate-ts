@@ -1,13 +1,14 @@
 import imgUrl from '@assets/underconstruction.png';
+import type { GuideProbe } from '@gql/server/gen/graphql';
 import { useGuideState } from '@gql/server/GuideState';
-import { useOiwfsObserve, useOiwfsStopObserve } from '@gql/server/WavefrontSensors';
+import { useOiwfsObserve, useOiwfsStopObserve, useTakeSky } from '@gql/server/WavefrontSensors';
 import { clsx } from 'clsx';
 import { Button } from 'primereact/button';
 import { Checkbox } from 'primereact/checkbox';
 import { Dropdown } from 'primereact/dropdown';
 import { useCallback, useId, useState } from 'react';
 
-import { Camera, Play, Stop } from '@/components/Icons';
+import { Play, Stop } from '@/components/Icons';
 
 export default function WavefrontSensor({
   canEdit,
@@ -22,14 +23,18 @@ export default function WavefrontSensor({
   const [freq, setFreq] = useState(100);
 
   let observeButton: React.ReactNode | undefined;
+  let skyButton: React.ReactNode | undefined;
   if (wfs === 'OIWFS') {
     observeButton = <OiwfsObserveButton freq={freq} canEdit={canEdit} />;
+    skyButton = <TakeSkyButton freq={freq} wfs="GMOS_OIWFS" canEdit={canEdit} />;
   } else if (wfs === 'PWFS1') {
     /* Show placeholder */
     observeButton = <Pwfs1ObserveButton canEdit={canEdit} />;
+    skyButton = <TakeSkyButton freq={freq} wfs="PWFS_1" canEdit={canEdit} />;
   } else if (wfs === 'PWFS2') {
     /* Show placeholder */
     observeButton = <Pwfs2ObserveButton canEdit={canEdit} />;
+    skyButton = <TakeSkyButton freq={freq} wfs="PWFS_2" canEdit={canEdit} />;
   }
 
   return (
@@ -60,20 +65,8 @@ export default function WavefrontSensor({
           style={{ gridArea: 'g22' }}
           checked={true}
         />
-        <Button
-          className="under-construction"
-          disabled={!canEdit}
-          style={{ gridArea: 'g23' }}
-          icon={<Camera />}
-          aria-label="Take Sky"
-          tooltip="Take Sky"
-        />
-        <Button
-          className="under-construction"
-          disabled={!canEdit}
-          style={{ gridArea: 'g3', width: '97%' }}
-          label="Autoadjust"
-        />
+        {skyButton}
+        <Button className="under-construction" disabled={!canEdit} style={{ gridArea: 'g3' }} label="Autoadjust" />
       </div>
     </div>
   );
@@ -134,5 +127,28 @@ function Pwfs2ObserveButton({ canEdit }: { canEdit: boolean }) {
       aria-label="Start"
       tooltip="Start"
     />
+  );
+}
+
+function TakeSkyButton({ freq, wfs, canEdit }: { freq: number; wfs: GuideProbe; canEdit: boolean }) {
+  const [takeSky, { loading: takeSkyLoading }] = useTakeSky();
+
+  const onClick = useCallback(
+    () => void takeSky({ variables: { wfs, period: { milliseconds: (1 / freq) * 1000 } } }),
+    [freq, takeSky, wfs],
+  );
+
+  return (
+    <Button
+      className={wfs.includes('OIWFS') ? '' : 'under-construction'}
+      loading={takeSkyLoading}
+      disabled={!canEdit}
+      style={{ gridArea: 'g23' }}
+      aria-label="Take Sky"
+      tooltip="Take Sky"
+      onClick={onClick}
+    >
+      Sky
+    </Button>
   );
 }

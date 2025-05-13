@@ -34,3 +34,16 @@ export function useOiwfsStopObserve(setStale: Dispatch<boolean>) {
     onCompleted: () => setStale(true),
   });
 }
+
+const TAKE_SKY = graphql(`
+  mutation wfsSky($period: TimeSpanInput!, $wfs: GuideProbe!) {
+    wfsSky(period: $period, wfs: $wfs) {
+      result
+      msg
+    }
+  }
+`);
+
+export function useTakeSky() {
+  return useMutation(TAKE_SKY);
+}

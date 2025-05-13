@@ -81,6 +81,11 @@ export type AngleInput = {
   seconds?: InputMaybe<Scalars['BigDecimal']['input']>;
 };
 
+export type AzElTargetInput = {
+  azimuth: AngleInput;
+  elevation: AngleInput;
+};
+
 export type CatalogInfo = {
   __typename?: 'CatalogInfo';
   id: Scalars['String']['output'];
@@ -297,6 +302,7 @@ export type Mutation = {
   slew: OperationOutcome;
   swapTarget: OperationOutcome;
   tcsConfig: OperationOutcome;
+  wfsSky: OperationOutcome;
 };
 
 
@@ -385,6 +391,12 @@ export type MutationSwapTargetArgs = {
 
 export type MutationTcsConfigArgs = {
   config: TcsConfigInput;
+};
+
+
+export type MutationWfsSkyArgs = {
+  period: TimeSpanInput;
+  wfs: GuideProbe;
 };
 
 export type NavigateState = {
@@ -636,6 +648,7 @@ export type Target = {
 
 /** Target properties input */
 export type TargetPropertiesInput = {
+  azel?: InputMaybe<AzElTargetInput>;
   id: Scalars['TargetId']['input'];
   name: Scalars['NonEmptyString']['input'];
   nonsidereal?: InputMaybe<NonsiderealInput>;
@@ -804,6 +817,14 @@ export type OiwfsStopObserveMutationVariables = Exact<{ [key: string]: never; }>
 
 export type OiwfsStopObserveMutation = { __typename?: 'Mutation', oiwfsStopObserve: { __typename?: 'OperationOutcome', result: OperationResult, msg?: string | null } };
 
+export type WfsSkyMutationVariables = Exact<{
+  period: TimeSpanInput;
+  wfs: GuideProbe;
+}>;
+
+
+export type WfsSkyMutation = { __typename?: 'Mutation', wfsSky: { __typename?: 'OperationOutcome', result: OperationResult, msg?: string | null } };
+
 export type ChangeMountStateMutationVariables = Exact<{
   enable: Scalars['Boolean']['input'];
 }>;
@@ -869,6 +890,7 @@ export const TelescopeStatesDocument = {"kind":"Document","definitions":[{"kind"
 export const VersionDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"version"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"serverVersion"}}]}}]} as unknown as DocumentNode<VersionQuery, VersionQueryVariables>;
 export const OiwfsObserveDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"oiwfsObserve"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"period"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"TimeSpanInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"oiwfsObserve"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"period"},"value":{"kind":"Variable","name":{"kind":"Name","value":"period"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"result"}},{"kind":"Field","name":{"kind":"Name","value":"msg"}}]}}]}}]} as unknown as DocumentNode<OiwfsObserveMutation, OiwfsObserveMutationVariables>;
 export const OiwfsStopObserveDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"oiwfsStopObserve"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"oiwfsStopObserve"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"result"}},{"kind":"Field","name":{"kind":"Name","value":"msg"}}]}}]}}]} as unknown as DocumentNode<OiwfsStopObserveMutation, OiwfsStopObserveMutationVariables>;
+export const WfsSkyDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"wfsSky"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"period"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"TimeSpanInput"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"wfs"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"GuideProbe"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"wfsSky"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"period"},"value":{"kind":"Variable","name":{"kind":"Name","value":"period"}}},{"kind":"Argument","name":{"kind":"Name","value":"wfs"},"value":{"kind":"Variable","name":{"kind":"Name","value":"wfs"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"result"}},{"kind":"Field","name":{"kind":"Name","value":"msg"}}]}}]}}]} as unknown as DocumentNode<WfsSkyMutation, WfsSkyMutationVariables>;
 export const ChangeMountStateDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"changeMountState"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"enable"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"mountFollow"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"enable"},"value":{"kind":"Variable","name":{"kind":"Name","value":"enable"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"result"}},{"kind":"Field","name":{"kind":"Name","value":"msg"}}]}}]}}]} as unknown as DocumentNode<ChangeMountStateMutation, ChangeMountStateMutationVariables>;
 export const ChangeRotatorStateDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"changeRotatorState"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"enable"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"rotatorFollow"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"enable"},"value":{"kind":"Variable","name":{"kind":"Name","value":"enable"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"result"}},{"kind":"Field","name":{"kind":"Name","value":"msg"}}]}}]}}]} as unknown as DocumentNode<ChangeRotatorStateMutation, ChangeRotatorStateMutationVariables>;
 export const ChangeScsStateDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"changeScsState"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"enable"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"scsFollow"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"enable"},"value":{"kind":"Variable","name":{"kind":"Name","value":"enable"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"result"}},{"kind":"Field","name":{"kind":"Name","value":"msg"}}]}}]}}]} as unknown as DocumentNode<ChangeScsStateMutation, ChangeScsStateMutationVariables>;

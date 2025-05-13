@@ -62,7 +62,7 @@ const sharedConfig = {
 
 const fetchedConfig: CodegenConfig['generates'] = {
   './src/gql/server/gen/': {
-    schema: 'http://localhost:9070/navigate/graphql',
+    schema: 'http://localhost:9090/navigate/graphql',
     documents: './src/gql/server/*.{ts,tsx}',
     config: sharedConfig,
     preset: 'client',
