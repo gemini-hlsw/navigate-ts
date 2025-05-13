@@ -57,5 +57,5 @@ $ pnpm configs dev
 
 The project is automatically published by [Github actions](./.github/workflows/node.js.yml) when a new tag is pushed. Two docker images are published:
 
-- `nlsoftware/navigate-configs`: the docker image for navigate-configs.
+- `noirlab/gpp-nav-configs`: the docker image for navigate-configs.
 - `noirlab/gpp-nav`: an extra layer on top of `noirlab/gpp-nav-server`, which adds the UI static files to `/navigate-ui`, so the backend can serve these files.
