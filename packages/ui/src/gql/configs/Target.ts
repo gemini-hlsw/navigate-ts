@@ -28,6 +28,7 @@ const GET_TARGETS = graphql(`
         dms
       }
       magnitude
+      band
       epoch
       type
       wavelength
@@ -63,6 +64,7 @@ const UPDATE_TARGET = graphql(`
     $coord1: Float
     $coord2: Float
     $magnitude: Float
+    $band: String
     $epoch: String
     $type: TargetType
     $wavelength: Int
@@ -74,6 +76,7 @@ const UPDATE_TARGET = graphql(`
       coord1: $coord1
       coord2: $coord2
       magnitude: $magnitude
+      band: $band
       epoch: $epoch
       type: $type
       wavelength: $wavelength
@@ -98,6 +101,7 @@ const UPDATE_TARGET = graphql(`
         dms
       }
       magnitude
+      band
       epoch
       type
       wavelength
@@ -123,6 +127,7 @@ const CREATE_TARGET = graphql(`
     $dec: Float
     $el: Float
     $magnitude: Float
+    $band: String
     $epoch: String
     $type: TargetType!
     $wavelength: Int
@@ -135,6 +140,7 @@ const CREATE_TARGET = graphql(`
       dec: $dec
       el: $el
       magnitude: $magnitude
+      band: $band
       epoch: $epoch
       type: $type
       wavelength: $wavelength
@@ -159,6 +165,7 @@ const CREATE_TARGET = graphql(`
         dms
       }
       magnitude
+      band
       epoch
       type
       wavelength
@@ -199,6 +206,7 @@ const REMOVE_AND_CREATE_BASE_TARGETS = graphql(`
         dms
       }
       magnitude
+      band
       epoch
       type
       wavelength
@@ -237,6 +245,7 @@ const REMOVE_AND_CREATE_WFS_TARGETS = graphql(`
         dms
       }
       magnitude
+      band
       epoch
       type
       wavelength

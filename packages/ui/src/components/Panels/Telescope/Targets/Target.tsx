@@ -62,7 +62,7 @@ export function Target({
         key="science-target"
         {...longPressEvent}
       >
-        <div className="target-item">
+        <div className="target-item-fixed">
           <span className="target-name" title={target.name ?? undefined}>
             {target.name}
           </span>
@@ -88,8 +88,9 @@ export function Target({
           <span>RA</span>
           <span className="text-right">{target.dec?.dms}</span>
           <span>Dec</span>
-          <span className="text-right">{target.magnitude ? target.magnitude.toFixed(2) : ''}</span>
-          <span>Mag</span>
+          <span className="text-right">
+            {target.band} {target.magnitude?.toFixed(2)}
+          </span>
         </div>
       </li>
     );

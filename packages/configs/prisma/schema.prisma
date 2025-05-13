@@ -48,7 +48,8 @@ model Target {
   name       String     @default("Test")
   coord1     Float // RA or Az
   coord2     Float // Dec or El
-  magnitude  Float?
+  magnitude  Float? // Magnitude number (Brightness)
+  band       String? // Magnitude band
   epoch      String     @default("J2000.000")
   type       TargetType @default(SCIENCE) // FIXED | SCIENCE | BLINDOFFSET | OIWFS | PWFS1 | PWFS2
   wavelength Int?

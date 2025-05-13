@@ -37,7 +37,8 @@ export const TargetTypeDefs = `#graphql
     az: Az              # Azimuth
     el: El              # Elevation
     dec: Dec            # Declination
-    magnitude: Float    # Magnitude
+    magnitude: Float    # Magnitude of the target
+    band: String        # Magnitude band
     epoch: String!       # Epoch of target
     type: TargetType!    # FIXED | SCIENCE | BLINDOFFSET | PWFS1 | PWFS2 | OIWFS
     wavelength: Int      # Wavelength
@@ -58,6 +59,7 @@ export const TargetTypeDefs = `#graphql
     coord1: Float
     coord2: Float
     magnitude: Float
+    band: String
     epoch: String
     type: String
     wavelength: Int
@@ -72,6 +74,7 @@ export const TargetTypeDefs = `#graphql
       dec: Float
       el: Float
       magnitude: Float
+      band: String
       epoch: String
       type: TargetType!
       wavelength: Int
@@ -84,6 +87,7 @@ export const TargetTypeDefs = `#graphql
       coord1: Float
       coord2: Float
       magnitude: Float
+      band: String
       epoch: String
       type: TargetType
       wavelength: Int
