@@ -66,7 +66,6 @@ export function useRefreshToken() {
 }
 
 export function useSetRole() {
-  const setToken = useSetOdbToken();
   const refreshToken = useRefreshToken();
   const toast = useToast();
 
@@ -77,7 +76,7 @@ export function useSetRole() {
       const res = await fetch(setRoleURL, { method: 'GET', credentials: 'include' });
       if (res.ok) {
         const data = await res.text();
-        if (data) refreshToken();
+        if (data) void refreshToken();
       } else {
         toast?.show({
           severity: 'error',
@@ -86,7 +85,7 @@ export function useSetRole() {
         });
       }
     },
-    [setToken, toast],
+    [refreshToken, toast],
   );
 
   return setRole;
