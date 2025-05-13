@@ -81,6 +81,11 @@ export type AngleInput = {
   seconds?: InputMaybe<Scalars['BigDecimal']['input']>;
 };
 
+export type AzElTargetInput = {
+  azimuth: AngleInput;
+  elevation: AngleInput;
+};
+
 export type CatalogInfo = {
   __typename?: 'CatalogInfo';
   id: Scalars['String']['output'];
@@ -297,6 +302,7 @@ export type Mutation = {
   slew: OperationOutcome;
   swapTarget: OperationOutcome;
   tcsConfig: OperationOutcome;
+  wfsSky: OperationOutcome;
 };
 
 
@@ -385,6 +391,12 @@ export type MutationSwapTargetArgs = {
 
 export type MutationTcsConfigArgs = {
   config: TcsConfigInput;
+};
+
+
+export type MutationWfsSkyArgs = {
+  period: TimeSpanInput;
+  wfs: GuideProbe;
 };
 
 export type NavigateState = {
@@ -636,6 +648,7 @@ export type Target = {
 
 /** Target properties input */
 export type TargetPropertiesInput = {
+  azel?: InputMaybe<AzElTargetInput>;
   id: Scalars['TargetId']['input'];
   name: Scalars['NonEmptyString']['input'];
   nonsidereal?: InputMaybe<NonsiderealInput>;
