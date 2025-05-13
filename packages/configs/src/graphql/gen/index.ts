@@ -260,7 +260,7 @@ export type MutationCreateTargetArgs = {
   el?: InputMaybe<Scalars['Float']['input']>;
   epoch?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
-  magnitude?: InputMaybe<Scalars['String']['input']>;
+  magnitude?: InputMaybe<Scalars['Float']['input']>;
   name: Scalars['String']['input'];
   ra?: InputMaybe<Scalars['Float']['input']>;
   type: TargetType;
@@ -461,7 +461,7 @@ export type MutationUpdateTargetArgs = {
   coord2?: InputMaybe<Scalars['Float']['input']>;
   epoch?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
-  magnitude?: InputMaybe<Scalars['String']['input']>;
+  magnitude?: InputMaybe<Scalars['Float']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   pk: Scalars['Int']['input'];
   type?: InputMaybe<TargetType>;
@@ -586,7 +586,7 @@ export type Target = {
   el?: Maybe<El>;
   epoch: Scalars['String']['output'];
   id?: Maybe<Scalars['String']['output']>;
-  magnitude?: Maybe<Scalars['String']['output']>;
+  magnitude?: Maybe<Scalars['Float']['output']>;
   name: Scalars['String']['output'];
   pk: Scalars['Int']['output'];
   ra?: Maybe<Ra>;
@@ -599,7 +599,7 @@ export type TargetInput = {
   coord2?: InputMaybe<Scalars['Float']['input']>;
   epoch?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
-  magnitude?: InputMaybe<Scalars['String']['input']>;
+  magnitude?: InputMaybe<Scalars['Float']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   type?: InputMaybe<Scalars['String']['input']>;
   wavelength?: InputMaybe<Scalars['Int']['input']>;
@@ -1049,7 +1049,7 @@ export type TargetResolvers<ContextType = ApolloContext, ParentType extends Reso
   el?: Resolver<Maybe<ResolversTypes['El']>, ParentType, ContextType>;
   epoch?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  magnitude?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  magnitude?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   pk?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   ra?: Resolver<Maybe<ResolversTypes['RA']>, ParentType, ContextType>;

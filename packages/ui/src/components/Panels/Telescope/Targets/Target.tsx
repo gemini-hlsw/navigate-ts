@@ -88,7 +88,9 @@ export function Target({
           <span>RA</span>
           <span className="text-right">{target.dec?.dms}</span>
           <span>Dec</span>
-          <span className="text-right">{target.magnitude}</span>
+          <span className="text-right">
+            {target.band} {target.magnitude?.toFixed(2)}
+          </span>
         </div>
       </li>
     );

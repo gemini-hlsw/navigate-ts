@@ -71,6 +71,10 @@ export function OdbImport() {
 
         const wavelength = extractCentralWavelength(configuration?.site, obsWithWavelength.data);
 
+        const { name: band, value: magnitude } = extractMagnitude(
+          selectedObservation.targetEnvironment?.firstScienceTarget?.sourceProfile as SourceProfile,
+        );
+
         // Second create the observation base target (SCIENCE)
         await removeAndCreateBaseTargets({
           variables: {
@@ -87,9 +91,8 @@ export function OdbImport() {
                     ? parseFloat(selectedObservation.targetEnvironment?.firstScienceTarget?.sidereal?.dec.degrees)
                     : selectedObservation.targetEnvironment?.firstScienceTarget?.sidereal?.dec.degrees,
                 epoch: selectedObservation.targetEnvironment?.firstScienceTarget?.sidereal?.epoch,
-                magnitude: extractMagnitude(
-                  selectedObservation.targetEnvironment?.firstScienceTarget?.sourceProfile as SourceProfile,
-                ),
+                magnitude: magnitude,
+                band: band,
                 type: 'SCIENCE',
                 wavelength: wavelength,
               },
@@ -219,6 +222,7 @@ function extractGuideTargets(data: GetGuideEnvironmentQuery | undefined) {
     Record<'oiwfs' | 'pwfs1' | 'pwfs2', TargetInput[]>
   >(
     (acc, t) => {
+      const { name: band, value: magnitude } = extractMagnitude(t.sourceProfile as SourceProfile);
       const auxTarget: Omit<TargetInput, 'type'> = {
         name: t.name,
         epoch: t.sidereal?.epoch,
@@ -226,7 +230,8 @@ function extractGuideTargets(data: GetGuideEnvironmentQuery | undefined) {
           typeof t.sidereal?.ra.degrees === 'string' ? parseFloat(t.sidereal?.ra.degrees) : t.sidereal?.ra.degrees,
         coord2:
           typeof t.sidereal?.dec.degrees === 'string' ? parseFloat(t.sidereal?.dec.degrees) : t.sidereal?.dec.degrees,
-        magnitude: extractMagnitude(t.sourceProfile as SourceProfile),
+        magnitude: magnitude,
+        band: band,
       };
       if (t.probe === 'GMOS_OIWFS') {
         acc.oiwfs.push({ ...auxTarget, type: 'OIWFS' });

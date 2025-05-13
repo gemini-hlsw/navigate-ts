@@ -26,16 +26,16 @@ export const BANDS = [
 ];
 
 export function extractMagnitude(sourceProfile: SourceProfile | undefined) {
-  if (!sourceProfile?.point?.bandNormalized?.brightnesses.length) return null;
+  if (!sourceProfile?.point?.bandNormalized?.brightnesses.length) return { name: undefined, value: undefined };
 
   const brightness =
     sourceProfile.point?.bandNormalized?.brightnesses.find((b) => b.band === 'GAIA') ??
     getBandClosestTo(sourceProfile.point?.bandNormalized?.brightnesses);
 
-  if (!brightness) return null;
+  if (!brightness) return { name: undefined, value: undefined };
   const name = BANDS.find((b) => b.odbName === brightness.band)?.name;
   const value = typeof brightness.value === 'string' ? parseFloat(brightness.value) : brightness.value;
-  return `${name} ${value.toFixed(2)}`;
+  return { name, value };
 }
 
 function getBandClosestTo(brightnesses: BandBrightnessIntegrated[], wavelength = 600000) {
