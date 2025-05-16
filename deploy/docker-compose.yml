@@ -48,7 +48,8 @@ services:
     restart: unless-stopped
     network_mode: host
     volumes:
-      - ${CONFIG_DIR}:/opt/docker/conf/local
+      - ${CONFIG_DIR}:/opt/docker/conf/local/
+      - ${LOGS_DIR}:/gemsoft/var/log/navigate/
     ports:
       - '${NAVIGATE_EXPOSE_PORT}:7070'
       - 5064:5064
