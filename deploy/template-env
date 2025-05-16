@@ -9,7 +9,8 @@ SERVER_PORT=4000
 
 # Server
 NAVIGATE_EXPOSE_PORT=9090
-CONFIG_DIR=/home/software/navigate-server-conf
+CONFIG_DIR=/home/software/navigate/conf/
+LOGS_DIR=/gemsoft/var/log/gpp/navigate/
 SITE=
 
 # Pgadmin (Optional)
