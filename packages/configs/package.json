@@ -25,11 +25,11 @@
   },
   "dependencies": {
     "@apollo/server": "4.12.1",
-    "@prisma/client": "6.7.0",
+    "@prisma/client": "6.8.2",
     "graphql": "catalog:",
     "lucuma-core": "catalog:",
     "navigate-schema": "workspace:*",
-    "prisma": "6.7.0"
+    "prisma": "6.8.2"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "catalog:",
