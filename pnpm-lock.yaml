@@ -17,8 +17,8 @@ catalogs:
       specifier: 16.11.0
       version: 16.11.0
     lucuma-core:
-      specifier: 0.127.0
-      version: 0.127.0
+      specifier: 0.129.0
+      version: 0.129.0
     typescript:
       specifier: 5.8.3
       version: 5.8.3
@@ -74,7 +74,7 @@ importers:
         version: 16.11.0
       lucuma-core:
         specifier: 'catalog:'
-        version: 0.127.0
+        version: 0.129.0
       navigate-schema:
         specifier: workspace:*
         version: link:../schema
@@ -181,7 +181,7 @@ importers:
         version: 2.12.4(@types/react@19.1.4)(react@19.1.0)
       lucuma-core:
         specifier: 'catalog:'
-        version: 0.127.0
+        version: 0.129.0
       lucuma-schemas:
         specifier: 0.131.1
         version: 0.131.1
@@ -3285,8 +3285,8 @@ packages:
     resolution: {integrity: sha512-jumlc0BIUrS3qJGgIkWZsyfAM7NCWiBcCDhnd+3NNM5KbBmLTgHVfWBcg6W+rLUsIpzpERPsvwUP7CckAQSOoA==}
     engines: {node: '>=12'}
 
-  lucuma-core@0.127.0:
-    resolution: {integrity: sha512-skeN/05laR/LpvoC/IgFHcSfs7DnItsClf9LbPLKNzZhLb1ZwwYc/b8POKDyJPwaaX3x+yP2uzCXeONOUG0NCA==}
+  lucuma-core@0.129.0:
+    resolution: {integrity: sha512-+N9hAqiAp0C3Au9tvOBwDUvRrHLHVDIfFy5IdPhNtbmR7Oyvab+XOiYSp+UF0M75WzWZSPhpKnoU8GwAnHj3MA==}
 
   lucuma-schemas@0.131.1:
     resolution: {integrity: sha512-mzAK+3SwqvJE/ZxHW6CRRn9O+5hWr5A3LFNsTX9PjIVfCB/SbaG3DB+oi+7mHpt7HpOxYZFECjOYjdH7nXgkGA==}
@@ -8224,7 +8224,7 @@ snapshots:
 
   lru-cache@7.18.3: {}
 
-  lucuma-core@0.127.0: {}
+  lucuma-core@0.129.0: {}
 
   lucuma-schemas@0.131.1: {}
 
