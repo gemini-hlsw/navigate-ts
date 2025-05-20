@@ -176,7 +176,7 @@ export function Slew(props: ButtonProps) {
   const { data: instrumentData, loading: instrumentLoading } = useInstrument({
     variables: {
       name: configuration?.obsInstrument ?? '',
-      issPort: 3,
+      // issPort: 3,
       wfs: 'NONE',
     },
   });
@@ -215,11 +215,21 @@ export function Slew(props: ButtonProps) {
       sourceATarget: {
         id: selectedTarget.id,
         name: selectedTarget.name,
-        sidereal: {
-          ra: { hms: selectedTarget?.ra?.hms },
-          dec: { dms: selectedTarget?.dec?.dms },
-          epoch: selectedTarget?.epoch,
-        },
+        sidereal:
+          selectedTarget.type === 'FIXED'
+            ? undefined
+            : {
+                ra: { hms: selectedTarget?.ra?.hms },
+                dec: { dms: selectedTarget?.dec?.dms },
+                epoch: selectedTarget?.epoch,
+              },
+        azel:
+          selectedTarget.type === 'FIXED'
+            ? {
+                azimuth: { degrees: selectedTarget.az?.degrees },
+                elevation: { degrees: selectedTarget.el?.degrees },
+              }
+            : undefined,
         wavelength: { nanometers: selectedTarget.wavelength },
       },
       instrument: instrument.name as Instrument,

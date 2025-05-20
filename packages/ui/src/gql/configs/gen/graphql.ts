@@ -92,6 +92,22 @@ export type El = {
   dms: Scalars['String']['output'];
 };
 
+export type EngineeringTarget = {
+  __typename?: 'EngineeringTarget';
+  az?: Maybe<Az>;
+  createdAt: Scalars['DateTime']['output'];
+  dec?: Maybe<Dec>;
+  el?: Maybe<El>;
+  epoch?: Maybe<Scalars['String']['output']>;
+  id?: Maybe<Scalars['String']['output']>;
+  instrument: Scalars['String']['output'];
+  name: Scalars['String']['output'];
+  pk: Scalars['Int']['output'];
+  ra?: Maybe<Ra>;
+  type: TargetType;
+  wavelength?: Maybe<Scalars['Int']['output']>;
+};
+
 export type GemsGuideLoop = {
   __typename?: 'GemsGuideLoop';
   anisopl: Scalars['Boolean']['output'];
@@ -203,6 +219,7 @@ export type Mechanism = {
 export type Mutation = {
   __typename?: 'Mutation';
   createConfiguration: Configuration;
+  createEngineeringTarget: EngineeringTarget;
   createInstrument: Instrument;
   createTarget: Target;
   createUser: User;
@@ -211,6 +228,7 @@ export type Mutation = {
   updateAltairGuideLoop: AltairGuideLoop;
   updateAltairInstrument: AltairInstrument;
   updateConfiguration: Configuration;
+  updateEngineeringTarget: EngineeringTarget;
   updateGemsGuideLoop: GemsGuideLoop;
   updateGemsInstrument: GemsInstrument;
   updateGuideAlarm: GuideAlarm;
@@ -237,6 +255,20 @@ export type MutationCreateConfigurationArgs = {
   selectedP2Target?: InputMaybe<Scalars['Int']['input']>;
   selectedTarget?: InputMaybe<Scalars['Int']['input']>;
   site?: InputMaybe<SiteType>;
+};
+
+
+export type MutationCreateEngineeringTargetArgs = {
+  az?: InputMaybe<Scalars['Float']['input']>;
+  dec?: InputMaybe<Scalars['Float']['input']>;
+  el?: InputMaybe<Scalars['Float']['input']>;
+  epoch?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
+  instrument: Scalars['String']['input'];
+  name: Scalars['String']['input'];
+  ra?: InputMaybe<Scalars['Float']['input']>;
+  type: TargetType;
+  wavelength?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
@@ -327,6 +359,19 @@ export type MutationUpdateConfigurationArgs = {
   selectedP2Target?: InputMaybe<Scalars['Int']['input']>;
   selectedTarget?: InputMaybe<Scalars['Int']['input']>;
   site?: InputMaybe<SiteType>;
+};
+
+
+export type MutationUpdateEngineeringTargetArgs = {
+  coord1?: InputMaybe<Scalars['Float']['input']>;
+  coord2?: InputMaybe<Scalars['Float']['input']>;
+  epoch?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
+  instrument?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  pk: Scalars['Int']['input'];
+  type?: InputMaybe<TargetType>;
+  wavelength?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
@@ -476,6 +521,8 @@ export type Query = {
   configuration?: Maybe<Configuration>;
   distinctInstruments: Array<DistinctInstrument>;
   distinctPorts: Array<DistinctPort>;
+  engineeringTarget?: Maybe<EngineeringTarget>;
+  engineeringTargets: Array<EngineeringTarget>;
   gemsGuideLoop?: Maybe<GemsGuideLoop>;
   gemsInstrument?: Maybe<GemsInstrument>;
   guideAlarms: GuideAlarms;
@@ -500,6 +547,18 @@ export type QueryConfigurationArgs = {
 
 export type QueryDistinctPortsArgs = {
   name?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type QueryEngineeringTargetArgs = {
+  id?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  pk?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+export type QueryEngineeringTargetsArgs = {
+  type?: InputMaybe<TargetType>;
 };
 
 
@@ -704,6 +763,26 @@ export type UpdateConfigurationMutationVariables = Exact<{
 
 
 export type UpdateConfigurationMutation = { __typename?: 'Mutation', updateConfiguration: { __typename?: 'Configuration', pk: number, site: SiteType, selectedTarget?: number | null, selectedOiTarget?: number | null, selectedP1Target?: number | null, selectedP2Target?: number | null, oiGuidingType: GuidingType, p1GuidingType: GuidingType, p2GuidingType: GuidingType, obsTitle?: string | null, obsId?: string | null, obsInstrument?: string | null, obsSubtitle?: string | null, obsReference?: string | null } };
+
+export type GetEngineeringTargetsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetEngineeringTargetsQuery = { __typename?: 'Query', engineeringTargets: Array<{ __typename?: 'EngineeringTarget', pk: number, id?: string | null, name: string, epoch?: string | null, type: TargetType, wavelength?: number | null, instrument: string, createdAt: string, ra?: { __typename?: 'RA', degrees: number, hms: string } | null, dec?: { __typename?: 'Dec', degrees: number, dms: string } | null, az?: { __typename?: 'Az', degrees: number, dms: string } | null, el?: { __typename?: 'El', degrees: number, dms: string } | null }> };
+
+export type UpdateEngineeringTargetMutationVariables = Exact<{
+  pk: Scalars['Int']['input'];
+  id?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  coord1?: InputMaybe<Scalars['Float']['input']>;
+  coord2?: InputMaybe<Scalars['Float']['input']>;
+  epoch?: InputMaybe<Scalars['String']['input']>;
+  type?: InputMaybe<TargetType>;
+  wavelength?: InputMaybe<Scalars['Int']['input']>;
+  instrument?: InputMaybe<Scalars['String']['input']>;
+}>;
+
+
+export type UpdateEngineeringTargetMutation = { __typename?: 'Mutation', updateEngineeringTarget: { __typename?: 'EngineeringTarget', pk: number, id?: string | null, name: string, epoch?: string | null, type: TargetType, wavelength?: number | null, instrument: string, createdAt: string, ra?: { __typename?: 'RA', degrees: number, hms: string } | null, dec?: { __typename?: 'Dec', degrees: number, dms: string } | null, az?: { __typename?: 'Az', degrees: number, dms: string } | null, el?: { __typename?: 'El', degrees: number, dms: string } | null } };
 
 export type GetGemsGuideLoopQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -976,6 +1055,8 @@ export const GetAltairInstrumentDocument = {"kind":"Document","definitions":[{"k
 export const UpdateAltairInstrumentDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"updateAltairInstrument"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"pk"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"beamsplitter"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"startMagnitude"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"seeing"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"windSpeed"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"forceMode"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"ndFilter"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"fieldLens"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"deployAdc"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"adjustAdc"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"lgs"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateAltairInstrument"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"pk"},"value":{"kind":"Variable","name":{"kind":"Name","value":"pk"}}},{"kind":"Argument","name":{"kind":"Name","value":"beamsplitter"},"value":{"kind":"Variable","name":{"kind":"Name","value":"beamsplitter"}}},{"kind":"Argument","name":{"kind":"Name","value":"startMagnitude"},"value":{"kind":"Variable","name":{"kind":"Name","value":"startMagnitude"}}},{"kind":"Argument","name":{"kind":"Name","value":"seeing"},"value":{"kind":"Variable","name":{"kind":"Name","value":"seeing"}}},{"kind":"Argument","name":{"kind":"Name","value":"windSpeed"},"value":{"kind":"Variable","name":{"kind":"Name","value":"windSpeed"}}},{"kind":"Argument","name":{"kind":"Name","value":"forceMode"},"value":{"kind":"Variable","name":{"kind":"Name","value":"forceMode"}}},{"kind":"Argument","name":{"kind":"Name","value":"ndFilter"},"value":{"kind":"Variable","name":{"kind":"Name","value":"ndFilter"}}},{"kind":"Argument","name":{"kind":"Name","value":"fieldLens"},"value":{"kind":"Variable","name":{"kind":"Name","value":"fieldLens"}}},{"kind":"Argument","name":{"kind":"Name","value":"deployAdc"},"value":{"kind":"Variable","name":{"kind":"Name","value":"deployAdc"}}},{"kind":"Argument","name":{"kind":"Name","value":"adjustAdc"},"value":{"kind":"Variable","name":{"kind":"Name","value":"adjustAdc"}}},{"kind":"Argument","name":{"kind":"Name","value":"lgs"},"value":{"kind":"Variable","name":{"kind":"Name","value":"lgs"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"pk"}},{"kind":"Field","name":{"kind":"Name","value":"beamsplitter"}},{"kind":"Field","name":{"kind":"Name","value":"startMagnitude"}},{"kind":"Field","name":{"kind":"Name","value":"seeing"}},{"kind":"Field","name":{"kind":"Name","value":"windSpeed"}},{"kind":"Field","name":{"kind":"Name","value":"forceMode"}},{"kind":"Field","name":{"kind":"Name","value":"ndFilter"}},{"kind":"Field","name":{"kind":"Name","value":"fieldLens"}},{"kind":"Field","name":{"kind":"Name","value":"deployAdc"}},{"kind":"Field","name":{"kind":"Name","value":"adjustAdc"}},{"kind":"Field","name":{"kind":"Name","value":"lgs"}}]}}]}}]} as unknown as DocumentNode<UpdateAltairInstrumentMutation, UpdateAltairInstrumentMutationVariables>;
 export const GetConfigurationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getConfiguration"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"configuration"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"pk"}},{"kind":"Field","name":{"kind":"Name","value":"site"}},{"kind":"Field","name":{"kind":"Name","value":"selectedTarget"}},{"kind":"Field","name":{"kind":"Name","value":"selectedOiTarget"}},{"kind":"Field","name":{"kind":"Name","value":"selectedP1Target"}},{"kind":"Field","name":{"kind":"Name","value":"selectedP2Target"}},{"kind":"Field","name":{"kind":"Name","value":"oiGuidingType"}},{"kind":"Field","name":{"kind":"Name","value":"p1GuidingType"}},{"kind":"Field","name":{"kind":"Name","value":"p2GuidingType"}},{"kind":"Field","name":{"kind":"Name","value":"obsTitle"}},{"kind":"Field","name":{"kind":"Name","value":"obsId"}},{"kind":"Field","name":{"kind":"Name","value":"obsInstrument"}},{"kind":"Field","name":{"kind":"Name","value":"obsSubtitle"}},{"kind":"Field","name":{"kind":"Name","value":"obsReference"}}]}}]}}]} as unknown as DocumentNode<GetConfigurationQuery, GetConfigurationQueryVariables>;
 export const UpdateConfigurationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"updateConfiguration"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"pk"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"site"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"SiteType"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"selectedTarget"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"selectedOiTarget"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"selectedP1Target"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"selectedP2Target"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"oiGuidingType"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"GuidingType"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"p1GuidingType"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"GuidingType"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"p2GuidingType"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"GuidingType"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"obsTitle"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"obsId"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"obsInstrument"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"obsSubtitle"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"obsReference"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateConfiguration"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"pk"},"value":{"kind":"Variable","name":{"kind":"Name","value":"pk"}}},{"kind":"Argument","name":{"kind":"Name","value":"site"},"value":{"kind":"Variable","name":{"kind":"Name","value":"site"}}},{"kind":"Argument","name":{"kind":"Name","value":"selectedTarget"},"value":{"kind":"Variable","name":{"kind":"Name","value":"selectedTarget"}}},{"kind":"Argument","name":{"kind":"Name","value":"selectedOiTarget"},"value":{"kind":"Variable","name":{"kind":"Name","value":"selectedOiTarget"}}},{"kind":"Argument","name":{"kind":"Name","value":"selectedP1Target"},"value":{"kind":"Variable","name":{"kind":"Name","value":"selectedP1Target"}}},{"kind":"Argument","name":{"kind":"Name","value":"selectedP2Target"},"value":{"kind":"Variable","name":{"kind":"Name","value":"selectedP2Target"}}},{"kind":"Argument","name":{"kind":"Name","value":"oiGuidingType"},"value":{"kind":"Variable","name":{"kind":"Name","value":"oiGuidingType"}}},{"kind":"Argument","name":{"kind":"Name","value":"p1GuidingType"},"value":{"kind":"Variable","name":{"kind":"Name","value":"p1GuidingType"}}},{"kind":"Argument","name":{"kind":"Name","value":"p2GuidingType"},"value":{"kind":"Variable","name":{"kind":"Name","value":"p2GuidingType"}}},{"kind":"Argument","name":{"kind":"Name","value":"obsTitle"},"value":{"kind":"Variable","name":{"kind":"Name","value":"obsTitle"}}},{"kind":"Argument","name":{"kind":"Name","value":"obsId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"obsId"}}},{"kind":"Argument","name":{"kind":"Name","value":"obsInstrument"},"value":{"kind":"Variable","name":{"kind":"Name","value":"obsInstrument"}}},{"kind":"Argument","name":{"kind":"Name","value":"obsSubtitle"},"value":{"kind":"Variable","name":{"kind":"Name","value":"obsSubtitle"}}},{"kind":"Argument","name":{"kind":"Name","value":"obsReference"},"value":{"kind":"Variable","name":{"kind":"Name","value":"obsReference"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"pk"}},{"kind":"Field","name":{"kind":"Name","value":"site"}},{"kind":"Field","name":{"kind":"Name","value":"selectedTarget"}},{"kind":"Field","name":{"kind":"Name","value":"selectedOiTarget"}},{"kind":"Field","name":{"kind":"Name","value":"selectedP1Target"}},{"kind":"Field","name":{"kind":"Name","value":"selectedP2Target"}},{"kind":"Field","name":{"kind":"Name","value":"oiGuidingType"}},{"kind":"Field","name":{"kind":"Name","value":"p1GuidingType"}},{"kind":"Field","name":{"kind":"Name","value":"p2GuidingType"}},{"kind":"Field","name":{"kind":"Name","value":"obsTitle"}},{"kind":"Field","name":{"kind":"Name","value":"obsId"}},{"kind":"Field","name":{"kind":"Name","value":"obsInstrument"}},{"kind":"Field","name":{"kind":"Name","value":"obsSubtitle"}},{"kind":"Field","name":{"kind":"Name","value":"obsReference"}}]}}]}}]} as unknown as DocumentNode<UpdateConfigurationMutation, UpdateConfigurationMutationVariables>;
+export const GetEngineeringTargetsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getEngineeringTargets"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"engineeringTargets"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"pk"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"ra"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"degrees"}},{"kind":"Field","name":{"kind":"Name","value":"hms"}}]}},{"kind":"Field","name":{"kind":"Name","value":"dec"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"degrees"}},{"kind":"Field","name":{"kind":"Name","value":"dms"}}]}},{"kind":"Field","name":{"kind":"Name","value":"az"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"degrees"}},{"kind":"Field","name":{"kind":"Name","value":"dms"}}]}},{"kind":"Field","name":{"kind":"Name","value":"el"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"degrees"}},{"kind":"Field","name":{"kind":"Name","value":"dms"}}]}},{"kind":"Field","name":{"kind":"Name","value":"epoch"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"wavelength"}},{"kind":"Field","name":{"kind":"Name","value":"instrument"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}}]}}]} as unknown as DocumentNode<GetEngineeringTargetsQuery, GetEngineeringTargetsQueryVariables>;
+export const UpdateEngineeringTargetDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"updateEngineeringTarget"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"pk"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"name"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"coord1"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"coord2"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"epoch"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"type"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"TargetType"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"wavelength"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"instrument"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateEngineeringTarget"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"pk"},"value":{"kind":"Variable","name":{"kind":"Name","value":"pk"}}},{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}},{"kind":"Argument","name":{"kind":"Name","value":"name"},"value":{"kind":"Variable","name":{"kind":"Name","value":"name"}}},{"kind":"Argument","name":{"kind":"Name","value":"coord1"},"value":{"kind":"Variable","name":{"kind":"Name","value":"coord1"}}},{"kind":"Argument","name":{"kind":"Name","value":"coord2"},"value":{"kind":"Variable","name":{"kind":"Name","value":"coord2"}}},{"kind":"Argument","name":{"kind":"Name","value":"epoch"},"value":{"kind":"Variable","name":{"kind":"Name","value":"epoch"}}},{"kind":"Argument","name":{"kind":"Name","value":"type"},"value":{"kind":"Variable","name":{"kind":"Name","value":"type"}}},{"kind":"Argument","name":{"kind":"Name","value":"wavelength"},"value":{"kind":"Variable","name":{"kind":"Name","value":"wavelength"}}},{"kind":"Argument","name":{"kind":"Name","value":"instrument"},"value":{"kind":"Variable","name":{"kind":"Name","value":"instrument"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"pk"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"ra"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"degrees"}},{"kind":"Field","name":{"kind":"Name","value":"hms"}}]}},{"kind":"Field","name":{"kind":"Name","value":"dec"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"degrees"}},{"kind":"Field","name":{"kind":"Name","value":"dms"}}]}},{"kind":"Field","name":{"kind":"Name","value":"az"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"degrees"}},{"kind":"Field","name":{"kind":"Name","value":"dms"}}]}},{"kind":"Field","name":{"kind":"Name","value":"el"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"degrees"}},{"kind":"Field","name":{"kind":"Name","value":"dms"}}]}},{"kind":"Field","name":{"kind":"Name","value":"epoch"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"wavelength"}},{"kind":"Field","name":{"kind":"Name","value":"instrument"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}}]}}]} as unknown as DocumentNode<UpdateEngineeringTargetMutation, UpdateEngineeringTargetMutationVariables>;
 export const GetGemsGuideLoopDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getGemsGuideLoop"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gemsGuideLoop"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"pk"}},{"kind":"Field","name":{"kind":"Name","value":"aoEnabled"}},{"kind":"Field","name":{"kind":"Name","value":"focus"}},{"kind":"Field","name":{"kind":"Name","value":"rotation"}},{"kind":"Field","name":{"kind":"Name","value":"tipTilt"}},{"kind":"Field","name":{"kind":"Name","value":"anisopl"}},{"kind":"Field","name":{"kind":"Name","value":"flexure"}}]}}]}}]} as unknown as DocumentNode<GetGemsGuideLoopQuery, GetGemsGuideLoopQueryVariables>;
 export const UpdateGemsGuideLoopDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"updateGemsGuideLoop"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"pk"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"aoEnabled"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"focus"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"rotation"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"tipTilt"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"anisopl"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"flexure"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateGemsGuideLoop"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"pk"},"value":{"kind":"Variable","name":{"kind":"Name","value":"pk"}}},{"kind":"Argument","name":{"kind":"Name","value":"aoEnabled"},"value":{"kind":"Variable","name":{"kind":"Name","value":"aoEnabled"}}},{"kind":"Argument","name":{"kind":"Name","value":"focus"},"value":{"kind":"Variable","name":{"kind":"Name","value":"focus"}}},{"kind":"Argument","name":{"kind":"Name","value":"rotation"},"value":{"kind":"Variable","name":{"kind":"Name","value":"rotation"}}},{"kind":"Argument","name":{"kind":"Name","value":"tipTilt"},"value":{"kind":"Variable","name":{"kind":"Name","value":"tipTilt"}}},{"kind":"Argument","name":{"kind":"Name","value":"anisopl"},"value":{"kind":"Variable","name":{"kind":"Name","value":"anisopl"}}},{"kind":"Argument","name":{"kind":"Name","value":"flexure"},"value":{"kind":"Variable","name":{"kind":"Name","value":"flexure"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"pk"}},{"kind":"Field","name":{"kind":"Name","value":"aoEnabled"}},{"kind":"Field","name":{"kind":"Name","value":"focus"}},{"kind":"Field","name":{"kind":"Name","value":"rotation"}},{"kind":"Field","name":{"kind":"Name","value":"tipTilt"}},{"kind":"Field","name":{"kind":"Name","value":"anisopl"}},{"kind":"Field","name":{"kind":"Name","value":"flexure"}}]}}]}}]} as unknown as DocumentNode<UpdateGemsGuideLoopMutation, UpdateGemsGuideLoopMutationVariables>;
 export const GetGemsInstrumentDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getGemsInstrument"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gemsInstrument"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"pk"}},{"kind":"Field","name":{"kind":"Name","value":"beamsplitter"}},{"kind":"Field","name":{"kind":"Name","value":"adc"}},{"kind":"Field","name":{"kind":"Name","value":"astrometricMode"}}]}}]}}]} as unknown as DocumentNode<GetGemsInstrumentQuery, GetGemsInstrumentQueryVariables>;

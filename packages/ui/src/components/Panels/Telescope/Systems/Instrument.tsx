@@ -21,7 +21,7 @@ export function Instrument({ canEdit }: { canEdit: boolean }) {
   const { data, loading: instrumentLoading } = useInstrument({
     variables: {
       name: configuration?.obsInstrument ?? '',
-      issPort: 3,
+      // issPort: 1,
       wfs: 'NONE',
     },
   });

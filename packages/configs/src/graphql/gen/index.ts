@@ -93,6 +93,22 @@ export type El = {
   dms: Scalars['String']['output'];
 };
 
+export type EngineeringTarget = {
+  __typename?: 'EngineeringTarget';
+  az?: Maybe<Az>;
+  createdAt: Scalars['DateTime']['output'];
+  dec?: Maybe<Dec>;
+  el?: Maybe<El>;
+  epoch?: Maybe<Scalars['String']['output']>;
+  id?: Maybe<Scalars['String']['output']>;
+  instrument: Scalars['String']['output'];
+  name: Scalars['String']['output'];
+  pk: Scalars['Int']['output'];
+  ra?: Maybe<Ra>;
+  type: TargetType;
+  wavelength?: Maybe<Scalars['Int']['output']>;
+};
+
 export type GemsGuideLoop = {
   __typename?: 'GemsGuideLoop';
   anisopl: Scalars['Boolean']['output'];
@@ -204,6 +220,7 @@ export type Mechanism = {
 export type Mutation = {
   __typename?: 'Mutation';
   createConfiguration: Configuration;
+  createEngineeringTarget: EngineeringTarget;
   createInstrument: Instrument;
   createTarget: Target;
   createUser: User;
@@ -212,6 +229,7 @@ export type Mutation = {
   updateAltairGuideLoop: AltairGuideLoop;
   updateAltairInstrument: AltairInstrument;
   updateConfiguration: Configuration;
+  updateEngineeringTarget: EngineeringTarget;
   updateGemsGuideLoop: GemsGuideLoop;
   updateGemsInstrument: GemsInstrument;
   updateGuideAlarm: GuideAlarm;
@@ -238,6 +256,20 @@ export type MutationCreateConfigurationArgs = {
   selectedP2Target?: InputMaybe<Scalars['Int']['input']>;
   selectedTarget?: InputMaybe<Scalars['Int']['input']>;
   site?: InputMaybe<SiteType>;
+};
+
+
+export type MutationCreateEngineeringTargetArgs = {
+  az?: InputMaybe<Scalars['Float']['input']>;
+  dec?: InputMaybe<Scalars['Float']['input']>;
+  el?: InputMaybe<Scalars['Float']['input']>;
+  epoch?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
+  instrument: Scalars['String']['input'];
+  name: Scalars['String']['input'];
+  ra?: InputMaybe<Scalars['Float']['input']>;
+  type: TargetType;
+  wavelength?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
@@ -328,6 +360,19 @@ export type MutationUpdateConfigurationArgs = {
   selectedP2Target?: InputMaybe<Scalars['Int']['input']>;
   selectedTarget?: InputMaybe<Scalars['Int']['input']>;
   site?: InputMaybe<SiteType>;
+};
+
+
+export type MutationUpdateEngineeringTargetArgs = {
+  coord1?: InputMaybe<Scalars['Float']['input']>;
+  coord2?: InputMaybe<Scalars['Float']['input']>;
+  epoch?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
+  instrument?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  pk: Scalars['Int']['input'];
+  type?: InputMaybe<TargetType>;
+  wavelength?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
@@ -477,6 +522,8 @@ export type Query = {
   configuration?: Maybe<Configuration>;
   distinctInstruments: Array<DistinctInstrument>;
   distinctPorts: Array<DistinctPort>;
+  engineeringTarget?: Maybe<EngineeringTarget>;
+  engineeringTargets: Array<EngineeringTarget>;
   gemsGuideLoop?: Maybe<GemsGuideLoop>;
   gemsInstrument?: Maybe<GemsInstrument>;
   guideAlarms: GuideAlarms;
@@ -501,6 +548,18 @@ export type QueryConfigurationArgs = {
 
 export type QueryDistinctPortsArgs = {
   name?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type QueryEngineeringTargetArgs = {
+  id?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  pk?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+export type QueryEngineeringTargetsArgs = {
+  type?: InputMaybe<TargetType>;
 };
 
 
@@ -720,6 +779,7 @@ export type ResolversTypes = {
   DistinctInstrument: ResolverTypeWrapper<DistinctInstrument>;
   DistinctPort: ResolverTypeWrapper<DistinctPort>;
   El: ResolverTypeWrapper<El>;
+  EngineeringTarget: ResolverTypeWrapper<EngineeringTarget>;
   Float: ResolverTypeWrapper<Scalars['Float']['output']>;
   GemsGuideLoop: ResolverTypeWrapper<GemsGuideLoop>;
   GemsInstrument: ResolverTypeWrapper<GemsInstrument>;
@@ -760,6 +820,7 @@ export type ResolversParentTypes = {
   DistinctInstrument: DistinctInstrument;
   DistinctPort: DistinctPort;
   El: El;
+  EngineeringTarget: EngineeringTarget;
   Float: Scalars['Float']['output'];
   GemsGuideLoop: GemsGuideLoop;
   GemsInstrument: GemsInstrument;
@@ -857,6 +918,22 @@ export type DistinctPortResolvers<ContextType = ApolloContext, ParentType extend
 export type ElResolvers<ContextType = ApolloContext, ParentType extends ResolversParentTypes['El'] = ResolversParentTypes['El']> = {
   degrees?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   dms?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type EngineeringTargetResolvers<ContextType = ApolloContext, ParentType extends ResolversParentTypes['EngineeringTarget'] = ResolversParentTypes['EngineeringTarget']> = {
+  az?: Resolver<Maybe<ResolversTypes['Az']>, ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  dec?: Resolver<Maybe<ResolversTypes['Dec']>, ParentType, ContextType>;
+  el?: Resolver<Maybe<ResolversTypes['El']>, ParentType, ContextType>;
+  epoch?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  instrument?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  pk?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  ra?: Resolver<Maybe<ResolversTypes['RA']>, ParentType, ContextType>;
+  type?: Resolver<ResolversTypes['TargetType'], ParentType, ContextType>;
+  wavelength?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -971,6 +1048,7 @@ export type MechanismResolvers<ContextType = ApolloContext, ParentType extends R
 
 export type MutationResolvers<ContextType = ApolloContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   createConfiguration?: Resolver<ResolversTypes['Configuration'], ParentType, ContextType, RequireFields<MutationCreateConfigurationArgs, 'oiGuidingType' | 'p1GuidingType' | 'p2GuidingType'>>;
+  createEngineeringTarget?: Resolver<ResolversTypes['EngineeringTarget'], ParentType, ContextType, RequireFields<MutationCreateEngineeringTargetArgs, 'instrument' | 'name' | 'type'>>;
   createInstrument?: Resolver<ResolversTypes['Instrument'], ParentType, ContextType, RequireFields<MutationCreateInstrumentArgs, 'issPort' | 'name'>>;
   createTarget?: Resolver<ResolversTypes['Target'], ParentType, ContextType, RequireFields<MutationCreateTargetArgs, 'name' | 'type'>>;
   createUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'name'>>;
@@ -979,6 +1057,7 @@ export type MutationResolvers<ContextType = ApolloContext, ParentType extends Re
   updateAltairGuideLoop?: Resolver<ResolversTypes['AltairGuideLoop'], ParentType, ContextType, RequireFields<MutationUpdateAltairGuideLoopArgs, 'pk'>>;
   updateAltairInstrument?: Resolver<ResolversTypes['AltairInstrument'], ParentType, ContextType, RequireFields<MutationUpdateAltairInstrumentArgs, 'pk'>>;
   updateConfiguration?: Resolver<ResolversTypes['Configuration'], ParentType, ContextType, RequireFields<MutationUpdateConfigurationArgs, 'pk'>>;
+  updateEngineeringTarget?: Resolver<ResolversTypes['EngineeringTarget'], ParentType, ContextType, RequireFields<MutationUpdateEngineeringTargetArgs, 'pk'>>;
   updateGemsGuideLoop?: Resolver<ResolversTypes['GemsGuideLoop'], ParentType, ContextType, RequireFields<MutationUpdateGemsGuideLoopArgs, 'pk'>>;
   updateGemsInstrument?: Resolver<ResolversTypes['GemsInstrument'], ParentType, ContextType, RequireFields<MutationUpdateGemsInstrumentArgs, 'pk'>>;
   updateGuideAlarm?: Resolver<ResolversTypes['GuideAlarm'], ParentType, ContextType, RequireFields<MutationUpdateGuideAlarmArgs, 'wfs'>>;
@@ -996,6 +1075,8 @@ export type QueryResolvers<ContextType = ApolloContext, ParentType extends Resol
   configuration?: Resolver<Maybe<ResolversTypes['Configuration']>, ParentType, ContextType, Partial<QueryConfigurationArgs>>;
   distinctInstruments?: Resolver<Array<ResolversTypes['DistinctInstrument']>, ParentType, ContextType>;
   distinctPorts?: Resolver<Array<ResolversTypes['DistinctPort']>, ParentType, ContextType, Partial<QueryDistinctPortsArgs>>;
+  engineeringTarget?: Resolver<Maybe<ResolversTypes['EngineeringTarget']>, ParentType, ContextType, Partial<QueryEngineeringTargetArgs>>;
+  engineeringTargets?: Resolver<Array<ResolversTypes['EngineeringTarget']>, ParentType, ContextType, Partial<QueryEngineeringTargetsArgs>>;
   gemsGuideLoop?: Resolver<Maybe<ResolversTypes['GemsGuideLoop']>, ParentType, ContextType>;
   gemsInstrument?: Resolver<Maybe<ResolversTypes['GemsInstrument']>, ParentType, ContextType>;
   guideAlarms?: Resolver<ResolversTypes['GuideAlarms'], ParentType, ContextType>;
@@ -1085,6 +1166,7 @@ export type Resolvers<ContextType = ApolloContext> = {
   DistinctInstrument?: DistinctInstrumentResolvers<ContextType>;
   DistinctPort?: DistinctPortResolvers<ContextType>;
   El?: ElResolvers<ContextType>;
+  EngineeringTarget?: EngineeringTargetResolvers<ContextType>;
   GemsGuideLoop?: GemsGuideLoopResolvers<ContextType>;
   GemsInstrument?: GemsInstrumentResolvers<ContextType>;
   GuideAlarm?: GuideAlarmResolvers<ContextType>;
