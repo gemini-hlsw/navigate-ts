@@ -662,6 +662,46 @@ export type BrightnessSurfaceUnits =
   /** W/m²/µm/arcsec² */
   | 'W_PER_M_SQUARED_PER_UM_PER_ARCSEC_SQUARED';
 
+/** A BandedTime that is automatically updated by a background process. */
+export type CalculatedBandedTime = {
+  __typename?: 'CalculatedBandedTime';
+  /** The current state of the background calculation. */
+  state: CalculationState;
+  value?: Maybe<BandedTime>;
+};
+
+/** A CategorizedTimeRange that is automatically updated by a background process. */
+export type CalculatedCategorizedTimeRange = {
+  __typename?: 'CalculatedCategorizedTimeRange';
+  /** The current state of the background calculation. */
+  state: CalculationState;
+  value?: Maybe<CategorizedTimeRange>;
+};
+
+/** Observation background-update calculation states. */
+export type CalculationState =
+  /**
+   * CALCULATING signifies that an observation background calculation is currently
+   * ongoing.
+   */
+  | 'CALCULATING'
+  /**
+   * PENDING signifies that the observation will be updated by a background worker
+   * in the future.  Calculated items like the execution digest may be updated at
+   * that point.
+   */
+  | 'PENDING'
+  /**
+   * READY signifies that there are no pending calculation updates at the moment
+   * and calculated values like the execution digest will not change.
+   */
+  | 'READY'
+  /**
+   * RETRY signifies that the observation update calculation failed and will be
+   * automatically attempted again even if its properties are not modified.
+   */
+  | 'RETRY';
+
 export type CalibrationProgramReference = ProgramReference & {
   __typename?: 'CalibrationProgramReference';
   instrument: Instrument;
@@ -1962,6 +2002,11 @@ export type ExecutionVisitsArgs = {
 export type ExecutionConfig = {
   __typename?: 'ExecutionConfig';
   /**
+   * Flamingos 2 execution config.  This will be null unless the `instrument` is
+   * `FLAMINGOS2`.
+   */
+  flamingos2?: Maybe<Flamingos2ExecutionConfig>;
+  /**
    * GMOS North execution config.  This will be null unless the `instrument` is
    * `GMOS_NORTH`.
    */
@@ -2139,6 +2184,49 @@ export type FilterTypeMeta = {
   tag: FilterType;
 };
 
+/** Flamingos 2 atom, a collection of steps that should be executed in their entirety */
+export type Flamingos2Atom = {
+  __typename?: 'Flamingos2Atom';
+  /** Optional description of the atom. */
+  description?: Maybe<Scalars['String']['output']>;
+  /** Atom id */
+  id: Scalars['AtomId']['output'];
+  /**
+   * Observe class for this atom as a whole (combined observe class for each of
+   * its steps).
+   */
+  observeClass: ObserveClass;
+  /** Individual steps that comprise the atom */
+  steps: Array<Flamingos2Step>;
+};
+
+/** Flamingos 2 Custom Mask */
+export type Flamingos2CustomMask = {
+  __typename?: 'Flamingos2CustomMask';
+  /** Custom Mask Filename */
+  filename: Scalars['String']['output'];
+  /** Custom Slit Width */
+  slitWidth: Flamingos2CustomSlitWidth;
+};
+
+/** Flamingos 2 custom mask input parameters */
+export type Flamingos2CustomMaskInput = {
+  /** Custom mask file name */
+  filename: Scalars['String']['input'];
+  /** Custom mask slit width */
+  slitWidth: Flamingos2CustomSlitWidth;
+};
+
+/** Flamingos 2 Custom Slit Width */
+export type Flamingos2CustomSlitWidth =
+  | 'CUSTOM_WIDTH_1_PIX'
+  | 'CUSTOM_WIDTH_2_PIX'
+  | 'CUSTOM_WIDTH_3_PIX'
+  | 'CUSTOM_WIDTH_4_PIX'
+  | 'CUSTOM_WIDTH_6_PIX'
+  | 'CUSTOM_WIDTH_8_PIX'
+  | 'OTHER';
+
 /** Flamingos2 Decker */
 export type Flamingos2Decker =
   /** Flamingos2Decker Imaging */
@@ -2156,6 +2244,67 @@ export type Flamingos2Disperser =
   | 'R1200_JH'
   /** Flamingos2Disperser R=3000 (J or H or K) grism */
   | 'R3000';
+
+/** Flamingos 2 dynamic step configuration */
+export type Flamingos2Dynamic = {
+  __typename?: 'Flamingos2Dynamic';
+  /** Flamingos 2 decker. */
+  decker: Flamingos2Decker;
+  /** Flamingos 2 disperser, if any. */
+  disperser?: Maybe<Flamingos2Disperser>;
+  /** Flamingos 2 exposure time */
+  exposure: TimeSpan;
+  /** Flamingos 2 filter. */
+  filter: Flamingos2Filter;
+  /** Flamingos 2 FPU, if any. */
+  fpu?: Maybe<Flamingos2FpuMask>;
+  /** Flamingos 2 Lyot Wheel. */
+  lyotWheel: Flamingos2LyotWheel;
+  /** Flamingos 2 read mode. */
+  readMode: Flamingos2ReadMode;
+  /** Flamingos 2 readout mode. */
+  readoutMode: Flamingos2ReadoutMode;
+  /** Flamingos 2 reads. */
+  reads: Flamingos2Reads;
+};
+
+/** Flamingos 2 instrument configuration input. */
+export type Flamingos2DynamicInput = {
+  decker: Flamingos2Decker;
+  disperser?: InputMaybe<Flamingos2Disperser>;
+  exposure: TimeSpanInput;
+  filter: Flamingos2Filter;
+  fpu?: InputMaybe<Flamingos2FpuMaskInput>;
+  lyotWheel: Flamingos2LyotWheel;
+  readMode: Flamingos2ReadMode;
+  readoutMode: Flamingos2ReadoutMode;
+  reads: Flamingos2Reads;
+};
+
+/** Flamingos 2 Execution Config */
+export type Flamingos2ExecutionConfig = {
+  __typename?: 'Flamingos2ExecutionConfig';
+  /** Flamingos 2 acquisition execution sequence */
+  acquisition?: Maybe<Flamingos2ExecutionSequence>;
+  /** Flamingos 2 science execution */
+  science?: Maybe<Flamingos2ExecutionSequence>;
+  /** Flamingos 2 static configuration */
+  static: Flamingos2Static;
+};
+
+/** Next atom to execute and potential future atoms. */
+export type Flamingos2ExecutionSequence = {
+  __typename?: 'Flamingos2ExecutionSequence';
+  /**
+   * Whether there are more anticipated atoms than those that appear in
+   * 'possibleFuture'.
+   */
+  hasMore: Scalars['Boolean']['output'];
+  /** Next atom to execute. */
+  nextAtom: Flamingos2Atom;
+  /** (Prefix of the) remaining atoms to execute, if any. */
+  possibleFuture: Array<Flamingos2Atom>;
+};
 
 /** Flamingos2 Filter */
 export type Flamingos2Filter =
@@ -2199,6 +2348,23 @@ export type Flamingos2Fpu =
   /** Flamingos2Fpu Sub-Pixel Pinhole Gr */
   | 'SUB_PIX_PINHOLE';
 
+/** Flamingos 2 mask option, either builtin or custom mask */
+export type Flamingos2FpuMask = {
+  __typename?: 'Flamingos2FpuMask';
+  /** Flamingos 2 builtin FPU, if in use */
+  builtin?: Maybe<Flamingos2Fpu>;
+  /** The custom mask, if in use */
+  customMask?: Maybe<Flamingos2CustomMask>;
+};
+
+/** Flamingos 2 mask input parameters (choose custom or builtin). */
+export type Flamingos2FpuMaskInput = {
+  /** Builtin FPU option */
+  builtin?: InputMaybe<Flamingos2Fpu>;
+  /** Custom mask FPU option */
+  customMask?: InputMaybe<Flamingos2CustomMaskInput>;
+};
+
 /** Flamingos2 South Long Slit mode */
 export type Flamingos2LongSlit = {
   __typename?: 'Flamingos2LongSlit';
@@ -2209,15 +2375,8 @@ export type Flamingos2LongSlit = {
   decker: Flamingos2Decker;
   /** Default decker, calculated based on the exposure time */
   defaultDecker: Flamingos2Decker;
-  /** Default read mode, calculated based on the exposure time */
-  defaultReadMode: Flamingos2ReadMode;
   /** Default readout mode, science */
   defaultReadoutMode: Flamingos2ReadoutMode;
-  /**
-   * Default reads, calculated from the selected read mode which in
-   * turn is based on the exposure time
-   */
-  defaultReads: Flamingos2Reads;
   /** Flamingos2 Disperser */
   disperser: Flamingos2Disperser;
   /**
@@ -2260,20 +2419,10 @@ export type Flamingos2LongSlit = {
    */
   initialFpu: Flamingos2Fpu;
   /**
-   * The read mode is either explicitly specified in explicitReadMode or else taken
-   * from defaultReadMode
-   */
-  readMode: Flamingos2ReadMode;
-  /**
    * The readoutMode field is either explicitly specified in explicitReadoutMode or else taken
    * from defaultReadoutMode
    */
   readoutMode: Flamingos2ReadoutMode;
-  /**
-   * F2 reads, either explicitly specified in explicitReads or else taken
-   * from the defaultXReads
-   */
-  reads: Flamingos2Reads;
 };
 
 /** Edit or create Flamingos2 Long Slit advanced configuration */
@@ -2293,6 +2442,14 @@ export type Flamingos2LongSlitInput = {
   /** The fpu field must be specified.  It cannot be unset with a null value. */
   fpu?: InputMaybe<Flamingos2Fpu>;
 };
+
+/** Flamingos 2 Lyot Wheel */
+export type Flamingos2LyotWheel =
+  | 'F16'
+  | 'GEMS_OVER'
+  | 'GEMS_UNDER'
+  | 'HARTMANN_A'
+  | 'HARTMANN_B';
 
 /** Flamingos2 Read Mode */
 export type Flamingos2ReadMode =
@@ -2343,12 +2500,41 @@ export type Flamingos2Reads =
   /** Flamingos2Reads Reads 16 */
   | 'READS_16';
 
-/** Flamingos2 Window Cover */
-export type Flamingos2WindowCover =
-  /** Flamingos2WindowCover CLOSE */
-  | 'CLOSE'
-  /** Flamingos2WindowCover Open */
-  | 'OPEN';
+/** Unchanging (over the course of the sequence) configuration values */
+export type Flamingos2Static = {
+  __typename?: 'Flamingos2Static';
+  /** Is MOS Pre-Imaging Observation */
+  mosPreImaging: MosPreImaging;
+  /** Whether to use electronic offsetting */
+  useElectronicOffsetting: Scalars['Boolean']['output'];
+};
+
+/** Flamingos 2 static configuration input parameters */
+export type Flamingos2StaticInput = {
+  /** Whether this is a MOS pre-imaging observation (defaults to IS_NOT_MOS_PRE_IMAGING) */
+  mosPreImaging?: InputMaybe<MosPreImaging>;
+  /** Whether to use electronic offsetting (defaults to false) */
+  useElectronicOffsetting?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+/** Flmaingos 2 step with potential breakpoint */
+export type Flamingos2Step = {
+  __typename?: 'Flamingos2Step';
+  /** Whether to pause before the execution of this step */
+  breakpoint: Breakpoint;
+  /** Time estimate for this step's execution */
+  estimate: StepEstimate;
+  /** Step id */
+  id: Scalars['StepId']['output'];
+  /** Instrument configuration for this step */
+  instrumentConfig: Flamingos2Dynamic;
+  /** Observe class for this step */
+  observeClass: ObserveClass;
+  /** The sequence step itself */
+  stepConfig: StepConfig;
+  /** The telescope configuration at this step. */
+  telescopeConfig: TelescopeConfig;
+};
 
 /** Flux density entry */
 export type FluxDensity = {
@@ -3663,7 +3849,7 @@ export type Group = {
    * fully defined such that a sequence can be generated for it.  All defined
    * observations in every band present in the group are included.
    */
-  timeEstimateBanded: Array<BandedTime>;
+  timeEstimateBanded: Array<CalculatedBandedTime>;
   /**
    * Remaining execution time estimate range, assuming it can be calculated.  In
    * order for an observation to have an estimate, it must be fully defined such
@@ -3671,7 +3857,7 @@ export type Group = {
    * are required and which are not fully defined, the remaining time estimate
    * cannot be calculated.
    */
-  timeEstimateRange?: Maybe<CategorizedTimeRange>;
+  timeEstimateRange?: Maybe<CalculatedCategorizedTimeRange>;
 };
 
 
@@ -3868,6 +4054,36 @@ export type ImageQualityPreset =
   /** ImageQualityPreset TwoPointZero */
   | 'TWO_POINT_ZERO';
 
+/** Describes an instrument configuration option for imaging. */
+export type ImagingConfigOption = {
+  __typename?: 'ImagingConfigOption';
+  adaptiveOptics: Scalars['Boolean']['output'];
+  filterLabel: Scalars['NonEmptyString']['output'];
+  fov: Angle;
+  /**
+   * For GMOS North options, the GMOS North configuration.  Null for other
+   * instruments.
+   */
+  gmosNorth?: Maybe<ImagingConfigOptionGmosNorth>;
+  /**
+   * For GMOS South options, the GMOS South configuration.  Null for other
+   * instruments.
+   */
+  gmosSouth?: Maybe<ImagingConfigOptionGmosSouth>;
+  instrument: Instrument;
+  site: Site;
+};
+
+export type ImagingConfigOptionGmosNorth = {
+  __typename?: 'ImagingConfigOptionGmosNorth';
+  filter: GmosNorthFilter;
+};
+
+export type ImagingConfigOptionGmosSouth = {
+  __typename?: 'ImagingConfigOptionGmosSouth';
+  filter: GmosSouthFilter;
+};
+
 /** Instrument */
 export type Instrument =
   /** Instrument AcqCam */
@@ -3888,6 +4104,8 @@ export type Instrument =
   | 'GPI'
   /** Instrument Gsaoi */
   | 'GSAOI'
+  /** Instrument Igrins2 */
+  | 'IGRINS2'
   /** Instrument Niri */
   | 'NIRI'
   /** Instrument Scorpio */
@@ -4137,6 +4355,10 @@ export type Mutation = {
   recordAtom: RecordAtomResult;
   /** Records a new dataset.  This dataset may be subsequently referenced by dataset events. */
   recordDataset: RecordDatasetResult;
+  /** Record a new Flamingos 2 step. */
+  recordFlamingos2Step: RecordFlamingos2StepResult;
+  /** Record a new Flamingos 2 visit */
+  recordFlamingos2Visit: RecordFlamingos2VisitResult;
   /** Record a new GMOS North step */
   recordGmosNorthStep: RecordGmosNorthStepResult;
   /** Record a new GMOS North visit */
@@ -4329,6 +4551,16 @@ export type MutationRecordDatasetArgs = {
 };
 
 
+export type MutationRecordFlamingos2StepArgs = {
+  input: RecordFlamingos2StepInput;
+};
+
+
+export type MutationRecordFlamingos2VisitArgs = {
+  input: RecordFlamingos2VisitInput;
+};
+
+
 export type MutationRecordGmosNorthStepArgs = {
   input: RecordGmosNorthStepInput;
 };
@@ -4503,6 +4735,33 @@ export type ObsStatus =
   | 'PROPOSED'
   /** ObsStatus Ready */
   | 'READY';
+
+/** Result type of the obscalcUpdate subscription. */
+export type ObscalcUpdate = {
+  __typename?: 'ObscalcUpdate';
+  /** Type of edit */
+  editType: EditType;
+  /** New calculation state, if any. */
+  newState?: Maybe<CalculationState>;
+  /** Id of the observation that was updated. */
+  observationId: Scalars['ObservationId']['output'];
+  /** Old calculation state, if any. */
+  oldState?: Maybe<CalculationState>;
+  /** Updated observation, if not deleted. */
+  value?: Maybe<Observation>;
+};
+
+/**
+ * Input to the obscalcUpdate subscription.  Specify programId and/or observation
+ * id to filter events to that program and/or observation.  Specify the old and
+ * new states to limit events to only those transitions.
+ */
+export type ObscalcUpdateInput = {
+  newState?: InputMaybe<WhereOptionEqCalculationState>;
+  observationId?: InputMaybe<Scalars['ObservationId']['input']>;
+  oldState?: InputMaybe<WhereOptionEqCalculationState>;
+  programId?: InputMaybe<Scalars['ProgramId']['input']>;
+};
 
 export type Observation = {
   __typename?: 'Observation';
@@ -5037,7 +5296,7 @@ export type Program = {
    * must be fully defined such that a sequence can be generated for it.  All
    * defined observations in every band present in the program are included.
    */
-  timeEstimateBanded: Array<BandedTime>;
+  timeEstimateBanded: Array<CalculatedBandedTime>;
   /**
    * Remaining execution time estimate range, assuming it can be calculated.  In
    * order for an observation to have an estimate, it must be fully defined such
@@ -5045,7 +5304,7 @@ export type Program = {
    * are required and which are not fully defined, the remaining time estimate
    * cannot be calculated.
    */
-  timeEstimateRange?: Maybe<CategorizedTimeRange>;
+  timeEstimateRange?: Maybe<CalculatedCategorizedTimeRange>;
   /** Program type */
   type: ProgramType;
   /** All user invitations associated with this program. */
@@ -5518,6 +5777,8 @@ export type Query = {
   goaDataDownloadAccess: Array<Scalars['ProgramReferenceLabel']['output']>;
   /** Returns the group indicated by the given groupId, if found. */
   group?: Maybe<Group>;
+  /** Imaging configuration options matching the WHERE parameter. */
+  imagingConfigOptions: Array<ImagingConfigOption>;
   /**
    * Returns the observation with the given id or reference, if any.  Identify the
    * observation by specifying only one of observationId or observationReference.
@@ -5646,6 +5907,11 @@ export type QueryGoaDataDownloadAccessArgs = {
 
 export type QueryGroupArgs = {
   groupId: Scalars['GroupId']['input'];
+};
+
+
+export type QueryImagingConfigOptionsArgs = {
+  WHERE?: InputMaybe<WhereImagingConfigOption>;
 };
 
 
@@ -5833,6 +6099,36 @@ export type RecordDatasetResult = {
   __typename?: 'RecordDatasetResult';
   /** The new dataset that was added. */
   dataset: Dataset;
+};
+
+/** Input parameters for creating a new Flamingos 2 StepRecord */
+export type RecordFlamingos2StepInput = {
+  atomId: Scalars['AtomId']['input'];
+  flamingos2: Flamingos2DynamicInput;
+  generatedId?: InputMaybe<Scalars['StepId']['input']>;
+  observeClass: ObserveClass;
+  stepConfig: StepConfigInput;
+  telescopeConfig?: InputMaybe<TelescopeConfigInput>;
+};
+
+/** The result of recording a Flamingos 2 step. */
+export type RecordFlamingos2StepResult = {
+  __typename?: 'RecordFlamingos2StepResult';
+  /** The newly added step record itself. */
+  stepRecord: StepRecord;
+};
+
+/** Input parameters for creating a new Flamingos 2 Visit */
+export type RecordFlamingos2VisitInput = {
+  flamingos2: Flamingos2StaticInput;
+  observationId: Scalars['ObservationId']['input'];
+};
+
+/** Result for recordFlamingos2Visit mutation. */
+export type RecordFlamingos2VisitResult = {
+  __typename?: 'RecordFlamingos2VisitResult';
+  /** The newly added visit record itself. */
+  visit: Visit;
 };
 
 /** Input parameters for creating a new GmosNorth StepRecord */
@@ -6922,6 +7218,11 @@ export type StepRecord = {
    * Observe.
    */
   executionState: StepExecutionState;
+  /**
+   * Flamingos 2 instrument configuration for this step, if any.  This will be null
+   * unless the `instrument` discriminator is "FLAMINGOS2".
+   */
+  flamingos2?: Maybe<Flamingos2Dynamic>;
   /** Step ID of the generated step, if any, that produced this step record. */
   generatedId?: Maybe<Scalars['StepId']['output']>;
   /**
@@ -7045,6 +7346,15 @@ export type Subscription = {
    */
   groupEdit: GroupEdit;
   /**
+   * Subscribes to an event that is generated whenever an observation calculation
+   * is updated.  If a program id is provided then the event must correspond to an
+   * observation referenced by that program.  If observation id is provided then
+   * the event must correspond to that particular observation. The old and new
+   * calculation states can also be matched to catch transitions, for example to
+   * and from 'Ready'.
+   */
+  obscalcUpdate: ObscalcUpdate;
+  /**
    * Subscribes to an event that is generated whenever a(n) observation is
    * created or updated.  If a(n) observation id is provided, the event is only
    * generated for edits to that particular observation.  If a program id is
@@ -7086,6 +7396,11 @@ export type SubscriptionExecutionEventAddedArgs = {
 
 export type SubscriptionGroupEditArgs = {
   input?: InputMaybe<GroupEditInput>;
+};
+
+
+export type SubscriptionObscalcUpdateArgs = {
+  input?: InputMaybe<ObscalcUpdateInput>;
 };
 
 
@@ -8149,6 +8464,12 @@ export type Visit = {
   /** Execution events associated with this visit. */
   events: ExecutionEventSelectResult;
   /**
+   * Flamingos 2 static instrument configuration, for Flamingos 2 visits.  See the
+   * `instrument` discriminator.  This will be null unless the instrument is
+   * `FLAMINGOS2`.
+   */
+  flamingos2?: Maybe<Flamingos2Static>;
+  /**
    * GmosNorth static instrument configuration, for GMOS North visits.  See the
    * `instrument` discriminator.  This will be null unless the instrument is
    * `GMOS_NORTH`.
@@ -8706,6 +9027,21 @@ export type WhereGroup = {
   name?: InputMaybe<WhereOptionString>;
 };
 
+/**
+ * Imaging instrument configuration option matcher.  Configure with the
+ * properties of interest and pass it to the 'imagingConfigOptions' query
+ * to find the corresponding configuration options.
+ */
+export type WhereImagingConfigOption = {
+  AND?: InputMaybe<Array<WhereImagingConfigOption>>;
+  NOT?: InputMaybe<WhereImagingConfigOption>;
+  OR?: InputMaybe<Array<WhereImagingConfigOption>>;
+  adaptiveOptics?: InputMaybe<WhereBoolean>;
+  fov?: InputMaybe<WhereAngle>;
+  instrument?: InputMaybe<WhereEqInstrument>;
+  site?: InputMaybe<WhereEqSite>;
+};
+
 /** Observation filter options.  All specified items must match. */
 export type WhereObservation = {
   /** A list of nested observation filters that all must match in order for the AND group as a whole to match. */
@@ -8746,6 +9082,22 @@ export type WhereOptionBoolean = {
   EQ?: InputMaybe<Scalars['Boolean']['input']>;
   /** Matches if the value is not defined. */
   IS_NULL?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type WhereOptionEqCalculationState = {
+  /** Matches if the property is exactly the supplied value. */
+  EQ?: InputMaybe<CalculationState>;
+  /** Matches if the property value is any of the supplied options. */
+  IN?: InputMaybe<Array<CalculationState>>;
+  /**
+   * When `true`, matches if the CalculationState is not defined. When `false` matches
+   * if the CalculationState is defined.
+   */
+  IS_NULL?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Matches if the property is not the supplied value. */
+  NEQ?: InputMaybe<CalculationState>;
+  /** Matches if the property value is none of the supplied values. */
+  NIN?: InputMaybe<Array<CalculationState>>;
 };
 
 /**
