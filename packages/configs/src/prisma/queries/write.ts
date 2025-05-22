@@ -1,6 +1,6 @@
 import { prisma } from '../db.js';
 import { INITIAL_CONFIGURATION } from './init/configuration.js';
-import { INITIAL_ENGINEERING_TARGETS } from './init/engineerintTargets.js';
+import { INITIAL_ENGINEERING_TARGETS } from './init/engineeringTargets.js';
 import { INITIAL_GUIDE_ALARMS } from './init/guideAlarm.js';
 import { INITIAL_ALTAIR_GUIDE_LOOP, INITIAL_GEMS_GUIDE_LOOP, INITIAL_GUIDE_LOOP } from './init/guideLoop.js';
 import { INITIAL_ALTAIR_INSTRUMENT, INITIAL_GEMS_INSTRUMENT, INITIAL_INSTRUMENTS } from './init/instruments.js';

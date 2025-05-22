@@ -5,7 +5,6 @@ export const EngineeringTargetResolver: Resolvers = {
     engineeringTarget: (_parent, args, { prisma }) => {
       return prisma.engineeringTarget.findFirst({
         where: args,
-        orderBy: { pk: 'desc' },
       });
     },
 
