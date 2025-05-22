@@ -4,6 +4,7 @@ import { resolvers as schemaResolvers, typeDefs } from 'navigate-schema';
 import { AltairGuideLoopResolver } from './graphql/resolvers/AltairGuideLoop.js';
 import { AltairInstrumentResolver } from './graphql/resolvers/AltairInstrument.js';
 import { ConfigurationResolver } from './graphql/resolvers/Configuration.js';
+import { EngineeringTargetResolver } from './graphql/resolvers/EngineeringTarget.js';
 import { GemsGuideLoopResolver } from './graphql/resolvers/GemsGuideLoop.js';
 import { GemsInstrumentResolver } from './graphql/resolvers/GemsInstrument.js';
 import { GuideAlarmResolver } from './graphql/resolvers/GuideAlarm.js';
@@ -24,6 +25,7 @@ const resolvers = {
     ...AltairGuideLoopResolver.Query,
     ...AltairInstrumentResolver.Query,
     ...ConfigurationResolver.Query,
+    ...EngineeringTargetResolver.Query,
     ...GemsGuideLoopResolver.Query,
     ...GemsInstrumentResolver.Query,
     ...GuideAlarmResolver.Query,
@@ -40,6 +42,7 @@ const resolvers = {
     ...AltairGuideLoopResolver.Mutation,
     ...AltairInstrumentResolver.Mutation,
     ...ConfigurationResolver.Mutation,
+    ...EngineeringTargetResolver.Mutation,
     ...GemsGuideLoopResolver.Mutation,
     ...GemsInstrumentResolver.Mutation,
     ...GuideAlarmResolver.Mutation,

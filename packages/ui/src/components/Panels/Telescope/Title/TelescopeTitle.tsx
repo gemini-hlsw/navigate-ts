@@ -3,6 +3,7 @@ import { Button } from 'primereact/button';
 import { Divider } from 'primereact/divider';
 
 import { useCanEdit } from '@/components/atoms/auth';
+import { useSetCatalogVisible } from '@/components/atoms/catalog';
 import { useSetOdbVisible } from '@/components/atoms/odb';
 import { List } from '@/components/Icons';
 
@@ -14,6 +15,7 @@ interface ParamsInterface {
 export function TelescopeTitle({ prevPanel, nextPanel }: ParamsInterface) {
   const canEdit = useCanEdit();
   const setOdbVisible = useSetOdbVisible();
+  const setCatalogVisible = useSetCatalogVisible();
 
   return (
     <Title title="TELESCOPE SETUP" prevPanel={prevPanel} nextPanel={nextPanel}>
@@ -28,7 +30,7 @@ export function TelescopeTitle({ prevPanel, nextPanel }: ParamsInterface) {
           disabled={!canEdit}
           className="p-button-text"
           label="Import from catalog"
-          onClick={() => console.log('Open catalog modal')}
+          onClick={() => setCatalogVisible(true)}
         />
         <Divider />
         <Button disabled={!canEdit} className="p-button-text" label="Edit targets" />

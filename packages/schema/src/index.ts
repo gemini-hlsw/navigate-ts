@@ -4,6 +4,7 @@ import { DateTimeResolver, DateTimeTypeDefinition, JSONDefinition, JSONResolver 
 import { AltairGuideLoopTypeDefs } from './AltairGuideLoop.js';
 import { AltairInstrumentTypeDefs } from './AltairInstrument.js';
 import { ConfigurationTypeDefs } from './Configuration.js';
+import { EngineeringTargetTypeDefs } from './EngineeringTarget.js';
 import { GemsGuideLoopTypeDefs } from './GemsGuideLoop.js';
 import { GemsInstrumentTypeDefs } from './GemsInstrument.js';
 import { GuideAlarmTypeDefs } from './GuideAlarm.js';
@@ -22,6 +23,7 @@ export const typeDefs = [
   AltairGuideLoopTypeDefs,
   AltairInstrumentTypeDefs,
   ConfigurationTypeDefs,
+  EngineeringTargetTypeDefs,
   GemsGuideLoopTypeDefs,
   GemsInstrumentTypeDefs,
   GuideAlarmTypeDefs,

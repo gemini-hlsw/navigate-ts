@@ -1,6 +1,7 @@
 import './Modals.scss';
 
 import { About } from './About';
+import { Catalog } from './Catalog/Catalog';
 import { Instrument } from './Instrument';
 import { OdbImport } from './OdbImport/OdbImport';
 import { SlewFlags } from './SlewFlags';
@@ -10,6 +11,7 @@ export function Modals() {
   return (
     <>
       <OdbImport />
+      <Catalog />
       <SlewFlags />
       <Target />
       <Instrument />
