@@ -77,7 +77,6 @@ export function Catalog() {
           },
         });
 
-        console.log(rotator, selectedTarget.rotatorMode, selectedTarget.rotatorAngle);
         if (rotator && selectedTarget.rotatorMode && selectedTarget.rotatorAngle !== null) {
           await updateRotator({
             variables: {
