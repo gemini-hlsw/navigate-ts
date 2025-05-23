@@ -11,6 +11,8 @@ export const EngineeringTargetTypeDefs = `#graphql
     type: TargetType!    # FIXED | SCIENCE | BLINDOFFSET | PWFS1 | PWFS2 | OIWFS
     wavelength: Int      # Wavelength
     instrument: String!   # Instrument name
+    rotatorMode: TrackingType # Rotator type
+    rotatorAngle: Float  # Rotator angle
     createdAt: DateTime!   # Datetime when it was created
   }
 
@@ -31,6 +33,8 @@ export const EngineeringTargetTypeDefs = `#graphql
       type: TargetType!
       instrument: String!
       wavelength: Int
+      rotatorMode: TrackingType
+      rotatorAngle: Float
     ): EngineeringTarget!
 
     updateEngineeringTarget(
@@ -43,6 +47,8 @@ export const EngineeringTargetTypeDefs = `#graphql
       type: TargetType
       instrument: String
       wavelength: Int
+      rotatorMode: TrackingType
+      rotatorAngle: Float
     ): EngineeringTarget!
   }
 `;

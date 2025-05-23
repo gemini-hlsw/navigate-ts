@@ -31,6 +31,8 @@ const GET_ENGINEERING_TARGETS = graphql(`
       wavelength
       instrument
       createdAt
+      rotatorAngle
+      rotatorMode
     }
   }
 `);
@@ -59,6 +61,8 @@ const UPDATE_ENGINEERING_TARGET = graphql(`
     $type: TargetType
     $wavelength: Int
     $instrument: String
+    $rotatorAngle: Float
+    $rotatorMode: TrackingType
   ) {
     updateEngineeringTarget(
       pk: $pk
@@ -70,6 +74,8 @@ const UPDATE_ENGINEERING_TARGET = graphql(`
       type: $type
       wavelength: $wavelength
       instrument: $instrument
+      rotatorAngle: $rotatorAngle
+      rotatorMode: $rotatorMode
     ) {
       pk
       id
@@ -95,6 +101,8 @@ const UPDATE_ENGINEERING_TARGET = graphql(`
       wavelength
       instrument
       createdAt
+      rotatorAngle
+      rotatorMode
     }
   }
 `);
