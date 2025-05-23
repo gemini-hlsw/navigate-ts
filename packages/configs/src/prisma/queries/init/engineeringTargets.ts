@@ -10,5 +10,7 @@ export const INITIAL_ENGINEERING_TARGETS: Prisma.EngineeringTargetCreateInput[] 
     instrument: 'ACQ_CAM',
     epoch: 'zenith',
     id: 'zenith',
+    rotatorMode: 'TRACKING',
+    rotatorAngle: 0.0,
   },
 ];

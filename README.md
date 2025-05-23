@@ -11,7 +11,7 @@ This repository is a [monorepo](https://monorepo.tools/) for Navigate projects w
 You can install a navigate cluster using the installation script provided in the deploy directory and in [this link](https://raw.githubusercontent.com/gemini-hlsw/navigate-ts/refs/heads/main/deploy/install.sh).
 
 IMPORTANT!
-A running docker service is required to install navigate, also the user installing navigate should have permissions to run docker commands.
+A running docker service is required to install navigate, the user installing navigate should have permissions to run docker commands. Also, the docker images are hoster under `noirlab` organization, so the `nlsoftware` user should be used to pull docker images, which requires a `docker login`,
 
 After running the install.sh script, the `navigate` command will be enabled to `start`, `stop` and `update` the cluster. For more information try the command `navigate help`.
 

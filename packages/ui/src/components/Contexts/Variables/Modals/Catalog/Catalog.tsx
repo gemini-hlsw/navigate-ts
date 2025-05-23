@@ -1,6 +1,7 @@
 import { useConfiguration, useUpdateConfiguration } from '@gql/configs/Configuration';
 import { useEngineeringTargets } from '@gql/configs/EngineeringTarget';
 import type { EngineeringTarget } from '@gql/configs/gen/graphql';
+import { useRotator, useUpdateRotator } from '@gql/configs/Rotator';
 import { useRemoveAndCreateBaseTargets } from '@gql/configs/Target';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
@@ -22,8 +23,10 @@ export function Catalog() {
   const { data: targetsData, loading: targetsLoading } = useEngineeringTargets();
   const [selectedTarget, setSelectedTarget] = useState<EngineeringTarget | null>(null);
   const toast = useToast();
+  const rotator = useRotator().data?.rotator;
+  const [updateRotator, { loading: updateRotatorLoading }] = useUpdateRotator();
 
-  const updateLoading = updateConfigLoading || removeCreateLoading || targetsLoading;
+  const updateLoading = updateConfigLoading || removeCreateLoading || targetsLoading || updateRotatorLoading;
 
   function updateTarget() {
     if (!selectedTarget) {
@@ -73,6 +76,16 @@ export function Catalog() {
             });
           },
         });
+
+        if (rotator && selectedTarget.rotatorMode && selectedTarget.rotatorAngle !== null) {
+          await updateRotator({
+            variables: {
+              pk: rotator.pk,
+              angle: selectedTarget.rotatorAngle,
+              tracking: selectedTarget.rotatorMode,
+            },
+          });
+        }
       },
     });
   }

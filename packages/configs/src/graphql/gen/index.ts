@@ -105,6 +105,8 @@ export type EngineeringTarget = {
   name: Scalars['String']['output'];
   pk: Scalars['Int']['output'];
   ra?: Maybe<Ra>;
+  rotatorAngle?: Maybe<Scalars['Float']['output']>;
+  rotatorMode?: Maybe<TrackingType>;
   type: TargetType;
   wavelength?: Maybe<Scalars['Int']['output']>;
 };
@@ -268,6 +270,8 @@ export type MutationCreateEngineeringTargetArgs = {
   instrument: Scalars['String']['input'];
   name: Scalars['String']['input'];
   ra?: InputMaybe<Scalars['Float']['input']>;
+  rotatorAngle?: InputMaybe<Scalars['Float']['input']>;
+  rotatorMode?: InputMaybe<TrackingType>;
   type: TargetType;
   wavelength?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -371,6 +375,8 @@ export type MutationUpdateEngineeringTargetArgs = {
   instrument?: InputMaybe<Scalars['String']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   pk: Scalars['Int']['input'];
+  rotatorAngle?: InputMaybe<Scalars['Float']['input']>;
+  rotatorMode?: InputMaybe<TrackingType>;
   type?: InputMaybe<TargetType>;
   wavelength?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -932,6 +938,8 @@ export type EngineeringTargetResolvers<ContextType = ApolloContext, ParentType e
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   pk?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   ra?: Resolver<Maybe<ResolversTypes['RA']>, ParentType, ContextType>;
+  rotatorAngle?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  rotatorMode?: Resolver<Maybe<ResolversTypes['TrackingType']>, ParentType, ContextType>;
   type?: Resolver<ResolversTypes['TargetType'], ParentType, ContextType>;
   wavelength?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;

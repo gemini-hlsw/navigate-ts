@@ -43,16 +43,18 @@ enum GuidingType {
 }
 
 model EngineeringTarget {
-  pk         Int        @id @default(autoincrement())
-  id         String?
-  name       String     @default("Test")
-  coord1     Float // RA or Az
-  coord2     Float // Dec or El
-  epoch      String?
-  type       TargetType @default(FIXED)
-  wavelength Int?
-  createdAt  DateTime   @default(now())
-  instrument String
+  pk           Int           @id @default(autoincrement())
+  id           String?
+  name         String        @default("Test")
+  coord1       Float // RA or Az
+  coord2       Float // Dec or El
+  epoch        String?
+  type         TargetType    @default(FIXED)
+  wavelength   Int?
+  createdAt    DateTime      @default(now())
+  instrument   String
+  rotatorMode  TrackingType?
+  rotatorAngle Float?
 }
 
 model Target {
