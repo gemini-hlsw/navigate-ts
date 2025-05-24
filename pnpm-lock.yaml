@@ -95,8 +95,8 @@ importers:
         specifier: 'catalog:'
         version: 2.5.1
       '@testcontainers/postgresql':
-        specifier: 10.26.0
-        version: 10.26.0
+        specifier: 10.28.0
+        version: 10.28.0
       '@types/node':
         specifier: 22.15.21
         version: 22.15.21
@@ -1327,8 +1327,8 @@ packages:
   '@swc/types@0.1.21':
     resolution: {integrity: sha512-2YEtj5HJVbKivud9N4bpPBAyZhj4S2Ipe5LkUG94alTpr7in/GU/EARgPAd3BwU+YOmFVJC2+kjqhGRi3r0ZpQ==}
 
-  '@testcontainers/postgresql@10.26.0':
-    resolution: {integrity: sha512-xc5ahJ7HcYayMuyl5lmAdx/9CddBpbdmaSWhPtxRWel3t3EoMGR/7tk8uynTq+mZeYHZFXaudy/x3etsWwM2mQ==}
+  '@testcontainers/postgresql@10.28.0':
+    resolution: {integrity: sha512-NN25rruG5D4Q7pCNIJuHwB+G85OSeJ3xHZ2fWx0O6sPoPEfCYwvpj8mq99cyn68nxFkFYZeyrZJtSFO+FnydiA==}
 
   '@testing-library/dom@10.4.0':
     resolution: {integrity: sha512-pemlzrSESWbdAloYml3bAJMEfNh1Z7EduzqPKprCH5S341frlpYnUEW0H72dLxa6IsYr+mPno20GiSm+h9dEdQ==}
@@ -4127,8 +4127,8 @@ packages:
     resolution: {integrity: sha512-pFYqmTw68LXVjeWJMST4+borgQP2AyMNbg1BpZh9LbyhUeNkeaPF9gzfPGUAnSMV3qPYdWUwDIjjCLiSDOl7vg==}
     engines: {node: '>=18'}
 
-  testcontainers@10.26.0:
-    resolution: {integrity: sha512-4Iv3KB23pZcnxnXg4eIlOpXuvx4aHexxLY6URiciRQrc3Dao09NsVoYGxD8sV9heKUZ107mecalDITx4NZHo7A==}
+  testcontainers@10.28.0:
+    resolution: {integrity: sha512-1fKrRRCsgAQNkarjHCMKzBKXSJFmzNTiTbhb5E/j5hflRXChEtHvkefjaHlgkNUjfw92/Dq8LTgwQn6RDBFbMg==}
 
   text-decoder@1.2.3:
     resolution: {integrity: sha512-3/o9z3X0X0fTupwsYvR03pJ/DjWuqqrfwBgTQzdWDiQSm9KitAyz/9WqsT2JQW7KV2m+bC2ol/zqpW37NHxLaA==}
@@ -5809,9 +5809,9 @@ snapshots:
     dependencies:
       '@swc/counter': 0.1.3
 
-  '@testcontainers/postgresql@10.26.0':
+  '@testcontainers/postgresql@10.28.0':
     dependencies:
-      testcontainers: 10.26.0
+      testcontainers: 10.28.0
     transitivePeerDependencies:
       - bare-buffer
       - supports-color
@@ -8981,7 +8981,7 @@ snapshots:
       glob: 10.4.5
       minimatch: 9.0.5
 
-  testcontainers@10.26.0:
+  testcontainers@10.28.0:
     dependencies:
       '@balena/dockerignore': 1.0.2
       '@types/dockerode': 3.3.38
