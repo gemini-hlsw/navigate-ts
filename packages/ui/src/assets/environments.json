@@ -10,7 +10,7 @@
   },
   {
     "hostName": "navigate-test.hi.gemini.edu",
-    "environment": "Gemini North TST",
+    "environment": "Gemini North Test",
     "navigateServerURI": "/navigate/graphql",
     "navigateServerWsURI": "/navigate/ws",
     "navigateConfigsURI": "/db",
@@ -19,7 +19,7 @@
   },
   {
     "hostName": "navigate-test.cl.gemini.edu",
-    "environment": "Gemini South TST",
+    "environment": "Gemini South Test",
     "navigateServerURI": "/navigate/graphql",
     "navigateServerWsURI": "/navigate/ws",
     "navigateConfigsURI": "/db",
