@@ -41,7 +41,7 @@ export function TargetSwapButton({
   });
 
   const { data: acData, loading: acLoading } = useInstrument({
-    variables: { name: `AC_${configuration?.site}` },
+    variables: { name: `ACQ_CAM` },
   });
 
   const acInst = acData?.instrument;
