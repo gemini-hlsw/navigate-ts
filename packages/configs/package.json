@@ -38,7 +38,7 @@
     "@parcel/watcher": "catalog:",
     "@testcontainers/postgresql": "10.28.0",
     "@types/node": "22.15.29",
-    "execa": "9.5.3",
+    "execa": "9.6.0",
     "typescript": "catalog:"
   },
   "prisma": {
