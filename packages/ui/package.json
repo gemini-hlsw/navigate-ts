@@ -40,7 +40,7 @@
     "eslint-plugin-react": "7.37.5",
     "eslint-plugin-react-hooks": "5.2.0",
     "graphql": "catalog:",
-    "jotai": "2.12.4",
+    "jotai": "2.12.5",
     "lucuma-core": "catalog:",
     "lucuma-schemas": "0.135.1",
     "lucuma-ui-css": "0.143.0",
