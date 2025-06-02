@@ -60,33 +60,25 @@ const sharedConfig = {
   enumsAsTypes: true,
 };
 
-const fetchedConfig: CodegenConfig['generates'] = {
-  './src/gql/server/gen/': {
-    schema: 'http://localhost:9090/navigate/graphql',
-    documents: './src/gql/server/*.{ts,tsx}',
-    config: sharedConfig,
-    preset: 'client',
-  },
-};
-
-const config: CodegenConfig = {
+export default {
   generates: {
     './src/gql/odb/gen/': {
       schema: require.resolve('lucuma-schemas/odb'),
-      config: sharedConfig,
       documents: './src/gql/odb/*.{ts,tsx}',
+      config: sharedConfig,
+      preset: 'client',
+    },
+    './src/gql/server/gen/': {
+      schema: require.resolve('navigate-server-schema/navigate.graphql'),
+      documents: './src/gql/server/*.{ts,tsx}',
+      config: sharedConfig,
       preset: 'client',
     },
     './src/gql/configs/gen/': {
       schema: typeDefs,
-      documents: './src/gql/configs/*.{ts,tsx}',
       config: sharedConfig,
+      documents: './src/gql/configs/*.{ts,tsx}',
       preset: 'client',
     },
-    // Don't fetch config in CI as there's no server running
-    // This way we can still run `codegen --check` in CI
-    ...(process.env.CI ? {} : fetchedConfig),
   },
-};
-
-export default config;
+} satisfies CodegenConfig;

@@ -13,7 +13,7 @@
     "test": "pnpm test:integration",
     "test:integration": "node --test --enable-source-maps --test-timeout 20000 'dist/integration/**/*.test.js'",
     "generate": "prisma generate",
-    "prebuild": "pnpm generate",
+    "prebuild": "pnpm generate && pnpm codegen",
     "build": "tsc -b",
     "start": "pnpm build && pnpm preview",
     "preview": "node --enable-source-maps ./dist/index.js",
