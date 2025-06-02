@@ -35,7 +35,7 @@ export function initializeServerFixture() {
   // Register setup to create the fixture
   before(async () => {
     // Create a postgres container for the tests
-    const container = await new PostgreSqlContainer().start();
+    const container = await new PostgreSqlContainer('postgres:alpine').start();
     const databaseUrl = container.getConnectionUri();
 
     // Setup Prisma client with the test container connection
