@@ -14,16 +14,27 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+  /** The `BigDecimal` scalar type represents signed fractional values with arbitrary precision. */
   BigDecimal: { input: string|number; output: string|number; }
+  /** Target declination coordinate in format '[+/-]DD:MM:SS.sss' */
   DmsString: { input: string; output: string; }
+  /** Reference observation epoch in format '[JB]YYYY.YYY' */
   EpochString: { input: string; output: string; }
+  /** Target right ascension coordinate in format 'HH:MM:SS.sss' */
   HmsString: { input: string; output: string; }
+  /** The `Long` scalar type represents non-fractional signed whole numeric values. Long can represent values between -(2^63) and 2^63 - 1. */
   Long: { input: number; output: number; }
+  /** A String value that cannot be empty */
   NonEmptyString: { input: string; output: string; }
+  /** ObservationId id formatted as `o-[1-9a-f][0-9a-f]*` */
   ObservationId: { input: string; output: string; }
+  /** A `BigDecimal` greater than 0 */
   PosBigDecimal: { input: number; output: number; }
+  /** An `Int` in the range from 1 to 2147483647 */
   PosInt: { input: number; output: number; }
+  /** TargetId id formatted as `t-[1-9a-f][0-9a-f]*` */
   TargetId: { input: string; output: string; }
+  /** Timestamp of time in ISO-8601 representation in format '2011-12-03T10:15:30Z' */
   Timestamp: { input: string; output: string; }
 };
 
@@ -50,22 +61,41 @@ export type AcquistionAdjustmentCommand =
   /**  User confirms to apply the adjustment  */
   | 'USER_CONFIRMS';
 
+export type AdjustTarget =
+  | 'OIWFS'
+  | 'PWFS1'
+  | 'PWFS2'
+  | 'SOURCE_A';
+
 export type Angle = {
   __typename?: 'Angle';
+  /** Angle in amin */
   arcminutes: Scalars['BigDecimal']['output'];
+  /** Angle in asec */
   arcseconds: Scalars['BigDecimal']['output'];
+  /** Angle in deg */
   degrees: Scalars['BigDecimal']['output'];
+  /** Angle in DD:MM:SS */
   dms: Scalars['String']['output'];
+  /** Angle in HH:MM:SS */
   hms: Scalars['String']['output'];
+  /** Angle in hrs */
   hours: Scalars['BigDecimal']['output'];
+  /** Angle in µas */
   microarcseconds: Scalars['Long']['output'];
+  /** Angle in µs */
   microseconds: Scalars['BigDecimal']['output'];
+  /** Angle in mas */
   milliarcseconds: Scalars['BigDecimal']['output'];
+  /** Angle in ms */
   milliseconds: Scalars['BigDecimal']['output'];
+  /** Angle in min */
   minutes: Scalars['BigDecimal']['output'];
+  /** Angle in sec */
   seconds: Scalars['BigDecimal']['output'];
 };
 
+/** Create an angle from a signed value.  Choose exactly one of the available units. */
 export type AngleInput = {
   arcminutes?: InputMaybe<Scalars['BigDecimal']['input']>;
   arcseconds?: InputMaybe<Scalars['BigDecimal']['input']>;
@@ -88,29 +118,44 @@ export type AzElTargetInput = {
 
 export type CatalogInfo = {
   __typename?: 'CatalogInfo';
+  /** Catalog id string */
   id: Scalars['String']['output'];
+  /** Catalog name option */
   name: CatalogName;
+  /** Catalog description of object morphology */
   objectType?: Maybe<Scalars['String']['output']>;
 };
 
+/** Catalog id consisting of catalog name, string identifier and an optional object type */
 export type CatalogInfoInput = {
+  /** The id field must be either specified or skipped altogether.  It cannot be unset with a null value. */
   id?: InputMaybe<Scalars['NonEmptyString']['input']>;
+  /** The name field must be either specified or skipped altogether.  It cannot be unset with a null value. */
   name?: InputMaybe<CatalogName>;
+  /** The objectType field may be unset by assigning a null value, or ignored by skipping it altogether */
   objectType?: InputMaybe<Scalars['NonEmptyString']['input']>;
 };
 
+/** Catalog name values */
 export type CatalogName =
+  /** CatalogName Gaia */
   | 'GAIA'
+  /** CatalogName Import */
   | 'IMPORT'
+  /** CatalogName Simbad */
   | 'SIMBAD';
 
 export type Declination = {
   __typename?: 'Declination';
+  /** Declination in signed degrees */
   degrees: Scalars['BigDecimal']['output'];
+  /** Declination in DD:MM:SS.SS format */
   dms: Scalars['DmsString']['output'];
+  /** Declination in signed µas */
   microarcseconds: Scalars['Long']['output'];
 };
 
+/** Declination, choose one of the available units */
 export type DeclinationInput = {
   degrees?: InputMaybe<Scalars['BigDecimal']['input']>;
   dms?: InputMaybe<Scalars['DmsString']['input']>;
@@ -128,12 +173,34 @@ export type DistanceInput = {
   millimeters?: InputMaybe<Scalars['BigDecimal']['input']>;
 };
 
+/** Ephemeris key type options */
 export type EphemerisKeyType =
+  /** EphemerisKeyType AsteroidNew */
   | 'ASTEROID_NEW'
+  /** EphemerisKeyType AsteroidOld */
   | 'ASTEROID_OLD'
+  /** EphemerisKeyType Comet */
   | 'COMET'
+  /** EphemerisKeyType MajorBody */
   | 'MAJOR_BODY'
+  /** EphemerisKeyType UserSupplied */
   | 'USER_SUPPLIED';
+
+export type EquatorialOffsetInput = {
+  deltaDec: AngleInput;
+  deltaRA: AngleInput;
+};
+
+export type FocalPlaneOffset = {
+  __typename?: 'FocalPlaneOffset';
+  deltaX: Angle;
+  deltaY: Angle;
+};
+
+export type FocalPlaneOffsetInput = {
+  deltaX: AngleInput;
+  deltaY: AngleInput;
+};
 
 export type FollowStatus =
   | 'FOLLOWING'
@@ -174,6 +241,7 @@ export type GuideConfigurationState = {
   p2Integrating: Scalars['Boolean']['output'];
 };
 
+/** Enumeration for Guide Probes */
 export type GuideProbe =
   | 'GMOS_OIWFS'
   | 'PWFS_1'
@@ -203,19 +271,51 @@ export type GuidersQualityValues = {
   pwfs2: GuideQuality;
 };
 
+export type HandsetAdjustmentInput = {
+  /**  Right Ascension/Declination coordinate system  */
+  equatorialAdjustment?: InputMaybe<EquatorialOffsetInput>;
+  /**  Telescope focal plane coordinate system (X, Y) */
+  focalPlaneAdjustment?: InputMaybe<FocalPlaneOffsetInput>;
+  /**  Azimuth/Elevation coordinate system  */
+  horizontalAdjustment?: InputMaybe<HorizontalOffsetInput>;
+  /**  Instrument coordinate system (P, Q)  */
+  instrumentAdjustment?: InputMaybe<OffsetInput>;
+};
+
+export type HorizontalOffsetInput = {
+  azimuth: AngleInput;
+  elevation: AngleInput;
+};
+
+/** Instrument */
 export type Instrument =
+  /** Instrument AcqCam */
   | 'ACQ_CAM'
+  /** Instrument Alopeke */
   | 'ALOPEKE'
+  /** Instrument Flamingos2 */
   | 'FLAMINGOS2'
+  /** Instrument Ghost */
   | 'GHOST'
+  /** Instrument GmosNorth */
   | 'GMOS_NORTH'
+  /** Instrument GmosSouth */
   | 'GMOS_SOUTH'
+  /** Instrument Gnirs */
   | 'GNIRS'
+  /** Instrument Gpi */
   | 'GPI'
+  /** Instrument Gsaoi */
   | 'GSAOI'
+  /** Instrument Igrins2 */
+  | 'IGRINS2'
+  /** Instrument Niri */
   | 'NIRI'
+  /** Instrument Scorpio */
   | 'SCORPIO'
+  /** Instrument Visitor */
   | 'VISITOR'
+  /** Instrument Zorro */
   | 'ZORRO';
 
 export type InstrumentSpecificsInput = {
@@ -272,9 +372,15 @@ export type MechSystemState = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  absorbOriginAdjustment: OperationOutcome;
+  absorbPointingAdjustment: OperationOutcome;
+  absorbTargetAdjustment: OperationOutcome;
   acObserve: OperationOutcome;
   acStopObserve: OperationOutcome;
   acquisitionAdjustment: OperationOutcome;
+  adjustOrigin: OperationOutcome;
+  adjustPointing: OperationOutcome;
+  adjustTarget: OperationOutcome;
   guideDisable: OperationOutcome;
   guideEnable: OperationOutcome;
   instrumentSpecifics: OperationOutcome;
@@ -294,6 +400,9 @@ export type Mutation = {
   oiwfsProbeTracking: OperationOutcome;
   oiwfsStopObserve: OperationOutcome;
   oiwfsTarget: OperationOutcome;
+  resetOriginAdjustment: OperationOutcome;
+  resetPointingAdjustment: OperationOutcome;
+  resetTargetAdjustment: OperationOutcome;
   restoreTarget: OperationOutcome;
   rotatorConfig: OperationOutcome;
   rotatorFollow: OperationOutcome;
@@ -306,6 +415,11 @@ export type Mutation = {
 };
 
 
+export type MutationAbsorbTargetAdjustmentArgs = {
+  target: AdjustTarget;
+};
+
+
 export type MutationAcObserveArgs = {
   period: TimeSpanInput;
 };
@@ -313,6 +427,25 @@ export type MutationAcObserveArgs = {
 
 export type MutationAcquisitionAdjustmentArgs = {
   adjustment: AcquisitionAdjustmentInput;
+};
+
+
+export type MutationAdjustOriginArgs = {
+  offset: HandsetAdjustmentInput;
+  openLoops: Scalars['Boolean']['input'];
+};
+
+
+export type MutationAdjustPointingArgs = {
+  offset: HandsetAdjustmentInput;
+  openLoops: Scalars['Boolean']['input'];
+};
+
+
+export type MutationAdjustTargetArgs = {
+  offset: HandsetAdjustmentInput;
+  openLoops: Scalars['Boolean']['input'];
+  target: AdjustTarget;
 };
 
 
@@ -354,6 +487,11 @@ export type MutationOiwfsProbeTrackingArgs = {
 
 export type MutationOiwfsTargetArgs = {
   target: TargetPropertiesInput;
+};
+
+
+export type MutationResetTargetAdjustmentArgs = {
+  target: AdjustTarget;
 };
 
 
@@ -406,45 +544,67 @@ export type NavigateState = {
 
 export type Nonsidereal = {
   __typename?: 'Nonsidereal';
+  /** Human readable designation that discriminates among ephemeris keys of the same type. */
   des: Scalars['String']['output'];
+  /** Synthesis of `keyType` and `des` */
   key: Scalars['String']['output'];
+  /** Nonsidereal target lookup type. */
   keyType: EphemerisKeyType;
 };
 
+/** Nonsidereal target parameters.  Supply `keyType` and `des` or `key` */
 export type NonsiderealInput = {
+  /** The des field must be either specified or skipped altogether.  It cannot be unset with a null value. */
   des?: InputMaybe<Scalars['NonEmptyString']['input']>;
+  /** The key field must be either specified or skipped altogether.  It cannot be unset with a null value. */
   key?: InputMaybe<Scalars['NonEmptyString']['input']>;
+  /** The keyType field must be either specified or skipped altogether.  It cannot be unset with a null value. */
   keyType?: InputMaybe<EphemerisKeyType>;
 };
 
 export type Offset = {
   __typename?: 'Offset';
+  /** Offset in p */
   p: OffsetP;
+  /** Offset in q */
   q: OffsetQ;
 };
 
+/** Offset component (p or q) input parameters. Choose one angle units definition. */
 export type OffsetComponentInput = {
+  /** Angle in arcsec */
   arcseconds?: InputMaybe<Scalars['BigDecimal']['input']>;
+  /** Angle in µas */
   microarcseconds?: InputMaybe<Scalars['Long']['input']>;
+  /** Angle in mas */
   milliarcseconds?: InputMaybe<Scalars['BigDecimal']['input']>;
 };
 
+/** Offset input.  Define offset in p and q. */
 export type OffsetInput = {
+  /** Offset in p */
   p: OffsetComponentInput;
+  /** Offset in q */
   q: OffsetComponentInput;
 };
 
 export type OffsetP = {
   __typename?: 'OffsetP';
+  /** p offset in arcsec */
   arcseconds: Scalars['BigDecimal']['output'];
+  /** p offset in µas */
   microarcseconds: Scalars['Long']['output'];
+  /** p offset in mas */
   milliarcseconds: Scalars['BigDecimal']['output'];
 };
 
 export type OffsetQ = {
   __typename?: 'OffsetQ';
+  /** q offset in arcsec */
   arcseconds: Scalars['BigDecimal']['output'];
+  /** q offset in µas */
   microarcseconds: Scalars['Long']['output'];
+  /** q offset in mas */
   milliarcseconds: Scalars['BigDecimal']['output'];
 };
 
@@ -460,10 +620,13 @@ export type OperationResult =
 
 export type Parallax = {
   __typename?: 'Parallax';
+  /** Parallax in microarcseconds */
   microarcseconds: Scalars['Long']['output'];
+  /** Parallax in milliarcseconds */
   milliarcseconds: Scalars['BigDecimal']['output'];
 };
 
+/** Parallax, choose one of the available units */
 export type ParallaxInput = {
   microarcseconds?: InputMaybe<Scalars['Long']['input']>;
   milliarcseconds?: InputMaybe<Scalars['BigDecimal']['input']>;
@@ -498,10 +661,13 @@ export type ProbeTrackingInput = {
 
 export type ProperMotion = {
   __typename?: 'ProperMotion';
+  /** Proper motion in declination */
   dec: ProperMotionDeclination;
+  /** Proper motion in RA */
   ra: ProperMotionRa;
 };
 
+/** Proper motion component, choose one of the available units */
 export type ProperMotionComponentInput = {
   microarcsecondsPerYear?: InputMaybe<Scalars['Long']['input']>;
   milliarcsecondsPerYear?: InputMaybe<Scalars['BigDecimal']['input']>;
@@ -509,10 +675,13 @@ export type ProperMotionComponentInput = {
 
 export type ProperMotionDeclination = {
   __typename?: 'ProperMotionDeclination';
+  /** Proper motion in properMotion μas/year */
   microarcsecondsPerYear: Scalars['Long']['output'];
+  /** Proper motion in properMotion mas/year */
   milliarcsecondsPerYear: Scalars['BigDecimal']['output'];
 };
 
+/** Proper motion, choose one of the available units */
 export type ProperMotionInput = {
   dec: ProperMotionComponentInput;
   ra: ProperMotionComponentInput;
@@ -520,7 +689,9 @@ export type ProperMotionInput = {
 
 export type ProperMotionRa = {
   __typename?: 'ProperMotionRA';
+  /** Proper motion in properMotion μas/year */
   microarcsecondsPerYear: Scalars['Long']['output'];
+  /** Proper motion in properMotion mas/year */
   milliarcsecondsPerYear: Scalars['BigDecimal']['output'];
 };
 
@@ -529,7 +700,10 @@ export type Query = {
   guideState: GuideConfigurationState;
   instrumentPort?: Maybe<Scalars['Int']['output']>;
   navigateState: NavigateState;
+  originAdjustmentOffset: FocalPlaneOffset;
+  pointingAdjustmentOffset: FocalPlaneOffset;
   serverVersion?: Maybe<Scalars['String']['output']>;
+  targetAdjustmentOffsets: TargetOffsets;
   telescopeState: TelescopeState;
 };
 
@@ -540,11 +714,15 @@ export type QueryInstrumentPortArgs = {
 
 export type RadialVelocity = {
   __typename?: 'RadialVelocity';
+  /** Radial velocity in cm/s */
   centimetersPerSecond: Scalars['Long']['output'];
+  /** Radial velocity in km/s */
   kilometersPerSecond: Scalars['BigDecimal']['output'];
+  /** Radial velocity in m/s */
   metersPerSecond: Scalars['BigDecimal']['output'];
 };
 
+/** Radial velocity, choose one of the available units */
 export type RadialVelocityInput = {
   centimetersPerSecond?: InputMaybe<Scalars['Long']['input']>;
   kilometersPerSecond?: InputMaybe<Scalars['BigDecimal']['input']>;
@@ -553,13 +731,19 @@ export type RadialVelocityInput = {
 
 export type RightAscension = {
   __typename?: 'RightAscension';
+  /** Right Ascension (RA) in degrees */
   degrees: Scalars['BigDecimal']['output'];
+  /** Right Ascension (RA) in HH:MM:SS.SSS format */
   hms: Scalars['HmsString']['output'];
+  /** Right Ascension (RA) in hours */
   hours: Scalars['BigDecimal']['output'];
+  /** Right Ascension (RA) in µas */
   microarcseconds: Scalars['Long']['output'];
+  /** Right Ascension (RA) in µs */
   microseconds: Scalars['Long']['output'];
 };
 
+/** Right Ascension, choose one of the available units */
 export type RightAscensionInput = {
   degrees?: InputMaybe<Scalars['BigDecimal']['input']>;
   hms?: InputMaybe<Scalars['HmsString']['input']>;
@@ -579,22 +763,37 @@ export type RotatorTrackingMode =
 
 export type Sidereal = {
   __typename?: 'Sidereal';
+  /** Catalog info, if any, describing from where the information in this target was obtained */
   catalogInfo?: Maybe<CatalogInfo>;
+  /** Declination at epoch */
   dec: Declination;
+  /** Epoch, time of base observation */
   epoch: Scalars['EpochString']['output'];
+  /** Parallax */
   parallax?: Maybe<Parallax>;
+  /** Proper motion per year in right ascension and declination */
   properMotion?: Maybe<ProperMotion>;
+  /** Right ascension at epoch */
   ra: RightAscension;
+  /** Radial velocity */
   radialVelocity?: Maybe<RadialVelocity>;
 };
 
+/** Sidereal target edit parameters */
 export type SiderealInput = {
+  /** The catalogInfo field may be unset by assigning a null value, or ignored by skipping it altogether */
   catalogInfo?: InputMaybe<CatalogInfoInput>;
+  /** The dec field must be either specified or skipped altogether.  It cannot be unset with a null value. */
   dec?: InputMaybe<DeclinationInput>;
+  /** The epoch field must be either specified or skipped altogether.  It cannot be unset with a null value. */
   epoch?: InputMaybe<Scalars['EpochString']['input']>;
+  /** The parallax field may be unset by assigning a null value, or ignored by skipping it altogether */
   parallax?: InputMaybe<ParallaxInput>;
+  /** The properMotion field may be unset by assigning a null value, or ignored by skipping it altogether */
   properMotion?: InputMaybe<ProperMotionInput>;
+  /** The ra field must be either specified or skipped altogether.  It cannot be unset with a null value. */
   ra?: InputMaybe<RightAscensionInput>;
+  /** The radialVelocity field may be unset by assigning a null value, or ignored by skipping it altogether */
   radialVelocity?: InputMaybe<RadialVelocityInput>;
 };
 
@@ -625,6 +824,9 @@ export type Subscription = {
   guidersQualityValues: GuidersQualityValues;
   logMessage: LogMessage;
   navigateState: NavigateState;
+  originAdjustmentOffset: FocalPlaneOffset;
+  pointingAdjustmentOffset: FocalPlaneOffset;
+  targetAdjustmentOffsets: TargetOffsets;
   telescopeState: TelescopeState;
 };
 
@@ -644,6 +846,14 @@ export type Target = {
   nonsidereal?: Maybe<Nonsidereal>;
   /** Sidereal tracking information, if this is a sidereal target */
   sidereal?: Maybe<Sidereal>;
+};
+
+export type TargetOffsets = {
+  __typename?: 'TargetOffsets';
+  oiwfs?: Maybe<FocalPlaneOffset>;
+  pwfs1?: Maybe<FocalPlaneOffset>;
+  pwfs2?: Maybe<FocalPlaneOffset>;
+  sourceA?: Maybe<FocalPlaneOffset>;
 };
 
 /** Target properties input */
@@ -674,18 +884,26 @@ export type TelescopeState = {
   scs: MechSystemState;
 };
 
+/** Equivalent time amount in several unit options (exactly one must be specified) */
 export type TimeSpanInput = {
+  /** TimeSpan in hours */
   hours?: InputMaybe<Scalars['BigDecimal']['input']>;
+  /** TimeSpan as an ISO-8601 string */
   iso?: InputMaybe<Scalars['String']['input']>;
+  /** TimeSpan in µs */
   microseconds?: InputMaybe<Scalars['Long']['input']>;
+  /** TimeSpan in ms */
   milliseconds?: InputMaybe<Scalars['BigDecimal']['input']>;
+  /** TimeSpan in minutes */
   minutes?: InputMaybe<Scalars['BigDecimal']['input']>;
+  /** TimeSpan in seconds */
   seconds?: InputMaybe<Scalars['BigDecimal']['input']>;
 };
 
 export type TipTiltSource =
   | 'OIWFS';
 
+/** Wavelength, choose one of the available units */
 export type WavelengthInput = {
   angstroms?: InputMaybe<Scalars['PosBigDecimal']['input']>;
   micrometers?: InputMaybe<Scalars['PosBigDecimal']['input']>;

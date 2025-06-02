@@ -26,8 +26,9 @@ jobs:
           cache: 'pnpm'
       - run: pnpm install --frozen-lockfile
       - run: pnpm -w ui exec playwright install chromium
-      - run: pnpm -r build
+      - run: pnpm schema build
       - run: pnpm -r codegen --check
+      - run: pnpm -r build
       - run: pnpm lint
       - run: pnpm -r test
       - name: Archive production artifacts

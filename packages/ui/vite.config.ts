@@ -107,7 +107,11 @@ export default defineConfig(({ mode }) => ({
       plugins: [fixCssRoot()],
     },
   },
-  plugins: [react({}), mkcert({ hosts: ['localhost', 'local.lucuma.xyz', 'navigate.lucuma.xyz'] }), buildVersionFile],
+  plugins: [
+    react({}),
+    mkcert({ hosts: ['localhost', 'local.lucuma.xyz', 'navigate.lucuma.xyz', 'navigate.gemini.edu'] }),
+    buildVersionFile,
+  ],
   test: {
     globals: true,
     setupFiles: ['src/gql/dev-messages.ts', 'vitest-browser-react'],
