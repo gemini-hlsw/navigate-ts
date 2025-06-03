@@ -1,7 +1,7 @@
 import type { CodegenConfig } from '@graphql-codegen/cli';
 import { typeDefs } from 'navigate-schema';
 
-const config: CodegenConfig = {
+export default {
   overwrite: true,
   schema: typeDefs,
   generates: {
@@ -17,6 +17,4 @@ const config: CodegenConfig = {
       },
     },
   },
-};
-
-export default config;
+} satisfies CodegenConfig;
