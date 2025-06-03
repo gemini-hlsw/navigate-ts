@@ -27,7 +27,6 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm -w ui exec playwright install chromium
       - run: pnpm schema build
-      - run: pnpm -r codegen --check
       - run: pnpm -r build
       - run: pnpm lint
       - run: pnpm -r test

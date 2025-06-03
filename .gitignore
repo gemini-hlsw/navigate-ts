@@ -36,3 +36,6 @@ metals.sbt
 .bsp/
 
 /packages/configs/gen/prisma
+
+/packages/ui/src/gql/*/gen/
+/packages/configs/src/graphql/gen/
