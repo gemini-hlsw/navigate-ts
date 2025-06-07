@@ -24,7 +24,7 @@
     "lint:eslint": "eslint ."
   },
   "dependencies": {
-    "@apollo/server": "4.12.1",
+    "@apollo/server": "4.12.2",
     "@prisma/client": "6.8.2",
     "graphql": "catalog:",
     "lucuma-core": "catalog:",
