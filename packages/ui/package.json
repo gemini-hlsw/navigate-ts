@@ -48,7 +48,7 @@
     "navigate-schema": "workspace:*",
     "navigate-server-schema": "0.1.0-20250528-280ea998",
     "playwright": "1.52.0",
-    "primereact": "10.9.5",
+    "primereact": "10.9.6",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-router": "7.6.2",
