@@ -43,7 +43,7 @@
     "graphql": "catalog:",
     "jotai": "2.12.5",
     "lucuma-core": "catalog:",
-    "lucuma-schemas": "0.138.0",
+    "lucuma-schemas": "0.140.0",
     "lucuma-ui-css": "0.144.0",
     "navigate-schema": "workspace:*",
     "navigate-server-schema": "0.1.0-20250528-280ea998",
