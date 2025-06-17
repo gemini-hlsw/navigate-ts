@@ -13,10 +13,10 @@ import { Play, Stop } from '@/components/Icons';
 export default function WavefrontSensor({
   canEdit,
   wfs,
-  className = '',
+  className,
 }: {
   canEdit: boolean;
-  wfs: string;
+  wfs: 'OIWFS' | 'PWFS1' | 'PWFS2';
   className?: string;
 }) {
   const id = useId();
@@ -38,7 +38,7 @@ export default function WavefrontSensor({
   }
 
   return (
-    <div className={`wfs ${className}`}>
+    <div className={clsx('wfs', className)}>
       <span className="wfs-name">{wfs}</span>
       <img src={imgUrl} alt="wfs" />
       <div className="controls">

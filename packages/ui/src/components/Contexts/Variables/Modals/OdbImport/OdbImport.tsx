@@ -233,7 +233,7 @@ function extractGuideTargets(data: GetGuideEnvironmentQuery | undefined) {
         magnitude: magnitude,
         band: band,
       };
-      if (t.probe === 'GMOS_OIWFS') {
+      if (t.probe.endsWith('OIWFS')) {
         acc.oiwfs.push({ ...auxTarget, type: 'OIWFS' });
       } else if (t.probe === 'PWFS_1') {
         acc.pwfs1.push({ ...auxTarget, type: 'PWFS1' });
