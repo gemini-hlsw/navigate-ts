@@ -118,6 +118,7 @@ export function createClient(env: Environment) {
       dataIdFromObject(responseObject) {
         // Configure primary-key fields for cache normalization to use 'pk' field
         if (
+          !('id' in responseObject && responseObject.id !== null) &&
           'pk' in responseObject &&
           (typeof responseObject.pk === 'string' || typeof responseObject.pk === 'number')
         ) {
@@ -130,6 +131,9 @@ export function createClient(env: Environment) {
       typePolicies: {
         GuideAlarm: {
           keyFields: ['wfs'],
+        },
+        Instrument: {
+          keyFields: ['name', 'wfs'],
         },
       },
     }),

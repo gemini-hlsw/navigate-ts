@@ -174,8 +174,9 @@ export function Slew(props: ButtonProps) {
   const configuration = configData?.configuration;
 
   const { data: instrumentData, loading: instrumentLoading } = useInstrument({
+    skip: !configuration?.obsInstrument,
     variables: {
-      name: configuration?.obsInstrument ?? '',
+      name: configuration?.obsInstrument,
       // issPort: 3,
       wfs: 'NONE',
     },

@@ -37,10 +37,12 @@ export function TargetSwapButton({
   const configuration = configurationData?.configuration;
 
   const { data: instrumentData, loading: instrumentLoading } = useInstrument({
+    skip: !configuration?.obsInstrument,
     variables: { name: configuration?.obsInstrument ?? '', issPort: 3, wfs: 'NONE' },
   });
 
   const { data: acData, loading: acLoading } = useInstrument({
+    skip: !configuration?.site,
     variables: { name: `AC_${configuration?.site}` },
   });
 
