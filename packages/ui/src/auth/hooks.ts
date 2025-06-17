@@ -76,7 +76,7 @@ export function useSetRole() {
       const res = await fetch(setRoleURL, { method: 'GET', credentials: 'include' });
       if (res.ok) {
         const data = await res.text();
-        if (data) void refreshToken();
+        if (data) await refreshToken();
       } else {
         toast?.show({
           severity: 'error',
