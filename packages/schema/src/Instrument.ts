@@ -76,5 +76,8 @@ export const InstrumentTypeDefs = `#graphql
       ao: Boolean
       extraParams: JSON
     ): Instrument!
+
+    # Reset the instruments to their default values
+    resetInstruments(name: String!): [Instrument!]!
   }
 `;

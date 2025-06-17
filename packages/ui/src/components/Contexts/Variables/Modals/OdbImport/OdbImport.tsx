@@ -1,4 +1,5 @@
 import { useConfiguration, useUpdateConfiguration } from '@gql/configs/Configuration';
+import { useResetInstruments } from '@gql/configs/Instrument';
 import { useRotator, useUpdateRotator } from '@gql/configs/Rotator';
 import { useRemoveAndCreateBaseTargets, useRemoveAndCreateWfsTargets } from '@gql/configs/Target';
 import type { GetCentralWavelengthQuery, GetGuideEnvironmentQuery, SourceProfile } from '@gql/odb/gen/graphql';
@@ -29,6 +30,7 @@ export function OdbImport() {
   const [updateConfiguration, { loading: updateConfigLoading }] = useUpdateConfiguration();
   const [updateRotator, { loading: updateRotatorLoading }] = useUpdateRotator();
   const [removeAndCreateWfsTargets, { loading: wfsTargetsLoading }] = useRemoveAndCreateWfsTargets();
+  const [resetInstruments, { loading: resetInstrumentsLoading }] = useResetInstruments();
 
   const observingNight = dateToLocalObservingNight(new Date());
 
@@ -40,7 +42,8 @@ export function OdbImport() {
     updateRotatorLoading ||
     getGuideEnvironmentLoading ||
     getCentralWavelengthLoading ||
-    wfsTargetsLoading;
+    wfsTargetsLoading ||
+    resetInstrumentsLoading;
 
   function updateObs() {
     if (!selectedObservation) {
@@ -61,8 +64,6 @@ export function OdbImport() {
         obsReference: selectedObservation.reference?.label,
       },
       async onCompleted() {
-        setOdbVisible(false);
-
         // Observation selected
         // First try to get a central wavelength associated to the observation
         const obsWithWavelength = await getCentralWavelength({
@@ -159,6 +160,15 @@ export function OdbImport() {
             });
           }
         }
+
+        if (selectedObservation.instrument) {
+          await resetInstruments({
+            variables: { name: selectedObservation.instrument },
+            refetchQueries: ['getInstrument'],
+          });
+        }
+
+        setOdbVisible(false);
       },
     });
   }

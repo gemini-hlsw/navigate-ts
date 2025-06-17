@@ -128,3 +128,26 @@ export function useUpdateInstrument() {
     context: { clientName: 'navigateConfigs' },
   });
 }
+
+const RESET_INSTRUMENTS = graphql(`
+  mutation resetInstruments($name: String!) {
+    resetInstruments(name: $name) {
+      pk
+      name
+      iaa
+      issPort
+      focusOffset
+      wfs
+      originX
+      originY
+      ao
+      extraParams
+    }
+  }
+`);
+
+export function useResetInstruments() {
+  return useMutation(RESET_INSTRUMENTS, {
+    context: { clientName: 'navigateConfigs' },
+  });
+}

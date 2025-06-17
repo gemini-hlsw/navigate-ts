@@ -1,3 +1,4 @@
+import { INITIAL_INSTRUMENTS } from '../../prisma/queries/init/instruments.js';
 import type { Resolvers } from '../gen/index.js';
 
 export const InstrumentResolver: Resolvers = {
@@ -30,6 +31,18 @@ export const InstrumentResolver: Resolvers = {
       return prisma.instrument.update({
         where: { pk: args.pk },
         data: args,
+      });
+    },
+    resetInstruments: async (_parent, args, { prisma }) => {
+      const initialInstruments = INITIAL_INSTRUMENTS.filter((i) => i.name === args.name);
+      if (!initialInstruments.length) {
+        throw new Error(`No initial instruments found for name: ${args.name}`);
+      }
+
+      return prisma.$transaction(async (tx) => {
+        await tx.instrument.deleteMany({ where: args });
+
+        return tx.instrument.createManyAndReturn({ data: initialInstruments });
       });
     },
   },

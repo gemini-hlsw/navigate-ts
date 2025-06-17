@@ -19,6 +19,7 @@ export function Instrument({ canEdit }: { canEdit: boolean }) {
   const setImportInstrument = useSetImportInstrument();
 
   const { data, loading: instrumentLoading } = useInstrument({
+    skip: !configuration?.obsInstrument,
     variables: {
       name: configuration?.obsInstrument ?? '',
       // issPort: 1,
