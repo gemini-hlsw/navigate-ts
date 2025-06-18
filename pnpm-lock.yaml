@@ -192,8 +192,8 @@ importers:
         specifier: workspace:*
         version: link:../schema
       navigate-server-schema:
-        specifier: 0.1.0-20250528-280ea998
-        version: 0.1.0-20250528-280ea998
+        specifier: 0.1.0-20250617-16d45221
+        version: 0.1.0-20250617-16d45221
       playwright:
         specifier: 1.53.0
         version: 1.53.0
@@ -3430,8 +3430,8 @@ packages:
   natural-compare@1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
 
-  navigate-server-schema@0.1.0-20250528-280ea998:
-    resolution: {integrity: sha512-TK9P7sTaWjiswYii/hJubV68l8wzgopSihfbcFWN8yC25rVWuAzS0CLFUhm2YM64NlIe72EfCTi2glrvmggC6w==}
+  navigate-server-schema@0.1.0-20250617-16d45221:
+    resolution: {integrity: sha512-xNjm++OyuFD8pTU2ljEQSIzDbnTejkVb80ESaK/UQeD3MXk573rX2pgo3+WiumwraHIdicbzDf3dfx+PIPmcUw==}
 
   negotiator@0.6.3:
     resolution: {integrity: sha512-+EUsqGPLsM+j/zdChZjsnX51g4XrHFOIXwfnCVPGlQk/k5giakcKsuxCObBRu6DSm9opw/O6slWbJdghQM4bBg==}
@@ -8219,7 +8219,7 @@ snapshots:
 
   natural-compare@1.4.0: {}
 
-  navigate-server-schema@0.1.0-20250528-280ea998: {}
+  navigate-server-schema@0.1.0-20250617-16d45221: {}
 
   negotiator@0.6.3: {}
 
