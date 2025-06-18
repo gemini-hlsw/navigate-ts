@@ -1,9 +1,9 @@
 import type { CodegenConfig } from '@graphql-codegen/cli';
-import { typeDefs } from 'navigate-schema';
+import { dirname, join } from 'path';
 
 export default {
   overwrite: true,
-  schema: typeDefs,
+  schema: join(dirname(require.resolve('navigate-schema')), 'src/**/*.graphql'),
   generates: {
     'src/graphql/gen/index.ts': {
       plugins: ['typescript', 'typescript-resolvers'],

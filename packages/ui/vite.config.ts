@@ -80,7 +80,7 @@ export default defineConfig(({ mode }) => ({
     },
   },
   server: {
-    allowedHosts: ['localhost', '.lucuma.xyz'],
+    allowedHosts: ['localhost', '.lucuma.xyz', '.gemini.edu'],
     host: '0.0.0.0',
     proxy: {
       '^/navigate/graphql': {

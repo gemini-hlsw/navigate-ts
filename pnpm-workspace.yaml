@@ -1,12 +1,12 @@
 packages:
-  - 'packages/*'
+  - packages/*
 
-# Versions of packages that are the same across all packages
 catalog:
-  'graphql': '16.11.0'
-  '@graphql-codegen/cli': '5.0.7'
-  '@parcel/watcher': '2.5.1'
-  'lucuma-core': '0.135.0'
-  'typescript': '5.8.3'
+  graphql: 16.11.0
+  '@graphql-codegen/cli': 5.0.7
+  '@parcel/watcher': 2.5.1
+  lucuma-core: 0.135.0
+  lucuma-schemas: 0.141.0
+  typescript: 5.8.3
 
 injectWorkspacePackages: true

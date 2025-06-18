@@ -6,7 +6,7 @@ import type {
   GemsInstrument as GemsInstrumentType,
   GuideLoop as GuideLoopType,
   GuidingType,
-  Instrument as InstrumentType,
+  InstrumentConfig as InstrumentType,
   Mechanism as MechanismType,
   Rotator as RotatorType,
   SiteType,

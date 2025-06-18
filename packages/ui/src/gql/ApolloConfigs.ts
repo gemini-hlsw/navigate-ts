@@ -132,7 +132,7 @@ export function createClient(env: Environment) {
         GuideAlarm: {
           keyFields: ['wfs'],
         },
-        Instrument: {
+        InstrumentConfig: {
           keyFields: ['name', 'wfs'],
         },
       },
