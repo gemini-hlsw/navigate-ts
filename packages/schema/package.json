@@ -4,21 +4,16 @@
   "version": "1.0.0",
   "type": "module",
   "license": "BSD-3-Clause",
-  "main": "dist/index.js",
+  "main": "index.js",
   "private": true,
   "repository": {
     "type": "git",
     "url": "git+https://github.com/gemini-hlsw/navigate-ts.git",
     "directory": "packages/schema"
   },
-  "scripts": {
-    "build": "tsc -b",
-    "lint:eslint": "eslint ."
-  },
+  "scripts": {},
   "dependencies": {
-    "graphql-scalars": "1.24.2"
+    "lucuma-schemas": "catalog:"
   },
-  "devDependencies": {
-    "graphql": "catalog:"
-  }
+  "devDependencies": {}
 }

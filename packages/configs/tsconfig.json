@@ -19,10 +19,5 @@
     "skipLibCheck": true,
     "strict": true
   },
-  "include": ["src"],
-  "references": [
-    {
-      "path": "../schema"
-    }
-  ]
+  "include": ["src"]
 }

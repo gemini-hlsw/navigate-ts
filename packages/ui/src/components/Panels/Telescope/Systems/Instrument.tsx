@@ -1,5 +1,4 @@
 import { useConfiguration } from '@gql/configs/Configuration';
-import type { Instrument } from '@gql/configs/gen/graphql';
 import { useInstrument, useUpdateInstrument } from '@gql/configs/Instrument';
 import { Title, TitleDropdown } from '@Shared/Title/Title';
 import { Button } from 'primereact/button';
@@ -11,6 +10,7 @@ import { useCallback, useEffect, useId, useMemo, useState } from 'react';
 
 import { useSetImportInstrument } from '@/components/atoms/instrument';
 import { FloppyDisk, List } from '@/components/Icons';
+import type { InstrumentType } from '@/types';
 
 export function Instrument({ canEdit }: { canEdit: boolean }) {
   const { data: configurationData, loading: configurationLoading } = useConfiguration();
@@ -29,7 +29,7 @@ export function Instrument({ canEdit }: { canEdit: boolean }) {
 
   const instrument = data?.instrument;
 
-  const [auxInstrument, setAuxInstrument] = useState<Instrument | undefined>(undefined);
+  const [auxInstrument, setAuxInstrument] = useState<InstrumentType | undefined>(undefined);
 
   useEffect(() => {
     setAuxInstrument(instrument ?? undefined);
@@ -38,7 +38,7 @@ export function Instrument({ canEdit }: { canEdit: boolean }) {
   const loading = configurationLoading || instrumentLoading || updateInstrumentLoading;
 
   const onUpdateInstrument = useCallback(
-    (variables: Partial<Instrument>) => {
+    (variables: Partial<InstrumentType>) => {
       if (auxInstrument)
         setAuxInstrument({
           ...auxInstrument,
@@ -64,7 +64,7 @@ export function Instrument({ canEdit }: { canEdit: boolean }) {
     () =>
       !!instrument &&
       !!auxInstrument &&
-      Object.entries(auxInstrument).some(([key, value]) => instrument[key as keyof Instrument] !== value),
+      Object.entries(auxInstrument).some(([key, value]) => instrument[key as keyof InstrumentType] !== value),
     [auxInstrument, instrument],
   );
 
