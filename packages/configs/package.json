@@ -20,7 +20,7 @@
     "populate": "prisma migrate deploy && prisma db seed",
     "dev": "node --env-file=.env --watch --enable-source-maps ./dist/index.js",
     "codegen": "graphql-codegen --config tasks/codegen.ts",
-    "codegen:watch": "pnpm codegen --watch 'src/graphql/**/*.ts'",
+    "codegen:watch": "pnpm codegen --watch 'src/graphql/**/*.ts' --watch '../schema/src/*.graphql'",
     "lint:eslint": "eslint ."
   },
   "dependencies": {

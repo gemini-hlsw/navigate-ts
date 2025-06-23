@@ -12,7 +12,7 @@
   "scripts": {
     "dev": "vite",
     "tsc:watch": "tsc -w",
-    "codegen:watch": "graphql-codegen --config tasks/codegen.ts --watch",
+    "codegen:watch": "graphql-codegen --config tasks/codegen.ts --watch 'src/gql/**/*.ts' --watch '../schema/src/*.graphql'",
     "prebuild": "pnpm run codegen",
     "build": "tsc && vite build",
     "preview": "vite preview",
