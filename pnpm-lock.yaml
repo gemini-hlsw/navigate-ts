@@ -20,8 +20,8 @@ catalogs:
       specifier: 0.136.1
       version: 0.136.1
     lucuma-schemas:
-      specifier: 0.141.0
-      version: 0.141.0
+      specifier: 0.142.1
+      version: 0.142.1
     typescript:
       specifier: 5.8.3
       version: 5.8.3
@@ -123,7 +123,7 @@ importers:
     dependencies:
       lucuma-schemas:
         specifier: 'catalog:'
-        version: 0.141.0
+        version: 0.142.1
 
   packages/ui:
     devDependencies:
@@ -192,7 +192,7 @@ importers:
         version: 0.136.1
       lucuma-schemas:
         specifier: 'catalog:'
-        version: 0.141.0
+        version: 0.142.1
       lucuma-ui-css:
         specifier: 0.146.1
         version: 0.146.1
@@ -3298,8 +3298,8 @@ packages:
   lucuma-core@0.136.1:
     resolution: {integrity: sha512-ZAoq5yyQAlic2UaVAJPs5ge1YEB1Z9Z/Bd6r5o5C1l8yWT2T8Dr4wohbxETwXUKA+7StJ+FE41IkbYLx1oLe2w==}
 
-  lucuma-schemas@0.141.0:
-    resolution: {integrity: sha512-KPow7mt1LhqvXCEZ2WXXFGn6xII4xATuTWF1kb6fzdgHPa5kNV6s5X/gMGLAY/EU5t9/puThrp/FvsAS5aUjGA==}
+  lucuma-schemas@0.142.1:
+    resolution: {integrity: sha512-5mO1gqro00dsVzJZgx9wAGKvsXmi6pN+YRoRjjlOgGu0vD8AQYLjRTKZ8EWaWycHqUOCBVJ8rK4ejrpWeYx53g==}
 
   lucuma-ui-css@0.146.1:
     resolution: {integrity: sha512-TBmCdLQvOejNZWVEg7evmfZ3hrTnqJ081y9ROt+z9UIvtRvBZ/gYNNyxLSkJg0yUABtb6j7EM3elUiFkrutlqg==}
@@ -8128,7 +8128,7 @@ snapshots:
 
   lucuma-core@0.136.1: {}
 
-  lucuma-schemas@0.141.0: {}
+  lucuma-schemas@0.142.1: {}
 
   lucuma-ui-css@0.146.1: {}
 
