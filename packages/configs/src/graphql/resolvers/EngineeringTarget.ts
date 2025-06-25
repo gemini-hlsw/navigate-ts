@@ -1,18 +1,18 @@
-import type { Resolvers } from '../gen/index.js';
+import type { EngineeringTarget, Resolvers } from '../gen/index.js';
 
 export const EngineeringTargetResolver: Resolvers = {
   Query: {
     engineeringTarget: (_parent, args, { prisma }) => {
       return prisma.engineeringTarget.findFirst({
         where: args,
-      });
+      }) as Promise<EngineeringTarget | null>;
     },
 
     engineeringTargets: (_parent, args, { prisma }) => {
       return prisma.engineeringTarget.findMany({
         where: args,
         orderBy: { pk: 'desc' },
-      });
+      }) as Promise<EngineeringTarget[]>;
     },
   },
 
@@ -28,14 +28,14 @@ export const EngineeringTargetResolver: Resolvers = {
       }
       return prisma.engineeringTarget.create({
         data: args as typeof args & { coord1: number; coord2: number },
-      });
+      }) as Promise<EngineeringTarget>;
     },
 
     updateEngineeringTarget: async (_parent, args, { prisma }) => {
       return prisma.engineeringTarget.update({
         where: { pk: args.pk },
         data: args,
-      });
+      }) as Promise<EngineeringTarget>;
     },
   },
 };

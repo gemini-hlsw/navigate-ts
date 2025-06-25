@@ -42,7 +42,7 @@ const UPDATE_CONFIGURATION = graphql(`
     $p2GuidingType: GuidingType
     $obsTitle: String
     $obsId: String
-    $obsInstrument: String
+    $obsInstrument: Instrument
     $obsSubtitle: String
     $obsReference: String
   ) {

@@ -1,28 +1,7 @@
 import type { Prisma } from '../../../../gen/prisma/index.js';
+import type { Instrument } from '../../../graphql/gen/index.js';
 
-export const INITIAL_INSTRUMENTS: Prisma.InstrumentCreateInput[] = [
-  {
-    wfs: 'NONE',
-    iaa: 0,
-    issPort: -1,
-    focusOffset: 0.0,
-    name: 'rotator_axis',
-    ao: false,
-    originX: 0.0,
-    originY: 0.0,
-    extraParams: {},
-  },
-  {
-    wfs: 'NONE',
-    iaa: 0,
-    issPort: -1,
-    focusOffset: 0.0,
-    name: 'hrwfs',
-    ao: false,
-    originX: 1.0,
-    originY: -2.5,
-    extraParams: {},
-  },
+export const INITIAL_INSTRUMENTS: (Prisma.InstrumentCreateInput & { name: Instrument })[] = [
   {
     wfs: 'NONE',
     iaa: 359.877,
@@ -285,17 +264,6 @@ export const INITIAL_INSTRUMENTS: Prisma.InstrumentCreateInput[] = [
     ao: false,
     originX: 0.0,
     originY: 0.0,
-    extraParams: {},
-  },
-  {
-    wfs: 'NONE',
-    iaa: 269.2,
-    issPort: 5,
-    focusOffset: -0.175,
-    name: 'PHOENIX',
-    ao: false,
-    originX: 4.37,
-    originY: -9.32,
     extraParams: {},
   },
   {

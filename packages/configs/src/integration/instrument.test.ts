@@ -2,7 +2,7 @@ import type { AssertionError } from 'node:assert';
 import assert from 'node:assert';
 import { describe, it } from 'node:test';
 
-import type { MutationResetInstrumentsArgs, MutationUpdateInstrumentArgs } from '../graphql/gen/index.js';
+import type { Instrument, MutationResetInstrumentsArgs, MutationUpdateInstrumentArgs } from '../graphql/gen/index.js';
 import { initializeServerFixture } from './setup.js';
 
 await describe('Instrument', async () => {
@@ -30,8 +30,9 @@ await describe('Instrument', async () => {
 
   await describe('resetInstruments mutation', async () => {
     await it('resets the instrument to initial state', async () => {
+      const where = { wfs: 'NONE', name: 'GMOS_NORTH', issPort: 5 } as const;
       const initialInstrument = await fixture.prisma.instrument.findFirstOrThrow({
-        where: { wfs: 'NONE', name: 'GMOS_SOUTH' },
+        where,
       });
       assert.deepStrictEqual(initialInstrument.extraParams, {});
 
@@ -42,28 +43,28 @@ await describe('Instrument', async () => {
 
       await fixture.executeGraphql<MutationResetInstrumentsArgs>({
         query: `#graphql
-          mutation resetInstruments($name: String!) {
+          mutation resetInstruments($name: Instrument!) {
             resetInstruments(name: $name) {
               pk
               extraParams
             }
           }`,
-        variables: { name: initialInstrument.name },
+        variables: { name: initialInstrument.name as Instrument },
       });
 
       const resetInstrument = await fixture.prisma.instrument.findFirstOrThrow({
-        where: { wfs: 'NONE', name: 'GMOS_SOUTH' },
+        where,
       });
       // Compare without the primary key
       assert.deepStrictEqual({ ...resetInstrument, pk: undefined }, { ...initialInstrument, pk: undefined });
     });
 
     await it('resets multiple instruments with the name', async () => {
-      const where = { wfs: 'NONE', name: 'GMOS_SOUTH' } as const;
+      const where = { wfs: 'NONE', name: 'GMOS_NORTH' } as const;
       const initialInstruments = await fixture.prisma.instrument.findMany({
         where,
       });
-      assert(initialInstruments.length > 1, 'There should be multiple instruments with the name GMOS_SOUTH');
+      assert(initialInstruments.length > 1, 'There should be multiple instruments with the name GMOS_NORTH');
 
       for (const instrument of initialInstruments) {
         await fixture.prisma.instrument.update({
@@ -74,13 +75,13 @@ await describe('Instrument', async () => {
 
       await fixture.executeGraphql<MutationResetInstrumentsArgs>({
         query: `#graphql
-          mutation resetInstruments($name: String!) {
+          mutation resetInstruments($name: Instrument!) {
             resetInstruments(name: $name) {
               pk
               extraParams
             }
           }`,
-        variables: { name: 'GMOS_SOUTH' },
+        variables: { name: 'GMOS_NORTH' },
       });
 
       const resetInstruments = await fixture.prisma.instrument.findMany({ where });
@@ -93,15 +94,15 @@ await describe('Instrument', async () => {
       await assert.rejects(
         fixture.executeGraphql<MutationResetInstrumentsArgs>({
           query: `#graphql
-            mutation resetInstruments($name: String!) {
+            mutation resetInstruments($name: Instrument!) {
               resetInstruments(name: $name) {
                 pk
                 extraParams
               }
             }`,
-          variables: { name: 'NON_EXISTENT_INSTRUMENT' },
+          variables: { name: 'SCORPIO' },
         }),
-        (err: AssertionError) => err.message.includes('No initial instruments found for name: NON_EXISTENT_INSTRUMENT'),
+        (err: AssertionError) => err.message.includes('No initial instruments found for name: SCORPIO'),
       );
     });
   });

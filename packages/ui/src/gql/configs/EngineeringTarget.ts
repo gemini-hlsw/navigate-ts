@@ -60,7 +60,7 @@ const UPDATE_ENGINEERING_TARGET = graphql(`
     $epoch: String
     $type: TargetType
     $wavelength: Int
-    $instrument: String
+    $instrument: Instrument
     $rotatorAngle: Float
     $rotatorMode: TrackingType
   ) {

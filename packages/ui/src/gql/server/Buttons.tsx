@@ -176,7 +176,8 @@ export function Slew(props: ButtonProps) {
   const configuration = configData?.configuration;
 
   const { data: instrumentPortData, loading: instrumentPortLoading } = useInstrumentPort({
-    variables: { instrument: configuration?.obsInstrument as Instrument },
+    // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
+    variables: { instrument: configuration?.obsInstrument! as Instrument },
   });
 
   const { data: instrumentData, loading: instrumentLoading } = useInstrument({

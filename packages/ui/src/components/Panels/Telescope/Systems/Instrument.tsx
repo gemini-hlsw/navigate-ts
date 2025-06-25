@@ -1,6 +1,6 @@
 import { useConfiguration } from '@gql/configs/Configuration';
 import { useInstrument, useUpdateInstrument } from '@gql/configs/Instrument';
-import type { Instrument } from '@gql/server/gen/graphql';
+import type { Instrument } from '@gql/odb/gen/graphql';
 import { useInstrumentPort } from '@gql/server/Instrument';
 import { Title, TitleDropdown } from '@Shared/Title/Title';
 import { Button } from 'primereact/button';
@@ -23,7 +23,8 @@ export function Instrument({ canEdit }: { canEdit: boolean }) {
 
   const { data: portData, loading: instrumentPortLoading } = useInstrumentPort({
     variables: {
-      instrument: configuration?.obsInstrument as Instrument,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
+      instrument: configuration?.obsInstrument! as Instrument,
     },
   });
 
@@ -114,7 +115,7 @@ export function Instrument({ canEdit }: { canEdit: boolean }) {
           id="instrument-name"
           disabled={!canEdit || loading || true}
           value={instrument.name}
-          onChange={(e) => onUpdateInstrument({ name: e.target.value })}
+          onChange={(e) => onUpdateInstrument({ name: e.target.value as Instrument })}
         />
 
         <InstrumentInputNumber value={instrument.issPort} label="Port" disabled={true} minFractionDigits={0} />

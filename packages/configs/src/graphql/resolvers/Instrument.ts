@@ -1,5 +1,5 @@
 import { INITIAL_INSTRUMENTS } from '../../prisma/queries/init/instruments.js';
-import type { Resolvers } from '../gen/index.js';
+import type { InstrumentConfig, Resolvers } from '../gen/index.js';
 
 export const InstrumentResolver: Resolvers = {
   Query: {
@@ -8,10 +8,10 @@ export const InstrumentResolver: Resolvers = {
       if (!instrument) {
         throw new Error(`Instrument not found for args: ${JSON.stringify(args)}`);
       }
-      return instrument;
+      return instrument as InstrumentConfig;
     },
     instruments: (_parent, args, { prisma }) => {
-      return prisma.instrument.findMany({ where: args });
+      return prisma.instrument.findMany({ where: args }) as Promise<InstrumentConfig[]>;
     },
     distinctInstruments: (_parent, _args, { prisma }) => {
       return prisma.instrument.findMany({
@@ -29,13 +29,13 @@ export const InstrumentResolver: Resolvers = {
   },
   Mutation: {
     createInstrument: (_parent, args, { prisma }) => {
-      return prisma.instrument.create({ data: { extraParams: {}, ...args } });
+      return prisma.instrument.create({ data: { extraParams: {}, ...args } }) as Promise<InstrumentConfig>;
     },
     updateInstrument: (_parent, args, { prisma }) => {
       return prisma.instrument.update({
         where: { pk: args.pk },
         data: args,
-      });
+      }) as Promise<InstrumentConfig>;
     },
     resetInstruments: async (_parent, args, { prisma }) => {
       const initialInstruments = INITIAL_INSTRUMENTS.filter((i) => i.name === args.name);
@@ -47,7 +47,7 @@ export const InstrumentResolver: Resolvers = {
         await tx.instrument.deleteMany({ where: args });
 
         return tx.instrument.createManyAndReturn({ data: initialInstruments });
-      });
+      }) as Promise<InstrumentConfig[]>;
     },
   },
 };

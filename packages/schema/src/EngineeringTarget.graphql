@@ -1,6 +1,7 @@
 #import DateTime from "./DateTime.graphql"
 #import RA, Az, El, Dec, TargetType from "./Target.graphql"
 #import TrackingType from "./Rotator.graphql"
+#import Instrument from "lucuma-schemas/odb"
 
 type EngineeringTarget {
   pk: Int! # Primary Key
@@ -13,7 +14,7 @@ type EngineeringTarget {
   epoch: String # Epoch of target
   type: TargetType! # FIXED | SCIENCE | BLINDOFFSET | PWFS1 | PWFS2 | OIWFS
   wavelength: Int # Wavelength
-  instrument: String! # Instrument name
+  instrument: Instrument! # Instrument name
   rotatorMode: TrackingType # Rotator type
   rotatorAngle: Float # Rotator angle
   createdAt: DateTime! # Datetime when it was created
@@ -34,7 +35,7 @@ type Mutation {
     el: Float
     epoch: String
     type: TargetType!
-    instrument: String!
+    instrument: Instrument!
     wavelength: Int
     rotatorMode: TrackingType
     rotatorAngle: Float
@@ -48,7 +49,7 @@ type Mutation {
     coord2: Float
     epoch: String
     type: TargetType
-    instrument: String
+    instrument: Instrument
     wavelength: Int
     rotatorMode: TrackingType
     rotatorAngle: Float
