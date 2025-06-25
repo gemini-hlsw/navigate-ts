@@ -3,8 +3,12 @@ import type { Resolvers } from '../gen/index.js';
 
 export const InstrumentResolver: Resolvers = {
   Query: {
-    instrument: (_parent, args, { prisma }) => {
-      return prisma.instrument.findFirst({ where: args });
+    instrument: async (_parent, args, { prisma }) => {
+      const instrument = await prisma.instrument.findFirst({ where: args });
+      if (!instrument) {
+        throw new Error(`Instrument not found for args: ${JSON.stringify(args)}`);
+      }
+      return instrument;
     },
     instruments: (_parent, args, { prisma }) => {
       return prisma.instrument.findMany({ where: args });
