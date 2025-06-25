@@ -20,7 +20,7 @@ export function useGetDistinctInstruments() {
 }
 
 const GET_DISTINCT_PORTS = graphql(`
-  query getDistinctPorts($name: String!) {
+  query getDistinctPorts($name: Instrument!) {
     distinctPorts(name: $name) {
       issPort
     }
@@ -36,7 +36,7 @@ export function useGetDistinctPorts() {
 }
 
 export const GET_INSTRUMENTS = graphql(`
-  query getInstruments($name: String!, $issPort: Int!) {
+  query getInstruments($name: Instrument!, $issPort: Int!) {
     instruments(name: $name, issPort: $issPort) {
       pk
       name
@@ -61,7 +61,7 @@ export function useGetInstruments() {
 }
 
 export const GET_INSTRUMENT = graphql(`
-  query getInstrument($name: String, $issPort: Int, $wfs: WfsType) {
+  query getInstrument($name: Instrument, $issPort: Int, $wfs: WfsType) {
     instrument(name: $name, issPort: $issPort, wfs: $wfs) {
       pk
       name
@@ -87,7 +87,7 @@ export function useInstrument(options: OptionsOf<typeof GET_INSTRUMENT> = {}) {
 export const UPDATE_INSTRUMENT = graphql(`
   mutation updateInstrument(
     $pk: Int!
-    $name: String
+    $name: Instrument
     $iaa: Float
     $issPort: Int
     $focusOffset: Float
@@ -130,7 +130,7 @@ export function useUpdateInstrument() {
 }
 
 const RESET_INSTRUMENTS = graphql(`
-  mutation resetInstruments($name: String!) {
+  mutation resetInstruments($name: Instrument!) {
     resetInstruments(name: $name) {
       pk
       name

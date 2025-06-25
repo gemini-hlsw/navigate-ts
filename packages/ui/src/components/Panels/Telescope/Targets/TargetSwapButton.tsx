@@ -1,13 +1,16 @@
+import { isNullish } from '@apollo/client/cache/inmemory/helpers';
 import { useConfiguration } from '@gql/configs/Configuration';
 import type { Target } from '@gql/configs/gen/graphql';
 import { useInstrument } from '@gql/configs/Instrument';
 import { useRotator } from '@gql/configs/Rotator';
+import type { Instrument } from '@gql/odb/gen/graphql';
 import type {
   Instrument as InstrumentName,
   InstrumentSpecificsInput,
   RotatorTrackingInput,
   TargetPropertiesInput,
 } from '@gql/server/gen/graphql';
+import { useInstrumentPort } from '@gql/server/Instrument';
 import { useNavigateState } from '@gql/server/NavigateState';
 import { useRestoreTarget, useSwapTarget } from '@gql/server/TargetSwap';
 import { Button } from 'primereact/button';
@@ -36,13 +39,18 @@ export function TargetSwapButton({
   const { data: configurationData, loading: configurationLoading } = useConfiguration();
   const configuration = configurationData?.configuration;
 
+  const { data: instrumentPortData, loading: instrumentPortLoading } = useInstrumentPort({
+    // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
+    variables: { instrument: configuration?.obsInstrument! as Instrument },
+  });
+
   const { data: instrumentData, loading: instrumentLoading } = useInstrument({
-    skip: !configuration?.obsInstrument,
-    variables: { name: configuration?.obsInstrument ?? '', issPort: 3, wfs: 'NONE' },
+    skip: isNullish(configuration?.obsInstrument) || isNullish(instrumentPortData?.instrumentPort),
+    variables: { name: configuration?.obsInstrument, issPort: instrumentPortData?.instrumentPort, wfs: 'NONE' },
   });
 
   const { data: acData, loading: acLoading } = useInstrument({
-    skip: !configuration?.site,
+    skip: isNullish(configuration?.site),
     variables: { name: `ACQ_CAM` },
   });
 
@@ -58,7 +66,8 @@ export function TargetSwapButton({
     instrumentLoading ||
     rotatorLoading ||
     configurationLoading ||
-    acLoading;
+    acLoading ||
+    instrumentPortLoading;
 
   const disabled = !canEdit;
 

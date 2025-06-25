@@ -1,4 +1,5 @@
 import { useGetDistinctInstruments, useGetDistinctPorts, useGetInstruments } from '@gql/configs/Instrument';
+import type { Instrument as InstrumentName } from '@gql/odb/gen/graphql';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { Dropdown } from 'primereact/dropdown';
@@ -13,7 +14,7 @@ export function Instrument() {
   const getPorts = useGetDistinctPorts();
   const getInstruments = useGetInstruments();
   const [nameOptions, setNameOptions] = useState<string[]>([]);
-  const [name, setName] = useState('');
+  const [name, setName] = useState<InstrumentName | ''>('');
   const [portOptions, setPortOptions] = useState<number[]>([]);
   const [port, setPort] = useState(0);
   const [instrumentOptions, setInstrumentOptions] = useState<InstrumentType[]>([]);
@@ -107,7 +108,7 @@ export function Instrument() {
           <Dropdown
             value={name}
             options={nameOptions}
-            onChange={(e) => setName(e.target.value as string)}
+            onChange={(e) => setName(e.target.value as InstrumentName)}
             placeholder="Select instrument"
           />
           <span>issPort</span>

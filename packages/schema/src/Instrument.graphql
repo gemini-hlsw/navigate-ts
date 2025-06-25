@@ -10,7 +10,7 @@ enum WfsType {
 
 type InstrumentConfig {
   pk: Int! # Record primary key
-  name: String! # Instrument name
+  name: Instrument! # Instrument name
   iaa: Float! # Instrument Alignment Angle
   issPort: Int! # Instrument Support Structure port
   focusOffset: Float! # Focus offset
@@ -33,18 +33,18 @@ type DistinctPort {
 # clients can execute, along with the return type for each. In this
 # case, the "books" query returns an array of zero or more Books (defined above).
 type Query {
-  instrument(name: String, issPort: Int, wfs: WfsType, extraParams: JSON): InstrumentConfig
+  instrument(name: Instrument, issPort: Int, wfs: WfsType, extraParams: JSON): InstrumentConfig!
 
-  instruments(name: String, issPort: Int, wfs: WfsType, extraParams: JSON): [InstrumentConfig!]!
+  instruments(name: Instrument, issPort: Int, wfs: WfsType, extraParams: JSON): [InstrumentConfig!]!
 
   distinctInstruments: [DistinctInstrument!]!
 
-  distinctPorts(name: String): [DistinctPort!]!
+  distinctPorts(name: Instrument): [DistinctPort!]!
 }
 
 type Mutation {
   createInstrument(
-    name: String! # Instrument name
+    name: Instrument! # Instrument name
     iaa: Float # Instrument Alignment Angle
     issPort: Int! # Instrument Support Structure port
     focusOffset: Float # Focus offset
@@ -57,7 +57,7 @@ type Mutation {
 
   updateInstrument(
     pk: Int!
-    name: String
+    name: Instrument
     iaa: Float
     issPort: Int
     focusOffset: Float
@@ -69,5 +69,5 @@ type Mutation {
   ): InstrumentConfig!
 
   # Reset the instruments to their default values
-  resetInstruments(name: String!): [InstrumentConfig!]!
+  resetInstruments(name: Instrument!): [InstrumentConfig!]!
 }

@@ -1,6 +1,7 @@
 import type { Prisma } from '../../../../gen/prisma/index.js';
+import type { Instrument } from '../../../graphql/gen/index.js';
 
-export const INITIAL_ENGINEERING_TARGETS: Prisma.EngineeringTargetCreateInput[] = [
+export const INITIAL_ENGINEERING_TARGETS: (Prisma.EngineeringTargetCreateInput & { instrument: Instrument })[] = [
   {
     coord1: 147.0,
     coord2: 89.9,

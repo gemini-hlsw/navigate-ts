@@ -3,6 +3,7 @@ import { GET_CONFIGURATION } from '@gql/configs/Configuration';
 import { GET_INSTRUMENT, UPDATE_INSTRUMENT } from '@gql/configs/Instrument';
 import type { RenderResultWithStore } from '@gql/render';
 import { renderWithContext } from '@gql/render';
+import { GET_INSTRUMENT_PORT } from '@gql/server/Instrument';
 import type { MockedResponseOf } from '@gql/util';
 import { userEvent } from '@vitest/browser/context';
 
@@ -106,6 +107,16 @@ const mocks: MockedResponse[] = [
       },
     },
   } satisfies MockedResponseOf<typeof GET_INSTRUMENT>,
+  {
+    request: { query: GET_INSTRUMENT_PORT },
+    maxUsageCount: Infinity,
+    variableMatcher: () => true,
+    result: {
+      data: {
+        instrumentPort: 3,
+      },
+    },
+  } satisfies MockedResponseOf<typeof GET_INSTRUMENT_PORT>,
 ];
 
 const updateInstrumentMock = {

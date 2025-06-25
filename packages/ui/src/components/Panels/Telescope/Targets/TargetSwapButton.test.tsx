@@ -3,6 +3,7 @@ import type { Target } from '@gql/configs/gen/graphql';
 import { GET_INSTRUMENT } from '@gql/configs/Instrument';
 import { GET_ROTATOR } from '@gql/configs/Rotator';
 import { renderWithContext } from '@gql/render';
+import { GET_INSTRUMENT_PORT } from '@gql/server/Instrument';
 import { NAVIGATE_STATE, NAVIGATE_STATE_SUBSCRIPTION } from '@gql/server/NavigateState';
 import { RESTORE_TARGET_MUTATION, SWAP_TARGET_MUTATION } from '@gql/server/TargetSwap';
 import type { MockedResponseOf } from '@gql/util';
@@ -18,13 +19,7 @@ describe(TargetSwapButton.name, () => {
       sut = renderWithContext(
         <TargetSwapButton selectedTarget={selectedTarget as Target} oiSelected={oiSelected as Target} />,
         {
-          mocks: [
-            getRotatorMock,
-            getInstrumentMock,
-            getConfigurationMock,
-            swapTargetMock,
-            ...navigateStatesMock(false),
-          ],
+          mocks: [...mocks, ...navigateStatesMock(false)],
         },
       );
       // wait for state to load
@@ -39,6 +34,7 @@ describe(TargetSwapButton.name, () => {
     it('should swap target when onSwappedTarget is false', async () => {
       await sut.getByRole('button').click();
 
+      const swapTargetMock = mocks.find((m) => m.request.query === SWAP_TARGET_MUTATION)!;
       expect(swapTargetMock.result).toHaveBeenCalledOnce();
     });
   });
@@ -48,13 +44,7 @@ describe(TargetSwapButton.name, () => {
       sut = renderWithContext(
         <TargetSwapButton selectedTarget={selectedTarget as Target} oiSelected={oiSelected as Target} />,
         {
-          mocks: [
-            getRotatorMock,
-            getInstrumentMock,
-            getConfigurationMock,
-            restoreTargetMock,
-            ...navigateStatesMock(true),
-          ],
+          mocks: [...mocks, ...navigateStatesMock(true)],
         },
       );
       // wait for state to load
@@ -67,6 +57,7 @@ describe(TargetSwapButton.name, () => {
 
       await sut.getByRole('button').click();
 
+      const restoreTargetMock = mocks.find((m) => m.request.query === RESTORE_TARGET_MUTATION)!;
       expect(restoreTargetMock.result).toHaveBeenCalledOnce();
     });
   });
@@ -111,45 +102,152 @@ const oiSelected = {
   createdAt: '2024-09-25T11:57:29.410Z',
 };
 
-const getRotatorMock: MockedResponseOf<typeof GET_ROTATOR> = {
-  request: {
-    query: GET_ROTATOR,
-    variables: {},
-  },
-  result: {
-    data: {
-      rotator: {
-        pk: 2,
-        angle: 0,
-        tracking: 'TRACKING',
+const mocks = [
+  {
+    request: {
+      query: GET_ROTATOR,
+      variables: {},
+    },
+    result: {
+      data: {
+        rotator: {
+          pk: 2,
+          angle: 0,
+          tracking: 'TRACKING',
+        },
       },
     },
-  },
-};
-
-const getInstrumentMock: MockedResponseOf<typeof GET_INSTRUMENT> = {
-  request: {
-    query: GET_INSTRUMENT,
-  },
-  maxUsageCount: 5,
-  variableMatcher: () => true,
-  result: {
-    data: {
-      instrument: {
-        pk: 1,
-        wfs: 'OIWFS',
-        iaa: 359.877,
-        issPort: 3,
-        focusOffset: 0.0,
-        name: 'GMOS_SOUTH',
-        ao: false,
-        originX: 0.0,
-        originY: 0.0,
-        extraParams: {},
+  } satisfies MockedResponseOf<typeof GET_ROTATOR>,
+  {
+    request: {
+      query: GET_INSTRUMENT,
+    },
+    maxUsageCount: 5,
+    variableMatcher: () => true,
+    result: {
+      data: {
+        instrument: {
+          pk: 1,
+          wfs: 'OIWFS',
+          iaa: 359.877,
+          issPort: 3,
+          focusOffset: 0.0,
+          name: 'GMOS_SOUTH',
+          ao: false,
+          originX: 0.0,
+          originY: 0.0,
+          extraParams: {},
+        },
       },
     },
-  },
-};
+  } satisfies MockedResponseOf<typeof GET_INSTRUMENT>,
+  {
+    request: {
+      query: SWAP_TARGET_MUTATION,
+      variables: {
+        swapConfig: {
+          acParams: {
+            iaa: { degrees: 359.877 },
+            focusOffset: { micrometers: 0 },
+            agName: 'GMOS_SOUTH',
+            origin: { x: { micrometers: 0 }, y: { micrometers: 0 } },
+          },
+          rotator: { ipa: { degrees: 0 }, mode: 'TRACKING' },
+          guideTarget: {
+            id: oiSelected.id,
+            name: oiSelected.name,
+            sidereal: {
+              ra: { hms: oiSelected.ra.hms },
+              dec: { dms: oiSelected.dec.dms },
+              epoch: oiSelected.epoch,
+            },
+          },
+        },
+      },
+    },
+    result: vi.fn().mockImplementation(() => ({ data: { swapTarget: { result: 'SUCCESS', msg: '' } } })),
+  } satisfies MockedResponseOf<typeof SWAP_TARGET_MUTATION>,
+  {
+    request: {
+      query: RESTORE_TARGET_MUTATION,
+      variables: {
+        config: {
+          instrument: 'GMOS_SOUTH',
+          instParams: {
+            iaa: { degrees: 359.877 },
+            focusOffset: { micrometers: 0 },
+            agName: 'GMOS_SOUTH',
+            origin: { x: { micrometers: 0 }, y: { micrometers: 0 } },
+          },
+          rotator: { ipa: { degrees: 0 }, mode: 'TRACKING' },
+          sourceATarget: {
+            id: selectedTarget.id,
+            name: selectedTarget.name,
+            sidereal: {
+              ra: { hms: selectedTarget.ra.hms },
+              dec: { dms: selectedTarget.dec.dms },
+              epoch: selectedTarget.epoch,
+            },
+            wavelength: { nanometers: selectedTarget.wavelength },
+          },
+          oiwfs: {
+            tracking: {
+              nodAchopA: true,
+              nodAchopB: false,
+              nodBchopA: false,
+              nodBchopB: true,
+            },
+            target: {
+              name: oiSelected.name,
+              sidereal: {
+                ra: { hms: oiSelected?.ra?.hms },
+                dec: { dms: oiSelected?.dec?.dms },
+                epoch: oiSelected.epoch,
+              },
+            },
+          },
+        },
+      },
+    },
+    result: vi.fn().mockImplementation(() => ({ data: { restoreTarget: { result: 'SUCCESS', msg: '' } } })),
+  } satisfies MockedResponseOf<typeof RESTORE_TARGET_MUTATION>,
+  {
+    request: {
+      query: GET_CONFIGURATION,
+    },
+    variableMatcher: () => true,
+    result: {
+      data: {
+        configuration: {
+          pk: 1,
+          site: 'GN',
+          selectedTarget: 3,
+          selectedOiTarget: 8,
+          selectedP1Target: null,
+          selectedP2Target: null,
+          oiGuidingType: 'NORMAL',
+          p1GuidingType: 'NORMAL',
+          p2GuidingType: 'NORMAL',
+          obsTitle: 'Markarian 573',
+          obsId: 'o-1e1',
+          obsInstrument: 'GMOS_NORTH',
+          obsSubtitle: null,
+          obsReference: 'G-2025A-ENG-GMOSN-01-0004',
+        },
+      },
+    },
+  } satisfies MockedResponseOf<typeof GET_CONFIGURATION>,
+  {
+    request: { query: GET_INSTRUMENT_PORT },
+    maxUsageCount: Infinity,
+    variableMatcher: () => true,
+    result: vi.fn().mockImplementation(() => ({
+      data: {
+        instrumentPort: 3,
+      },
+    })),
+  } satisfies MockedResponseOf<typeof GET_INSTRUMENT_PORT>,
+];
 
 const navigateStatesMock = (onSwappedTarget: boolean) => [
   {
@@ -181,102 +279,3 @@ const navigateStatesMock = (onSwappedTarget: boolean) => [
     },
   } satisfies MockedResponseOf<typeof NAVIGATE_STATE_SUBSCRIPTION>,
 ];
-
-const swapTargetMock: MockedResponseOf<typeof SWAP_TARGET_MUTATION> = {
-  request: {
-    query: SWAP_TARGET_MUTATION,
-    variables: {
-      swapConfig: {
-        acParams: {
-          iaa: { degrees: 359.877 },
-          focusOffset: { micrometers: 0 },
-          agName: 'GMOS_SOUTH',
-          origin: { x: { micrometers: 0 }, y: { micrometers: 0 } },
-        },
-        rotator: { ipa: { degrees: 0 }, mode: 'TRACKING' },
-        guideTarget: {
-          id: oiSelected.id,
-          name: oiSelected.name,
-          sidereal: {
-            ra: { hms: oiSelected.ra.hms },
-            dec: { dms: oiSelected.dec.dms },
-            epoch: oiSelected.epoch,
-          },
-        },
-      },
-    },
-  },
-  result: vi.fn().mockImplementation(() => ({ data: { swapTarget: { result: 'SUCCESS', msg: '' } } })),
-};
-
-const restoreTargetMock: MockedResponseOf<typeof RESTORE_TARGET_MUTATION> = {
-  request: {
-    query: RESTORE_TARGET_MUTATION,
-    variables: {
-      config: {
-        instrument: 'GMOS_SOUTH',
-        instParams: {
-          iaa: { degrees: 359.877 },
-          focusOffset: { micrometers: 0 },
-          agName: 'GMOS_SOUTH',
-          origin: { x: { micrometers: 0 }, y: { micrometers: 0 } },
-        },
-        rotator: { ipa: { degrees: 0 }, mode: 'TRACKING' },
-        sourceATarget: {
-          id: selectedTarget.id,
-          name: selectedTarget.name,
-          sidereal: {
-            ra: { hms: selectedTarget.ra.hms },
-            dec: { dms: selectedTarget.dec.dms },
-            epoch: selectedTarget.epoch,
-          },
-          wavelength: { nanometers: selectedTarget.wavelength },
-        },
-        oiwfs: {
-          tracking: {
-            nodAchopA: true,
-            nodAchopB: false,
-            nodBchopA: false,
-            nodBchopB: true,
-          },
-          target: {
-            name: oiSelected.name,
-            sidereal: {
-              ra: { hms: oiSelected?.ra?.hms },
-              dec: { dms: oiSelected?.dec?.dms },
-              epoch: oiSelected.epoch,
-            },
-          },
-        },
-      },
-    },
-  },
-  result: vi.fn().mockImplementation(() => ({ data: { restoreTarget: { result: 'SUCCESS', msg: '' } } })),
-};
-
-const getConfigurationMock: MockedResponseOf<typeof GET_CONFIGURATION> = {
-  request: {
-    query: GET_CONFIGURATION,
-  },
-  variableMatcher: () => true,
-  result: {
-    data: {
-      configuration: {
-        pk: 1,
-        site: 'GN',
-        selectedTarget: 3,
-        selectedOiTarget: 8,
-        selectedP1Target: null,
-        selectedP2Target: null,
-        oiGuidingType: 'NORMAL',
-        p1GuidingType: 'NORMAL',
-        p2GuidingType: 'NORMAL',
-        obsTitle: 'Markarian 573',
-        obsId: 'o-1e1',
-        obsInstrument: 'GMOS_NORTH',
-        obsSubtitle: null,
-        obsReference: 'G-2025A-ENG-GMOSN-01-0004',
-      },
-    },
-  },
-};

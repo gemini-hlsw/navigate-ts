@@ -1,5 +1,7 @@
 import { useConfiguration } from '@gql/configs/Configuration';
 import { useInstrument, useUpdateInstrument } from '@gql/configs/Instrument';
+import type { Instrument } from '@gql/odb/gen/graphql';
+import { useInstrumentPort } from '@gql/server/Instrument';
 import { Title, TitleDropdown } from '@Shared/Title/Title';
 import { Button } from 'primereact/button';
 import { Divider } from 'primereact/divider';
@@ -10,6 +12,7 @@ import { useCallback, useEffect, useId, useMemo, useState } from 'react';
 
 import { useSetImportInstrument } from '@/components/atoms/instrument';
 import { FloppyDisk, List } from '@/components/Icons';
+import { isNullish } from '@/Helpers/functions';
 import type { InstrumentType } from '@/types';
 
 export function Instrument({ canEdit }: { canEdit: boolean }) {
@@ -18,11 +21,18 @@ export function Instrument({ canEdit }: { canEdit: boolean }) {
   const configuration = configurationData?.configuration;
   const setImportInstrument = useSetImportInstrument();
 
-  const { data, loading: instrumentLoading } = useInstrument({
-    skip: !configuration?.obsInstrument,
+  const { data: portData, loading: instrumentPortLoading } = useInstrumentPort({
     variables: {
-      name: configuration?.obsInstrument ?? '',
-      // issPort: 1,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
+      instrument: configuration?.obsInstrument! as Instrument,
+    },
+  });
+
+  const { data, loading: instrumentLoading } = useInstrument({
+    skip: isNullish(configuration?.obsInstrument) || isNullish(portData?.instrumentPort),
+    variables: {
+      name: configuration?.obsInstrument,
+      issPort: portData?.instrumentPort,
       wfs: 'NONE',
     },
   });
@@ -35,7 +45,7 @@ export function Instrument({ canEdit }: { canEdit: boolean }) {
     setAuxInstrument(instrument ?? undefined);
   }, [instrument]);
 
-  const loading = configurationLoading || instrumentLoading || updateInstrumentLoading;
+  const loading = configurationLoading || instrumentLoading || updateInstrumentLoading || instrumentPortLoading;
 
   const onUpdateInstrument = useCallback(
     (variables: Partial<InstrumentType>) => {
@@ -105,7 +115,7 @@ export function Instrument({ canEdit }: { canEdit: boolean }) {
           id="instrument-name"
           disabled={!canEdit || loading || true}
           value={instrument.name}
-          onChange={(e) => onUpdateInstrument({ name: e.target.value })}
+          onChange={(e) => onUpdateInstrument({ name: e.target.value as Instrument })}
         />
 
         <InstrumentInputNumber value={instrument.issPort} label="Port" disabled={true} minFractionDigits={0} />
