@@ -9,7 +9,7 @@ import type {
   InstrumentConfig as InstrumentType,
   Mechanism as MechanismType,
   Rotator as RotatorType,
-  SiteType,
+  Site as SiteType,
   SlewFlags as SlewFlagsType,
   StatusType,
   Target as TargetType,
