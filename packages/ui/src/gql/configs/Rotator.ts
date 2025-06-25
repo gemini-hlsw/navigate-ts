@@ -19,7 +19,7 @@ export function useRotator() {
 }
 
 const UPDATE_ROTATOR = graphql(`
-  mutation updateRotator($pk: Int!, $angle: Float, $tracking: TrackingType) {
+  mutation updateRotator($pk: Int!, $angle: Float, $tracking: RotatorTrackingMode) {
     updateRotator(pk: $pk, angle: $angle, tracking: $tracking) {
       pk
       angle

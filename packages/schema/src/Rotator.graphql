@@ -1,12 +1,9 @@
-enum TrackingType {
-  TRACKING
-  FIXED
-}
+#import RotatorTrackingMode from 'navigate-server-schema/navigate.graphql'
 
 type Rotator {
   pk: Int! # Record primary key
   angle: Float! # Rotator angle
-  tracking: TrackingType! # Tracking mode
+  tracking: RotatorTrackingMode! # Tracking mode
 }
 
 type Query {
@@ -17,6 +14,6 @@ type Mutation {
   updateRotator(
     pk: Int! # Primary key
     angle: Float # Rotator angle
-    tracking: TrackingType # Tracking mode
+    tracking: RotatorTrackingMode # Tracking mode
   ): Rotator!
 }
