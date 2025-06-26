@@ -3,17 +3,9 @@
   "tasks": [
     {
       "type": "npm",
-      "script": "tsc:watch",
-      "group": "build",
-      "problemMatcher": ["$tsc-watch"],
-      "label": "TypeScript: Watch",
-      "detail": "tsc -w"
-    },
-    {
-      "type": "npm",
       "script": "codegen:watch",
       "group": "build",
-      "label": "GraphQL Codegen: Watch",
+      "label": "GraphQL Codegen: Watch (UI)",
       "detail": "graphql-codegen --watch"
     }
   ]

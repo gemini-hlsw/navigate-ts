@@ -27,6 +27,5 @@
     },
     "types": ["vitest/globals", "vitest", "@vitest/browser/providers/playwright"]
   },
-  "include": ["src", "tasks"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "include": ["src", "tasks"]
 }
