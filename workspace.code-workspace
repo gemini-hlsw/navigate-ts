@@ -31,17 +31,4 @@
     },
     "eslint.rules.customizations": [{ "rule": "*", "severity": "warn" }],
   },
-  "tasks": {
-    "version": "2.0.0",
-    "tasks": [
-      {
-        "type": "npm",
-        "script": "tsc:watch",
-        "group": "build",
-        "problemMatcher": ["$tsc-watch"],
-        "label": "TypeScript: Watch",
-        "detail": "tsc -w",
-      },
-    ],
-  },
 }

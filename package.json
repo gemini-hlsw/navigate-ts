@@ -17,6 +17,7 @@
     "all": "pnpm -r",
     "lint": "pnpm lint:prettier && pnpm -r lint:eslint",
     "lint:prettier": "prettier --check .",
+    "tsc:watch": "tsc --build --watch",
     "prepare": "node .husky/install.js"
   },
   "devDependencies": {
