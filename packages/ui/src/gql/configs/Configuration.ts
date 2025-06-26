@@ -32,7 +32,7 @@ export function useConfiguration() {
 const UPDATE_CONFIGURATION = graphql(`
   mutation updateConfiguration(
     $pk: Int!
-    $site: SiteType
+    $site: Site
     $selectedTarget: Int
     $selectedOiTarget: Int
     $selectedP1Target: Int

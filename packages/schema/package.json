@@ -13,7 +13,8 @@
   },
   "scripts": {},
   "dependencies": {
-    "lucuma-schemas": "catalog:"
+    "lucuma-schemas": "catalog:",
+    "navigate-server-schema": "catalog:"
   },
   "devDependencies": {}
 }
