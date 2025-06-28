@@ -200,8 +200,8 @@ importers:
         specifier: 'catalog:'
         version: 0.143.0
       lucuma-ui-css:
-        specifier: 0.146.1
-        version: 0.146.1
+        specifier: 0.147.0
+        version: 0.147.0
       navigate-schema:
         specifier: workspace:*
         version: link:../schema
@@ -3327,8 +3327,8 @@ packages:
   lucuma-schemas@0.143.0:
     resolution: {integrity: sha512-ajOoduoG/dfU0bkCToS6W/I/q80n6X0BehUQDXhhfQ9Qd1yT6E2UfXotI1tLZhY1JJ0UW9NSjYOfAlpVHUgvlg==}
 
-  lucuma-ui-css@0.146.1:
-    resolution: {integrity: sha512-TBmCdLQvOejNZWVEg7evmfZ3hrTnqJ081y9ROt+z9UIvtRvBZ/gYNNyxLSkJg0yUABtb6j7EM3elUiFkrutlqg==}
+  lucuma-ui-css@0.147.0:
+    resolution: {integrity: sha512-WjZlqcRZfWMavP5VWtX5ZC5myZlFNmgiPCJoyfAPHQ0x5W5xhZS6sS6agEzuHGxfdIrpamlZYCJ7AgaC/JCbhQ==}
 
   lz-string@1.5.0:
     resolution: {integrity: sha512-h5bgJWpxJNswbU7qCrV0tIKQCaS3blPDrqKWx+QxzuzL1zGUzij9XCWLrSLsJPu5t+eWA/ycetzYAO5IOMcWAQ==}
@@ -8188,7 +8188,7 @@ snapshots:
 
   lucuma-schemas@0.143.0: {}
 
-  lucuma-ui-css@0.146.1: {}
+  lucuma-ui-css@0.147.0: {}
 
   lz-string@1.5.0: {}
 
