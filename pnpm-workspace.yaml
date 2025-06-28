@@ -5,7 +5,7 @@ catalog:
   graphql: 16.11.0
   '@graphql-codegen/cli': 5.0.7
   '@parcel/watcher': 2.5.1
-  lucuma-core: 0.136.1
+  lucuma-core: 0.136.2
   lucuma-schemas: 0.143.0
   navigate-server-schema: 0.1.0-20250619-75394639
   typescript: 5.8.3
