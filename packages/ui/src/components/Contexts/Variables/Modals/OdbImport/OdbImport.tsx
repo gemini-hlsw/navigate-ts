@@ -272,8 +272,11 @@ function extractCentralWavelength(
 ) {
   if (!instrument) return undefined;
 
+  const config = data?.observation?.execution.config;
+  if (!config) return undefined;
+
   // TODO: Add other instruments when odb supports them
-  let instrumentName = '';
+  let instrumentName: keyof typeof config;
   switch (instrument) {
     case 'FLAMINGOS2':
       instrumentName = 'flamingos2';
@@ -288,9 +291,7 @@ function extractCentralWavelength(
       return undefined;
   }
 
-  const config = data?.observation?.execution.config;
-  if (!config) return undefined;
-  const instrumentConfig = config[instrumentName as keyof typeof config] as
+  const instrumentConfig = config[instrumentName] as
     | GmosNorthExecutionConfig
     | GmosSouthExecutionConfig
     | Flamingos2ExecutionConfig;
