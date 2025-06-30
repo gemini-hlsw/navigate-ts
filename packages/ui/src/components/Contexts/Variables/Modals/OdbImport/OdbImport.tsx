@@ -273,7 +273,7 @@ function extractCentralWavelength(
   if (!instrument) return undefined;
 
   // TODO: Add other instruments when odb supports them
-  var instrumentName: string = '';
+  let instrumentName = '';
   switch (instrument) {
     case 'FLAMINGOS2':
       instrumentName = 'flamingos2';
