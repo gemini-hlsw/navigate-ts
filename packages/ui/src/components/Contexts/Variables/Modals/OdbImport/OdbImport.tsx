@@ -2,7 +2,15 @@ import { useConfiguration, useUpdateConfiguration } from '@gql/configs/Configura
 import { useResetInstruments } from '@gql/configs/Instrument';
 import { useRotator, useUpdateRotator } from '@gql/configs/Rotator';
 import { useRemoveAndCreateBaseTargets, useRemoveAndCreateWfsTargets } from '@gql/configs/Target';
-import type { GetCentralWavelengthQuery, GetGuideEnvironmentQuery, SourceProfile } from '@gql/odb/gen/graphql';
+import type {
+  Flamingos2ExecutionConfig,
+  GetCentralWavelengthQuery,
+  GetGuideEnvironmentQuery,
+  GmosNorthExecutionConfig,
+  GmosSouthExecutionConfig,
+  Instrument,
+  SourceProfile,
+} from '@gql/odb/gen/graphql';
 import { useGetCentralWavelength, useGetGuideEnvironment, useGetObservationsByState } from '@gql/odb/Observation';
 import { dateToLocalObservingNight } from 'lucuma-core';
 import { Button } from 'primereact/button';
@@ -13,7 +21,7 @@ import { useCanEdit } from '@/components/atoms/auth';
 import { useOdbVisible } from '@/components/atoms/odb';
 import { extractMagnitude } from '@/Helpers/bands';
 import { useToast } from '@/Helpers/toast';
-import type { ConfigurationType, OdbObservationType, SiteType, TargetInput } from '@/types';
+import type { ConfigurationType, OdbObservationType, TargetInput } from '@/types';
 
 import { ObservationTable } from './ObservationTable';
 
@@ -70,7 +78,7 @@ export function OdbImport() {
           variables: { obsId: selectedObservation.id },
         });
 
-        const wavelength = extractCentralWavelength(configuration?.site, obsWithWavelength.data);
+        const wavelength = extractCentralWavelength(configuration?.obsInstrument, obsWithWavelength.data);
 
         const { name: band, value: magnitude } = extractMagnitude(
           selectedObservation.targetEnvironment?.firstScienceTarget?.sourceProfile as SourceProfile,
@@ -258,12 +266,36 @@ function extractGuideTargets(data: GetGuideEnvironmentQuery | undefined) {
   );
 }
 
-function extractCentralWavelength(site: SiteType | undefined, data: GetCentralWavelengthQuery | undefined) {
-  return site === 'GN'
-    ? data?.observation?.execution.config?.gmosNorth?.acquisition?.nextAtom.steps[0].instrumentConfig.centralWavelength
-        ?.nanometers
-    : data?.observation?.execution.config?.gmosSouth?.acquisition?.nextAtom.steps[0].instrumentConfig.centralWavelength
-        ?.nanometers;
+function extractCentralWavelength(
+  instrument: Instrument | undefined | null,
+  data: GetCentralWavelengthQuery | undefined,
+) {
+  if (!instrument) return undefined;
+
+  // TODO: Add other instruments when odb supports them
+  let instrumentName = '';
+  switch (instrument) {
+    case 'FLAMINGOS2':
+      instrumentName = 'flamingos2';
+      break;
+    case 'GMOS_NORTH':
+      instrumentName = 'gmosNorth';
+      break;
+    case 'GMOS_SOUTH':
+      instrumentName = 'gmosSouth';
+      break;
+    default:
+      return undefined;
+  }
+
+  const config = data?.observation?.execution.config;
+  if (!config) return undefined;
+  const instrumentConfig = config[instrumentName as keyof typeof config] as
+    | GmosNorthExecutionConfig
+    | GmosSouthExecutionConfig
+    | Flamingos2ExecutionConfig;
+  if (!instrumentConfig) return undefined;
+  return instrumentConfig.acquisition?.nextAtom.steps[0].instrumentConfig.centralWavelength?.nanometers;
 }
 
 function firstIfOnlyOne<T>(arr: T[] | undefined): T | undefined {
