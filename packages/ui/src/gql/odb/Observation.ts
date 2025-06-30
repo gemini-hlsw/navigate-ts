@@ -148,6 +148,19 @@ const GET_CENTRAL_WAVELENGTH = graphql(`
               }
             }
           }
+          flamingos2 {
+            acquisition {
+              nextAtom {
+                steps {
+                  instrumentConfig {
+                    centralWavelength {
+                      nanometers
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
       }
     }
