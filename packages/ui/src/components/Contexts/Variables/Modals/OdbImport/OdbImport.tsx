@@ -270,12 +270,24 @@ function extractCentralWavelength(
   instrument: Instrument | undefined | null,
   data: GetCentralWavelengthQuery | undefined,
 ) {
-  const instrumentName = instrument
-    ?.split('_')
-    .map((s, i) => (i === 0 ? s.toLowerCase() : s.charAt(0).toUpperCase() + s.slice(1).toLowerCase()))
-    .join('');
+  if (!instrument) return undefined;
 
-  if (!instrumentName) return undefined;
+  // TODO: Add other instruments when odb supports them
+  var instrumentName: string = '';
+  switch (instrument) {
+    case 'FLAMINGOS2':
+      instrumentName = 'flamingos2';
+      break;
+    case 'GMOS_NORTH':
+      instrumentName = 'gmosNorth';
+      break;
+    case 'GMOS_SOUTH':
+      instrumentName = 'gmosSouth';
+      break;
+    default:
+      return undefined;
+  }
+
   const config = data?.observation?.execution.config;
   if (!config) return undefined;
   const instrumentConfig = config[instrumentName as keyof typeof config] as
