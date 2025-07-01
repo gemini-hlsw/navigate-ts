@@ -23,8 +23,8 @@ catalogs:
       specifier: 0.143.0
       version: 0.143.0
     navigate-server-schema:
-      specifier: 0.1.0-20250619-75394639
-      version: 0.1.0-20250619-75394639
+      specifier: 0.1.0-20250701-63b901ec
+      version: 0.1.0-20250701-63b901ec
     typescript:
       specifier: 5.8.3
       version: 5.8.3
@@ -129,7 +129,7 @@ importers:
         version: 0.143.0
       navigate-server-schema:
         specifier: 'catalog:'
-        version: 0.1.0-20250619-75394639
+        version: 0.1.0-20250701-63b901ec
 
   packages/ui:
     devDependencies:
@@ -207,7 +207,7 @@ importers:
         version: link:../schema
       navigate-server-schema:
         specifier: 'catalog:'
-        version: 0.1.0-20250619-75394639
+        version: 0.1.0-20250701-63b901ec
       playwright:
         specifier: 1.53.1
         version: 1.53.1
@@ -3436,8 +3436,8 @@ packages:
   natural-compare@1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
 
-  navigate-server-schema@0.1.0-20250619-75394639:
-    resolution: {integrity: sha512-oJtR3Bnnyn9szdAqxEpMqaLI+7502GKab2OYuQyipRazL8KfrPSNmHUlzGoHQZMS/jrP2lKVeUtCYCryHdFaEQ==}
+  navigate-server-schema@0.1.0-20250701-63b901ec:
+    resolution: {integrity: sha512-fzgioTk9gMzfB3Li9CZBeZJ81fVqIC7k7uxhu6k/jnI4iJo9//nTgk1SqKm6eespPccaeLst0QqKFA2U+ojeLw==}
 
   negotiator@0.6.3:
     resolution: {integrity: sha512-+EUsqGPLsM+j/zdChZjsnX51g4XrHFOIXwfnCVPGlQk/k5giakcKsuxCObBRu6DSm9opw/O6slWbJdghQM4bBg==}
@@ -8220,7 +8220,7 @@ snapshots:
 
   natural-compare@1.4.0: {}
 
-  navigate-server-schema@0.1.0-20250619-75394639: {}
+  navigate-server-schema@0.1.0-20250701-63b901ec: {}
 
   negotiator@0.6.3: {}
 
