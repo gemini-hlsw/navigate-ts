@@ -9,7 +9,12 @@ import { environment } from '@/Helpers/environment';
 
 export function About() {
   const [aboutVisible, toggleAboutVisible] = useAboutVisible();
-  const odbHost = new URL(environment.odbURI).hostname.split('.')[0];
+  const odbHost = URL.canParse(environment.odbURI) ? new URL(environment.odbURI).hostname.split('.')[0] : 'dev';
+  const environmentType = odbHost.includes('staging')
+    ? 'staging'
+    : odbHost.includes('dev')
+      ? 'development'
+      : 'production';
 
   const onHide = useCallback(() => toggleAboutVisible(false), [toggleAboutVisible]);
   const configsVersion = useConfigsVersion().data?.version.version;
@@ -26,9 +31,7 @@ export function About() {
             </tr>
             <tr>
               <td>ODB</td>
-              <td>
-                {odbHost.includes('staging') ? 'staging' : odbHost.includes('dev') ? 'development' : 'production'}
-              </td>
+              <td>{environmentType}</td>
             </tr>
             <tr>
               <td>Frontend</td>

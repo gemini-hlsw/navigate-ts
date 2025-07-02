@@ -84,12 +84,9 @@
 
     > .acquisition-camera {
       border-top: 1px solid var(--surface-border);
-      // flex: 1 0 auto;
 
-      display: grid;
-      grid-template-columns: 66.666% 33.333%;
-
-      > .left {
+      .left {
+        width: 100%;
         border-right: 1px solid var(--surface-border);
         position: relative;
         display: flex;
@@ -131,52 +128,72 @@
         }
       }
 
-      > .main-controls {
-        height: 100%;
-        padding: 2px;
-
+      .main-controls {
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
+        width: 100%;
 
-        > .top {
-          display: grid;
-          grid-template-columns: 50px 1fr;
-          grid-template-rows: repeat(3, 26px);
-          grid-template-areas:
-            'g11 g12'
-            'g21 g22'
-            'g31 g32';
-          gap: 4px;
-          padding: 2px;
-        }
+        .handset {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
 
-        > .arrow {
-          margin-top: 10px;
-          display: grid;
-          grid-template-columns: 1fr 26px 26px 26px 1fr;
-          grid-template-rows: repeat(3, 26px);
-          grid-template-areas:
-            'g11 g12 gu g14 g15'
-            'g21 gl g23 gr g25'
-            'g31 g32 gd g34 g35';
-          gap: 4px;
-          padding: 2px;
-        }
+          .selector-group {
+            display: grid;
 
-        > .bottom {
-          margin-top: 10px;
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          grid-template-rows: repeat(5, 26px);
-          grid-template-areas:
-            'g11 g12 g13'
-            'g21 g22 g23'
-            'g31 g32 g33'
-            'g41 g42 g43'
-            'g5 g5 g5';
-          gap: 4px;
-          padding: 2px;
+            label {
+              align-self: center;
+            }
+
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: auto;
+            gap: 8px 0px;
+          }
+
+          .coordinates-input {
+            justify-content: space-between;
+            .coordinates-buttons {
+              display: grid;
+              grid-template-columns: repeat(3, 26px);
+              grid-template-rows: repeat(3, 26px);
+              grid-template-areas:
+                'gul gu gur'
+                'gl gm gr'
+                'gdl gd gdr';
+              gap: 4px;
+              padding: 2px;
+              margin-left: auto;
+              margin-right: auto;
+            }
+
+            .coordinates-stepsize {
+              display: flex;
+              align-items: center;
+              gap: 16px;
+              flex-direction: column;
+
+              > .p-slider {
+                width: 100%;
+              }
+            }
+          }
+
+          .open-loops {
+            margin-top: 12px;
+          }
+
+          .control-row {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 6px;
+          }
+
+          .control-row.buttons .p-button {
+            width: auto;
+            padding-left: 8px;
+            padding-right: 8px;
+          }
         }
       }
     }
