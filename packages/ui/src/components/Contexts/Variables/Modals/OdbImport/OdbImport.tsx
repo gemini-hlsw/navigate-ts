@@ -78,7 +78,7 @@ export function OdbImport() {
           variables: { obsId: selectedObservation.id },
         });
 
-        const wavelength = extractCentralWavelength(configuration?.obsInstrument, obsWithWavelength.data);
+        const wavelength = extractCentralWavelength(selectedObservation.instrument, obsWithWavelength.data);
 
         const { name: band, value: magnitude } = extractMagnitude(
           selectedObservation.targetEnvironment?.firstScienceTarget?.sourceProfile as SourceProfile,
