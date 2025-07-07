@@ -13,7 +13,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { CoordinatesInput, type CoordSystem, CoordSystemControls, CurrentCoordinates, ManualInput } from './Controls';
 import { strategies } from './strategy';
 
-export default function PointingHandset() {
+export default function PointingHandset({ canEdit }: { canEdit: boolean }) {
   // GraphQL Queries
   const { data: offset, loading: offsetLoading } = usePointingAdjustmentOffset();
 
@@ -69,7 +69,7 @@ export default function PointingHandset() {
   return (
     <div className="handset">
       <div className="selector-group">
-        <CoordSystemControls coordSystem={coordSystem} onChange={setCoordSystem} loading={loading} />
+        <CoordSystemControls coordSystem={coordSystem} onChange={setCoordSystem} loading={loading} canEdit={canEdit} />
       </div>
       <CoordinatesInput
         loading={loading}
@@ -77,9 +77,16 @@ export default function PointingHandset() {
         x={auxCoords.horizontal}
         y={auxCoords.vertical}
         strategy={strategy}
+        canEdit={canEdit}
       />
 
-      <ManualInput loading={loading} onChange={handleCoordChange} auxCoords={auxCoords} strategy={strategy} />
+      <ManualInput
+        loading={loading}
+        onChange={handleCoordChange}
+        auxCoords={auxCoords}
+        strategy={strategy}
+        canEdit={canEdit}
+      />
 
       <Title title="Pointing correction" />
       <CurrentCoordinates
@@ -91,8 +98,13 @@ export default function PointingHandset() {
       />
       <div className="control-row buttons">
         <ButtonGroup>
-          <Button size="small" label="Apply" onClick={handleApply} disabled={loading} />
-          <Button size="small" label="Reset" onClick={() => void resetLocalAdjustment()} disabled={loading} />
+          <Button size="small" label="Apply" onClick={handleApply} disabled={loading || !canEdit} />
+          <Button
+            size="small"
+            label="Reset"
+            onClick={() => void resetLocalAdjustment()}
+            disabled={loading || !canEdit}
+          />
         </ButtonGroup>
       </div>
       <Title title="Guide correction" />
@@ -105,8 +117,13 @@ export default function PointingHandset() {
       />
       <div className="control-row buttons">
         <ButtonGroup>
-          <Button size="small" label="Reset" onClick={() => void resetGuideAdjustment()} disabled={loading} />
-          <Button size="small" label="Absorb" onClick={() => void absorbAdjustment()} disabled={loading} />
+          <Button
+            size="small"
+            label="Reset"
+            onClick={() => void resetGuideAdjustment()}
+            disabled={loading || !canEdit}
+          />
+          <Button size="small" label="Absorb" onClick={() => void absorbAdjustment()} disabled={loading || !canEdit} />
         </ButtonGroup>
       </div>
     </div>

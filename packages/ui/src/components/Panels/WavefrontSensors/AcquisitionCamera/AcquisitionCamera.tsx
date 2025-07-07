@@ -92,7 +92,7 @@ export default function AcquisitionCamera({ canEdit, ac }: { canEdit: boolean; a
           </div>
         </SplitterPanel>
         <SplitterPanel size={40}>
-          <MainControls />
+          <MainControls canEdit={canEdit} />
         </SplitterPanel>
       </Splitter>
     </div>

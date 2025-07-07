@@ -1,4 +1,4 @@
-import { MockedResponse } from '@apollo/client/testing';
+import type { MockedResponse } from '@apollo/client/testing';
 import { renderWithContext } from '@gql/render';
 import {
   ABSORB_TARGET_ADJUSTMENT_MUTATION,
@@ -7,14 +7,15 @@ import {
   TARGET_ADJUSTMENT_OFFSETS_QUERY,
   TARGET_ADJUSTMENT_OFFSETS_SUBSCRIPTION,
 } from '@gql/server/TargetsHandset';
-import { MockedResponseOf } from '@gql/util';
+import type { MockedResponseOf } from '@gql/util';
+
 import TargetsHandset from './TargetsHandset';
 
 describe(TargetsHandset.name, () => {
   let sut: ReturnType<typeof renderWithContext>;
 
   beforeEach(() => {
-    sut = renderWithContext(<TargetsHandset />, { mocks });
+    sut = renderWithContext(<TargetsHandset canEdit={true} />, { mocks });
   });
 
   it('should render', () => {
@@ -73,6 +74,15 @@ describe(TargetsHandset.name, () => {
     expect(absorbTargetAdjustmentMutationMock.variableMatcher).toHaveBeenCalledWith({
       target: 'OIWFS',
     });
+  });
+
+  it('should be disabled when canEdit is false', () => {
+    sut.unmount();
+    sut = renderWithContext(<TargetsHandset canEdit={false} />, { mocks });
+
+    expect(sut.getByRole('button', { name: 'Apply' })).toBeDisabled();
+    expect(sut.getByRole('button', { name: 'Reset' })).toBeDisabled();
+    expect(sut.getByRole('button', { name: 'Absorb' })).toBeDisabled();
   });
 });
 

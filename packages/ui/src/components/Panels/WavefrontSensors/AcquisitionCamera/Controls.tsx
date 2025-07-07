@@ -21,17 +21,19 @@ export function CoordSystemControls({
   onChange,
   coordSystem,
   loading,
+  canEdit,
 }: {
   onChange: (value: CoordSystem) => void;
   coordSystem: CoordSystem;
-  loading?: boolean;
+  loading: boolean;
+  canEdit: boolean;
 }) {
   return (
     <>
       <label htmlFor="coord-system">Coordinates</label>
       <Dropdown
         inputId="coord-system"
-        disabled={loading}
+        disabled={loading || !canEdit}
         value={coordSystem}
         options={coordSystemOptions.map((cs) => cs)}
         onChange={(e) => onChange(e.value as CoordSystem)}
@@ -44,10 +46,12 @@ export function TargetSelector({
   target,
   onChange,
   loading,
+  canEdit,
 }: {
   target: AdjustTarget;
   onChange: (value: AdjustTarget) => void;
-  loading?: boolean;
+  loading: boolean;
+  canEdit: boolean;
 }) {
   return (
     <>
@@ -55,6 +59,7 @@ export function TargetSelector({
       <Dropdown
         inputId="handsets-target"
         loading={loading}
+        disabled={!canEdit}
         value={target}
         onChange={(e) => onChange(e.value as AdjustTarget)}
         options={targetOptions}
@@ -69,12 +74,14 @@ export function CoordinatesInput({
   y,
   strategy,
   loading,
+  canEdit,
 }: {
   onChange?: CoordOnChange;
   x: number;
   y: number;
   strategy: HandsetStrategy;
-  loading?: boolean;
+  loading: boolean;
+  canEdit: boolean;
 }) {
   const { up, down, right, left } = strategy;
   const [stepSize, setStepSize] = useState(5);
@@ -89,7 +96,7 @@ export function CoordinatesInput({
           onClick={() => onChange?.(up.mod({ horizontal: x, vertical: y }, stepSize))}
           className="coordinate-up"
           icon={<CaretUp />}
-          disabled={loading}
+          disabled={loading || !canEdit}
         />
         <Button
           tooltip={left.label}
@@ -98,7 +105,7 @@ export function CoordinatesInput({
           onClick={() => onChange?.(left.mod({ horizontal: x, vertical: y }, stepSize))}
           className="coordinate-left"
           icon={<CaretLeft />}
-          disabled={loading}
+          disabled={loading || !canEdit}
         />
         <Button
           tooltip={right.label}
@@ -107,7 +114,7 @@ export function CoordinatesInput({
           onClick={() => onChange?.(right.mod({ horizontal: x, vertical: y }, stepSize))}
           className="coordinate-right"
           icon={<CaretRight />}
-          disabled={loading}
+          disabled={loading || !canEdit}
         />
         <Button
           tooltip={down.label}
@@ -116,14 +123,14 @@ export function CoordinatesInput({
           onClick={() => onChange?.(down.mod({ horizontal: x, vertical: y }, stepSize))}
           className="coordinate-down"
           icon={<CaretDown />}
-          disabled={loading}
+          disabled={loading || !canEdit}
         />
       </div>
       <div className="coordinates-stepsize">
         <div className="control-row">
           <label htmlFor="step-stepsize">Step</label>
           <InputNumber
-            disabled={loading}
+            disabled={loading || !canEdit}
             inputId="step-stepsize"
             min={0}
             maxFractionDigits={1}
@@ -133,7 +140,7 @@ export function CoordinatesInput({
         </div>
 
         <Slider
-          disabled={loading}
+          disabled={loading || !canEdit}
           min={0.1}
           max={5}
           step={0.1}
@@ -149,18 +156,20 @@ export function ManualInput({
   auxCoords,
   strategy,
   loading,
+  canEdit,
 }: {
   onChange: CoordOnChange;
   auxCoords: { horizontal: number; vertical: number };
   strategy: HandsetStrategy;
-  loading?: boolean;
+  loading: boolean;
+  canEdit: boolean;
 }) {
   return (
     <div className="control-row">
       <label htmlFor="manual-input-second">{strategy.vertical.label}</label>
       <InputNumber
         inputId="manual-input-second"
-        disabled={loading}
+        disabled={loading || !canEdit}
         value={auxCoords.vertical}
         maxFractionDigits={2}
         onValueChange={(e) =>
@@ -170,7 +179,7 @@ export function ManualInput({
       <label htmlFor="manual-input-first">{strategy.horizontal.label}</label>
       <InputNumber
         inputId="manual-input-first"
-        disabled={loading}
+        disabled={loading || !canEdit}
         value={auxCoords.horizontal}
         maxFractionDigits={2}
         onValueChange={(e) =>
@@ -210,15 +219,22 @@ export function OpenLoopsInput({
   openLoops,
   onChange,
   loading,
+  canEdit,
 }: {
   openLoops: boolean;
   onChange: (value: boolean) => void;
-  loading?: boolean;
+  loading: boolean;
+  canEdit: boolean;
 }) {
   return (
     <div className="control-row open-loops">
       <label htmlFor="open-loops">Open loops</label>
-      <InputSwitch disabled={loading} inputId="open-loops" checked={openLoops} onChange={(e) => onChange(e.value)} />
+      <InputSwitch
+        disabled={loading || !canEdit}
+        inputId="open-loops"
+        checked={openLoops}
+        onChange={(e) => onChange(e.value)}
+      />
     </div>
   );
 }

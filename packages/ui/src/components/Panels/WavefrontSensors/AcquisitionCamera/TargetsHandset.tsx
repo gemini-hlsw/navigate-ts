@@ -24,7 +24,7 @@ import { strategies } from './strategy';
 
 type FocalPlaneOffset = NonNullable<GetTargetAdjustmentOffsetsQuery['targetAdjustmentOffsets']['oiwfs']>;
 
-export default function TargetsHandset() {
+export default function TargetsHandset({ canEdit }: { canEdit: boolean }) {
   // GraphQL Queries
   const { data: offsets, loading: offsetsLoading } = useTargetAdjustmentOffsets();
 
@@ -101,8 +101,8 @@ export default function TargetsHandset() {
   return (
     <div className="handset">
       <div className="selector-group">
-        <TargetSelector loading={loading} target={selectedTarget} onChange={setSelectedTarget} />
-        <CoordSystemControls coordSystem={coordSystem} onChange={setCoordSystem} loading={loading} />
+        <TargetSelector loading={loading} target={selectedTarget} onChange={setSelectedTarget} canEdit={canEdit} />
+        <CoordSystemControls coordSystem={coordSystem} onChange={setCoordSystem} loading={loading} canEdit={canEdit} />
       </div>
 
       <CoordinatesInput
@@ -111,9 +111,16 @@ export default function TargetsHandset() {
         x={auxCoords.horizontal}
         y={auxCoords.vertical}
         strategy={strategy}
+        canEdit={canEdit}
       />
 
-      <ManualInput loading={loading} onChange={handleCoordChange} auxCoords={auxCoords} strategy={strategy} />
+      <ManualInput
+        loading={loading}
+        onChange={handleCoordChange}
+        auxCoords={auxCoords}
+        strategy={strategy}
+        canEdit={canEdit}
+      />
 
       <CurrentCoordinates
         horizontal={offset?.deltaX.arcseconds}
@@ -122,21 +129,21 @@ export default function TargetsHandset() {
         verticalLabel="Y"
       />
 
-      <OpenLoopsInput openLoops={openLoops} onChange={setOpenLoops} loading={loading} />
+      <OpenLoopsInput openLoops={openLoops} onChange={setOpenLoops} loading={loading} canEdit={canEdit} />
 
       <div className="control-row buttons">
         <ButtonGroup>
-          <Button size="small" label="Apply" loading={loading} onClick={handleApply} />
+          <Button size="small" label="Apply" loading={loading || !canEdit} onClick={handleApply} />
           <Button
             size="small"
             label="Reset"
-            loading={loading}
+            loading={loading || !canEdit}
             onClick={() => void resetOffset({ variables: { openLoops, target: selectedTarget } })}
           />
           <Button
             size="small"
             label="Absorb"
-            loading={loading}
+            loading={loading || !canEdit}
             onClick={() => void absorbOffset({ variables: { target: selectedTarget } })}
           />
         </ButtonGroup>

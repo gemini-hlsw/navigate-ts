@@ -19,7 +19,7 @@ import {
 } from './Controls';
 import { strategies } from './strategy';
 
-export default function OriginHandset() {
+export default function OriginHandset({ canEdit }: { canEdit: boolean }) {
   // GraphQL Queries
   const { data: offset, loading: offsetLoading } = useOriginAdjustmentOffset();
 
@@ -75,7 +75,7 @@ export default function OriginHandset() {
   return (
     <div className="handset">
       <div className="selector-group">
-        <CoordSystemControls coordSystem={coordSystem} onChange={setCoordSystem} loading={loading} />
+        <CoordSystemControls coordSystem={coordSystem} onChange={setCoordSystem} loading={loading} canEdit={canEdit} />
       </div>
       <CoordinatesInput
         loading={loading}
@@ -83,9 +83,16 @@ export default function OriginHandset() {
         x={auxCoords.horizontal}
         y={auxCoords.vertical}
         strategy={strategy}
+        canEdit={canEdit}
       />
 
-      <ManualInput loading={loading} onChange={handleCoordChange} auxCoords={auxCoords} strategy={strategy} />
+      <ManualInput
+        loading={loading}
+        onChange={handleCoordChange}
+        auxCoords={auxCoords}
+        strategy={strategy}
+        canEdit={canEdit}
+      />
 
       <CurrentCoordinates
         horizontal={offset?.deltaX.arcseconds as number}
@@ -94,18 +101,25 @@ export default function OriginHandset() {
         verticalLabel="Y"
       />
 
-      <OpenLoopsInput openLoops={openLoops} onChange={setOpenLoops} loading={loading} />
+      <OpenLoopsInput openLoops={openLoops} onChange={setOpenLoops} loading={loading} canEdit={canEdit} />
 
       <div className="control-row buttons">
         <ButtonGroup>
-          <Button size="small" label="Apply" loading={loading} onClick={handleApply} />
+          <Button size="small" label="Apply" loading={loading} onClick={handleApply} disabled={canEdit} />
           <Button
             size="small"
             label="Reset"
             loading={loading}
+            disabled={canEdit}
             onClick={() => void resetAdjustment({ variables: { openLoops } })}
           />
-          <Button size="small" label="Absorb" loading={loading} onClick={() => void absorbAdjustment()} />
+          <Button
+            size="small"
+            label="Absorb"
+            loading={loading}
+            disabled={canEdit}
+            onClick={() => void absorbAdjustment()}
+          />
         </ButtonGroup>
       </div>
 
