@@ -4,7 +4,7 @@ import { useQueryAndSubscription } from '@gql/use-query-and-subscription';
 
 import { graphql } from './gen';
 
-const TARGET_ADJUSTMENT_OFFSETS_QUERY = graphql(`
+export const TARGET_ADJUSTMENT_OFFSETS_QUERY = graphql(`
   query getTargetAdjustmentOffsets {
     targetAdjustmentOffsets {
       sourceA {
@@ -43,7 +43,7 @@ const TARGET_ADJUSTMENT_OFFSETS_QUERY = graphql(`
   }
 `);
 
-const TARGET_ADJUSTMENT_OFFSETS_SUBSCRIPTION = graphql(`
+export const TARGET_ADJUSTMENT_OFFSETS_SUBSCRIPTION = graphql(`
   subscription targetAdjustmentOffsets {
     targetAdjustmentOffsets {
       sourceA {
@@ -91,7 +91,7 @@ export function useTargetAdjustmentOffsets(options?: QueryAndSubscriptionOptions
   );
 }
 
-const ADJUST_TARGET_MUTATION = graphql(`
+export const ADJUST_TARGET_MUTATION = graphql(`
   mutation adjustTarget($target: AdjustTarget!, $offset: HandsetAdjustmentInput!, $openLoops: Boolean!) {
     adjustTarget(target: $target, offset: $offset, openLoops: $openLoops) {
       result
@@ -104,7 +104,7 @@ export function useAdjustTarget() {
   return useMutation(ADJUST_TARGET_MUTATION);
 }
 
-const RESET_TARGET_ADJUSTMENT_MUTATION = graphql(`
+export const RESET_TARGET_ADJUSTMENT_MUTATION = graphql(`
   mutation resetTargetAdjustment($target: AdjustTarget!, $openLoops: Boolean!) {
     resetTargetAdjustment(target: $target, openLoops: $openLoops) {
       result
@@ -117,7 +117,7 @@ export function useResetTargetAdjustment() {
   return useMutation(RESET_TARGET_ADJUSTMENT_MUTATION);
 }
 
-const ABSORB_TARGET_ADJUSTMENT_MUTATION = graphql(`
+export const ABSORB_TARGET_ADJUSTMENT_MUTATION = graphql(`
   mutation absorbTargetAdjustment($target: AdjustTarget!) {
     absorbTargetAdjustment(target: $target) {
       result

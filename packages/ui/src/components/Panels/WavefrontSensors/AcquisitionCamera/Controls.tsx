@@ -84,6 +84,7 @@ export function CoordinatesInput({
       <div className="coordinates-buttons">
         <Button
           tooltip={up.label}
+          data-testid={up.label}
           style={{ gridArea: 'gu' }}
           onClick={() => onChange?.(up.mod({ horizontal: x, vertical: y }, stepSize))}
           className="coordinate-up"
@@ -92,6 +93,7 @@ export function CoordinatesInput({
         />
         <Button
           tooltip={left.label}
+          data-testid={left.label}
           style={{ gridArea: 'gl' }}
           onClick={() => onChange?.(left.mod({ horizontal: x, vertical: y }, stepSize))}
           className="coordinate-left"
@@ -100,6 +102,7 @@ export function CoordinatesInput({
         />
         <Button
           tooltip={right.label}
+          data-testid={right.label}
           style={{ gridArea: 'gr' }}
           onClick={() => onChange?.(right.mod({ horizontal: x, vertical: y }, stepSize))}
           className="coordinate-right"
@@ -108,6 +111,7 @@ export function CoordinatesInput({
         />
         <Button
           tooltip={down.label}
+          data-testid={down.label}
           style={{ gridArea: 'gd' }}
           onClick={() => onChange?.(down.mod({ horizontal: x, vertical: y }, stepSize))}
           className="coordinate-down"
