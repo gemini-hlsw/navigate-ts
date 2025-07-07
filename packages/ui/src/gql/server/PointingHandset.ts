@@ -98,7 +98,7 @@ export function useResetGuidePointingAdjustment() {
   return useMutation(RESET_GUIDE_POINTING_ADJUSTMENT_MUTATION);
 }
 
-const ABSORD_GUIDE_POINTING_ADJUSTMENT_MUTATION = graphql(`
+const ABSORB_GUIDE_POINTING_ADJUSTMENT_MUTATION = graphql(`
   mutation absorbGuidePointingAdjustment {
     absorbGuidePointingAdjustment {
       result
@@ -108,5 +108,5 @@ const ABSORD_GUIDE_POINTING_ADJUSTMENT_MUTATION = graphql(`
 `);
 
 export function useAbsorbGuidePointingAdjustment() {
-  return useMutation(ABSORD_GUIDE_POINTING_ADJUSTMENT_MUTATION);
+  return useMutation(ABSORB_GUIDE_POINTING_ADJUSTMENT_MUTATION);
 }
