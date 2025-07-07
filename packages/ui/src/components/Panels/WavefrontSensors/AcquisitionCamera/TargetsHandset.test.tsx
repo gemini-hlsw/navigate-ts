@@ -1,7 +1,5 @@
-import { render } from 'vitest-browser-react';
-import TargetsHandset from './TargetsHandset';
-import { renderWithContext } from '@gql/render';
 import { MockedResponse } from '@apollo/client/testing';
+import { renderWithContext } from '@gql/render';
 import {
   ABSORB_TARGET_ADJUSTMENT_MUTATION,
   ADJUST_TARGET_MUTATION,
@@ -10,6 +8,7 @@ import {
   TARGET_ADJUSTMENT_OFFSETS_SUBSCRIPTION,
 } from '@gql/server/TargetsHandset';
 import { MockedResponseOf } from '@gql/util';
+import TargetsHandset from './TargetsHandset';
 
 describe(TargetsHandset.name, () => {
   let sut: ReturnType<typeof renderWithContext>;
