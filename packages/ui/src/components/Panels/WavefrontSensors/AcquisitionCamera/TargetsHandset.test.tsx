@@ -156,7 +156,7 @@ const absorbTargetAdjustmentMutationMock = {
       },
     },
   })),
-} satisfies MockedResponseOf<typeof ADJUST_TARGET_MUTATION>;
+} satisfies MockedResponseOf<typeof ABSORB_TARGET_ADJUSTMENT_MUTATION>;
 
 const mocks: MockedResponse[] = [
   {
