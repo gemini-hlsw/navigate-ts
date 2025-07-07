@@ -97,7 +97,7 @@ export const strategies = {
     up: { label: 'N', mod: plusVertical },
     down: { label: 'S', mod: minusVertical },
     right: { label: 'E', mod: plusHorizontal },
-    left: { label: 'W', mod: minusVertical },
+    left: { label: 'W', mod: minusHorizontal },
     horizontal: { label: 'Ra', mod: setHorizontal },
     vertical: { label: 'Dec', mod: setVertical },
     toInput: (coords: Coords) => ({
