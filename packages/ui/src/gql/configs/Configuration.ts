@@ -6,7 +6,6 @@ export const GET_CONFIGURATION = graphql(`
   query getConfiguration {
     configuration {
       pk
-      site
       selectedTarget
       selectedOiTarget
       selectedP1Target
@@ -32,7 +31,6 @@ export function useConfiguration() {
 const UPDATE_CONFIGURATION = graphql(`
   mutation updateConfiguration(
     $pk: Int!
-    $site: Site
     $selectedTarget: Int
     $selectedOiTarget: Int
     $selectedP1Target: Int
@@ -48,7 +46,6 @@ const UPDATE_CONFIGURATION = graphql(`
   ) {
     updateConfiguration(
       pk: $pk
-      site: $site
       selectedTarget: $selectedTarget
       selectedOiTarget: $selectedOiTarget
       selectedP1Target: $selectedP1Target
@@ -63,7 +60,6 @@ const UPDATE_CONFIGURATION = graphql(`
       obsReference: $obsReference
     ) {
       pk
-      site
       selectedTarget
       selectedOiTarget
       selectedP1Target

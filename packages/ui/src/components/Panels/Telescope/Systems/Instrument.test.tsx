@@ -67,7 +67,6 @@ const mocks: MockedResponse[] = [
       data: {
         configuration: {
           pk: 1,
-          site: 'GN',
           selectedTarget: 1,
           selectedOiTarget: null,
           selectedP1Target: null,

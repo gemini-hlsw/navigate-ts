@@ -4,6 +4,7 @@ import { after, before } from 'node:test';
 import type { GraphQLRequest } from '@apollo/server';
 import type { StartedPostgreSqlContainer } from '@testcontainers/postgresql';
 import { PostgreSqlContainer } from '@testcontainers/postgresql';
+import type { Options } from 'execa';
 import { execa } from 'execa';
 import type { FormattedExecutionResult } from 'graphql';
 
@@ -33,7 +34,7 @@ export function initializeServerFixture() {
   const fixture: ServerFixture = {} as ServerFixture;
 
   // Register setup to create the fixture
-  before(async () => {
+  before(async ({ signal }) => {
     // Create a postgres container for the tests
     const container = await new PostgreSqlContainer('postgres:alpine').start();
     const databaseUrl = container.getConnectionUri();
@@ -41,7 +42,7 @@ export function initializeServerFixture() {
     // Setup Prisma client with the test container connection
     const prisma = extendPrisma(new PrismaClient({ datasourceUrl: databaseUrl }));
     // Migrate and seed the database
-    const exec = execa({ env: { DATABASE_URL: databaseUrl } });
+    const exec = execa<Options>({ env: { DATABASE_URL: databaseUrl }, cancelSignal: signal });
     await exec`prisma migrate dev`;
     await exec`prisma db seed`;
 
@@ -64,7 +65,7 @@ export function initializeServerFixture() {
   // Register teardown
   after(async () => {
     await fixture.prisma.$disconnect();
-    await fixture.container.stop();
+    await fixture.container.stop({ timeout: 10000 });
   });
 
   return fixture;

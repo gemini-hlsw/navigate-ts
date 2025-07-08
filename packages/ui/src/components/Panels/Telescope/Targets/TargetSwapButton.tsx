@@ -50,7 +50,6 @@ export function TargetSwapButton({
   });
 
   const { data: acData, loading: acLoading } = useInstrument({
-    skip: isNullish(configuration?.site),
     variables: { name: `ACQ_CAM` },
   });
 

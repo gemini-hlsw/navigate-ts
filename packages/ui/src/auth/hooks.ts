@@ -2,7 +2,7 @@ import { useCallback, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 
 import { useSetOdbToken } from '@/components/atoms/auth';
-import { environment } from '@/Helpers/environment';
+import { useServerConfigValue } from '@/components/atoms/config';
 import { useToast } from '@/Helpers/toast';
 
 import type { StandardRole } from './user';
@@ -12,15 +12,15 @@ import type { StandardRole } from './user';
  */
 export function useSignInURL() {
   const location = useLocation();
-
+  const { ssoUri } = useServerConfigValue();
   const signinURL = useMemo(() => {
-    const redirectURL = new URL('/auth/v1/stage1', environment.ssoURI);
+    const redirectURL = new URL('/auth/v1/stage1', ssoUri);
     const from = (location.state as LocationInterface)?.from?.pathname ?? '/';
     const state = new URL(from, window.location.origin);
     redirectURL.searchParams.set('state', state.toString());
 
     return redirectURL.toString();
-  }, [location.state]);
+  }, [location.state, ssoUri]);
 
   return signinURL;
 }
@@ -30,10 +30,11 @@ export function useSignInURL() {
  */
 export function useSignout() {
   const setToken = useSetOdbToken();
+  const { ssoUri } = useServerConfigValue();
 
   const signout = useCallback(async () => {
     setToken(null);
-    const logoutURL = new URL('/api/v1/logout', environment.ssoURI);
+    const logoutURL = new URL('/api/v1/logout', ssoUri);
     const res = await fetch(logoutURL, { method: 'POST', credentials: 'include' });
     if (res.ok) {
       const data = await res.text();
@@ -41,7 +42,7 @@ export function useSignout() {
     } else {
       console.error('Error logging out', res.status, res.statusText);
     }
-  }, [setToken]);
+  }, [setToken, ssoUri]);
 
   return signout;
 }
@@ -51,9 +52,10 @@ export function useSignout() {
  */
 export function useRefreshToken() {
   const setToken = useSetOdbToken();
+  const { ssoUri } = useServerConfigValue();
 
   const refreshToken = useCallback(async () => {
-    const refreshURL = new URL('/api/v1/refresh-token', environment.ssoURI);
+    const refreshURL = new URL('/api/v1/refresh-token', ssoUri);
     const res = await fetch(refreshURL, { method: 'POST', credentials: 'include' });
     if (res.ok) {
       const data = await res.text();
@@ -61,17 +63,18 @@ export function useRefreshToken() {
     } else {
       console.error('Error refreshing token', res.status, res.statusText);
     }
-  }, [setToken]);
+  }, [setToken, ssoUri]);
   return refreshToken;
 }
 
 export function useSetRole() {
   const refreshToken = useRefreshToken();
   const toast = useToast();
+  const { ssoUri } = useServerConfigValue();
 
   const setRole = useCallback(
     async (role: StandardRole) => {
-      const setRoleURL = new URL('/auth/v1/set-role', environment.ssoURI);
+      const setRoleURL = new URL('/auth/v1/set-role', ssoUri);
       setRoleURL.searchParams.set('role', role.id);
       const res = await fetch(setRoleURL, { method: 'GET', credentials: 'include' });
       if (res.ok) {
@@ -85,7 +88,7 @@ export function useSetRole() {
         });
       }
     },
-    [refreshToken, toast],
+    [refreshToken, toast, ssoUri],
   );
 
   return setRole;
@@ -104,10 +107,11 @@ export function useGuestLogin() {
   const toast = useToast();
   const setToken = useSetOdbToken();
   const location = useLocation();
+  const { ssoUri } = useServerConfigValue();
 
   const navigate = useNavigate();
   const guestLogin = useCallback(async () => {
-    const guestTokenURL = new URL('/api/v1/auth-as-guest', environment.ssoURI);
+    const guestTokenURL = new URL('/api/v1/auth-as-guest', ssoUri);
     const response = await fetch(guestTokenURL, { method: 'POST', credentials: 'include' });
 
     if (!response.ok) {
@@ -128,7 +132,7 @@ export function useGuestLogin() {
       detail: 'Logged in as guest',
     });
     await navigate(from, { replace: true });
-  }, [location.state, navigate, setToken, toast]);
+  }, [location.state, navigate, setToken, ssoUri, toast]);
 
   return guestLogin;
 }

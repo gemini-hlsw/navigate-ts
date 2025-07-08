@@ -1,12 +1,10 @@
 #import Instrument from 'lucuma-schemas/odb'
-#import Site from 'lucuma-schemas/odb'
 enum GuidingType {
   NORMAL
 }
 
 type Configuration {
   pk: Int!
-  site: Site!
   selectedTarget: Int
   selectedOiTarget: Int
   selectedP1Target: Int
@@ -30,7 +28,6 @@ type Query {
 
 type Mutation {
   createConfiguration(
-    site: Site
     selectedTarget: Int
     selectedOiTarget: Int
     selectedP1Target: Int
@@ -47,7 +44,6 @@ type Mutation {
 
   updateConfiguration(
     pk: Int!
-    site: Site
     selectedTarget: Int
     selectedOiTarget: Int
     selectedP1Target: Int

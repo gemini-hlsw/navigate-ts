@@ -4,12 +4,13 @@ import { Dialog } from 'primereact/dialog';
 import { useCallback } from 'react';
 
 import { useAboutVisible } from '@/components/atoms/about';
+import { useServerConfigValue } from '@/components/atoms/config';
 import { frontendVersion } from '@/Helpers/constants';
-import { environment } from '@/Helpers/environment';
 
 export function About() {
   const [aboutVisible, toggleAboutVisible] = useAboutVisible();
-  const odbHost = URL.canParse(environment.odbURI) ? new URL(environment.odbURI).hostname.split('.')[0] : 'dev';
+  const { odbUri, site } = useServerConfigValue();
+  const odbHost = odbUri && URL.canParse(odbUri) ? new URL(odbUri).hostname.split('.')[0] : 'dev';
   const environmentType = odbHost.includes('staging')
     ? 'staging'
     : odbHost.includes('dev')
@@ -27,7 +28,7 @@ export function About() {
           <tbody>
             <tr>
               <td>Environment</td>
-              <td>{environment.environment}</td>
+              <td>{site}</td>
             </tr>
             <tr>
               <td>ODB</td>
