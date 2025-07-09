@@ -18,6 +18,7 @@ import { Dialog } from 'primereact/dialog';
 import { useEffect, useState } from 'react';
 
 import { useCanEdit } from '@/components/atoms/auth';
+import { useServerConfigValue } from '@/components/atoms/config';
 import { useOdbVisible } from '@/components/atoms/odb';
 import { extractMagnitude } from '@/Helpers/bands';
 import { useToast } from '@/Helpers/toast';
@@ -28,6 +29,7 @@ import { ObservationTable } from './ObservationTable';
 export function OdbImport() {
   const canEdit = useCanEdit();
   const configuration = useConfiguration().data?.configuration;
+  const { site } = useServerConfigValue();
   const toast = useToast();
   const [odbVisible, setOdbVisible] = useOdbVisible();
   const [selectedObservation, setSelectedObservation] = useState<OdbObservationType | null>(null);
@@ -182,22 +184,22 @@ export function OdbImport() {
   }
 
   useEffect(() => {
-    if (configuration?.site && odbVisible) {
+    if (site && odbVisible) {
       void getReadyObservations({
         variables: {
           date: observingNight,
-          site: configuration.site,
+          site,
           states: ['READY', 'ONGOING'],
         },
         fetchPolicy: 'no-cache',
       });
     }
-  }, [configuration?.site, getReadyObservations, observingNight, odbVisible]);
+  }, [site, getReadyObservations, observingNight, odbVisible]);
 
   const header = (
     <div className="header-item">
       <span>
-        Observing Night {observingNight} @ {configuration?.site}
+        Observing Night {observingNight} @ {site}
       </span>
     </div>
   );

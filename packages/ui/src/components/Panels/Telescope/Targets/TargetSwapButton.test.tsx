@@ -220,7 +220,6 @@ const mocks = [
       data: {
         configuration: {
           pk: 1,
-          site: 'GN',
           selectedTarget: 3,
           selectedOiTarget: 8,
           selectedP1Target: null,

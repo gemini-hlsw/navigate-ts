@@ -18,7 +18,6 @@ model User {
 
 model Configuration {
   pk               Int         @id @default(autoincrement())
-  site             SiteType    @default(GN)
   selectedTarget   Int?
   selectedOiTarget Int?
   selectedP1Target Int?
@@ -31,11 +30,6 @@ model Configuration {
   obsInstrument    String?
   obsSubtitle      String?
   obsReference     String?
-}
-
-enum SiteType {
-  GN
-  GS
 }
 
 enum GuidingType {

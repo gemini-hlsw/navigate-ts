@@ -1,8 +1,8 @@
-import { useConfiguration } from '@gql/configs/Configuration';
 import type { ReactNode } from 'react';
 import { useState } from 'react';
 
 import { useCanEdit } from '@/components/atoms/auth';
+import { useServerConfigValue } from '@/components/atoms/config';
 import { ChevronRight } from '@/components/Icons';
 
 import { Altair, GeMS } from './AdaptiveOptics';
@@ -14,7 +14,7 @@ import { BotSubsystems, TopSubsystems } from './Subsystems';
 
 export function Systems() {
   const canEdit = useCanEdit();
-  const configuration = useConfiguration().data?.configuration;
+  const { site } = useServerConfigValue();
   const [collapsed, setCollapsed] = useState<boolean>(false);
 
   function toggle() {
@@ -22,9 +22,9 @@ export function Systems() {
   }
 
   let aoSystem: ReactNode | null = null;
-  if (configuration?.site === 'GN') {
+  if (site === 'GN') {
     aoSystem = <Altair canEdit={canEdit} />;
-  } else if (configuration?.site === 'GS') {
+  } else if (site === 'GS') {
     aoSystem = <GeMS canEdit={canEdit} />;
   }
 

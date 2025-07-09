@@ -1,4 +1,3 @@
-import { useConfiguration } from '@gql/configs/Configuration';
 import type { GuideLoop, UpdateGuideLoopMutationVariables } from '@gql/configs/gen/graphql';
 import { useGetGuideLoop, useUpdateGuideLoop } from '@gql/configs/GuideLoop';
 import type { GuideConfigurationInput } from '@gql/server/gen/graphql';
@@ -11,16 +10,16 @@ import { ProgressSpinner } from 'primereact/progressspinner';
 import type { ReactNode } from 'react';
 
 import { useCanEdit } from '@/components/atoms/auth';
+import { useServerConfigValue } from '@/components/atoms/config';
 
 import { Altair, GeMS } from './AdaptiveOptics';
 import { BrokenChain, ConnectedChain } from './Chain';
 
 export function Configuration() {
   const canEdit = useCanEdit();
-  const { data: confData, loading: confLoading } = useConfiguration();
   const { data, loading: guideLoopLoading } = useGetGuideLoop();
 
-  const configuration = confData?.configuration;
+  const { site } = useServerConfigValue();
   const state =
     data?.guideLoop ??
     ({
@@ -90,15 +89,15 @@ export function Configuration() {
     state.m2FocusSource?.split(',').includes('GAOS') ||
     state.m2ComaM1CorrectionsSource === 'GAOS'
   ) {
-    if (configuration?.site === 'GN') {
+    if (site === 'GN') {
       aoSystem = <Altair />;
-    } else if (configuration?.site === 'GS') {
+    } else if (site === 'GS') {
       aoSystem = <GeMS />;
     }
   }
 
   const disabled = !canEdit;
-  const loading = guideLoopLoading || confLoading || updateLoading;
+  const loading = guideLoopLoading || updateLoading;
 
   return (
     <>

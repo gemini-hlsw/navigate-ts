@@ -13,6 +13,7 @@ import { displayName } from '@/auth/user';
 import { useSetAboutVisible } from '@/components/atoms/about';
 import { useAlarmValue } from '@/components/atoms/alarm';
 import { useIsLoggedIn, useUser } from '@/components/atoms/auth';
+import { useServerConfigValue } from '@/components/atoms/config';
 import { useTheme } from '@/components/atoms/theme';
 import { ChevronDown, Info, Map, Moon, SignIn, SignOut, Sun, User } from '@/components/Icons';
 
@@ -23,6 +24,7 @@ export default function Navbar() {
   const [theme, toggleTheme] = useTheme();
   const user = useUser();
   const isLoggedIn = useIsLoggedIn();
+  const { site } = useServerConfigValue();
 
   const signout = useSignout();
   const toggleAboutVisible = useSetAboutVisible();
@@ -78,7 +80,7 @@ export default function Navbar() {
             <span>E</span>
           </Button>
         </Link>
-        {configuration?.site && <span className="site">{configuration.site}</span>}
+        {site && <span className="site">{site}</span>}
       </div>
       <div className="center">
         {configuration?.obsTitle && <span className="observation">{configuration.obsTitle}</span>}

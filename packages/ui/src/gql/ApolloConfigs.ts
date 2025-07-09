@@ -9,9 +9,9 @@ import { Kind, OperationTypeNode } from 'graphql/language';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
 
 import { odbTokenAtom } from '@/components/atoms/auth';
+import { serverConfigAtom } from '@/components/atoms/config';
 import { wsIsConnectedAtom } from '@/components/atoms/connection';
 import { store } from '@/components/atoms/store';
-import type { Environment } from '@/Helpers/environment';
 import { toastAtom } from '@/Helpers/toast';
 
 /**
@@ -23,6 +23,10 @@ const withAbsoluteUri = (uri: string, isWs = false) => {
   const newUri = window.location.origin + uri;
   return isWs ? newUri.replace(/^http/, 'ws') : newUri;
 };
+
+const navigateServerURI = withAbsoluteUri('/navigate/graphql');
+const navigateServerWsURI = withAbsoluteUri('/navigate/ws', true);
+const navigateConfigsURI = withAbsoluteUri('/db');
 
 // Log errors to the console and show a toast
 const errorLink = onError(({ operation, graphQLErrors, networkError }) => {
@@ -46,10 +50,10 @@ const errorLink = onError(({ operation, graphQLErrors, networkError }) => {
   if (networkError) console.error(`[Network error]`, networkError);
 });
 
-export function createClient(env: Environment) {
-  const navigateCommandServer = new HttpLink({ uri: withAbsoluteUri(env.navigateServerURI) });
+function createClient() {
+  const navigateCommandServer = new HttpLink({ uri: navigateServerURI });
 
-  const navigateConfigs = new HttpLink({ uri: withAbsoluteUri(env.navigateConfigsURI) });
+  const navigateConfigs = new HttpLink({ uri: navigateConfigsURI });
 
   const odbAuthLink = setContext((_, { headers }) => {
     const token = store.get(odbTokenAtom);
@@ -67,9 +71,9 @@ export function createClient(env: Environment) {
     };
   });
 
-  const odbLink = new HttpLink({ uri: withAbsoluteUri(env.odbURI) });
+  const odbLink = new HttpLink({ uri: () => store.get(serverConfigAtom)?.odbUri ?? '/odb' });
 
-  const subscriptionClient = new SubscriptionClient(withAbsoluteUri(env.navigateServerWsURI, true), {
+  const subscriptionClient = new SubscriptionClient(navigateServerWsURI, {
     reconnect: true,
   });
 
@@ -139,3 +143,5 @@ export function createClient(env: Environment) {
     }),
   });
 }
+
+export const client = createClient();
