@@ -17,8 +17,7 @@ export function Alarms() {
 
   const { loading: guideStateLoading, data: guideState } = useGuideState();
 
-  const { data, loading: subscriptionLoading } = useGuideQualities();
-  const guideQualities = data?.guidersQualityValues;
+  const { data: guideQualities, loading: subscriptionLoading } = useGuideQualities();
 
   const { data: alarmsData, loading: alarmsLoading } = useGuideAlarms();
   const alarms = alarmsData?.guideAlarms;

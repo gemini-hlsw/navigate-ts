@@ -2,7 +2,7 @@ import type { MockedResponse } from '@apollo/client/testing';
 import { GET_GUIDE_ALARMS, UPDATE_GUIDE_ALARM } from '@gql/configs/GuideAlarm';
 import type { RenderResultWithStore } from '@gql/render';
 import { renderWithContext } from '@gql/render';
-import { GUIDE_QUALITY_SUBSCRIPTION } from '@gql/server/GuideQuality';
+import { GUIDE_QUALITY_QUERY, GUIDE_QUALITY_SUBSCRIPTION } from '@gql/server/GuideQuality';
 import { GUIDE_STATE_QUERY, GUIDE_STATE_SUBSCRIPTION } from '@gql/server/GuideState';
 import type { MockedResponseOf } from '@gql/util';
 import { page, userEvent } from '@vitest/browser/context';
@@ -66,10 +66,34 @@ const mocks: MockedResponse[] = [
   } satisfies MockedResponseOf<typeof GET_GUIDE_ALARMS>,
   {
     request: {
+      query: GUIDE_QUALITY_QUERY,
+      variables: {},
+    },
+    result: {
+      data: {
+        guidersQualityValues: {
+          oiwfs: {
+            flux: 901,
+            centroidDetected: false,
+          },
+          pwfs1: {
+            flux: 902,
+            centroidDetected: false,
+          },
+          pwfs2: {
+            flux: 903,
+            centroidDetected: false,
+          },
+        },
+      },
+    },
+  } satisfies MockedResponseOf<typeof GUIDE_QUALITY_QUERY>,
+  {
+    request: {
       query: GUIDE_QUALITY_SUBSCRIPTION,
       variables: {},
     },
-
+    maxUsageCount: 2,
     result: {
       data: {
         guidersQualityValues: {
