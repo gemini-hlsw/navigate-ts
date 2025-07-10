@@ -69,7 +69,6 @@ const mocks: MockedResponse[] = [
       query: GUIDE_QUALITY_QUERY,
       variables: {},
     },
-
     result: {
       data: {
         guidersQualityValues: {
@@ -94,7 +93,7 @@ const mocks: MockedResponse[] = [
       query: GUIDE_QUALITY_SUBSCRIPTION,
       variables: {},
     },
-
+    maxUsageCount: 2,
     result: {
       data: {
         guidersQualityValues: {
