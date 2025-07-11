@@ -31,7 +31,7 @@ export function Configuration() {
     [data?.guideLoop],
   );
 
-  const m2ComaNotAllowed = state.m2TipTiltSource.includes('OIWFS');
+  const m2ComaNotAllowed = state.m2TipTiltSource?.includes('OIWFS');
 
   const [updateGuideLoop, { loading: updateLoading }] = useUpdateGuideLoop();
   const [guideEnable, { loading: enableLoading }] = useGuideEnable();
