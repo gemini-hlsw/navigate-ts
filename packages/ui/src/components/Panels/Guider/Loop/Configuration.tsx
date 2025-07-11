@@ -1,6 +1,6 @@
 import type { GuideLoop, UpdateGuideLoopMutationVariables } from '@gql/configs/gen/graphql';
 import { useGetGuideLoop, useUpdateGuideLoop } from '@gql/configs/GuideLoop';
-import type { GuideConfigurationInput } from '@gql/server/gen/graphql';
+import type { GuideConfigurationInput, M1CorrectionSource, TipTiltSource } from '@gql/server/gen/graphql';
 import { useGuideDisable, useGuideEnable } from '@gql/server/GuideState';
 import { Button } from 'primereact/button';
 import { Checkbox } from 'primereact/checkbox';
@@ -8,6 +8,7 @@ import { Dropdown } from 'primereact/dropdown';
 import { MultiSelect } from 'primereact/multiselect';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import type { ReactNode } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 
 import { useCanEdit } from '@/components/atoms/auth';
 import { useServerConfigValue } from '@/components/atoms/config';
@@ -20,38 +21,43 @@ export function Configuration() {
   const { data, loading: guideLoopLoading } = useGetGuideLoop();
 
   const { site } = useServerConfigValue();
-  const state =
-    data?.guideLoop ??
-    ({
-      m1CorrectionsEnable: true,
-      m2ComaM1CorrectionsSource: 'OIWFS',
-    } as GuideLoop);
+  const state = useMemo(
+    () =>
+      data?.guideLoop ??
+      ({
+        m1CorrectionsEnable: true,
+        m2ComaM1CorrectionsSource: 'OIWFS',
+      } as GuideLoop),
+    [data?.guideLoop],
+  );
+
+  const m2ComaNotAllowed = state.m2TipTiltSource.includes('OIWFS');
 
   const [updateGuideLoop, { loading: updateLoading }] = useUpdateGuideLoop();
   const [guideEnable, { loading: enableLoading }] = useGuideEnable();
   const [guideDisable, { loading: disableLoading }] = useGuideDisable();
 
-  function modifyGuideLoop<T extends keyof UpdateGuideLoopMutationVariables>(
-    name: T,
-    value: UpdateGuideLoopMutationVariables[T],
-  ) {
-    if (state.pk)
-      void updateGuideLoop({
-        variables: {
-          pk: state.pk,
-          [name]: value,
-        },
-        optimisticResponse: {
-          updateGuideLoop: {
-            ...state,
+  const modifyGuideLoop = useCallback(
+    <T extends keyof UpdateGuideLoopMutationVariables>(name: T, value: UpdateGuideLoopMutationVariables[T]) => {
+      if (state.pk)
+        void updateGuideLoop({
+          variables: {
+            pk: state.pk,
             [name]: value,
           },
-        },
-      });
-  }
+          optimisticResponse: {
+            updateGuideLoop: {
+              ...state,
+              [name]: value,
+            },
+          },
+        });
+    },
+    [state, updateGuideLoop],
+  );
 
   function translateStateGuideInput(): GuideConfigurationInput {
-    const m2Inputs: 'OIWFS'[] = [];
+    const m2Inputs: TipTiltSource[] = [];
     if (state.m2TipTiltEnable) {
       if (state.m2TipTiltSource.split(',').includes('OIWFS')) {
         m2Inputs.push('OIWFS');
@@ -63,9 +69,9 @@ export function Configuration() {
       return {
         m2Inputs: m2Inputs,
         m2Coma: state.m2ComaEnable,
-        m1Input: m1Input as 'OIWFS',
-        mountOffload: state.mountOffload ?? false,
-        daytimeMode: state.daytimeMode ?? false,
+        m1Input: m1Input as M1CorrectionSource,
+        mountOffload: state.mountOffload,
+        daytimeMode: state.daytimeMode,
       };
     }
 
@@ -73,15 +79,21 @@ export function Configuration() {
     return {
       m2Inputs: m2Inputs,
       m2Coma: state.m2ComaEnable,
-      m1Input: m1Input as 'OIWFS',
-      mountOffload: state.mountOffload ?? false,
-      daytimeMode: state.daytimeMode ?? false,
+      m1Input: m1Input as M1CorrectionSource,
+      mountOffload: state.mountOffload,
+      daytimeMode: state.daytimeMode,
       probeGuide: {
         from: probeFrom === 'OI' ? 'GMOS_OIWFS' : probeFrom === 'P1' ? 'PWFS_1' : 'PWFS_2',
         to: probeTo === 'OI' ? 'GMOS_OIWFS' : probeTo === 'P1' ? 'PWFS_1' : 'PWFS_2',
       },
     };
   }
+
+  useEffect(() => {
+    if (m2ComaNotAllowed && state.m2ComaEnable) {
+      modifyGuideLoop('m2ComaEnable', false);
+    }
+  }, [m2ComaNotAllowed, state.m2ComaEnable, modifyGuideLoop]);
 
   let aoSystem: ReactNode | null = null;
   if (
@@ -193,7 +205,7 @@ export function Configuration() {
           </label>
           <Checkbox
             inputId="m2ComaEnable"
-            disabled={disabled || loading}
+            disabled={disabled || loading || m2ComaNotAllowed}
             checked={state.m2ComaEnable}
             onChange={() => modifyGuideLoop('m2ComaEnable', !state.m2ComaEnable)}
           />
