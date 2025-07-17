@@ -9,8 +9,9 @@ if (process.argv.includes('populate')) {
   // Populate DB
   await populateDb();
 } else {
+  const port = parseInt(process.env.SERVER_PORT! || process.env.PORT!) || 4000;
   const { url } = await startStandaloneServer<ApolloContext>(server, {
-    listen: { port: parseInt(process.env.SERVER_PORT!) || 4000 },
+    listen: { port },
     context: () => Promise.resolve({ prisma }),
   });
   console.log(`🚀  Server ready at: ${url}`);
