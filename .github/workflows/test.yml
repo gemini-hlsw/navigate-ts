@@ -1,0 +1,38 @@
+name: Test deploy
+
+on:
+  push:
+    branches: ['*']
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      REGISTRY_IMAGE: registry.heroku.com/navigate-dev-gn/web
+      HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - name: Install Heroku CLI
+        run: |
+          curl https://cli-assets.heroku.com/install.sh | sh
+      - name: Login to Heroku Container registry
+        run: |
+          heroku container:login
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Set version
+        run: |
+          cd packages/configs
+          pnpm pkg set version="${VERSION:11}+$(date +'%Y%m%d').$(git rev-parse --short HEAD)"
+        env:
+          VERSION: ${{ github.ref }}
+
+      - run: |
+          cd packages/configs
+          heroku container:push -a navigate-dev-gn web --context-path ../../
+
+      - name: Deploy
+        run: heroku container:release web --app=navigate-dev-gn
