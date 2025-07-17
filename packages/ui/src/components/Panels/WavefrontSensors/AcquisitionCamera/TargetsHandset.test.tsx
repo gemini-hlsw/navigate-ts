@@ -39,18 +39,26 @@ describe(TargetsHandset.name, () => {
   });
 
   it('changing variables updates the mutation variables', async () => {
+    await sut.getByLabelText('Open loops').click();
     await sut.getByTestId('+X').click();
     await sut.getByTestId('-Y').click();
-    await sut.getByLabelText('Open loops').click();
-
-    await sut.getByRole('button', { name: 'Apply' }).click();
 
     expect(adjustTargetMutationMock.variableMatcher).toHaveBeenCalledWith({
       target: 'OIWFS',
       offset: {
         focalPlaneAdjustment: {
-          deltaX: { arcseconds: 5 },
-          deltaY: { arcseconds: -5 },
+          deltaX: { arcseconds: 0 },
+          deltaY: { arcseconds: -0.5 },
+        },
+      },
+      openLoops: true,
+    });
+    expect(adjustTargetMutationMock.variableMatcher).toHaveBeenCalledWith({
+      target: 'OIWFS',
+      offset: {
+        focalPlaneAdjustment: {
+          deltaX: { arcseconds: 0.5 },
+          deltaY: { arcseconds: 0 },
         },
       },
       openLoops: true,
@@ -142,6 +150,7 @@ const adjustTargetMutationMock = {
   request: {
     query: ADJUST_TARGET_MUTATION,
   },
+  maxUsageCount: Infinity,
   variableMatcher: vi.fn().mockImplementation(() => true),
   result: vi.fn().mockImplementation(() => ({
     data: {

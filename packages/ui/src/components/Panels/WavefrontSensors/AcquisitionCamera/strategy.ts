@@ -1,32 +1,30 @@
 import type { HandsetAdjustmentInput } from '@gql/server/gen/graphql';
 
-import type { CoordSystem } from './Controls';
+import type { Alignment } from './Controls';
 
 export interface Coords {
   horizontal: number;
   vertical: number;
 }
 
-export type CoordsMod = (value: Coords, step: number) => Coords;
+export type CoordsMod = (step: number) => Coords;
 
-export const minusVertical: CoordsMod = (coords, step) => ({
-  horizontal: coords.horizontal,
-  vertical: coords.vertical - step,
+export const minusVertical: CoordsMod = (step) => ({
+  horizontal: 0,
+  vertical: -step,
 });
-export const plusHorizontal: CoordsMod = (coords, step) => ({
-  horizontal: coords.horizontal + step,
-  vertical: coords.vertical,
+export const plusHorizontal: CoordsMod = (step) => ({
+  horizontal: +step,
+  vertical: 0,
 });
-export const minusHorizontal: CoordsMod = (coords, step) => ({
-  horizontal: coords.horizontal - step,
-  vertical: coords.vertical,
+export const minusHorizontal: CoordsMod = (step) => ({
+  horizontal: -step,
+  vertical: 0,
 });
-export const plusVertical: CoordsMod = (coords, step) => ({
-  horizontal: coords.horizontal,
-  vertical: coords.vertical + step,
+export const plusVertical: CoordsMod = (step) => ({
+  horizontal: 0,
+  vertical: +step,
 });
-export const setHorizontal: CoordsMod = (coords, value) => ({ horizontal: value, vertical: coords.vertical });
-export const setVertical: CoordsMod = (coords, value) => ({ horizontal: coords.horizontal, vertical: value });
 
 interface LabelledCoordsMod {
   label: string;
@@ -41,8 +39,8 @@ export interface HandsetStrategy {
   down: LabelledCoordsMod;
   right: LabelledCoordsMod;
   left: LabelledCoordsMod;
-  horizontal: LabelledCoordsMod;
-  vertical: LabelledCoordsMod;
+  horizontal: string;
+  vertical: string;
   toInput: (coords: Coords) => HandsetAdjustmentInput;
 }
 
@@ -56,8 +54,8 @@ export const strategies = {
     down: { label: '-El', mod: minusVertical },
     right: { label: '+Az', mod: plusHorizontal },
     left: { label: '-Az', mod: minusHorizontal },
-    horizontal: { label: 'Az', mod: setHorizontal },
-    vertical: { label: 'El', mod: setVertical },
+    horizontal: 'Az',
+    vertical: 'El',
     toInput: (coords: Coords) => ({
       horizontalAdjustment: {
         elevation: { arcseconds: coords.vertical },
@@ -70,8 +68,8 @@ export const strategies = {
     down: { label: '+X', mod: plusVertical },
     right: { label: '+Y', mod: plusHorizontal },
     left: { label: '-Y', mod: minusHorizontal },
-    horizontal: { label: 'Y', mod: setHorizontal },
-    vertical: { label: 'X', mod: setVertical },
+    horizontal: 'Y',
+    vertical: 'X',
     toInput: (coords: Coords) => ({
       focalPlaneAdjustment: {
         deltaX: { arcseconds: coords.vertical },
@@ -84,8 +82,8 @@ export const strategies = {
     down: { label: '+Q', mod: plusVertical },
     right: { label: '+P', mod: plusHorizontal },
     left: { label: '-P', mod: minusHorizontal },
-    horizontal: { label: 'P', mod: setHorizontal },
-    vertical: { label: 'Q', mod: setVertical },
+    horizontal: 'P',
+    vertical: 'Q',
     toInput: (coords: Coords) => ({
       instrumentAdjustment: {
         q: { arcseconds: coords.vertical },
@@ -98,8 +96,8 @@ export const strategies = {
     down: { label: 'S', mod: minusVertical },
     right: { label: 'E', mod: plusHorizontal },
     left: { label: 'W', mod: minusHorizontal },
-    horizontal: { label: 'Ra', mod: setHorizontal },
-    vertical: { label: 'Dec', mod: setVertical },
+    horizontal: 'Ra',
+    vertical: 'Dec',
     toInput: (coords: Coords) => ({
       equatorialAdjustment: {
         deltaDec: { arcseconds: coords.vertical },
@@ -107,4 +105,4 @@ export const strategies = {
       },
     }),
   },
-} satisfies Record<CoordSystem, HandsetStrategy>;
+} satisfies Record<Alignment, HandsetStrategy>;

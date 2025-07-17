@@ -8,9 +8,10 @@ import {
 import { Title } from '@Shared/Title/Title';
 import { Button } from 'primereact/button';
 import { ButtonGroup } from 'primereact/buttongroup';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 
-import { CoordinatesInput, type CoordSystem, CoordSystemControls, CurrentCoordinates, ManualInput } from './Controls';
+import { type Alignment, AlignmentSelector, CurrentCoordinates, InputControls } from './Controls';
+import type { Coords } from './strategy';
 import { strategies } from './strategy';
 
 export default function PointingHandset({ canEdit }: { canEdit: boolean }) {
@@ -24,27 +25,18 @@ export default function PointingHandset({ canEdit }: { canEdit: boolean }) {
   const [absorbAdjustment, { loading: absorbAdjustmentLoading }] = useAbsorbGuidePointingAdjustment();
 
   // State
-  const [coordSystem, setCoordSystem] = useState<CoordSystem>('Az/El');
-
-  const [auxCoords, setAuxCoords] = useState({
-    horizontal: Number(offset?.local.azimuth.arcseconds ?? 0),
-    vertical: Number(offset?.local.elevation.arcseconds ?? 0),
-  });
+  const [alignment, setAlignment] = useState<Alignment>('Az/El');
 
   // Derived state
-  const strategy = strategies[coordSystem];
+  const strategy = strategies[alignment];
 
-  const handleCoordChange = useCallback(
-    ({ horizontal, vertical }: { horizontal?: number; vertical?: number }) => {
-      setAuxCoords({ horizontal: horizontal ?? auxCoords.horizontal, vertical: vertical ?? auxCoords.vertical });
+  const handleApply = useCallback(
+    (coords: Coords) => {
+      const offsetInput = strategy.toInput(coords);
+      void adjustPointing({ variables: { offset: offsetInput } });
     },
-    [auxCoords],
+    [adjustPointing, strategy],
   );
-
-  const handleApply = useCallback(() => {
-    const offsetInput = strategy.toInput(auxCoords);
-    void adjustPointing({ variables: { offset: offsetInput } });
-  }, [adjustPointing, auxCoords, strategy]);
 
   const loading =
     offsetLoading ||
@@ -53,40 +45,13 @@ export default function PointingHandset({ canEdit }: { canEdit: boolean }) {
     resetGuideAdjustmentLoading ||
     absorbAdjustmentLoading;
 
-  // Effects
-  useEffect(() => {
-    // If we get new data, overwrite the auxX and auxY values and reset coordinate system to AC.
-    if (
-      !offsetLoading &&
-      typeof offset?.local.azimuth.arcseconds === 'number' &&
-      typeof offset?.local.elevation.arcseconds === 'number'
-    ) {
-      setCoordSystem('AC');
-      setAuxCoords({ horizontal: offset.local.azimuth.arcseconds, vertical: offset.local.elevation.arcseconds });
-    }
-  }, [offsetLoading, offset]);
-
   return (
     <div className="handset">
       <div className="selector-group">
-        <CoordSystemControls coordSystem={coordSystem} onChange={setCoordSystem} loading={loading} canEdit={canEdit} />
+        <AlignmentSelector alignment={alignment} onChange={setAlignment} loading={loading} canEdit={canEdit} />
       </div>
-      <CoordinatesInput
-        loading={loading}
-        onChange={handleCoordChange}
-        x={auxCoords.horizontal}
-        y={auxCoords.vertical}
-        strategy={strategy}
-        canEdit={canEdit}
-      />
 
-      <ManualInput
-        loading={loading}
-        onChange={handleCoordChange}
-        auxCoords={auxCoords}
-        strategy={strategy}
-        canEdit={canEdit}
-      />
+      <InputControls loading={loading} handleApply={handleApply} strategy={strategy} canEdit={canEdit} />
 
       <Title title="Pointing correction" />
       <CurrentCoordinates
@@ -98,7 +63,6 @@ export default function PointingHandset({ canEdit }: { canEdit: boolean }) {
       />
       <div className="control-row buttons">
         <ButtonGroup>
-          <Button size="small" label="Apply" onClick={handleApply} disabled={loading || !canEdit} />
           <Button
             size="small"
             label="Reset"

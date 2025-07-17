@@ -1,7 +1,7 @@
 import { Title } from '@Shared/Title/Title';
 import { TabPanel, TabView } from 'primereact/tabview';
 
-import OriginHandset from './OriginHandset';
+import InstrumentHandset from './InstrumentHandset';
 import PointingHandset from './PointingHandset';
 import TargetsHandset from './TargetsHandset';
 
@@ -13,8 +13,8 @@ export default function MainControls({ canEdit }: { canEdit: boolean }) {
         <TabPanel header="Targets">
           <TargetsHandset canEdit={canEdit} />
         </TabPanel>
-        <TabPanel header="Origin">
-          <OriginHandset canEdit={canEdit} />
+        <TabPanel header="Instrument">
+          <InstrumentHandset canEdit={canEdit} />
         </TabPanel>
         <TabPanel header="Pointing">
           <PointingHandset canEdit={canEdit} />

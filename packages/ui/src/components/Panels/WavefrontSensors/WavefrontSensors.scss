@@ -150,8 +150,29 @@
             gap: 8px 0px;
           }
 
+          .input-divider {
+            align-self: normal;
+          }
+
+          .coordinates-input-row {
+            justify-content: space-around;
+          }
+
+          .manual-input {
+            flex-direction: column !important;
+
+            > div > label {
+              margin-right: 8px;
+            }
+          }
+
           .coordinates-input {
+            display: flex;
+            flex-direction: column;
             justify-content: space-between;
+            align-items: center;
+            gap: 6px;
+
             .coordinates-buttons {
               display: grid;
               grid-template-columns: repeat(3, 26px);
@@ -171,15 +192,12 @@
               align-items: center;
               gap: 16px;
               flex-direction: column;
+              margin-bottom: 12px;
 
               > .p-slider {
                 width: 100%;
               }
             }
-          }
-
-          .open-loops {
-            margin-top: 12px;
           }
 
           .control-row {

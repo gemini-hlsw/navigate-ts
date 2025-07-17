@@ -1,6 +1,9 @@
+import { useQuery } from '@apollo/client';
+import type { OptionsOf } from '@gql/util';
+
 import { graphql } from './gen';
 
-export const SERVER_CONFIGURATION = graphql(`
+const SERVER_CONFIGURATION = graphql(`
   query serverConfiguration {
     serverConfiguration {
       version
@@ -10,3 +13,7 @@ export const SERVER_CONFIGURATION = graphql(`
     }
   }
 `);
+
+export function useServerConfiguration(options: OptionsOf<typeof SERVER_CONFIGURATION> = {}) {
+  return useQuery(SERVER_CONFIGURATION, options);
+}

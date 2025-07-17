@@ -2,8 +2,9 @@ import { ApolloProvider } from '@apollo/client';
 import { Authentication } from '@Contexts/Auth/Authentication';
 import { Modals } from '@Contexts/Variables/Modals/Modals';
 import { client } from '@gql/ApolloConfigs';
-import { SERVER_CONFIGURATION } from '@gql/server/ServerConfiguration';
+import { useServerConfiguration } from '@gql/server/ServerConfiguration';
 import { Provider as AtomProvider } from 'jotai';
+import { Message } from 'primereact/message';
 import { startTransition, useEffect, useState } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router';
 
@@ -30,32 +31,47 @@ export function App() {
   }, [theme]);
 
   const [loading, setLoading] = useState(true);
+  const { data, error } = useServerConfiguration({ client });
 
   useEffect(() => {
-    void client.query({ query: SERVER_CONFIGURATION }).then(({ data }) => {
-      if (data?.serverConfiguration) {
-        startTransition(() => {
-          store.set(serverConfigAtom, data.serverConfiguration);
-          setLoading(false);
-        });
-      }
-    });
-  }, []);
+    if (data?.serverConfiguration) {
+      startTransition(() => {
+        store.set(serverConfigAtom, data.serverConfiguration);
+        setLoading(false);
+      });
+    }
+  }, [data?.serverConfiguration]);
+
+  if (loading) {
+    return <SolarProgress />;
+  }
+
+  if (error) {
+    return (
+      <div className="error-container">
+        <Message
+          text={
+            <>
+              <p>
+                <b>Could not load server configuration.</b>
+              </p>
+              <p>{error.message}</p>
+            </>
+          }
+          severity="error"
+        />
+      </div>
+    );
+  }
 
   return (
     <AtomProvider store={store}>
       <ApolloProvider client={client}>
         <ToastProvider>
-          {loading ? (
-            <SolarProgress />
-          ) : (
-            <>
-              <Authentication />
-              <Modals />
-              <RouterProvider router={router} />
-              <VersionManager />
-            </>
-          )}
+          <Authentication />
+          <Modals />
+          <RouterProvider router={router} />
+          <VersionManager />
         </ToastProvider>
       </ApolloProvider>
     </AtomProvider>

@@ -1,5 +1,5 @@
-import type { AdjustTarget } from '@gql/server/gen/graphql';
 import { Button } from 'primereact/button';
+import { Divider } from 'primereact/divider';
 import { Dropdown } from 'primereact/dropdown';
 import { InputNumber } from 'primereact/inputnumber';
 import { InputSwitch } from 'primereact/inputswitch';
@@ -12,88 +12,62 @@ import type { Coords, HandsetStrategy } from './strategy';
 
 export type CoordOnChange = (value: Coords) => void;
 
-export const targetOptions: AdjustTarget[] = ['OIWFS', 'PWFS1', 'PWFS2', 'SOURCE_A'];
+export const alignmentOptions = ['Az/El', 'AC', 'Instrument', 'RA/Dec'] as const;
+export type Alignment = (typeof alignmentOptions)[number];
 
-export const coordSystemOptions = ['Az/El', 'AC', 'Instrument', 'RA/Dec'] as const;
-export type CoordSystem = (typeof coordSystemOptions)[number];
-
-export function CoordSystemControls({
+export function AlignmentSelector({
   onChange,
-  coordSystem,
+  alignment,
   loading,
   canEdit,
 }: {
-  onChange: (value: CoordSystem) => void;
-  coordSystem: CoordSystem;
+  onChange: (value: Alignment) => void;
+  alignment: Alignment;
   loading: boolean;
   canEdit: boolean;
 }) {
   return (
     <>
-      <label htmlFor="coord-system">Coordinates</label>
+      <label htmlFor="coord-system">Alignment</label>
       <Dropdown
         inputId="coord-system"
         disabled={loading || !canEdit}
-        value={coordSystem}
-        options={coordSystemOptions.map((cs) => cs)}
-        onChange={(e) => onChange(e.value as CoordSystem)}
+        value={alignment}
+        options={alignmentOptions.map((cs) => cs)}
+        onChange={(e) => onChange(e.value as Alignment)}
       />
     </>
   );
 }
 
-export function TargetSelector({
-  target,
-  onChange,
-  loading,
-  canEdit,
-}: {
-  target: AdjustTarget;
-  onChange: (value: AdjustTarget) => void;
-  loading: boolean;
-  canEdit: boolean;
-}) {
-  return (
-    <>
-      <label htmlFor="handsets-target">Target</label>
-      <Dropdown
-        inputId="handsets-target"
-        loading={loading}
-        disabled={!canEdit}
-        value={target}
-        onChange={(e) => onChange(e.value as AdjustTarget)}
-        options={targetOptions}
-      />
-    </>
-  );
-}
+const steps = Object.freeze([0.1, 0.2, 0.5, 1, 2, 5, 10, 20, 60] as const);
+const nSteps = steps.length;
 
 export function CoordinatesInput({
   onChange,
-  x,
-  y,
   strategy,
   loading,
   canEdit,
 }: {
-  onChange?: CoordOnChange;
-  x: number;
-  y: number;
+  onChange: CoordOnChange;
   strategy: HandsetStrategy;
   loading: boolean;
   canEdit: boolean;
 }) {
   const { up, down, right, left } = strategy;
-  const [stepSize, setStepSize] = useState(5);
+
+  // Start at 0.5
+  const [sliderStep, setSliderStep] = useState(2);
+  const [offset, setOffset] = useState<number>(steps[sliderStep]);
 
   return (
-    <div className="control-row coordinates-input">
+    <div className="coordinates-input">
       <div className="coordinates-buttons">
         <Button
           tooltip={up.label}
           data-testid={up.label}
           style={{ gridArea: 'gu' }}
-          onClick={() => onChange?.(up.mod({ horizontal: x, vertical: y }, stepSize))}
+          onClick={() => onChange(up.mod(offset))}
           className="coordinate-up"
           icon={<CaretUp />}
           disabled={loading || !canEdit}
@@ -102,7 +76,7 @@ export function CoordinatesInput({
           tooltip={left.label}
           data-testid={left.label}
           style={{ gridArea: 'gl' }}
-          onClick={() => onChange?.(left.mod({ horizontal: x, vertical: y }, stepSize))}
+          onClick={() => onChange(left.mod(offset))}
           className="coordinate-left"
           icon={<CaretLeft />}
           disabled={loading || !canEdit}
@@ -111,7 +85,7 @@ export function CoordinatesInput({
           tooltip={right.label}
           data-testid={right.label}
           style={{ gridArea: 'gr' }}
-          onClick={() => onChange?.(right.mod({ horizontal: x, vertical: y }, stepSize))}
+          onClick={() => onChange(right.mod(offset))}
           className="coordinate-right"
           icon={<CaretRight />}
           disabled={loading || !canEdit}
@@ -120,7 +94,7 @@ export function CoordinatesInput({
           tooltip={down.label}
           data-testid={down.label}
           style={{ gridArea: 'gd' }}
-          onClick={() => onChange?.(down.mod({ horizontal: x, vertical: y }, stepSize))}
+          onClick={() => onChange(down.mod(offset))}
           className="coordinate-down"
           icon={<CaretDown />}
           disabled={loading || !canEdit}
@@ -134,18 +108,22 @@ export function CoordinatesInput({
             inputId="step-stepsize"
             min={0}
             maxFractionDigits={1}
-            value={stepSize}
-            onValueChange={(e) => setStepSize(e.value!)}
+            value={offset}
+            onValueChange={(e) => setOffset(e.value!)}
           />
         </div>
 
         <Slider
           disabled={loading || !canEdit}
-          min={0.1}
-          max={5}
-          step={0.1}
-          value={stepSize}
-          onChange={(e) => setStepSize(e.value as number)}
+          min={0}
+          max={nSteps - 1}
+          step={1}
+          value={sliderStep}
+          onChange={(e) => {
+            const value = e.value as number;
+            setSliderStep(value);
+            setOffset(steps[value]);
+          }}
         />
       </div>
     </div>
@@ -153,41 +131,53 @@ export function CoordinatesInput({
 }
 export function ManualInput({
   onChange,
-  auxCoords,
   strategy,
   loading,
   canEdit,
 }: {
   onChange: CoordOnChange;
-  auxCoords: { horizontal: number; vertical: number };
   strategy: HandsetStrategy;
   loading: boolean;
   canEdit: boolean;
 }) {
+  const [auxCoords, setAuxCoords] = useState({
+    horizontal: 0,
+    vertical: 0,
+  });
+
   return (
-    <div className="control-row">
-      <label htmlFor="manual-input-second">{strategy.vertical.label}</label>
-      <InputNumber
-        inputId="manual-input-second"
-        disabled={loading || !canEdit}
-        value={auxCoords.vertical}
-        maxFractionDigits={2}
-        onValueChange={(e) =>
-          onChange(strategy.vertical.mod({ horizontal: auxCoords.horizontal, vertical: auxCoords.vertical }, e.value!))
-        }
-      />
-      <label htmlFor="manual-input-first">{strategy.horizontal.label}</label>
-      <InputNumber
-        inputId="manual-input-first"
-        disabled={loading || !canEdit}
-        value={auxCoords.horizontal}
-        maxFractionDigits={2}
-        onValueChange={(e) =>
-          onChange(
-            strategy.horizontal.mod({ horizontal: auxCoords.horizontal, vertical: auxCoords.vertical }, e.value!),
-          )
-        }
-      />
+    <div className="control-row manual-input">
+      <div>
+        <label htmlFor="manual-input-second">{strategy.vertical}</label>
+        <InputNumber
+          inputId="manual-input-second"
+          disabled={loading || !canEdit}
+          value={auxCoords.vertical}
+          maxFractionDigits={2}
+          onValueChange={(e) => setAuxCoords({ ...auxCoords, vertical: e.value! })}
+        />
+      </div>
+      <div>
+        <label htmlFor="manual-input-first">{strategy.horizontal}</label>
+        <InputNumber
+          inputId="manual-input-first"
+          disabled={loading || !canEdit}
+          value={auxCoords.horizontal}
+          maxFractionDigits={2}
+          onValueChange={(e) => setAuxCoords({ ...auxCoords, horizontal: e.value! })}
+        />
+      </div>
+      <div>
+        <Button
+          size="small"
+          label="Apply"
+          onClick={() => {
+            onChange(auxCoords);
+            setAuxCoords({ horizontal: 0, vertical: 0 }); // Reset after applying
+          }}
+          disabled={loading || !canEdit}
+        />
+      </div>
     </div>
   );
 }
@@ -208,9 +198,27 @@ export function CurrentCoordinates({
   const current = currentLabel ?? 'Current offset:';
   return (
     <div className="control-row">
-      <span>
-        <b>{current}</b> {horizontalLabel} {horizontal} {verticalLabel} {vertical}
-      </span>
+      <b>{current}</b> {horizontalLabel} {horizontal} {verticalLabel} {vertical}
+    </div>
+  );
+}
+
+export function InputControls({
+  loading,
+  handleApply,
+  strategy,
+  canEdit,
+}: {
+  loading: boolean;
+  handleApply: (coords: Coords) => void;
+  strategy: HandsetStrategy;
+  canEdit: boolean;
+}) {
+  return (
+    <div className="control-row coordinates-input-row">
+      <CoordinatesInput loading={loading} onChange={handleApply} strategy={strategy} canEdit={canEdit} />
+      <Divider className="input-divider" layout="vertical" />
+      <ManualInput loading={loading} onChange={handleApply} strategy={strategy} canEdit={canEdit} />
     </div>
   );
 }
