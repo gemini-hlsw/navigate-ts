@@ -1,4 +1,4 @@
-import type { GetTargetAdjustmentOffsetsQuery } from '@gql/server/gen/graphql';
+import type { AdjustTarget, GetTargetAdjustmentOffsetsQuery } from '@gql/server/gen/graphql';
 import {
   useAbsorbTargetAdjustment,
   useAdjustTarget,
@@ -7,19 +7,12 @@ import {
 } from '@gql/server/TargetsHandset';
 import { Button } from 'primereact/button';
 import { ButtonGroup } from 'primereact/buttongroup';
-import { useCallback, useEffect, useState } from 'react';
+import { Dropdown } from 'primereact/dropdown';
+import { useCallback, useState } from 'react';
 
-import type { CoordSystem } from './Controls';
-import {
-  Autoadjust,
-  CoordinatesInput,
-  CoordSystemControls,
-  CurrentCoordinates,
-  ManualInput,
-  OpenLoopsInput,
-  targetOptions,
-  TargetSelector,
-} from './Controls';
+import type { Alignment } from './Controls';
+import { AlignmentSelector, Autoadjust, CurrentCoordinates, InputControls, OpenLoopsInput } from './Controls';
+import type { Coords } from './strategy';
 import { strategies } from './strategy';
 
 type FocalPlaneOffset = NonNullable<GetTargetAdjustmentOffsetsQuery['targetAdjustmentOffsets']['oiwfs']>;
@@ -36,9 +29,9 @@ export default function TargetsHandset({ canEdit }: { canEdit: boolean }) {
   const loading = offsetsLoading || adjustTargetLoading || resetOffsetLoading || absorbOffsetLoading;
 
   // State
-  const [selectedTarget, setSelectedTarget] = useState(targetOptions[0]);
+  const [selectedTarget, setSelectedTarget] = useState(targetOptions[0].value);
 
-  const [coordSystem, setCoordSystem] = useState<CoordSystem>('AC');
+  const [alignment, setAlignment] = useState<Alignment>('AC');
 
   let offset: FocalPlaneOffset | undefined;
   switch (selectedTarget) {
@@ -58,69 +51,34 @@ export default function TargetsHandset({ canEdit }: { canEdit: boolean }) {
       if (!loading) console.warn('Unknown target selected:', selectedTarget);
   }
 
-  const [auxCoords, setAuxCoords] = useState({
-    horizontal: Number(offset?.deltaX.arcseconds ?? 0),
-    vertical: Number(offset?.deltaY.arcseconds ?? 0),
-  });
   const [openLoops, setOpenLoops] = useState(false);
 
   // Derived state
-  const strategy = strategies[coordSystem];
+  const strategy = strategies[alignment];
 
-  const handleCoordChange = useCallback(
-    ({ horizontal, vertical }: { horizontal?: number; vertical?: number }) => {
-      setAuxCoords({ horizontal: horizontal ?? auxCoords.horizontal, vertical: vertical ?? auxCoords.vertical });
+  const handleApply = useCallback(
+    (coords: Coords) => {
+      const offsetInput = strategy.toInput(coords);
+      void adjustTarget({
+        variables: {
+          target: selectedTarget,
+          offset: offsetInput,
+          openLoops,
+        },
+      });
     },
-    [auxCoords],
+    [adjustTarget, openLoops, selectedTarget, strategy],
   );
-
-  const handleApply = useCallback(() => {
-    const offsetInput = strategy.toInput(auxCoords);
-    void adjustTarget({
-      variables: {
-        target: selectedTarget,
-        offset: offsetInput,
-        openLoops,
-      },
-    });
-  }, [adjustTarget, auxCoords, openLoops, selectedTarget, strategy]);
-
-  // Effects
-  useEffect(() => {
-    // If we get new data, overwrite the auxX and auxY values and reset coordinate system to AC.
-    if (
-      !offsetsLoading &&
-      typeof offset?.deltaX.arcseconds === 'number' &&
-      typeof offset?.deltaY.arcseconds === 'number'
-    ) {
-      setCoordSystem('AC');
-      setAuxCoords({ horizontal: offset.deltaX.arcseconds, vertical: offset.deltaY.arcseconds });
-    }
-  }, [offsetsLoading, offset]);
 
   return (
     <div className="handset">
       <div className="selector-group">
         <TargetSelector loading={loading} target={selectedTarget} onChange={setSelectedTarget} canEdit={canEdit} />
-        <CoordSystemControls coordSystem={coordSystem} onChange={setCoordSystem} loading={loading} canEdit={canEdit} />
+        <AlignmentSelector alignment={alignment} onChange={setAlignment} loading={loading} canEdit={canEdit} />
       </div>
 
-      <CoordinatesInput
-        loading={loading}
-        onChange={handleCoordChange}
-        x={auxCoords.horizontal}
-        y={auxCoords.vertical}
-        strategy={strategy}
-        canEdit={canEdit}
-      />
-
-      <ManualInput
-        loading={loading}
-        onChange={handleCoordChange}
-        auxCoords={auxCoords}
-        strategy={strategy}
-        canEdit={canEdit}
-      />
+      <InputControls loading={loading} handleApply={handleApply} strategy={strategy} canEdit={canEdit} />
+      <OpenLoopsInput openLoops={openLoops} onChange={setOpenLoops} loading={loading} canEdit={canEdit} />
 
       <CurrentCoordinates
         horizontal={offset?.deltaX.arcseconds}
@@ -129,21 +87,18 @@ export default function TargetsHandset({ canEdit }: { canEdit: boolean }) {
         verticalLabel="Y"
       />
 
-      <OpenLoopsInput openLoops={openLoops} onChange={setOpenLoops} loading={loading} canEdit={canEdit} />
-
       <div className="control-row buttons">
         <ButtonGroup>
-          <Button size="small" label="Apply" loading={loading || !canEdit} onClick={handleApply} />
           <Button
             size="small"
             label="Reset"
-            loading={loading || !canEdit}
+            disabled={loading || !canEdit}
             onClick={() => void resetOffset({ variables: { openLoops, target: selectedTarget } })}
           />
           <Button
             size="small"
             label="Absorb"
-            loading={loading || !canEdit}
+            disabled={loading || !canEdit}
             onClick={() => void absorbOffset({ variables: { target: selectedTarget } })}
           />
         </ButtonGroup>
@@ -151,5 +106,37 @@ export default function TargetsHandset({ canEdit }: { canEdit: boolean }) {
 
       <Autoadjust />
     </div>
+  );
+}
+
+const targetOptions: { label: string; value: AdjustTarget }[] = [
+  { value: 'OIWFS', label: 'OIWFS' },
+  { value: 'PWFS1', label: 'PWFS1' },
+  { value: 'PWFS2', label: 'PWFS2' },
+  { value: 'SOURCE_A', label: 'Base' },
+];
+
+function TargetSelector({
+  target,
+  onChange,
+  loading,
+  canEdit,
+}: {
+  target: AdjustTarget;
+  onChange: (value: AdjustTarget) => void;
+  loading: boolean;
+  canEdit: boolean;
+}) {
+  return (
+    <>
+      <label htmlFor="handsets-target">Target</label>
+      <Dropdown
+        inputId="handsets-target"
+        disabled={loading || !canEdit}
+        value={target}
+        onChange={(e) => onChange(e.value as AdjustTarget)}
+        options={targetOptions}
+      />
+    </>
   );
 }
