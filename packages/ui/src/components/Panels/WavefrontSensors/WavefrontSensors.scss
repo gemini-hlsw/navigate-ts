@@ -152,6 +152,8 @@
 
           .input-divider {
             align-self: normal;
+            margin-left: 0px;
+            margin-right: 0px;
           }
 
           .coordinates-input-row {
@@ -159,10 +161,15 @@
           }
 
           .manual-input {
-            flex-direction: column !important;
+            display: grid;
+            grid-template-columns: auto 1fr;
+            grid-template-rows: auto;
+            gap: 8px;
+            align-items: center;
 
-            > div > label {
-              margin-right: 8px;
+            .apply-button {
+              grid-column: 1 / span 2;
+              max-width: fit-content;
             }
           }
 
