@@ -34,12 +34,13 @@ RUN PNPM_VERSION="$(pnpm -v)" && cd pruned && npm pkg set packageManager="pnpm@$
 # Final image
 FROM base
 ENV NODE_ENV=production
-ENV COREPACK_ENABLE_NETWORK=0
+# ENV COREPACK_ENABLE_NETWORK=0
 
 # Copy built files
 COPY --from=build --chown=software:software /usr/src/app/pruned /usr/src/app
 RUN pnpm --version && pnpm prisma generate
 
+ENV PORT=4000
 EXPOSE 4000
 
 HEALTHCHECK --start-period=2s CMD ["./tasks/healthcheck.js"]

@@ -8,7 +8,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      REGISTRY_IMAGE: registry.heroku.com/navigate-dev-gn/web
+      REGISTRY_IMAGE: registry.heroku.com/navigate--configs-dev-gn/web
       HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
     steps:
       - uses: actions/checkout@v4
@@ -32,7 +32,7 @@ jobs:
 
       - run: |
           cd packages/configs
-          heroku container:push -a navigate-dev-gn web --context-path ../../
+          heroku container:push -a navigate-configs-dev-gn web --context-path ../../
 
       - name: Deploy
-        run: heroku container:release web --app=navigate-dev-gn
+        run: heroku container:release web --app=navigate-configs-dev-gn
