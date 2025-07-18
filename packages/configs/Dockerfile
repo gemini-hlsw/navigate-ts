@@ -38,7 +38,7 @@ ENV NODE_ENV=production
 
 # Copy built files
 COPY --from=build --chown=software:software /usr/src/app/pruned /usr/src/app
-RUN pnpm --version && pnpm prisma generate
+RUN pnpm prisma generate
 
 ENV PORT=4000
 EXPOSE 4000
