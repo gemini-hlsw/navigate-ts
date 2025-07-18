@@ -148,7 +148,7 @@ jobs:
   deploy-server:
     environment:
       name: navigate-dev-gn
-      url: https://navigate-dev-gn.herokuapp.com/
+      url: https://navigate-dev.lucuma.xyz/
     if: github.event_name != 'pull_request' && (startsWith(github.ref, 'refs/tags/v'))
     needs: [publish-ui]
     runs-on: ubuntu-latest
