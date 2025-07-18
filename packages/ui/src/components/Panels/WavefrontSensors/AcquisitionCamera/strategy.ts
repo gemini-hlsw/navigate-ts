@@ -27,7 +27,7 @@ export const plusVertical: CoordsMod = (step) => ({
 });
 
 interface LabelledCoordsMod {
-  label: string;
+  label: string | undefined;
   mod: CoordsMod;
 }
 
@@ -102,6 +102,52 @@ export const strategies = {
       equatorialAdjustment: {
         deltaDec: { arcseconds: coords.vertical },
         deltaRA: { arcseconds: coords.horizontal },
+      },
+    }),
+  },
+  PWFS1: {
+    up: { label: undefined, mod: plusVertical },
+    down: { label: undefined, mod: minusVertical },
+    right: { label: undefined, mod: plusHorizontal },
+    left: { label: undefined, mod: minusHorizontal },
+    horizontal: 'X',
+    vertical: 'Y',
+    toInput: (coords) => ({
+      probeFrameAdjustment: {
+        probeFrame: 'PWFS_1',
+        deltaX: { arcseconds: coords.vertical },
+        deltaY: { arcseconds: coords.horizontal },
+      },
+    }),
+  },
+  PWFS2: {
+    up: { label: undefined, mod: plusVertical },
+    down: { label: undefined, mod: minusVertical },
+    right: { label: undefined, mod: plusHorizontal },
+    left: { label: undefined, mod: minusHorizontal },
+    horizontal: 'X',
+    vertical: 'Y',
+    toInput: (coords) => ({
+      probeFrameAdjustment: {
+        probeFrame: 'PWFS_2',
+        deltaX: { arcseconds: coords.vertical },
+        deltaY: { arcseconds: coords.horizontal },
+      },
+    }),
+  },
+  OIWFS: {
+    up: { label: undefined, mod: plusVertical },
+    down: { label: undefined, mod: minusVertical },
+    right: { label: undefined, mod: plusHorizontal },
+    left: { label: undefined, mod: minusHorizontal },
+    horizontal: 'X',
+    vertical: 'Y',
+    toInput: (coords) => ({
+      probeFrameAdjustment: {
+        // TODO: handle FLAMINGOS2_OIWFS?
+        probeFrame: 'GMOS_OIWFS',
+        deltaX: { arcseconds: coords.vertical },
+        deltaY: { arcseconds: coords.horizontal },
       },
     }),
   },
