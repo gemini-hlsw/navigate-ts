@@ -11,7 +11,7 @@ import type { InstrumentType } from '@/types';
 export function Instrument() {
   const [name, setName] = useState<InstrumentName | ''>('');
   const [port, setPort] = useState(0);
-  const [currentInstrument, setCurrentInstrument] = useState<InstrumentType | undefined>(undefined);
+  const [currentInstrument, setCurrentInstrument] = useState<InstrumentType | undefined>();
 
   const [importInstrument, setImportInstrument] = useImportInstrument();
 
