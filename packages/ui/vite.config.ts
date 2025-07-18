@@ -109,8 +109,9 @@ export default defineConfig(({ mode }) => ({
   },
   plugins: [
     react({}),
-    mkcert({ hosts: ['localhost', 'local.lucuma.xyz', 'navigate.lucuma.xyz', 'navigate.gemini.edu'] }),
-    buildVersionFile,
+    mode === 'development' &&
+      mkcert({ hosts: ['localhost', 'local.lucuma.xyz', 'navigate.lucuma.xyz', 'navigate.gemini.edu'] }),
+    mode === 'production' && buildVersionFile,
   ],
   test: {
     globals: true,
