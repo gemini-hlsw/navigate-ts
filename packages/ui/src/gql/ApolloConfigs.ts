@@ -136,9 +136,6 @@ function createClient() {
         GuideAlarm: {
           keyFields: ['wfs'],
         },
-        InstrumentConfig: {
-          keyFields: ['name', 'wfs'],
-        },
       },
     }),
   });

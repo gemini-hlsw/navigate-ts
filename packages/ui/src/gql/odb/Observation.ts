@@ -1,4 +1,5 @@
-import { useLazyQuery } from '@apollo/client';
+import { useLazyQuery, useQuery } from '@apollo/client';
+import type { OptionsOf } from '@gql/util';
 
 import { graphql } from './gen';
 
@@ -65,9 +66,10 @@ const GET_OBSERVATIONS_BY_STATE = graphql(`
   }
 `);
 
-export function useGetObservationsByState() {
-  return useLazyQuery(GET_OBSERVATIONS_BY_STATE, {
+export function useObservationsByState(options: OptionsOf<typeof GET_OBSERVATIONS_BY_STATE>) {
+  return useQuery(GET_OBSERVATIONS_BY_STATE, {
     context: { clientName: 'odb' },
+    ...options,
   });
 }
 

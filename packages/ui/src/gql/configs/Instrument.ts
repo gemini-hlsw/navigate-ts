@@ -1,4 +1,4 @@
-import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import type { OptionsOf } from '@gql/util';
 
 import { graphql } from './gen';
@@ -11,12 +11,11 @@ const GET_DISTINCT_INSTRUMENTS = graphql(`
   }
 `);
 
-export function useGetDistinctInstruments() {
-  const [queryFunction] = useLazyQuery(GET_DISTINCT_INSTRUMENTS, {
+export function useDistinctInstruments(options: OptionsOf<typeof GET_DISTINCT_INSTRUMENTS> = {}) {
+  return useQuery(GET_DISTINCT_INSTRUMENTS, {
     context: { clientName: 'navigateConfigs' },
+    ...options,
   });
-
-  return queryFunction;
 }
 
 const GET_DISTINCT_PORTS = graphql(`
@@ -27,12 +26,11 @@ const GET_DISTINCT_PORTS = graphql(`
   }
 `);
 
-export function useGetDistinctPorts() {
-  const [queryFunction] = useLazyQuery(GET_DISTINCT_PORTS, {
+export function useDistinctPorts(options: OptionsOf<typeof GET_DISTINCT_PORTS> = {}) {
+  return useQuery(GET_DISTINCT_PORTS, {
     context: { clientName: 'navigateConfigs' },
+    ...options,
   });
-
-  return queryFunction;
 }
 
 export const GET_INSTRUMENTS = graphql(`
@@ -52,12 +50,11 @@ export const GET_INSTRUMENTS = graphql(`
   }
 `);
 
-export function useGetInstruments() {
-  const [queryFunction] = useLazyQuery(GET_INSTRUMENTS, {
+export function useInstruments(options: OptionsOf<typeof GET_INSTRUMENTS> = {}) {
+  return useQuery(GET_INSTRUMENTS, {
     context: { clientName: 'navigateConfigs' },
+    ...options,
   });
-
-  return queryFunction;
 }
 
 export const GET_INSTRUMENT = graphql(`
