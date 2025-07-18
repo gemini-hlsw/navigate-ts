@@ -23,8 +23,8 @@ catalogs:
       specifier: 0.144.0
       version: 0.144.0
     navigate-server-schema:
-      specifier: 0.1.0-20250717-d73ad688
-      version: 0.1.0-20250717-d73ad688
+      specifier: 0.1.0-20250718-e638d465
+      version: 0.1.0-20250718-e638d465
     typescript:
       specifier: 5.8.3
       version: 5.8.3
@@ -138,7 +138,7 @@ importers:
         version: 0.144.0
       navigate-server-schema:
         specifier: 'catalog:'
-        version: 0.1.0-20250717-d73ad688
+        version: 0.1.0-20250718-e638d465
 
   packages/ui:
     devDependencies:
@@ -216,7 +216,7 @@ importers:
         version: link:../schema
       navigate-server-schema:
         specifier: 'catalog:'
-        version: 0.1.0-20250717-d73ad688
+        version: 0.1.0-20250718-e638d465
       playwright:
         specifier: 1.54.1
         version: 1.54.1
@@ -3367,8 +3367,8 @@ packages:
   natural-compare@1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==, tarball: https://registry.npmjs.org/natural-compare/-/natural-compare-1.4.0.tgz}
 
-  navigate-server-schema@0.1.0-20250717-d73ad688:
-    resolution: {integrity: sha512-kwcxFKz8g59VS4IJiKklWxPS+O41R+X/OwoWgsQVdTajZDoESq99fevtGWIVOlU+k9VqAxOyGdatnFsIVtUUNw==, tarball: https://registry.npmjs.org/navigate-server-schema/-/navigate-server-schema-0.1.0-20250717-d73ad688.tgz}
+  navigate-server-schema@0.1.0-20250718-e638d465:
+    resolution: {integrity: sha512-xIqhQ99tm/BQ7Bmpq8n96CxSq+Yjf0c+5CuAxAE82NJtIBRCutAMbKX67xYPrNUJFsq1myDA1AahaSC2OzdIig==, tarball: https://registry.npmjs.org/navigate-server-schema/-/navigate-server-schema-0.1.0-20250718-e638d465.tgz}
 
   negotiator@1.0.0:
     resolution: {integrity: sha512-8Ofs/AUQh8MaEcrlq5xOX0CQ9ypTF5dl78mjlMNfOK08fzpgTHQRQPBxcPlEtIw0yRpws+Zo/3r+5WRby7u3Gg==, tarball: https://registry.npmjs.org/negotiator/-/negotiator-1.0.0.tgz}
@@ -8025,7 +8025,7 @@ snapshots:
 
   natural-compare@1.4.0: {}
 
-  navigate-server-schema@0.1.0-20250717-d73ad688: {}
+  navigate-server-schema@0.1.0-20250718-e638d465: {}
 
   negotiator@1.0.0: {}
 
