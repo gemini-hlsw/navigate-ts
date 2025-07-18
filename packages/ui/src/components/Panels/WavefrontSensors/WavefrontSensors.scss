@@ -156,13 +156,23 @@
 
           .coordinates-input-row {
             justify-content: space-around;
+
+            .p-divider {
+              margin-left: 0px;
+              margin-right: 0px;
+            }
           }
 
           .manual-input {
-            flex-direction: column !important;
+            display: grid;
+            grid-template-columns: auto 1fr;
+            grid-template-rows: auto;
+            align-items: center;
+            gap: 8px;
 
-            > div > label {
-              margin-right: 8px;
+            .apply-button {
+              width: fit-content;
+              grid-column: 1 / span 2;
             }
           }
 
@@ -181,10 +191,6 @@
                 'gul gu gur'
                 'gl gm gr'
                 'gdl gd gdr';
-              gap: 4px;
-              padding: 2px;
-              margin-left: auto;
-              margin-right: auto;
             }
 
             .coordinates-stepsize {
@@ -192,7 +198,7 @@
               align-items: center;
               gap: 16px;
               flex-direction: column;
-              margin-bottom: 12px;
+              margin-bottom: 16px;
 
               > .p-slider {
                 width: 100%;

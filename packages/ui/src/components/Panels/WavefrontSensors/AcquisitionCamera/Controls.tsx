@@ -12,7 +12,7 @@ import type { Coords, HandsetStrategy } from './strategy';
 
 export type CoordOnChange = (value: Coords) => void;
 
-export const alignmentOptions = ['Az/El', 'AC', 'Instrument', 'RA/Dec'] as const;
+export const alignmentOptions = ['Az/El', 'AC', 'Instrument', 'RA/Dec', 'PWFS1', 'PWFS2', 'OIWFS'] as const;
 export type Alignment = (typeof alignmentOptions)[number];
 
 export function AlignmentSelector({
@@ -146,38 +146,33 @@ export function ManualInput({
   });
 
   return (
-    <div className="control-row manual-input">
-      <div>
-        <label htmlFor="manual-input-second">{strategy.vertical}</label>
-        <InputNumber
-          inputId="manual-input-second"
-          disabled={loading || !canEdit}
-          value={auxCoords.vertical}
-          maxFractionDigits={2}
-          onValueChange={(e) => setAuxCoords({ ...auxCoords, vertical: e.value! })}
-        />
-      </div>
-      <div>
-        <label htmlFor="manual-input-first">{strategy.horizontal}</label>
-        <InputNumber
-          inputId="manual-input-first"
-          disabled={loading || !canEdit}
-          value={auxCoords.horizontal}
-          maxFractionDigits={2}
-          onValueChange={(e) => setAuxCoords({ ...auxCoords, horizontal: e.value! })}
-        />
-      </div>
-      <div>
-        <Button
-          size="small"
-          label="Apply"
-          onClick={() => {
-            onChange(auxCoords);
-            setAuxCoords({ horizontal: 0, vertical: 0 }); // Reset after applying
-          }}
-          disabled={loading || !canEdit}
-        />
-      </div>
+    <div className="manual-input">
+      <label htmlFor="manual-input-second">{strategy.vertical}</label>
+      <InputNumber
+        inputId="manual-input-second"
+        disabled={loading || !canEdit}
+        value={auxCoords.vertical}
+        maxFractionDigits={2}
+        onValueChange={(e) => setAuxCoords({ ...auxCoords, vertical: e.value! })}
+      />
+      <label htmlFor="manual-input-first">{strategy.horizontal}</label>
+      <InputNumber
+        inputId="manual-input-first"
+        disabled={loading || !canEdit}
+        value={auxCoords.horizontal}
+        maxFractionDigits={2}
+        onValueChange={(e) => setAuxCoords({ ...auxCoords, horizontal: e.value! })}
+      />
+      <Button
+        size="small"
+        label="Apply"
+        className="apply-button"
+        onClick={() => {
+          onChange(auxCoords);
+          setAuxCoords({ horizontal: 0, vertical: 0 }); // Reset after applying
+        }}
+        disabled={loading || !canEdit}
+      />
     </div>
   );
 }
@@ -250,7 +245,7 @@ export function OpenLoopsInput({
 export function Autoadjust() {
   return (
     <div className="control-row under-construction">
-      <Button size="small" label="Autoadjust" />
+      <Button label="Autoadjust" />
     </div>
   );
 }
