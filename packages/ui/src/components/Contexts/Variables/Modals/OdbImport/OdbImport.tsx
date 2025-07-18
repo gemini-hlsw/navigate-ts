@@ -11,11 +11,11 @@ import type {
   Instrument,
   SourceProfile,
 } from '@gql/odb/gen/graphql';
-import { useGetCentralWavelength, useGetGuideEnvironment, useGetObservationsByState } from '@gql/odb/Observation';
+import { useGetCentralWavelength, useGetGuideEnvironment, useObservationsByState } from '@gql/odb/Observation';
 import { dateToLocalObservingNight } from 'lucuma-core';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
-import { useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import { useCanEdit } from '@/components/atoms/auth';
 import { useServerConfigValue } from '@/components/atoms/config';
@@ -33,7 +33,18 @@ export function OdbImport() {
   const toast = useToast();
   const [odbVisible, setOdbVisible] = useOdbVisible();
   const [selectedObservation, setSelectedObservation] = useState<OdbObservationType | null>(null);
-  const [getReadyObservations, { loading, data }] = useGetObservationsByState();
+
+  const observingNight = dateToLocalObservingNight(new Date());
+
+  const { data, loading } = useObservationsByState({
+    skip: !odbVisible || !site,
+    variables: {
+      date: observingNight,
+      site,
+      states: ['READY', 'ONGOING'],
+    },
+  });
+
   const [getGuideEnvironment, { loading: getGuideEnvironmentLoading }] = useGetGuideEnvironment();
   const [getCentralWavelength, { loading: getCentralWavelengthLoading }] = useGetCentralWavelength();
   const [removeAndCreateBaseTargets, { loading: removeCreateLoading }] = useRemoveAndCreateBaseTargets();
@@ -41,8 +52,6 @@ export function OdbImport() {
   const [updateRotator, { loading: updateRotatorLoading }] = useUpdateRotator();
   const [removeAndCreateWfsTargets, { loading: wfsTargetsLoading }] = useRemoveAndCreateWfsTargets();
   const [resetInstruments, { loading: resetInstrumentsLoading }] = useResetInstruments();
-
-  const observingNight = dateToLocalObservingNight(new Date());
 
   const rotator = useRotator().data?.rotator;
 
@@ -55,7 +64,7 @@ export function OdbImport() {
     wfsTargetsLoading ||
     resetInstrumentsLoading;
 
-  function updateObs() {
+  const updateObs = useCallback(() => {
     if (!selectedObservation) {
       toast?.show({
         severity: 'warn',
@@ -181,20 +190,20 @@ export function OdbImport() {
         setOdbVisible(false);
       },
     });
-  }
-
-  useEffect(() => {
-    if (site && odbVisible) {
-      void getReadyObservations({
-        variables: {
-          date: observingNight,
-          site,
-          states: ['READY', 'ONGOING'],
-        },
-        fetchPolicy: 'no-cache',
-      });
-    }
-  }, [site, getReadyObservations, observingNight, odbVisible]);
+  }, [
+    configuration,
+    getCentralWavelength,
+    getGuideEnvironment,
+    removeAndCreateBaseTargets,
+    removeAndCreateWfsTargets,
+    resetInstruments,
+    rotator,
+    selectedObservation,
+    setOdbVisible,
+    toast,
+    updateConfiguration,
+    updateRotator,
+  ]);
 
   const header = (
     <div className="header-item">

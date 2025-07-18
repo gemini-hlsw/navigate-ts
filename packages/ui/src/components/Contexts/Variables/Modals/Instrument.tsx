@@ -1,60 +1,43 @@
-import { useGetDistinctInstruments, useGetDistinctPorts, useGetInstruments } from '@gql/configs/Instrument';
+import { useDistinctInstruments, useDistinctPorts, useInstruments } from '@gql/configs/Instrument';
 import type { Instrument as InstrumentName } from '@gql/odb/gen/graphql';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { Dropdown } from 'primereact/dropdown';
-import { useEffect, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import { useImportInstrument } from '@/components/atoms/instrument';
 import type { InstrumentType } from '@/types';
 
 export function Instrument() {
-  const [importInstrument, setImportInstrument] = useImportInstrument();
-  const getNames = useGetDistinctInstruments();
-  const getPorts = useGetDistinctPorts();
-  const getInstruments = useGetInstruments();
-  const [nameOptions, setNameOptions] = useState<string[]>([]);
   const [name, setName] = useState<InstrumentName | ''>('');
-  const [portOptions, setPortOptions] = useState<number[]>([]);
   const [port, setPort] = useState(0);
-  const [instrumentOptions, setInstrumentOptions] = useState<InstrumentType[]>([]);
-  const [currentInstrument, setCurrentInstrument] = useState<InstrumentType>({} as InstrumentType);
+  const [currentInstrument, setCurrentInstrument] = useState<InstrumentType | undefined>(undefined);
 
-  useEffect(() => {
-    if (importInstrument)
-      void getNames({
-        onCompleted: (data) => {
-          setNameOptions(data.distinctInstruments.map((e) => e.name));
-        },
-      });
-  }, [getNames, importInstrument]);
+  const [importInstrument, setImportInstrument] = useImportInstrument();
 
-  useEffect(() => {
-    if (name) {
-      setPort(0);
-      void getPorts({
-        variables: { name: name },
-        onCompleted: (data) => {
-          setPortOptions(data.distinctPorts.map((e) => e.issPort));
-        },
-      });
-    }
-  }, [getPorts, name]);
+  const { data: distinctInstrumentsData, loading: distinctInstrumentsLoading } = useDistinctInstruments({
+    skip: !importInstrument,
+  });
+  const { data: distinctPortsData, loading: distinctPortsLoading } = useDistinctPorts({
+    skip: !importInstrument || !name,
+    variables: { name: name as InstrumentName },
+  });
+  const { data: instrumentsData, loading: instrumentsLoading } = useInstruments({
+    skip: !importInstrument || !name || !port,
+    variables: { name: name as InstrumentName, issPort: port },
+  });
 
-  useEffect(() => {
-    if (port && name) {
-      void getInstruments({
-        variables: { name: name, issPort: port },
-        onCompleted: (data) => {
-          setInstrumentOptions(data.instruments);
-        },
-      });
-    }
-  }, [getInstruments, name, port]);
+  const nameOptions = useMemo(
+    () => distinctInstrumentsData?.distinctInstruments.map((e) => e.name) ?? [],
+    [distinctInstrumentsData],
+  );
+  const portOptions = useMemo(() => distinctPortsData?.distinctPorts.map((e) => e.issPort) ?? [], [distinctPortsData]);
 
-  function modifyInstrument() {
+  const loading = distinctInstrumentsLoading || distinctPortsLoading || instrumentsLoading;
+
+  const modifyInstrument = useCallback(() => {
     setImportInstrument(false);
-  }
+  }, [setImportInstrument]);
 
   const footer = (
     <div className="modal-footer">
@@ -65,12 +48,12 @@ export function Instrument() {
     </div>
   );
 
-  const tableData = instrumentOptions.map((i) => (
+  const tableData = instrumentsData?.instruments.map((i) => (
     <InstrumentDetails
       instrument={i}
-      selectedPk={currentInstrument.pk}
+      selectedPk={currentInstrument?.pk}
       setInstrument={setCurrentInstrument}
-      key={i.name}
+      key={i.pk}
     />
   ));
 
@@ -104,15 +87,19 @@ export function Instrument() {
     >
       <div className="import-instrument">
         <div className="selectors">
-          <span>Instrument</span>
+          <label htmlFor="instrument-import-name">Instrument</label>
           <Dropdown
+            inputId="instrument-import-name"
             value={name}
+            loading={loading}
             options={nameOptions}
             onChange={(e) => setName(e.target.value as InstrumentName)}
             placeholder="Select instrument"
           />
-          <span>issPort</span>
+          <label htmlFor="instrument-import-issPort">issPort</label>
           <Dropdown
+            inputId="instrument-import-issPort"
+            loading={loading}
             disabled={portOptions.length <= 0}
             value={port}
             options={portOptions}
@@ -133,7 +120,7 @@ function InstrumentDetails({
 }: {
   instrument: InstrumentType;
   setInstrument(this: void, _: InstrumentType): void;
-  selectedPk: number;
+  selectedPk: number | undefined;
 }) {
   return (
     <tr onClick={() => setInstrument(instrument)} className={instrument.pk === selectedPk ? 'active' : ''}>
