@@ -71,7 +71,7 @@ export function Catalog() {
             await updateConfiguration({
               variables: {
                 pk: configuration?.pk ?? 1,
-                selectedTarget: t.removeAndCreateBaseTargets[0].pk,
+                selectedTarget: t.removeAndCreateBaseTargets[0]?.pk,
               },
             });
           },

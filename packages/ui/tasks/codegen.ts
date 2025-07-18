@@ -58,6 +58,8 @@ const sharedConfig = {
   scalars,
   // Generate union types (`'foo' | 'bar'`) for enums instead of non-standard typescript enums
   enumsAsTypes: true,
+  useTypeImports: true,
+  skipTypename: true,
 };
 
 export default {

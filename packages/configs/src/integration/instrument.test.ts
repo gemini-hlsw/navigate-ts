@@ -86,7 +86,7 @@ await describe('Instrument', async () => {
 
       const resetInstruments = await fixture.prisma.instrument.findMany({ where });
       resetInstruments.forEach((instrument, i) => {
-        assert.deepStrictEqual(instrument.extraParams, initialInstruments[i].extraParams);
+        assert.deepStrictEqual(instrument.extraParams, initialInstruments[i]?.extraParams);
       });
     });
 

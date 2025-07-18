@@ -83,7 +83,6 @@ const mocks: MockedResponse[] = [
           autoparkOiwfs: false,
           autoparkGems: true,
           autoparkAowfs: false,
-          __typename: 'SlewFlags',
         },
       },
     },

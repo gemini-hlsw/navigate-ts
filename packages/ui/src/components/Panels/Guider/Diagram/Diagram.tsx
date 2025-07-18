@@ -83,9 +83,9 @@ function Flow() {
     const sourceEdges: Edge[] = [];
 
     function changeSourceState(source: string | undefined | null, state: boolean) {
-      const findIdx = sourceNodes.findIndex((s) => s.id === source);
-      if (findIdx === -1) return;
-      sourceNodes[findIdx].className = state ? 'active' : 'inactive';
+      const node = sourceNodes.find((s) => s.id === source);
+      if (!node) return;
+      node.className = state ? 'active' : 'inactive';
     }
 
     // Create missing source nodes depending on the configuration
@@ -197,7 +197,7 @@ function Flow() {
       const pos = sourceNodes.findIndex((n) => n.id === state.m2ComaM1CorrectionsSource);
       const isActive = isSourceActive(state.m2ComaM1CorrectionsSource);
       if (pos !== -1 && pos !== sourceNodes.length - 1) {
-        sourceNodes.splice(sourceNodes.length - 1, 0, sourceNodes.splice(pos, 1)[0]);
+        sourceNodes.splice(sourceNodes.length - 1, 0, sourceNodes.splice(pos, 1)[0]!);
       }
       sourceEdges.push({
         id: `${state.m2ComaM1CorrectionsSource}-coma`,
@@ -212,7 +212,7 @@ function Flow() {
       const pos = sourceNodes.findIndex((n) => n.id === state.m2ComaM1CorrectionsSource);
       const isActive = isSourceActive(state.m2ComaM1CorrectionsSource);
       if (pos !== -1 && pos !== sourceNodes.length - 1) {
-        sourceNodes.splice(sourceNodes.length - 1, 0, sourceNodes.splice(pos, 1)[0]);
+        sourceNodes.splice(sourceNodes.length - 1, 0, sourceNodes.splice(pos, 1)[0]!);
       }
       sourceEdges.push({
         id: `${state.m2ComaM1CorrectionsSource}-higho`,

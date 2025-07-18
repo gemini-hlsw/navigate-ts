@@ -10,9 +10,14 @@ export default {
       config: {
         contextType: '../../server.js#ApolloContext',
         enumsAsTypes: true,
+        immutableTypes: true,
+        strictScalars: true,
         inputMaybeValue: 'T | undefined',
+        skipTypename: true,
+        useTypeImports: true,
         scalars: {
           DateTime: 'Date',
+          JSON: 'Record<string, unknown>',
         },
       },
     },

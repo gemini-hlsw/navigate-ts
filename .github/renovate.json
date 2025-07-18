@@ -39,6 +39,10 @@
       "matchPackageNames": ["**vite**", "@vitest/**"]
     },
     {
+      "groupName": "TSConfig bases",
+      "matchPackageNames": ["@tsconfig/**"]
+    },
+    {
       "description": "Schedule schema updates to run daily",
       "matchPackageNames": ["lucuma-schemas", "navigate-server-schema"],
       "schedule": ["* 0-4 * * *"]

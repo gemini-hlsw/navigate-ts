@@ -14,7 +14,7 @@ export default function Home() {
 
   const handleTouchStart = useCallback(
     (e: React.TouchEvent) => {
-      setTouchPos(e.touches[0].pageX);
+      setTouchPos(e.touches[0]!.pageX);
     },
     [setTouchPos],
   );
@@ -53,7 +53,7 @@ export default function Home() {
 
   const handleTouchEnd = useCallback(
     (e: React.TouchEvent) => {
-      const movement = e.changedTouches[0].pageX - touchPos;
+      const movement = e.changedTouches[0]!.pageX - touchPos;
       if (movement > TOUCH_THRESHOLD) {
         prevPanel();
       } else if (movement < -TOUCH_THRESHOLD) {

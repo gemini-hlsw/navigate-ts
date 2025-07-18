@@ -10,7 +10,7 @@ import { frontendVersion } from '@/Helpers/constants';
 export function About() {
   const [aboutVisible, toggleAboutVisible] = useAboutVisible();
   const { odbUri, site } = useServerConfigValue();
-  const odbHost = odbUri && URL.canParse(odbUri) ? new URL(odbUri).hostname.split('.')[0] : 'dev';
+  const odbHost = odbUri && URL.canParse(odbUri) ? new URL(odbUri).hostname.split('.')[0]! : 'dev';
   const environmentType = odbHost.includes('staging')
     ? 'staging'
     : odbHost.includes('dev')
