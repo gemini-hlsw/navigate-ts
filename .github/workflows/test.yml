@@ -9,8 +9,31 @@ jobs:
     runs-on: ubuntu-latest
     env:
       REGISTRY_USERNAME: 'nlsoftware'
-      REGISTRY_IMAGE: noirlab/gpp-nav-configs
+      REGISTRY_IMAGE: noirlab/gpp-nav
       HEROKU_APP_NAME: navigate-dev-gn
+    steps:
+      - uses: actions/checkout@v4
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          username: ${{ env.REGISTRY_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_TOKEN }}
+
+      - name: Install Heroku CLI
+        run: |
+          curl https://cli-assets.heroku.com/install.sh | sh
+
+      - name: Deploy
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: ./deploy/deploy-heroku.sh
+
+  deploy-configs:
+    runs-on: ubuntu-latest
+    env:
+      REGISTRY_USERNAME: 'nlsoftware'
+      REGISTRY_IMAGE: noirlab/gpp-nav-configs
+      HEROKU_APP_NAME: navigate-configs-dev-gn
     steps:
       - uses: actions/checkout@v4
       - name: Log in to the Container registry
