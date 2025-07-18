@@ -29,7 +29,7 @@ export default function TargetsHandset({ canEdit }: { canEdit: boolean }) {
   const loading = offsetsLoading || adjustTargetLoading || resetOffsetLoading || absorbOffsetLoading;
 
   // State
-  const [selectedTarget, setSelectedTarget] = useState(targetOptions[0].value);
+  const [selectedTarget, setSelectedTarget] = useState(targetOptions[0]!.value);
 
   const [alignment, setAlignment] = useState<Alignment>('AC');
 

@@ -210,7 +210,7 @@ export function Slew(props: ButtonProps) {
 
   const variables: VariablesOf<typeof SLEW_MUTATION> = {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    slewOptions: (({ __typename, pk, ...o }) => o)(slewFlags),
+    slewOptions: (({ pk, ...o }) => o)(slewFlags),
     config: {
       instParams: {
         iaa: { degrees: instrument.iaa },

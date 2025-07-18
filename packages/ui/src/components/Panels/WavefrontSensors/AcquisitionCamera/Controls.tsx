@@ -58,7 +58,7 @@ export function CoordinatesInput({
 
   // Start at 0.5
   const [sliderStep, setSliderStep] = useState(2);
-  const [offset, setOffset] = useState<number>(steps[sliderStep]);
+  const [offset, setOffset] = useState<number>(steps[sliderStep]!);
 
   return (
     <div className="coordinates-input">
@@ -122,7 +122,7 @@ export function CoordinatesInput({
           onChange={(e) => {
             const value = e.value as number;
             setSliderStep(value);
-            setOffset(steps[value]);
+            setOffset(steps[value]!);
           }}
         />
       </div>

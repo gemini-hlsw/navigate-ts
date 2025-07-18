@@ -1,20 +1,6 @@
 {
+  "extends": ["@tsconfig/strictest/tsconfig", "@tsconfig/vite-react/tsconfig.json"],
   "compilerOptions": {
-    "target": "ESNext",
-    "useDefineForClassFields": true,
-    "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "allowJs": false,
-    "skipLibCheck": true,
-    "esModuleInterop": false,
-    "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react-jsx",
     "paths": {
       "@Telescope/*": ["./src/components/Panels/Telescope/*"],
       "@WavefrontSensors/*": ["./src/components/Panels/WavefrontSensors/*"],
@@ -25,7 +11,11 @@
       "@gql/*": ["./src/gql/*"],
       "@/*": ["./src/*"]
     },
-    "types": ["vitest/globals", "vitest", "@vitest/browser/providers/playwright"]
+    "types": ["vitest/globals", "vitest", "@vitest/browser/providers/playwright"],
+    "resolveJsonModule": true,
+    "forceConsistentCasingInFileNames": true,
+    "exactOptionalPropertyTypes": false,
+    "noPropertyAccessFromIndexSignature": false
   },
   "include": ["src", "tasks"]
 }

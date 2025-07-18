@@ -113,7 +113,7 @@ export function OdbImport() {
             await updateConfiguration({
               variables: {
                 pk: configuration?.pk ?? 1,
-                selectedTarget: t.removeAndCreateBaseTargets[0].pk,
+                selectedTarget: t.removeAndCreateBaseTargets[0]?.pk,
               },
             });
           },
@@ -298,7 +298,7 @@ function extractCentralWavelength(
     | GmosSouthExecutionConfig
     | Flamingos2ExecutionConfig;
   if (!instrumentConfig) return undefined;
-  return instrumentConfig.acquisition?.nextAtom.steps[0].instrumentConfig.centralWavelength?.nanometers;
+  return instrumentConfig.acquisition?.nextAtom.steps[0]?.instrumentConfig.centralWavelength?.nanometers;
 }
 
 function firstIfOnlyOne<T>(arr: T[] | undefined): T | undefined {

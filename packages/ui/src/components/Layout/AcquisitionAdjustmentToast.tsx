@@ -42,6 +42,7 @@ export function AcquisitionAdjustmentToast() {
         toast?.remove(acquisitionAdjustmentToast);
       };
     }
+    return;
   }, [data, toast, alarmAudio]);
 
   return <></>;

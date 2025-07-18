@@ -52,5 +52,7 @@ export function displayName(user: User) {
       p.givenName ||
       user.profile.orcidId
     );
+  } else {
+    return undefined;
   }
 }

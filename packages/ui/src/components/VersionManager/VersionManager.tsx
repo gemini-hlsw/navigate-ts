@@ -48,6 +48,7 @@ export function VersionManager() {
         toast?.show(newVersionAlert);
         return () => toast?.remove(newVersionAlert);
       }
+      return;
     },
     [toast],
   );
