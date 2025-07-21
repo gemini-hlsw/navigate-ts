@@ -96,7 +96,7 @@ export const strategies = {
     down: { label: 'S', mod: minusVertical },
     right: { label: 'E', mod: plusHorizontal },
     left: { label: 'W', mod: minusHorizontal },
-    horizontal: 'Ra',
+    horizontal: 'RA',
     vertical: 'Dec',
     toInput: (coords: Coords) => ({
       equatorialAdjustment: {

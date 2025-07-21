@@ -1,9 +1,9 @@
-import { renderWithContext } from '@gql/render';
 import { page } from '@vitest/browser/context';
 
 import { odbTokenAtom } from '@/components/atoms/auth';
 import { slewVisibleAtom } from '@/components/atoms/slew';
 import { expiredJwt } from '@/test/helpers';
+import { renderWithContext } from '@/test/render';
 
 import { SlewFlags } from './SlewFlags';
 

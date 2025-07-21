@@ -2,12 +2,13 @@ import { GET_CONFIGURATION } from '@gql/configs/Configuration';
 import type { Target } from '@gql/configs/gen/graphql';
 import { GET_INSTRUMENT } from '@gql/configs/Instrument';
 import { GET_ROTATOR } from '@gql/configs/Rotator';
-import { renderWithContext } from '@gql/render';
 import { GET_INSTRUMENT_PORT } from '@gql/server/Instrument';
 import { NAVIGATE_STATE, NAVIGATE_STATE_SUBSCRIPTION } from '@gql/server/NavigateState';
 import { RESTORE_TARGET_MUTATION, SWAP_TARGET_MUTATION } from '@gql/server/TargetSwap';
 import type { MockedResponseOf } from '@gql/util';
 import type { RenderResult } from 'vitest-browser-react';
+
+import { renderWithContext } from '@/test/render';
 
 import { TargetSwapButton } from './TargetSwapButton';
 
