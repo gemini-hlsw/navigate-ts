@@ -45,7 +45,7 @@ export function Catalog() {
         obsTitle: selectedTarget.name,
         obsSubtitle: '',
         obsInstrument: selectedTarget.instrument,
-        obsReference: undefined,
+        obsReference: '',
       },
       async onCompleted() {
         setCatalogVisible(false);
