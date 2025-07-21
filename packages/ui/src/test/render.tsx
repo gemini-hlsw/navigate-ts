@@ -1,5 +1,7 @@
 import type { MockedResponse } from '@apollo/client/testing';
 import { MockedProvider } from '@apollo/client/testing';
+import { GET_SLEW_FLAGS } from '@gql/configs/SlewFlags';
+import type { MockedResponseOf } from '@gql/util';
 import type { WritableAtom } from 'jotai';
 import { createStore, Provider } from 'jotai';
 import { useHydrateAtoms } from 'jotai/utils';
@@ -9,9 +11,6 @@ import { render } from 'vitest-browser-react';
 
 import { odbTokenAtom } from '@/components/atoms/auth';
 import { longExpirationJwt } from '@/test/helpers';
-
-import { GET_SLEW_FLAGS } from './configs/SlewFlags';
-import type { MockedResponseOf } from './util';
 
 interface CreateOptions<T> {
   mocks?: MockedResponse[];

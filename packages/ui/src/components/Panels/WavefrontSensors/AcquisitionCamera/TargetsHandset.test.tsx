@@ -1,5 +1,4 @@
 import type { MockedResponse } from '@apollo/client/testing';
-import { renderWithContext } from '@gql/render';
 import {
   ABSORB_TARGET_ADJUSTMENT_MUTATION,
   ADJUST_TARGET_MUTATION,
@@ -8,6 +7,8 @@ import {
   TARGET_ADJUSTMENT_OFFSETS_SUBSCRIPTION,
 } from '@gql/server/TargetsHandset';
 import type { MockedResponseOf } from '@gql/util';
+
+import { renderWithContext } from '@/test/render';
 
 import TargetsHandset from './TargetsHandset';
 

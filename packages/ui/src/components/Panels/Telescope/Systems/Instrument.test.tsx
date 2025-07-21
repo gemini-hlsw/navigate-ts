@@ -1,13 +1,13 @@
 import type { MockedResponse } from '@apollo/client/testing';
 import { GET_CONFIGURATION } from '@gql/configs/Configuration';
 import { GET_INSTRUMENT, UPDATE_INSTRUMENT } from '@gql/configs/Instrument';
-import type { RenderResultWithStore } from '@gql/render';
-import { renderWithContext } from '@gql/render';
 import { GET_INSTRUMENT_PORT } from '@gql/server/Instrument';
 import type { MockedResponseOf } from '@gql/util';
 import { userEvent } from '@vitest/browser/context';
 
 import { importInstrumentAtom } from '@/components/atoms/instrument';
+import type { RenderResultWithStore } from '@/test/render';
+import { renderWithContext } from '@/test/render';
 
 import { Instrument } from './Instrument';
 

@@ -1,13 +1,13 @@
 import type { MockedResponse } from '@apollo/client/testing';
 import { GET_GUIDE_ALARMS, UPDATE_GUIDE_ALARM } from '@gql/configs/GuideAlarm';
-import type { RenderResultWithStore } from '@gql/render';
-import { renderWithContext } from '@gql/render';
 import { GUIDE_QUALITY_QUERY, GUIDE_QUALITY_SUBSCRIPTION } from '@gql/server/GuideQuality';
 import { GUIDE_STATE_QUERY, GUIDE_STATE_SUBSCRIPTION } from '@gql/server/GuideState';
 import type { MockedResponseOf } from '@gql/util';
 import { page, userEvent } from '@vitest/browser/context';
 
 import { guideAlarmSoundAtom } from '@/components/atoms/alarm';
+import type { RenderResultWithStore } from '@/test/render';
+import { renderWithContext } from '@/test/render';
 
 import { Alarms } from './Alarms';
 
