@@ -75,6 +75,7 @@ export default function AcquisitionCamera({ canEdit, ac }: { canEdit: boolean; a
                 disabled={!canEdit}
                 style={{ gridArea: 'g6' }}
                 icon={integrating ? <Stop /> : <Play />}
+                severity={integrating ? 'danger' : undefined}
                 aria-label={integrating ? 'Stop' : 'Start'}
                 tooltip={integrating ? 'Stop' : 'Start'}
                 onClick={onClick}

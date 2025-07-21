@@ -19,10 +19,17 @@ export function Footer() {
           onClick={() => setSlewVisible(true)}
         />
       </TitleDropdown>
-      <Slew className="btn-small" label="Slew Telescope" disabled={!canEdit} />
-      <Button disabled={!canEdit} className="btn-small" label="Apply Parameters" aria-label="Apply Parameters" />
+      <Slew label="Slew Telescope" disabled={!canEdit} />
+      <Button disabled={!canEdit} label="Apply Parameters" aria-label="Apply Parameters" />
       <div></div>
-      <Button disabled={!canEdit} className="btn-small p-button-danger right" label="Shutdown" aria-label="Shutdown" />
+      <Button
+        disabled={!canEdit}
+        severity="danger"
+        size="small"
+        className="right"
+        label="Shutdown"
+        aria-label="Shutdown"
+      />
     </div>
   );
 }

@@ -54,9 +54,9 @@ export function Target() {
   const footer = (
     <div className="modal-footer">
       <div className="right">
-        <Button className="" label="Update" onClick={updateObservation} />
+        <Button label="Update" onClick={updateObservation} />
         <Button
-          className="p-button-danger"
+          severity="danger"
           label="Cancel"
           onClick={() =>
             setTargetEdit({
