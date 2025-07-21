@@ -96,7 +96,7 @@ function OiwfsObserveButton({ freq, canEdit }: { freq: number; canEdit: boolean 
       disabled={!canEdit}
       style={{ gridArea: 'g13' }}
       icon={integrating ? <Stop /> : <Play />}
-      className={clsx(integrating && 'p-button-danger')}
+      severity={integrating ? 'danger' : undefined}
       aria-label={integrating ? 'Stop' : 'Start'}
       tooltip={integrating ? 'Stop' : 'Start'}
       onClick={onClick}

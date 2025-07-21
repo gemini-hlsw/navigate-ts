@@ -221,12 +221,11 @@ export function OdbImport() {
             !(canEdit && selectedObservation?.targetEnvironment?.firstScienceTarget?.name) ||
             !selectedObservation?.targetEnvironment?.firstScienceTarget?.name
           }
-          className=""
           label="Import to Navigate"
           loading={updateLoading}
           onClick={updateObs}
         />
-        <Button disabled={!canEdit} className="p-button-danger" label="Cancel" onClick={() => setOdbVisible(false)} />
+        <Button disabled={!canEdit} severity="danger" label="Cancel" onClick={() => setOdbVisible(false)} />
       </div>
     </div>
   );
