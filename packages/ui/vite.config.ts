@@ -114,6 +114,7 @@ export default defineConfig(({ mode }) => ({
     mode === 'production' && buildVersionFile,
   ],
   test: {
+    clearMocks: true,
     globals: true,
     setupFiles: ['src/gql/dev-messages.ts', 'vitest-browser-react'],
     browser: {
