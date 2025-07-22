@@ -42,10 +42,6 @@ export function App() {
     }
   }, [data?.serverConfiguration]);
 
-  if (loading) {
-    return <SolarProgress />;
-  }
-
   if (error) {
     return (
       <div className="error-container">
@@ -62,6 +58,10 @@ export function App() {
         />
       </div>
     );
+  }
+
+  if (loading) {
+    return <SolarProgress />;
   }
 
   return (
