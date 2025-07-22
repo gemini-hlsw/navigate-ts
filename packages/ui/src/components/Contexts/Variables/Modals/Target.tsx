@@ -35,8 +35,8 @@ export function Target() {
     }
   }, [targetEdit]);
 
-  function updateObservation() {
-    void updateTarget({
+  async function updateObservation() {
+    await updateTarget({
       variables: {
         ...auxTarget,
         coord1: auxTarget.ra ? auxTarget.ra.degrees : auxTarget.az?.degrees,

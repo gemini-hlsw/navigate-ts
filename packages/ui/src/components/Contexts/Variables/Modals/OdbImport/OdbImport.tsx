@@ -64,7 +64,7 @@ export function OdbImport() {
     wfsTargetsLoading ||
     resetInstrumentsLoading;
 
-  const updateObs = useCallback(() => {
+  const updateObs = useCallback(async () => {
     if (!selectedObservation) {
       toast?.show({
         severity: 'warn',
@@ -73,7 +73,7 @@ export function OdbImport() {
       });
       return;
     }
-    void updateConfiguration({
+    await updateConfiguration({
       variables: {
         ...(configuration as ConfigurationType),
         obsId: selectedObservation.id,

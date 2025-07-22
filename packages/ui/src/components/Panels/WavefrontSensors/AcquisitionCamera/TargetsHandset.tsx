@@ -57,16 +57,14 @@ export default function TargetsHandset({ canEdit }: { canEdit: boolean }) {
   const strategy = strategies[alignment];
 
   const handleApply = useCallback(
-    (coords: Coords) => {
-      const offsetInput = strategy.toInput(coords);
-      void adjustTarget({
+    (coords: Coords) =>
+      adjustTarget({
         variables: {
           target: selectedTarget,
-          offset: offsetInput,
+          offset: strategy.toInput(coords),
           openLoops,
         },
-      });
-    },
+      }),
     [adjustTarget, openLoops, selectedTarget, strategy],
   );
 
@@ -93,13 +91,13 @@ export default function TargetsHandset({ canEdit }: { canEdit: boolean }) {
             size="small"
             label="Reset"
             disabled={loading || !canEdit}
-            onClick={() => void resetOffset({ variables: { openLoops, target: selectedTarget } })}
+            onClick={() => resetOffset({ variables: { openLoops, target: selectedTarget } })}
           />
           <Button
             size="small"
             label="Absorb"
             disabled={loading || !canEdit}
-            onClick={() => void absorbOffset({ variables: { target: selectedTarget } })}
+            onClick={() => absorbOffset({ variables: { target: selectedTarget } })}
           />
         </ButtonGroup>
       </div>

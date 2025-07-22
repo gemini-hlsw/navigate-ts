@@ -5,7 +5,7 @@ import { useMemo } from 'react';
 import { graphql } from './gen';
 import type { Target } from './gen/graphql';
 
-const GET_TARGETS = graphql(`
+export const GET_TARGETS = graphql(`
   query getTargets {
     targets {
       pk

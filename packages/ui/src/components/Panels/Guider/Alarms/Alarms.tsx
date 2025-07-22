@@ -37,9 +37,7 @@ export function Alarms() {
   }, [alarms, guideQualities, guideState, toggleGuideAlarm]);
 
   const onUpdateAlarm = useCallback(
-    (variables: UpdateGuideAlarmMutationVariables) => {
-      void updateAlarm({ variables });
-    },
+    (variables: UpdateGuideAlarmMutationVariables) => updateAlarm({ variables }),
     [updateAlarm],
   );
 

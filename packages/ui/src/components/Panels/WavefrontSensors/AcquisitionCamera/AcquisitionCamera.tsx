@@ -24,8 +24,8 @@ export default function AcquisitionCamera({ canEdit, ac }: { canEdit: boolean; a
   const onClick = useCallback(
     () =>
       integrating
-        ? void stopObserve({})
-        : void startObserve({
+        ? stopObserve({})
+        : startObserve({
             variables: { period: { milliseconds: exp * 1000 } },
           }),
     [exp, integrating, startObserve, stopObserve],

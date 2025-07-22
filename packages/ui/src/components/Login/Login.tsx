@@ -27,13 +27,7 @@ export default function Login() {
               size="large"
             />
           </Link>
-          <Button
-            icon={<Astronaut />}
-            label="Continue as Guest"
-            size="large"
-            onClick={() => void guestLogin()}
-            outlined
-          />
+          <Button icon={<Astronaut />} label="Continue as Guest" size="large" onClick={guestLogin} outlined />
         </div>
       </div>
     </div>

@@ -14,6 +14,7 @@ import { useInstrumentPort } from '@gql/server/Instrument';
 import { useNavigateState } from '@gql/server/NavigateState';
 import { useRestoreTarget, useSwapTarget } from '@gql/server/TargetSwap';
 import { Button } from 'primereact/button';
+import { useCallback } from 'react';
 
 import { useCanEdit } from '@/components/atoms/auth';
 import { useToast } from '@/Helpers/toast';
@@ -73,7 +74,7 @@ export function TargetSwapButton({
   const label = data?.onSwappedTarget ? 'Point to Base' : 'Point to Guide Star';
   const severity = data?.onSwappedTarget ? 'danger' : undefined;
 
-  const onClick = () => {
+  const onClick = useCallback(async () => {
     if (selectedTarget?.id && instrument && rotator && oiSelected && acInst) {
       // TODO: other inputs for swap/nonswap
       const rotatorInput: RotatorTrackingInput = { ipa: { degrees: rotator.angle }, mode: rotator.tracking };
@@ -101,7 +102,7 @@ export function TargetSwapButton({
           wavelength: { nanometers: selectedTarget.wavelength },
         };
 
-        void restoreTarget({
+        await restoreTarget({
           variables: {
             config: {
               instrument: instrument.name as InstrumentName,
@@ -152,7 +153,7 @@ export function TargetSwapButton({
           // wavelength: {nanometers: } // <- ???
         };
 
-        void swapTarget({
+        await swapTarget({
           variables: {
             swapConfig: {
               acParams: instrumentInput,
@@ -183,7 +184,17 @@ export function TargetSwapButton({
         detail,
       });
     }
-  };
+  }, [
+    acInst,
+    data?.onSwappedTarget,
+    instrument,
+    oiSelected,
+    restoreTarget,
+    rotator,
+    selectedTarget,
+    swapTarget,
+    toast,
+  ]);
 
   return (
     <Button

@@ -31,6 +31,16 @@ export default config(
       'simple-import-sort/exports': 'error',
       'simple-import-sort/imports': 'error',
 
+      // Allow passing `() => Promise<void>` to a React prop that expects `() => void`. Mostly for Primereact
+      '@typescript-eslint/no-misused-promises': [
+        'error',
+        {
+          checksVoidReturn: {
+            attributes: false,
+          },
+        },
+      ],
+
       eqeqeq: 'error',
     },
     plugins: {

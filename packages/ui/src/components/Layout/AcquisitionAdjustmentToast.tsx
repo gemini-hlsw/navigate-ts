@@ -84,7 +84,7 @@ function AcquisitionAdjustmentPrompt({ state }: { state: AcquisitionAdjustmentSt
           severity="success"
           label="Accept"
           onClick={() =>
-            void adjustAcquisition({
+            adjustAcquisition({
               variables: {
                 input: {
                   ...input,
@@ -101,7 +101,7 @@ function AcquisitionAdjustmentPrompt({ state }: { state: AcquisitionAdjustmentSt
           severity="secondary"
           label="Cancel"
           onClick={() =>
-            void adjustAcquisition({
+            adjustAcquisition({
               variables: {
                 input: {
                   ...input,

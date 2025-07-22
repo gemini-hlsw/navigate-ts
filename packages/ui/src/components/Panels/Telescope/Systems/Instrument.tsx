@@ -58,9 +58,9 @@ export function Instrument({ canEdit }: { canEdit: boolean }) {
     [auxInstrument],
   );
 
-  const onClickSave = useCallback(() => {
+  const onClickSave = useCallback(async () => {
     if (auxInstrument && instrument)
-      void updateInstrument({
+      await updateInstrument({
         variables: {
           ...instrument,
           ...auxInstrument,

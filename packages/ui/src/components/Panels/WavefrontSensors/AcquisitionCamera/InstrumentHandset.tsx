@@ -37,15 +37,13 @@ export default function InstrumentHandset({ canEdit }: { canEdit: boolean }) {
   const strategy = strategies[alignment];
 
   const handleApply = useCallback(
-    (coords: Coords) => {
-      const offsetInput = strategy.toInput(coords);
-      void adjustOrigin({
+    async (coords: Coords) =>
+      adjustOrigin({
         variables: {
-          offset: offsetInput,
+          offset: strategy.toInput(coords),
           openLoops,
         },
-      });
-    },
+      }),
     [adjustOrigin, openLoops, strategy],
   );
 
@@ -74,9 +72,9 @@ export default function InstrumentHandset({ canEdit }: { canEdit: boolean }) {
             size="small"
             label="Reset"
             disabled={loading || !canEdit}
-            onClick={() => void resetAdjustment({ variables: { openLoops } })}
+            onClick={() => resetAdjustment({ variables: { openLoops } })}
           />
-          <Button size="small" label="Absorb" disabled={loading || !canEdit} onClick={() => void absorbAdjustment()} />
+          <Button size="small" label="Absorb" disabled={loading || !canEdit} onClick={() => absorbAdjustment()} />
         </ButtonGroup>
       </div>
 
