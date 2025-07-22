@@ -31,10 +31,7 @@ export default function PointingHandset({ canEdit }: { canEdit: boolean }) {
   const strategy = strategies[alignment];
 
   const handleApply = useCallback(
-    (coords: Coords) => {
-      const offsetInput = strategy.toInput(coords);
-      void adjustPointing({ variables: { offset: offsetInput } });
-    },
+    (coords: Coords) => adjustPointing({ variables: { offset: strategy.toInput(coords) } }),
     [adjustPointing, strategy],
   );
 
@@ -63,12 +60,7 @@ export default function PointingHandset({ canEdit }: { canEdit: boolean }) {
       />
       <div className="control-row buttons">
         <ButtonGroup>
-          <Button
-            size="small"
-            label="Reset"
-            onClick={() => void resetLocalAdjustment()}
-            disabled={loading || !canEdit}
-          />
+          <Button size="small" label="Reset" onClick={() => resetLocalAdjustment()} disabled={loading || !canEdit} />
         </ButtonGroup>
       </div>
       <Title title="Guide correction" />
@@ -81,13 +73,8 @@ export default function PointingHandset({ canEdit }: { canEdit: boolean }) {
       />
       <div className="control-row buttons">
         <ButtonGroup>
-          <Button
-            size="small"
-            label="Reset"
-            onClick={() => void resetGuideAdjustment()}
-            disabled={loading || !canEdit}
-          />
-          <Button size="small" label="Absorb" onClick={() => void absorbAdjustment()} disabled={loading || !canEdit} />
+          <Button size="small" label="Reset" onClick={() => resetGuideAdjustment()} disabled={loading || !canEdit} />
+          <Button size="small" label="Absorb" onClick={() => absorbAdjustment()} disabled={loading || !canEdit} />
         </ButtonGroup>
       </div>
     </div>

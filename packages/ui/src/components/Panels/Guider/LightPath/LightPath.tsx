@@ -82,7 +82,7 @@ export function LightPath() {
               loading={loading}
               disabled={disabled}
               label={label}
-              onClick={() => void onClick(label, from, to)}
+              onClick={() => onClick(label, from, to)}
             />
           );
         })}

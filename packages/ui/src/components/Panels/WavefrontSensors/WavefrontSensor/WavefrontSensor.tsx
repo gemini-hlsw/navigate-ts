@@ -83,8 +83,8 @@ function OiwfsObserveButton({ freq, canEdit }: { freq: number; canEdit: boolean 
   const onClick = useCallback(
     () =>
       integrating
-        ? void stopObserve({})
-        : void startObserve({
+        ? stopObserve({})
+        : startObserve({
             variables: { period: { milliseconds: (1 / freq) * 1000 } },
           }),
     [freq, integrating, startObserve, stopObserve],
@@ -134,7 +134,7 @@ function TakeSkyButton({ freq, wfs, canEdit }: { freq: number; wfs: GuideProbe; 
   const [takeSky, { loading: takeSkyLoading }] = useTakeSky();
 
   const onClick = useCallback(
-    () => void takeSky({ variables: { wfs, period: { milliseconds: (1 / freq) * 1000 } } }),
+    () => takeSky({ variables: { wfs, period: { milliseconds: (1 / freq) * 1000 } } }),
     [freq, takeSky, wfs],
   );
 

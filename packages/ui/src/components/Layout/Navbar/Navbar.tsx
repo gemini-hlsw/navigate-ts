@@ -95,7 +95,7 @@ export default function Navbar() {
           className="p-button-text nav-btn"
           buttonClassName={clsx(!user && 'menu-button-not-logged-in')}
           model={items}
-          onClick={() => (!user ? void navigateToSignIn() : undefined)}
+          onClick={() => (!user ? navigateToSignIn() : undefined)}
           dropdownIcon={<ChevronDown size="lg" />}
         ></SplitButton>
       </div>

@@ -22,9 +22,9 @@ export function Rotator({ canEdit }: { canEdit: boolean }) {
           value={rotator?.tracking}
           options={['TRACKING', 'FIXED']}
           loading={loading}
-          onChange={(e) => {
+          onChange={async (e) => {
             if (rotator)
-              void updateRotator({
+              await updateRotator({
                 variables: { pk: rotator.pk, tracking: e.target.value as TrackingType },
               });
           }}
@@ -36,9 +36,9 @@ export function Rotator({ canEdit }: { canEdit: boolean }) {
           value={rotator?.angle}
           minFractionDigits={2}
           maxFractionDigits={7}
-          onValueChange={(e) => {
+          onValueChange={async (e) => {
             if (rotator)
-              void updateRotator({
+              await updateRotator({
                 variables: { pk: rotator.pk, angle: e.target.value },
               });
           }}

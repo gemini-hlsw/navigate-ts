@@ -38,9 +38,9 @@ export function Configuration() {
   const [guideDisable, { loading: disableLoading }] = useGuideDisable();
 
   const modifyGuideLoop = useCallback(
-    <T extends keyof UpdateGuideLoopMutationVariables>(name: T, value: UpdateGuideLoopMutationVariables[T]) => {
+    async <T extends keyof UpdateGuideLoopMutationVariables>(name: T, value: UpdateGuideLoopMutationVariables[T]) => {
       if (state.pk)
-        void updateGuideLoop({
+        await updateGuideLoop({
           variables: {
             pk: state.pk,
             [name]: value,
@@ -91,7 +91,7 @@ export function Configuration() {
 
   useEffect(() => {
     if (m2ComaNotAllowed && state.m2ComaEnable) {
-      modifyGuideLoop('m2ComaEnable', false);
+      void modifyGuideLoop('m2ComaEnable', false);
     }
   }, [m2ComaNotAllowed, state.m2ComaEnable, modifyGuideLoop]);
 
@@ -268,7 +268,7 @@ export function Configuration() {
           <Button
             disabled={disabled || enableLoading || disableLoading}
             onClick={() =>
-              void guideEnable({
+              guideEnable({
                 variables: {
                   config: translateStateGuideInput(),
                 },
@@ -277,7 +277,7 @@ export function Configuration() {
           >
             Enable
           </Button>
-          <Button disabled={disabled || enableLoading || disableLoading} onClick={() => void guideDisable()}>
+          <Button disabled={disabled || enableLoading || disableLoading} onClick={() => guideDisable()}>
             Disable
           </Button>
         </div>

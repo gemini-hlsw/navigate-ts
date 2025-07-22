@@ -28,7 +28,7 @@ export function Catalog() {
 
   const updateLoading = updateConfigLoading || removeCreateLoading || targetsLoading || updateRotatorLoading;
 
-  function updateTarget() {
+  async function updateTarget() {
     if (!selectedTarget) {
       toast?.show({
         severity: 'warn',
@@ -38,7 +38,7 @@ export function Catalog() {
       return;
     }
 
-    void updateConfiguration({
+    await updateConfiguration({
       variables: {
         ...(configuration as ConfigurationType),
         obsId: selectedTarget.id,

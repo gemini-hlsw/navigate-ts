@@ -17,12 +17,12 @@ export function GeMS({ canEdit }: { canEdit: boolean }) {
   const state = useGemsInstrument().data?.gemsInstrument ?? ({} as GemsInstrumentType);
   const updateGemsInstrument = useUpdateGemsInstrument();
 
-  function modifyGemsInstrument<T extends keyof UpdateGemsInstrumentMutationVariables>(
+  async function modifyGemsInstrument<T extends keyof UpdateGemsInstrumentMutationVariables>(
     name: T,
     value: NonNullable<UpdateGemsInstrumentMutationVariables[T]>,
   ) {
     if (state.pk)
-      void updateGemsInstrument({
+      await updateGemsInstrument({
         variables: {
           pk: state.pk,
           [name]: value,
@@ -67,12 +67,12 @@ export function Altair({ canEdit }: { canEdit: boolean }) {
   const state = useAltairInstrument().data?.altairInstrument ?? ({} as AltairInstrumentType);
   const updateAltairInstrument = useUpdateAltairInstrument();
 
-  function modifyAltairInstrument<T extends keyof UpdateAltairInstrumentMutationVariables>(
+  async function modifyAltairInstrument<T extends keyof UpdateAltairInstrumentMutationVariables>(
     name: T,
     value: UpdateAltairInstrumentMutationVariables[T],
   ) {
     if (isNotNullish(value) && state.pk)
-      void updateAltairInstrument({
+      await updateAltairInstrument({
         variables: {
           pk: state.pk,
           [name]: value,

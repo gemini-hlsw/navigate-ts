@@ -44,7 +44,7 @@ function MutationButton<T extends DocumentNode>({
   });
 
   return (
-    <Button {...props} onClick={() => void mutationFunction({ variables })} loading={props.loading || loading}>
+    <Button {...props} onClick={() => mutationFunction({ variables })} loading={props.loading || loading}>
       {icons?.length && <span className="mutation-button-icons">{icons}</span>}
       <span className="p-button-label">{label}</span>
     </Button>
@@ -155,7 +155,7 @@ export function OiwfsPark(props: ButtonProps) {
 }
 
 // SLEW
-const SLEW_MUTATION = graphql(`
+export const SLEW_MUTATION = graphql(`
   mutation runSlew($slewOptions: SlewOptionsInput!, $config: TcsConfigInput!, $obsId: ObservationId) {
     slew(slewOptions: $slewOptions, config: $config, obsId: $obsId) {
       result

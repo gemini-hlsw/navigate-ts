@@ -15,12 +15,12 @@ export function Altair() {
   const state = data?.altairGuideLoop;
   const [updateAltairGuideLoop, { loading: updateLoading }] = useUpdateAltairGuideLoop();
 
-  function modifyAltairGuideLoop<T extends keyof UpdateAltairGuideLoopMutationVariables>(
+  async function modifyAltairGuideLoop<T extends keyof UpdateAltairGuideLoopMutationVariables>(
     name: T,
     value: NonNullable<UpdateAltairGuideLoopMutationVariables[T]>,
   ) {
     if (state)
-      void updateAltairGuideLoop({
+      await updateAltairGuideLoop({
         variables: {
           pk: state.pk,
           [name]: value,
@@ -123,12 +123,12 @@ export function GeMS() {
   const state = data?.gemsGuideLoop;
   const [updateGemsGuideLoop, { loading: updateLoading }] = useUpdateGemsGuideLoop();
 
-  function modifyGemsGuideLoop<T extends keyof UpdateGemsGuideLoopMutationVariables>(
+  async function modifyGemsGuideLoop<T extends keyof UpdateGemsGuideLoopMutationVariables>(
     name: T,
     value: NonNullable<UpdateGemsGuideLoopMutationVariables[T]>,
   ) {
     if (state)
-      void updateGemsGuideLoop({
+      await updateGemsGuideLoop({
         variables: {
           pk: state.pk,
           [name]: value,

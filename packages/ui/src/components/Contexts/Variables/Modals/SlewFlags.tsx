@@ -53,8 +53,8 @@ function SlewFlagInput<T extends keyof UpdateSlewFlagsMutationVariables>({
   const id = useId();
   const [updateSlewFlags, { loading: updateLoading }] = useUpdateSlewFlags();
 
-  function updateFlags() {
-    void updateSlewFlags({
+  async function updateFlags() {
+    await updateSlewFlags({
       variables: {
         pk: flags.pk,
         [flag]: !flags[flag],
