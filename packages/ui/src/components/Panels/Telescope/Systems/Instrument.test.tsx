@@ -123,7 +123,7 @@ const updateInstrumentMock = {
     query: UPDATE_INSTRUMENT,
   },
   variableMatcher: () => true,
-  result: vi.fn().mockImplementation(() => ({
+  result: vi.fn().mockReturnValue({
     data: {
       updateInstrument: {
         pk: 1,
@@ -138,5 +138,5 @@ const updateInstrumentMock = {
         extraParams: {},
       },
     },
-  })),
+  }),
 } satisfies MockedResponseOf<typeof UPDATE_INSTRUMENT>;

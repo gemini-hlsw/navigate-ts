@@ -65,7 +65,8 @@ export function CoordinatesInput({
       <div className="coordinates-buttons">
         <Button
           tooltip={up.label}
-          data-testid={up.label}
+          aria-label={up.label}
+          data-testid="UP"
           style={{ gridArea: 'gu' }}
           onClick={() => onChange(up.mod(offset))}
           className="coordinate-up"
@@ -74,7 +75,8 @@ export function CoordinatesInput({
         />
         <Button
           tooltip={left.label}
-          data-testid={left.label}
+          aria-label={left.label}
+          data-testid="LEFT"
           style={{ gridArea: 'gl' }}
           onClick={() => onChange(left.mod(offset))}
           className="coordinate-left"
@@ -83,7 +85,8 @@ export function CoordinatesInput({
         />
         <Button
           tooltip={right.label}
-          data-testid={right.label}
+          aria-label={right.label}
+          data-testid="RIGHT"
           style={{ gridArea: 'gr' }}
           onClick={() => onChange(right.mod(offset))}
           className="coordinate-right"
@@ -92,7 +95,8 @@ export function CoordinatesInput({
         />
         <Button
           tooltip={down.label}
-          data-testid={down.label}
+          aria-label={down.label}
+          data-testid="DOWN"
           style={{ gridArea: 'gd' }}
           onClick={() => onChange(down.mod(offset))}
           className="coordinate-down"
@@ -147,22 +151,23 @@ export function ManualInput({
 
   return (
     <div className="manual-input">
-      <label htmlFor="manual-input-second">{strategy.vertical}</label>
+      <label htmlFor="manual-input-horizontal">{strategy.horizontal}</label>
       <InputNumber
-        inputId="manual-input-second"
-        disabled={loading || !canEdit}
-        value={auxCoords.vertical}
-        maxFractionDigits={2}
-        onValueChange={(e) => setAuxCoords({ ...auxCoords, vertical: e.value! })}
-      />
-      <label htmlFor="manual-input-first">{strategy.horizontal}</label>
-      <InputNumber
-        inputId="manual-input-first"
+        inputId="manual-input-horizontal"
         disabled={loading || !canEdit}
         value={auxCoords.horizontal}
         maxFractionDigits={2}
         onValueChange={(e) => setAuxCoords({ ...auxCoords, horizontal: e.value! })}
       />
+      <label htmlFor="manual-input-vertical">{strategy.vertical}</label>
+      <InputNumber
+        inputId="manual-input-vertical"
+        disabled={loading || !canEdit}
+        value={auxCoords.vertical}
+        maxFractionDigits={2}
+        onValueChange={(e) => setAuxCoords({ ...auxCoords, vertical: e.value! })}
+      />
+
       <Button
         size="small"
         label="Apply"

@@ -24,7 +24,7 @@ describe(TargetSwapButton.name, () => {
         },
       );
       // wait for state to load
-      await expect.element(sut.getByRole('button')).toBeVisible();
+      await expect.element(sut.getByRole('button')).toBeEnabled();
     });
 
     it('should render', async () => {
@@ -49,7 +49,7 @@ describe(TargetSwapButton.name, () => {
         },
       );
       // wait for state to load
-      await expect.element(sut.getByRole('button')).toBeInTheDocument();
+      await expect.element(sut.getByRole('button')).toBeEnabled();
     });
 
     it('should restore target', async () => {
@@ -166,7 +166,7 @@ const mocks = [
         },
       },
     },
-    result: vi.fn().mockImplementation(() => ({ data: { swapTarget: { result: 'SUCCESS', msg: '' } } })),
+    result: vi.fn().mockReturnValue({ data: { swapTarget: { result: 'SUCCESS', msg: '' } } }),
   } satisfies MockedResponseOf<typeof SWAP_TARGET_MUTATION>,
   {
     request: {
@@ -210,7 +210,7 @@ const mocks = [
         },
       },
     },
-    result: vi.fn().mockImplementation(() => ({ data: { restoreTarget: { result: 'SUCCESS', msg: '' } } })),
+    result: vi.fn().mockReturnValue({ data: { restoreTarget: { result: 'SUCCESS', msg: '' } } }),
   } satisfies MockedResponseOf<typeof RESTORE_TARGET_MUTATION>,
   {
     request: {
@@ -241,11 +241,11 @@ const mocks = [
     request: { query: GET_INSTRUMENT_PORT },
     maxUsageCount: Infinity,
     variableMatcher: () => true,
-    result: vi.fn().mockImplementation(() => ({
+    result: vi.fn().mockReturnValue({
       data: {
         instrumentPort: 3,
       },
-    })),
+    }),
   } satisfies MockedResponseOf<typeof GET_INSTRUMENT_PORT>,
 ];
 

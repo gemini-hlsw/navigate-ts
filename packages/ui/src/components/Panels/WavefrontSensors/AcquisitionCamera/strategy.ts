@@ -1,4 +1,4 @@
-import type { HandsetAdjustmentInput } from '@gql/server/gen/graphql';
+import type { GuideProbe, HandsetAdjustmentInput } from '@gql/server/gen/graphql';
 
 import type { Alignment } from './Controls';
 
@@ -64,16 +64,16 @@ export const strategies = {
     }),
   },
   AC: {
-    up: { label: '-X', mod: minusVertical },
-    down: { label: '+X', mod: plusVertical },
-    right: { label: '+Y', mod: plusHorizontal },
-    left: { label: '-Y', mod: minusHorizontal },
-    horizontal: 'Y',
-    vertical: 'X',
+    up: { label: '-X', mod: minusHorizontal },
+    down: { label: '+X', mod: plusHorizontal },
+    right: { label: '+Y', mod: plusVertical },
+    left: { label: '-Y', mod: minusVertical },
+    horizontal: 'X',
+    vertical: 'Y',
     toInput: (coords: Coords) => ({
       focalPlaneAdjustment: {
-        deltaX: { arcseconds: coords.vertical },
-        deltaY: { arcseconds: coords.horizontal },
+        deltaX: { arcseconds: coords.horizontal },
+        deltaY: { arcseconds: coords.vertical },
       },
     }),
   },
@@ -94,8 +94,8 @@ export const strategies = {
   'RA/Dec': {
     up: { label: 'N', mod: plusVertical },
     down: { label: 'S', mod: minusVertical },
-    right: { label: 'E', mod: plusHorizontal },
-    left: { label: 'W', mod: minusHorizontal },
+    right: { label: 'W', mod: minusHorizontal },
+    left: { label: 'E', mod: plusHorizontal },
     horizontal: 'RA',
     vertical: 'Dec',
     toInput: (coords: Coords) => ({
@@ -105,50 +105,25 @@ export const strategies = {
       },
     }),
   },
-  PWFS1: {
-    up: { label: undefined, mod: plusVertical },
-    down: { label: undefined, mod: minusVertical },
-    right: { label: undefined, mod: plusHorizontal },
-    left: { label: undefined, mod: minusHorizontal },
-    horizontal: 'U',
-    vertical: 'V',
-    toInput: (coords) => ({
-      probeFrameAdjustment: {
-        probeFrame: 'PWFS_1',
-        deltaV: { arcseconds: coords.vertical },
-        deltaU: { arcseconds: coords.horizontal },
-      },
-    }),
-  },
-  PWFS2: {
-    up: { label: undefined, mod: plusVertical },
-    down: { label: undefined, mod: minusVertical },
-    right: { label: undefined, mod: plusHorizontal },
-    left: { label: undefined, mod: minusHorizontal },
-    horizontal: 'U',
-    vertical: 'V',
-    toInput: (coords) => ({
-      probeFrameAdjustment: {
-        probeFrame: 'PWFS_2',
-        deltaV: { arcseconds: coords.vertical },
-        deltaU: { arcseconds: coords.horizontal },
-      },
-    }),
-  },
-  OIWFS: {
-    up: { label: undefined, mod: plusVertical },
-    down: { label: undefined, mod: minusVertical },
-    right: { label: undefined, mod: plusHorizontal },
-    left: { label: undefined, mod: minusHorizontal },
-    horizontal: 'U',
-    vertical: 'V',
-    toInput: (coords) => ({
-      probeFrameAdjustment: {
-        // TODO: handle FLAMINGOS2_OIWFS?
-        probeFrame: 'GMOS_OIWFS',
-        deltaV: { arcseconds: coords.vertical },
-        deltaU: { arcseconds: coords.horizontal },
-      },
-    }),
-  },
+  PWFS1: wfsStrategy('PWFS_1'),
+  PWFS2: wfsStrategy('PWFS_2'),
+  OIWFS: wfsStrategy('GMOS_OIWFS'),
 } satisfies Record<Alignment, HandsetStrategy>;
+
+function wfsStrategy(probe: GuideProbe): HandsetStrategy {
+  return {
+    up: { label: undefined, mod: plusVertical },
+    down: { label: undefined, mod: minusVertical },
+    right: { label: undefined, mod: plusHorizontal },
+    left: { label: undefined, mod: minusHorizontal },
+    horizontal: 'u',
+    vertical: 'v',
+    toInput: (coords) => ({
+      probeFrameAdjustment: {
+        probeFrame: probe,
+        deltaV: { arcseconds: coords.vertical },
+        deltaU: { arcseconds: coords.horizontal },
+      },
+    }),
+  };
+}
