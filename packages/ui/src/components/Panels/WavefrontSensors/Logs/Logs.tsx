@@ -22,7 +22,7 @@ export default function Logs() {
         }}
       >
         <Column field="timestamp" header="Timestamp" className="text-small"></Column>
-        <Column field="message" header="Message" className="text-small"></Column>
+        <Column field="message" header="Message" className="log-message text-small"></Column>
       </DataTable>
     </div>
   );

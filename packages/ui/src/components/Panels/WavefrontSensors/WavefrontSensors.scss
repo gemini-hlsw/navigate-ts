@@ -242,6 +242,10 @@
         .error {
           background-color: var(--red-700);
         }
+
+        .log-message {
+          word-break: break-all;
+        }
       }
     }
   }
