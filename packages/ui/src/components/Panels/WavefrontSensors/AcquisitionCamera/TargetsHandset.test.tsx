@@ -233,7 +233,7 @@ describe(TargetsHandset.name, () => {
       'W',
       {
         deltaDec: { arcseconds: 0 },
-        deltaRA: { arcseconds: -0.5 },
+        deltaRA: { arcseconds: 0.5 },
       },
     ],
     [
@@ -241,7 +241,7 @@ describe(TargetsHandset.name, () => {
       'E',
       {
         deltaDec: { arcseconds: 0 },
-        deltaRA: { arcseconds: 0.5 },
+        deltaRA: { arcseconds: -0.5 },
       },
     ],
   ])('inputs for RA/Dec %s matches %s', async (testId, label, expectedInput) => {
