@@ -8,7 +8,7 @@ export function isNullish<T>(val: T | undefined | null): val is undefined | null
   return val === null || val === undefined;
 }
 
-export function getConfigWfs(configuration: GetConfigurationQuery['configuration'] | null | undefined) {
+export function getConfigWfs(configuration: Configuration | null | undefined): WfsType {
   const oiNull = isNullish(configuration?.selectedOiTarget);
   const p1Null = isNullish(configuration?.selectedP1Target);
   const p2Null = isNullish(configuration?.selectedP2Target);
