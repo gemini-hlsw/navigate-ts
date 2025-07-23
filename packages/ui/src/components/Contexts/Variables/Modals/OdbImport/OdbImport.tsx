@@ -169,11 +169,11 @@ export function OdbImport() {
           ]);
 
           // Set the first of each result as the selected target if there is only 1
-          const selectedOiTarget = firstIfOnlyOne(oi.data?.removeAndCreateWfsTargets)?.pk;
-          const selectedP1Target = firstIfOnlyOne(p1.data?.removeAndCreateWfsTargets)?.pk;
-          const selectedP2Target = firstIfOnlyOne(p2.data?.removeAndCreateWfsTargets)?.pk;
+          const selectedOiTarget = firstIfOnlyOne(oi.data?.removeAndCreateWfsTargets)?.pk ?? null;
+          const selectedP1Target = firstIfOnlyOne(p1.data?.removeAndCreateWfsTargets)?.pk ?? null;
+          const selectedP2Target = firstIfOnlyOne(p2.data?.removeAndCreateWfsTargets)?.pk ?? null;
 
-          if (configuration?.pk && (selectedOiTarget || selectedP1Target || selectedP2Target)) {
+          if (configuration?.pk) {
             await updateConfiguration({
               variables: { pk: configuration.pk, selectedOiTarget, selectedP1Target, selectedP2Target },
             });

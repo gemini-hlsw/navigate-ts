@@ -14,7 +14,7 @@ import type { ReactNode } from 'react';
 
 import { Crosshairs, CrosshairsSlash, Parking, ParkingSlash } from '@/components/Icons';
 import { BTN_CLASSES } from '@/Helpers/constants';
-import { isNullish } from '@/Helpers/functions';
+import { getConfigWfs, isNullish } from '@/Helpers/functions';
 import type { SetStale } from '@/Helpers/hooks';
 import type { SlewFlagsType } from '@/types';
 
@@ -185,7 +185,7 @@ export function Slew(props: ButtonProps) {
     variables: {
       name: configuration?.obsInstrument,
       issPort: instrumentPortData?.instrumentPort,
-      wfs: 'NONE',
+      wfs: getConfigWfs(configuration),
     },
   });
   const instrument = instrumentData?.instrument;
