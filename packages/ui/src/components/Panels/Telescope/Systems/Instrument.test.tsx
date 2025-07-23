@@ -15,7 +15,7 @@ describe(Instrument.name, () => {
   let sut: RenderResultWithStore;
   beforeEach(() => {
     sut = renderWithContext(<Instrument canEdit={true} />, {
-      mocks: [...mocks, updateInstrumentMock],
+      mocks: [...mocks, getInstrumentMock, updateInstrumentMock],
     });
   });
 
@@ -57,22 +57,15 @@ describe(Instrument.name, () => {
 
     expect(updateInstrumentMock.result).toHaveBeenCalledOnce();
   });
-});
-
-describe('instrument WFS', () => {
-  let sut: RenderResultWithStore;
-  beforeEach(() => {
-    sut = renderWithContext(<Instrument canEdit={true} />, {
-      mocks: [configWithOi, getInstrumentPortMock, getInstrumentMock],
-    });
-  });
 
   it('should query instrument using oiWfs', async () => {
     const originXInput = sut.getByLabelText('Origin X');
     await userEvent.clear(originXInput);
     await userEvent.type(originXInput, '0.2{Enter}');
+
     const saveButton = sut.getByRole('button');
     await expect.element(saveButton).toBeEnabled();
+
     expect(getInstrumentMock.variableMatcher).toHaveBeenCalledWith(expect.objectContaining({ wfs: 'OIWFS' }));
   });
 });
@@ -88,7 +81,7 @@ const mocks: MockedResponse[] = [
         configuration: {
           pk: 1,
           selectedTarget: 1,
-          selectedOiTarget: null,
+          selectedOiTarget: 3,
           selectedP1Target: null,
           selectedP2Target: null,
           oiGuidingType: 'NORMAL',
@@ -104,29 +97,6 @@ const mocks: MockedResponse[] = [
     },
   } satisfies MockedResponseOf<typeof GET_CONFIGURATION>,
   {
-    request: {
-      query: GET_INSTRUMENT,
-    },
-    maxUsageCount: 5,
-    variableMatcher: () => true,
-    result: {
-      data: {
-        instrument: {
-          pk: 1,
-          name: 'GMOS_NORTH',
-          iaa: 359.877,
-          issPort: 3,
-          focusOffset: 0,
-          wfs: 'NONE',
-          originX: 0.1,
-          originY: 0,
-          ao: false,
-          extraParams: {},
-        },
-      },
-    },
-  } satisfies MockedResponseOf<typeof GET_INSTRUMENT>,
-  {
     request: { query: GET_INSTRUMENT_PORT },
     maxUsageCount: Infinity,
     variableMatcher: () => true,
@@ -137,55 +107,6 @@ const mocks: MockedResponse[] = [
     },
   } satisfies MockedResponseOf<typeof GET_INSTRUMENT_PORT>,
 ];
-
-const updateInstrumentMock = {
-  request: {
-    query: UPDATE_INSTRUMENT,
-  },
-  variableMatcher: () => true,
-  result: vi.fn().mockReturnValue({
-    data: {
-      updateInstrument: {
-        pk: 1,
-        name: 'GMOS_NORTH',
-        iaa: 359.877,
-        issPort: 3,
-        focusOffset: 0,
-        wfs: 'NONE',
-        originX: 0.2,
-        originY: 0,
-        ao: false,
-        extraParams: {},
-      },
-    },
-  }),
-} satisfies MockedResponseOf<typeof UPDATE_INSTRUMENT>;
-
-const configWithOi = {
-  request: {
-    query: GET_CONFIGURATION,
-    variables: {},
-  },
-  result: vi.fn().mockReturnValue({
-    data: {
-      configuration: {
-        pk: 1,
-        selectedTarget: 1,
-        selectedOiTarget: 3,
-        selectedP1Target: null,
-        selectedP2Target: null,
-        oiGuidingType: 'NORMAL',
-        p1GuidingType: 'NORMAL',
-        p2GuidingType: 'NORMAL',
-        obsTitle: 'Feige 110',
-        obsId: 'o-2790',
-        obsInstrument: 'GMOS_NORTH',
-        obsSubtitle: null,
-        obsReference: 'G-2025A-ENG-GMOSN-01-0004',
-      },
-    },
-  }),
-} satisfies MockedResponseOf<typeof GET_CONFIGURATION>;
 
 const getInstrumentMock = {
   request: {
@@ -211,13 +132,25 @@ const getInstrumentMock = {
   },
 } satisfies MockedResponseOf<typeof GET_INSTRUMENT>;
 
-const getInstrumentPortMock = {
-  request: { query: GET_INSTRUMENT_PORT },
-  maxUsageCount: Infinity,
-  variableMatcher: () => true,
-  result: {
-    data: {
-      instrumentPort: 3,
-    },
+const updateInstrumentMock = {
+  request: {
+    query: UPDATE_INSTRUMENT,
   },
-} satisfies MockedResponseOf<typeof GET_INSTRUMENT_PORT>;
+  variableMatcher: () => true,
+  result: vi.fn().mockReturnValue({
+    data: {
+      updateInstrument: {
+        pk: 1,
+        name: 'GMOS_NORTH',
+        iaa: 359.877,
+        issPort: 3,
+        focusOffset: 0,
+        wfs: 'NONE',
+        originX: 0.2,
+        originY: 0,
+        ao: false,
+        extraParams: {},
+      },
+    },
+  }),
+} satisfies MockedResponseOf<typeof UPDATE_INSTRUMENT>;
