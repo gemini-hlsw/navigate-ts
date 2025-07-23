@@ -248,8 +248,8 @@ importers:
         specifier: 3.2.4
         version: 3.2.4(@types/node@22.16.5)(@vitest/browser@3.2.4)(jiti@2.4.2)(sass@1.89.2)(yaml@2.8.0)
       vitest-browser-react:
-        specifier: 1.0.0
-        version: 1.0.0(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(@vitest/browser@3.2.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(vitest@3.2.4)
+        specifier: 1.0.1
+        version: 1.0.1(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(@vitest/browser@3.2.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(vitest@3.2.4)
 
 packages:
 
@@ -4367,8 +4367,8 @@ packages:
       yaml:
         optional: true
 
-  vitest-browser-react@1.0.0:
-    resolution: {integrity: sha512-d8oHuCOxG6KL6j2LOgUbU5Jh5ljPIqGoy38Pey1Fzw7BTWxYNsztNFmxbGNrBVSMcRcctDZXBSsgPIl9PLcD8Q==}
+  vitest-browser-react@1.0.1:
+    resolution: {integrity: sha512-LqiGFCdknrbMoSDWXTCTrPsED3SvdIXIgYOOZyYUNj2dkJusW2eF6NENOlBlxwq+FBQqzNK1X59b+b03pXFpAQ==}
     engines: {node: ^18.0.0 || ^20.0.0 || >=22.0.0}
     peerDependencies:
       '@types/react': ^18.0.0 || ^19.0.0
@@ -9161,7 +9161,7 @@ snapshots:
       sass: 1.89.2
       yaml: 2.8.0
 
-  vitest-browser-react@1.0.0(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(@vitest/browser@3.2.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(vitest@3.2.4):
+  vitest-browser-react@1.0.1(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(@vitest/browser@3.2.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(vitest@3.2.4):
     dependencies:
       '@vitest/browser': 3.2.4(playwright@1.54.1)(vite@7.0.5(@types/node@22.16.5)(jiti@2.4.2)(sass@1.89.2)(yaml@2.8.0))(vitest@3.2.4)
       react: 19.1.0
