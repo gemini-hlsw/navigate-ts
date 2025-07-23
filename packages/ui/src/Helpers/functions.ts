@@ -1,4 +1,4 @@
-import type { GetConfigurationQuery } from '@gql/configs/gen/graphql';
+import type { Configuration, WfsType } from '@gql/configs/gen/graphql';
 
 export function isNotNullish<T>(val: T | undefined | null): val is T {
   return !isNullish(val);
