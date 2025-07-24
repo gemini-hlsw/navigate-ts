@@ -19,7 +19,7 @@ export default function AcquisitionCamera({ canEdit, ac }: { canEdit: boolean; a
 
   const integrating = guideStateData?.acIntegrating;
 
-  const [exp, setExp] = useState(1);
+  const [exp, setExp] = useState(0.01);
 
   const onClick = useCallback(
     () =>
