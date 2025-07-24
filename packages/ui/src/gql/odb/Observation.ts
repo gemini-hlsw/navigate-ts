@@ -5,57 +5,58 @@ import { graphql } from './gen';
 
 const GET_OBSERVATIONS_BY_STATE = graphql(`
   query getObservationsByState($states: [ObservationWorkflowState!]!, $site: Site!, $date: Date!) {
-    observationsByWorkflowState(
-      states: $states
+    observations(
       WHERE: {
-        site: { EQ: $site }
+        workflow: { workflowState: { IN: $states } }
         program: { AND: [{ activeStart: { LTE: $date } }, { activeEnd: { GTE: $date } }] }
         reference: { IS_NULL: false }
       }
     ) {
-      id
-      existence
-      title
-      subtitle
-      instrument
-      reference {
-        label
-      }
-      program {
+      matches {
         id
         existence
-        name
-        pi {
-          user {
-            profile {
-              givenName
-              familyName
-            }
-          }
+        title
+        subtitle
+        instrument
+        reference {
+          label
         }
-      }
-      targetEnvironment {
-        firstScienceTarget {
+        program {
           id
           existence
           name
-          sidereal {
-            epoch
-            ra {
-              hms
-              degrees
-            }
-            dec {
-              dms
-              degrees
+          pi {
+            user {
+              profile {
+                givenName
+                familyName
+              }
             }
           }
-          sourceProfile {
-            point {
-              bandNormalized {
-                brightnesses {
-                  band
-                  value
+        }
+        targetEnvironment {
+          firstScienceTarget {
+            id
+            existence
+            name
+            sidereal {
+              epoch
+              ra {
+                hms
+                degrees
+              }
+              dec {
+                dms
+                degrees
+              }
+            }
+            sourceProfile {
+              point {
+                bandNormalized {
+                  brightnesses {
+                    band
+                    value
+                  }
                 }
               }
             }

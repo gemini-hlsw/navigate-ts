@@ -236,7 +236,7 @@ export function OdbImport() {
         <ObservationTable
           headerItems={header}
           loading={loading}
-          observations_list={data?.observationsByWorkflowState}
+          observations_list={data?.observations?.matches}
           selectedObservation={selectedObservation}
           setSelectedObservation={setSelectedObservation}
         />

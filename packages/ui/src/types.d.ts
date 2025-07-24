@@ -22,7 +22,7 @@ import type { RotatorTrackingMode as TrackingType } from '@gql/server/gen/graphq
 
 export type ThemeType = 'light' | 'dark';
 
-export type OdbObservationType = NonNullable<GetObservationsByStateQuery['observationsByWorkflowState'][number]>;
+export type OdbObservationType = NonNullable<GetObservationsByStateQuery['observations']['matches'][number]>;
 
 export type {
   AltairGuideLoopType,
