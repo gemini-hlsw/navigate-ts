@@ -17,7 +17,7 @@
     "build": "tsc -b",
     "start": "pnpm build && pnpm preview",
     "preview": "node --enable-source-maps ./dist/index.js",
-    "populate": "prisma migrate deploy && prisma db seed",
+    "populate": "prisma migrate reset --force",
     "dev": "node --env-file=.env --watch --enable-source-maps ./dist/index.js",
     "codegen": "graphql-codegen --config tasks/codegen.ts",
     "codegen:watch": "pnpm codegen --watch 'src/graphql/**/*.ts' --watch '../schema/src/*.graphql'",
