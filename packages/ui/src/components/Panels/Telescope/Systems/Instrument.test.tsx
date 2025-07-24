@@ -14,7 +14,9 @@ import { Instrument } from './Instrument';
 describe(Instrument.name, () => {
   let sut: RenderResultWithStore;
   beforeEach(() => {
-    sut = renderWithContext(<Instrument canEdit={true} />, { mocks: [...mocks, updateInstrumentMock] });
+    sut = renderWithContext(<Instrument canEdit={true} />, {
+      mocks: [...mocks, getInstrumentMock, updateInstrumentMock],
+    });
   });
 
   it('should render', async () => {
@@ -55,6 +57,17 @@ describe(Instrument.name, () => {
 
     expect(updateInstrumentMock.result).toHaveBeenCalledOnce();
   });
+
+  it('should query instrument using oiWfs', async () => {
+    const originXInput = sut.getByLabelText('Origin X');
+    await userEvent.clear(originXInput);
+    await userEvent.type(originXInput, '0.2{Enter}');
+
+    const saveButton = sut.getByRole('button');
+    await expect.element(saveButton).toBeEnabled();
+
+    expect(getInstrumentMock.variableMatcher).toHaveBeenCalledWith(expect.objectContaining({ wfs: 'OIWFS' }));
+  });
 });
 
 const mocks: MockedResponse[] = [
@@ -68,7 +81,7 @@ const mocks: MockedResponse[] = [
         configuration: {
           pk: 1,
           selectedTarget: 1,
-          selectedOiTarget: null,
+          selectedOiTarget: 3,
           selectedP1Target: null,
           selectedP2Target: null,
           oiGuidingType: 'NORMAL',
@@ -84,29 +97,6 @@ const mocks: MockedResponse[] = [
     },
   } satisfies MockedResponseOf<typeof GET_CONFIGURATION>,
   {
-    request: {
-      query: GET_INSTRUMENT,
-    },
-    maxUsageCount: 5,
-    variableMatcher: () => true,
-    result: {
-      data: {
-        instrument: {
-          pk: 1,
-          name: 'GMOS_NORTH',
-          iaa: 359.877,
-          issPort: 3,
-          focusOffset: 0,
-          wfs: 'NONE',
-          originX: 0.1,
-          originY: 0,
-          ao: false,
-          extraParams: {},
-        },
-      },
-    },
-  } satisfies MockedResponseOf<typeof GET_INSTRUMENT>,
-  {
     request: { query: GET_INSTRUMENT_PORT },
     maxUsageCount: Infinity,
     variableMatcher: () => true,
@@ -117,6 +107,30 @@ const mocks: MockedResponse[] = [
     },
   } satisfies MockedResponseOf<typeof GET_INSTRUMENT_PORT>,
 ];
+
+const getInstrumentMock = {
+  request: {
+    query: GET_INSTRUMENT,
+  },
+  maxUsageCount: 5,
+  variableMatcher: vi.fn().mockReturnValue(true),
+  result: {
+    data: {
+      instrument: {
+        pk: 1,
+        name: 'GMOS_NORTH',
+        iaa: 359.877,
+        issPort: 3,
+        focusOffset: 0,
+        wfs: 'OIWFS',
+        originX: 0.1,
+        originY: 0,
+        ao: false,
+        extraParams: {},
+      },
+    },
+  },
+} satisfies MockedResponseOf<typeof GET_INSTRUMENT>;
 
 const updateInstrumentMock = {
   request: {

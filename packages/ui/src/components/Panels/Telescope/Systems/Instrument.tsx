@@ -12,7 +12,7 @@ import { useCallback, useEffect, useId, useMemo, useState } from 'react';
 
 import { useSetImportInstrument } from '@/components/atoms/instrument';
 import { FloppyDisk, List } from '@/components/Icons';
-import { isNullish } from '@/Helpers/functions';
+import { getConfigWfs, isNullish } from '@/Helpers/functions';
 import type { InstrumentType } from '@/types';
 
 export function Instrument({ canEdit }: { canEdit: boolean }) {
@@ -33,7 +33,7 @@ export function Instrument({ canEdit }: { canEdit: boolean }) {
     variables: {
       name: configuration?.obsInstrument,
       issPort: portData?.instrumentPort,
-      wfs: 'NONE',
+      wfs: getConfigWfs(configuration),
     },
   });
 

@@ -17,6 +17,7 @@ import { Button } from 'primereact/button';
 import { useCallback } from 'react';
 
 import { useCanEdit } from '@/components/atoms/auth';
+import { getConfigWfs } from '@/Helpers/functions';
 import { useToast } from '@/Helpers/toast';
 
 export function TargetSwapButton({
@@ -47,7 +48,11 @@ export function TargetSwapButton({
 
   const { data: instrumentData, loading: instrumentLoading } = useInstrument({
     skip: isNullish(configuration?.obsInstrument) || isNullish(instrumentPortData?.instrumentPort),
-    variables: { name: configuration?.obsInstrument, issPort: instrumentPortData?.instrumentPort, wfs: 'NONE' },
+    variables: {
+      name: configuration?.obsInstrument,
+      issPort: instrumentPortData?.instrumentPort,
+      wfs: getConfigWfs(configuration),
+    },
   });
 
   const { data: acData, loading: acLoading } = useInstrument({
