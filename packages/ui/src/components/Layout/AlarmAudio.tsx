@@ -17,7 +17,7 @@ export function AlarmAudio() {
         alarmAudio
           .play()
           .then(() => clearInterval(AudioRetryInterval))
-          .catch((err) => {
+          .catch((err: unknown) => {
             console.log('waiting for user interaction to play first notification', err);
           });
       else {

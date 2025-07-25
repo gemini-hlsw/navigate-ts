@@ -63,7 +63,7 @@ export function TargetList({ targets, type }: { targets: TargetType[]; type?: Ty
 
   const displayTargets = targets.map((target: TargetType, index: number) => (
     <Target
-      key={`obsTarget-${target.pk}-${target.id}`}
+      key={`obsTarget-${target.pk ?? ''}-${target.id ?? ''}`}
       target={target}
       updateSelectedTarget={updateSelectedTarget}
       selectedTarget={selectedTarget}

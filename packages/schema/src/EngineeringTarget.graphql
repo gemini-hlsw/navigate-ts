@@ -4,20 +4,34 @@
 #import Instrument from "lucuma-schemas/odb"
 
 type EngineeringTarget {
-  pk: Int! # Primary Key
-  id: String # Target ID
-  name: String! # Name of the target
-  ra: RA # Right Ascention
-  az: Az # Azimuth
-  el: El # Elevation
-  dec: Dec # Declination
-  epoch: String # Epoch of target
-  type: TargetType! # FIXED | SCIENCE | BLINDOFFSET | PWFS1 | PWFS2 | OIWFS
-  wavelength: Int # Wavelength
-  instrument: Instrument! # Instrument name
-  rotatorMode: RotatorTrackingMode # Rotator type
-  rotatorAngle: Float # Rotator angle
-  createdAt: DateTime! # Datetime when it was created
+  "Primary Key"
+  pk: Int!
+  "Target ID"
+  id: String
+  "Name of the target"
+  name: String!
+  "Right Ascention"
+  ra: RA
+  "Azimuth"
+  az: Az
+  "Elevation"
+  el: El
+  "Declination"
+  dec: Dec
+  "Epoch of target"
+  epoch: String
+  "FIXED | SCIENCE | BLINDOFFSET | PWFS1 | PWFS2 | OIWFS"
+  type: TargetType!
+  "Wavelength"
+  wavelength: Int
+  "Instrument name"
+  instrument: Instrument!
+  "Rotator type"
+  rotatorMode: RotatorTrackingMode
+  "Rotator angle"
+  rotatorAngle: Float
+  "Datetime when it was created"
+  createdAt: DateTime!
 }
 
 type Query {

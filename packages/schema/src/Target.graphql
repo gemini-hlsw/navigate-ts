@@ -30,24 +30,34 @@ type El {
 }
 
 type Target {
-  pk: Int! # Primary Key
-  id: String # Target ID
-  name: String! # Name of the target
-  ra: RA # Right Ascention
-  az: Az # Azimuth
-  el: El # Elevation
-  dec: Dec # Declination
-  magnitude: Float # Magnitude of the target
-  band: String # Magnitude band
-  epoch: String! # Epoch of target
-  type: TargetType! # FIXED | SCIENCE | BLINDOFFSET | PWFS1 | PWFS2 | OIWFS
-  wavelength: Int # Wavelength
-  createdAt: DateTime! # Datetime when it was created
+  "Primary Key"
+  pk: Int!
+  "Target ID"
+  id: String
+  "Name of the target"
+  name: String!
+  "Right Ascension"
+  ra: RA
+  "Azimuth"
+  az: Az
+  "Elevation"
+  el: El
+  "Declination"
+  dec: Dec
+  "Magnitude of the target"
+  magnitude: Float
+  "Magnitude band"
+  band: String
+  "Epoch of target"
+  epoch: String!
+  "FIXED | SCIENCE | BLINDOFFSET | PWFS1 | PWFS2 | OIWFS"
+  type: TargetType!
+  "Wavelength"
+  wavelength: Int
+  "Datetime when it was created"
+  createdAt: DateTime!
 }
 
-# The "Query" type is special: it lists all of the available queries that
-# clients can execute, along with the return type for each. In this
-# case, the "books" query returns an array of zero or more Books (defined above).
 type Query {
   target(pk: Int, id: String, name: String): Target
   targets(type: TargetType): [Target!]!

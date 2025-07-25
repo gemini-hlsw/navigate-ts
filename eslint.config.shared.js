@@ -8,11 +8,12 @@ import { config, configs } from 'typescript-eslint';
 
 export default config(
   eslint.configs.recommended,
-  ...configs.recommendedTypeChecked,
   ...configs.stylisticTypeChecked,
+  ...configs.strictTypeChecked,
   flatConfigs.recommended,
   flatConfigs.typescript,
   {
+    files: ['**/*.ts', '**/*.tsx'],
     languageOptions: {
       parserOptions: {
         project: true,
@@ -24,9 +25,20 @@ export default config(
     rules: {
       '@typescript-eslint/consistent-type-imports': 'error',
       '@typescript-eslint/no-import-type-side-effects': 'error',
+      '@typescript-eslint/no-deprecated': 'error',
+      '@typescript-eslint/no-confusing-void-expression': 'off',
+      '@typescript-eslint/no-non-null-assertion': 'off',
+      '@typescript-eslint/restrict-template-expressions': [
+        'error',
+        {
+          allowBoolean: true,
+          allowNumber: true,
+          allowRegExp: true,
+        },
+      ],
+      '@typescript-eslint/no-unnecessary-condition': 'off',
 
       'import-x/newline-after-import': 'error',
-      'import-x/no-deprecated': 'error',
 
       'simple-import-sort/exports': 'error',
       'simple-import-sort/imports': 'error',
@@ -55,7 +67,7 @@ export default config(
     },
   },
   {
-    files: ['*.js', '*.config.{js,ts}', 'tasks/*.{js,ts}', '.husky/**/*.{js,ts}'],
+    files: ['*.js', '*.config.{js,ts}', 'tasks/*.{js,ts}', '.husky/**/*.{js,ts}', 'src/**/*.graphql'],
     ...configs.disableTypeChecked,
   },
   {

@@ -124,7 +124,8 @@ function createClient() {
         if (
           !('id' in responseObject && responseObject.id !== null) &&
           'pk' in responseObject &&
-          (typeof responseObject.pk === 'string' || typeof responseObject.pk === 'number')
+          (typeof responseObject.pk === 'string' || typeof responseObject.pk === 'number') &&
+          responseObject.__typename
         ) {
           return `${responseObject.__typename}:pk:${responseObject.pk}`;
         } else {

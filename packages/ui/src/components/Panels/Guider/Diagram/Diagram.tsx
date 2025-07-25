@@ -200,7 +200,7 @@ function Flow() {
         sourceNodes.splice(sourceNodes.length - 1, 0, sourceNodes.splice(pos, 1)[0]!);
       }
       sourceEdges.push({
-        id: `${state.m2ComaM1CorrectionsSource}-coma`,
+        id: `${state.m2ComaM1CorrectionsSource ?? ''}-coma`,
         source: state.m2ComaM1CorrectionsSource ?? '',
         target: 'coma',
         animated: isActive,
@@ -215,7 +215,7 @@ function Flow() {
         sourceNodes.splice(sourceNodes.length - 1, 0, sourceNodes.splice(pos, 1)[0]!);
       }
       sourceEdges.push({
-        id: `${state.m2ComaM1CorrectionsSource}-higho`,
+        id: `${state.m2ComaM1CorrectionsSource ?? ''}-higho`,
         source: state.m2ComaM1CorrectionsSource ?? '',
         target: 'higho',
         animated: isActive,

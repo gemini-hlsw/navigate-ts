@@ -12,7 +12,7 @@ export function Target({
   targetIndex = undefined,
 }: {
   target: TargetType;
-  updateSelectedTarget(this: void, target: number): void | Promise<void>;
+  updateSelectedTarget: (target: number) => void | Promise<void>;
   selectedTarget?: number | null;
   targetIndex?: number | undefined;
 }) {
@@ -57,11 +57,7 @@ export function Target({
 
   if (target.type === 'FIXED') {
     return (
-      <li
-        className={`${selectedTarget === target.pk ? 'selected-target' : ''}`}
-        key="science-target"
-        {...longPressEvent}
-      >
+      <li className={selectedTarget === target.pk ? 'selected-target' : ''} key="science-target" {...longPressEvent}>
         <div className="target-item-fixed">
           <span className="target-name" title={target.name ?? undefined}>
             {target.name}
@@ -75,11 +71,7 @@ export function Target({
     );
   } else {
     return (
-      <li
-        className={`${selectedTarget === target.pk ? 'selected-target' : ''}`}
-        key="science-target"
-        {...longPressEvent}
-      >
+      <li className={selectedTarget === target.pk ? 'selected-target' : ''} key="science-target" {...longPressEvent}>
         <div className="target-item">
           <span className="target-name" title={target.name ?? undefined}>
             {target.name}

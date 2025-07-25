@@ -8,7 +8,7 @@ export function useToast() {
   return useAtomValue(toastAtom);
 }
 
-export function ToastProvider({ children }: React.PropsWithChildren<unknown>) {
+export function ToastProvider({ children }: React.PropsWithChildren) {
   const ref = useRef<Toast>(null);
   const setToast = useSetAtom(toastAtom);
 

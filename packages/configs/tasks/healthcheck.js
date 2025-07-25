@@ -7,7 +7,7 @@ import { setTimeout } from 'node:timers/promises';
 const query = `#graphql
   query Version {
     version {
-      version
+      serverVersion
       databaseVersion
     }
   }
@@ -32,7 +32,7 @@ async function executeGraphql(retries = 3, sleepTime = 1000) {
 
     assert.strictEqual(json.errors, undefined);
 
-    assert.ok(json.data?.version?.version, 'Version not found');
+    assert.ok(json.data?.version?.serverVersion, 'Version not found');
     assert.ok(json.data?.version?.databaseVersion, 'Database version not found');
 
     console.log(`Success!`);

@@ -3,11 +3,8 @@ import { useResetInstruments } from '@gql/configs/Instrument';
 import { useRotator, useUpdateRotator } from '@gql/configs/Rotator';
 import { useRemoveAndCreateBaseTargets, useRemoveAndCreateWfsTargets } from '@gql/configs/Target';
 import type {
-  Flamingos2ExecutionConfig,
   GetCentralWavelengthQuery,
   GetGuideEnvironmentQuery,
-  GmosNorthExecutionConfig,
-  GmosSouthExecutionConfig,
   Instrument,
   SourceProfile,
 } from '@gql/odb/gen/graphql';
@@ -282,7 +279,7 @@ function extractCentralWavelength(
 ) {
   if (!instrument) return undefined;
 
-  const config = data?.observation?.execution.config;
+  const config = data?.executionConfig;
   if (!config) return undefined;
 
   // TODO: Add other instruments when odb supports them
@@ -301,10 +298,7 @@ function extractCentralWavelength(
       return undefined;
   }
 
-  const instrumentConfig = config[instrumentName] as
-    | GmosNorthExecutionConfig
-    | GmosSouthExecutionConfig
-    | Flamingos2ExecutionConfig;
+  const instrumentConfig = config[instrumentName];
   if (!instrumentConfig) return undefined;
   return instrumentConfig.acquisition?.nextAtom.steps[0]?.instrumentConfig.centralWavelength?.nanometers;
 }
