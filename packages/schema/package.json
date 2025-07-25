@@ -11,7 +11,9 @@
     "url": "git+https://github.com/gemini-hlsw/navigate-ts.git",
     "directory": "packages/schema"
   },
-  "scripts": {},
+  "scripts": {
+    "lint:eslint": "eslint ."
+  },
   "dependencies": {
     "lucuma-schemas": "catalog:",
     "navigate-server-schema": "catalog:"

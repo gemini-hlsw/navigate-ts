@@ -20,7 +20,8 @@ type Query {
 
 type Mutation {
   updateGuideLoop(
-    pk: Int! # Primary key
+    "Primary key"
+    pk: Int!
     m2TipTiltEnable: Boolean
     m2TipTiltSource: String
     m2FocusEnable: Boolean

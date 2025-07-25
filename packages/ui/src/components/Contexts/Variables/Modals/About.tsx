@@ -18,7 +18,7 @@ export function About() {
       : 'production';
 
   const onHide = useCallback(() => toggleAboutVisible(false), [toggleAboutVisible]);
-  const configsVersion = useConfigsVersion().data?.version.version;
+  const configsVersion = useConfigsVersion().data?.version.serverVersion;
   const serverVersion = useServerVersion().data?.serverVersion;
 
   return (

@@ -201,7 +201,7 @@ export function Slew(props: ButtonProps) {
     return (
       <Button
         {...props}
-        label={missing ? `${props.label} (No ${missing})` : props.label}
+        label={missing ? `${props.label ?? ''} (No ${missing})` : props.label}
         loading={loading}
         disabled={true}
       />

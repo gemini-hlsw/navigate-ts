@@ -9,16 +9,26 @@ enum WfsType {
 }
 
 type InstrumentConfig {
-  pk: Int! # Record primary key
-  name: Instrument! # Instrument name
-  iaa: Float! # Instrument Alignment Angle
-  issPort: Int! # Instrument Support Structure port
-  focusOffset: Float! # Focus offset
-  wfs: WfsType! # Asociated Wavefront Sensor
-  originX: Float! # Origin of instrument X position
-  originY: Float! # Origin of instrument Y position
-  ao: Boolean! # Adaptive Optics is being used?
-  extraParams: JSON! # Instrument dependent set of parameters
+  "Record primary key"
+  pk: Int!
+  "Instrument name"
+  name: Instrument!
+  "Instrument Alignment Angle"
+  iaa: Float!
+  "Instrument Support Structure port"
+  issPort: Int!
+  "Focus offset"
+  focusOffset: Float!
+  "Asociated Wavefront Sensor"
+  wfs: WfsType!
+  "Origin of instrument X position"
+  originX: Float!
+  "Origin of instrument Y position"
+  originY: Float!
+  "Adaptive Optics is being used?"
+  ao: Boolean!
+  "Instrument dependent set of parameters"
+  extraParams: JSON!
 }
 
 type DistinctInstrument {
@@ -29,9 +39,6 @@ type DistinctPort {
   issPort: Int!
 }
 
-# The "Query" type is special: it lists all of the available queries that
-# clients can execute, along with the return type for each. In this
-# case, the "books" query returns an array of zero or more Books (defined above).
 type Query {
   instrument(name: Instrument, issPort: Int, wfs: WfsType, extraParams: JSON): InstrumentConfig!
 
@@ -44,15 +51,24 @@ type Query {
 
 type Mutation {
   createInstrument(
-    name: Instrument! # Instrument name
-    iaa: Float # Instrument Alignment Angle
-    issPort: Int! # Instrument Support Structure port
-    focusOffset: Float # Focus offset
-    wfs: WfsType # Asociated Wavefront Sensor
-    originX: Float # Origin of instrument X position
-    originY: Float # Origin of instrument Y position
-    ao: Boolean # Adaptive Optics is being used?
-    extraParams: JSON # Instrument dependent set of parameters
+    "Instrument name"
+    name: Instrument!
+    "Instrument Alignment Angle"
+    iaa: Float
+    "Instrument Support Structure port"
+    issPort: Int!
+    "Focus offset"
+    focusOffset: Float
+    "Asociated Wavefront Sensor"
+    wfs: WfsType
+    "Origin of instrument X position"
+    originX: Float
+    "Origin of instrument Y position"
+    originY: Float
+    "Adaptive Optics is being used?"
+    ao: Boolean
+    "Instrument dependent set of parameters"
+    extraParams: JSON
   ): InstrumentConfig!
 
   updateInstrument(
@@ -68,6 +84,6 @@ type Mutation {
     extraParams: JSON
   ): InstrumentConfig!
 
-  # Reset the instruments to their default values
+  "Reset the instruments to their default values"
   resetInstruments(name: Instrument!): [InstrumentConfig!]!
 }

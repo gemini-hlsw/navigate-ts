@@ -40,12 +40,12 @@ export function SlewFlags() {
   );
 }
 
-function SlewFlagInput<T extends keyof UpdateSlewFlagsMutationVariables>({
+function SlewFlagInput({
   flag,
   label,
   flags,
 }: {
-  flag: T;
+  flag: keyof UpdateSlewFlagsMutationVariables;
   label: string;
   flags: SlewFlagsType;
 }) {

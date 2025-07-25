@@ -25,8 +25,8 @@ export function VersionManager() {
   const prevServerVersion = server.previousData?.serverVersion;
 
   const configs = useConfigsVersion({ pollInterval });
-  const configsVersion = configs.data?.version.version;
-  const prevConfigsVersion = configs.previousData?.version.version;
+  const configsVersion = configs.data?.version.serverVersion;
+  const prevConfigsVersion = configs.previousData?.version.serverVersion;
 
   const checkAndShowNewVersion = useCallback(
     (prevVersion: string | null | undefined, newVersion: string | null | undefined, serverName: string) => {

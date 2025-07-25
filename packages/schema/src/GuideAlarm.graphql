@@ -4,6 +4,8 @@ type GuideAlarm {
   enabled: Boolean!
 }
 
+# eslint-disable @graphql-eslint/naming-convention
+
 type GuideAlarms {
   OIWFS: GuideAlarm!
   PWFS1: GuideAlarm!

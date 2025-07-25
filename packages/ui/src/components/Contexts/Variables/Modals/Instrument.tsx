@@ -119,7 +119,7 @@ function InstrumentDetails({
   selectedPk,
 }: {
   instrument: InstrumentType;
-  setInstrument(this: void, _: InstrumentType): void;
+  setInstrument: (_: InstrumentType) => void;
   selectedPk: number | undefined;
 }) {
   return (

@@ -6,7 +6,7 @@ import { graphql } from './gen';
 export const GET_VERSION = graphql(`
   query version {
     version {
-      version
+      serverVersion
       databaseVersion
     }
   }

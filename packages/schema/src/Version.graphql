@@ -1,5 +1,5 @@
 type Version {
-  version: String!
+  serverVersion: String!
   databaseVersion: String!
 }
 

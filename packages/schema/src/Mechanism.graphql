@@ -51,7 +51,8 @@ type Query {
 
 type Mutation {
   updateMechanism(
-    pk: Int! # Primary key
+    "Primary key"
+    pk: Int!
     mcs: StatusType
     mcsPark: StatusType
     mcsUnwrap: StatusType
