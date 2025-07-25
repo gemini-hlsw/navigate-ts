@@ -30,7 +30,7 @@ export function useConfiguration() {
 
 const UPDATE_CONFIGURATION = graphql(`
   mutation updateConfiguration(
-    $pk: Int!
+    $pk: PosInt!
     $selectedTarget: Int
     $selectedOiTarget: Int
     $selectedP1Target: Int
@@ -39,7 +39,7 @@ const UPDATE_CONFIGURATION = graphql(`
     $p1GuidingType: GuidingType
     $p2GuidingType: GuidingType
     $obsTitle: String
-    $obsId: String
+    $obsId: ObservationId
     $obsInstrument: Instrument
     $obsSubtitle: String
     $obsReference: String

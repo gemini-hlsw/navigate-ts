@@ -1,5 +1,5 @@
-#import JSON from "./JSON.graphql"
-#import Instrument from "lucuma-schemas/odb"
+#import JSON from "./Scalars.graphql"
+#import Instrument, PosInt from "lucuma-schemas/odb"
 
 enum WfsType {
   NONE
@@ -10,7 +10,7 @@ enum WfsType {
 
 type InstrumentConfig {
   "Record primary key"
-  pk: Int!
+  pk: PosInt!
   "Instrument name"
   name: Instrument!
   "Instrument Alignment Angle"
@@ -72,7 +72,7 @@ type Mutation {
   ): InstrumentConfig!
 
   updateInstrument(
-    pk: Int!
+    pk: PosInt!
     name: Instrument
     iaa: Float
     issPort: Int

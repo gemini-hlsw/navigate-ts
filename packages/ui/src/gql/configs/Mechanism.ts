@@ -56,7 +56,7 @@ export function useMechanism(options: OptionsOf<typeof GET_MECHANISM> = {}) {
 
 const UPDATE_MECHANISM = graphql(`
   mutation updateMechanism(
-    $pk: Int!
+    $pk: PosInt!
     $mcs: StatusType
     $mcsPark: StatusType
     $mcsUnwrap: StatusType

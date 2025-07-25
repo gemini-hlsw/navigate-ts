@@ -1,5 +1,7 @@
+#import PosInt from "lucuma-schemas/odb"
+
 type AltairGuideLoop {
-  pk: Int!
+  pk: PosInt!
   aoEnabled: Boolean!
   oiBlend: Boolean!
   focus: Boolean!
@@ -16,7 +18,7 @@ type Query {
 
 type Mutation {
   updateAltairGuideLoop(
-    pk: Int!
+    pk: PosInt!
     aoEnabled: Boolean
     oiBlend: Boolean
     focus: Boolean

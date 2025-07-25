@@ -34,7 +34,7 @@ export function useSlewFlags() {
 
 const UPDATE_SLEW_FLAGS = graphql(`
   mutation updateSlewFlags(
-    $pk: Int!
+    $pk: PosInt!
     $zeroChopThrow: Boolean
     $zeroSourceOffset: Boolean
     $zeroSourceDiffTrack: Boolean

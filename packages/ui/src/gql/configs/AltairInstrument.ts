@@ -28,7 +28,7 @@ export function useAltairInstrument() {
 
 const UPDATE_ALTAIR_INSTRUMENT = graphql(`
   mutation updateAltairInstrument(
-    $pk: Int!
+    $pk: PosInt!
     $beamsplitter: String
     $startMagnitude: Float
     $seeing: Float

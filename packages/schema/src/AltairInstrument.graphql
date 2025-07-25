@@ -1,5 +1,7 @@
+#import PosInt from "lucuma-schemas/odb"
+
 type AltairInstrument {
-  pk: Int!
+  pk: PosInt!
   beamsplitter: String!
   startMagnitude: Float!
   seeing: Float!
@@ -19,7 +21,7 @@ type Query {
 type Mutation {
   updateAltairInstrument(
     "Primary key"
-    pk: Int!
+    pk: PosInt!
     beamsplitter: String
     startMagnitude: Float
     seeing: Float

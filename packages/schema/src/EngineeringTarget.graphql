@@ -1,11 +1,11 @@
-#import DateTime from "./DateTime.graphql"
+#import DateTime from "./Scalars.graphql"
 #import RA, Az, El, Dec, TargetType from "./Target.graphql"
 #import RotatorTrackingMode from 'navigate-server-schema/navigate.graphql'
-#import Instrument from "lucuma-schemas/odb"
+#import Instrument, PosInt from "lucuma-schemas/odb"
 
 type EngineeringTarget {
   "Primary Key"
-  pk: Int!
+  pk: PosInt!
   "Target ID"
   id: String
   "Name of the target"
@@ -35,7 +35,7 @@ type EngineeringTarget {
 }
 
 type Query {
-  engineeringTarget(pk: Int, id: String, name: String): EngineeringTarget
+  engineeringTarget(pk: PosInt, id: String, name: String): EngineeringTarget
   engineeringTargets(type: TargetType): [EngineeringTarget!]!
 }
 
@@ -56,7 +56,7 @@ type Mutation {
   ): EngineeringTarget!
 
   updateEngineeringTarget(
-    pk: Int!
+    pk: PosInt!
     id: String
     name: String
     coord1: Float

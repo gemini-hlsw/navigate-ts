@@ -58,8 +58,8 @@ export function useTargets() {
 
 const UPDATE_TARGET = graphql(`
   mutation updateTarget(
-    $pk: Int!
-    $id: String
+    $pk: PosInt!
+    $id: TargetId
     $name: String
     $coord1: Float
     $coord2: Float
@@ -120,7 +120,7 @@ export function useUpdateTarget() {
 
 const CREATE_TARGET = graphql(`
   mutation createTarget(
-    $id: String
+    $id: TargetId
     $name: String!
     $ra: Float
     $az: Float

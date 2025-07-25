@@ -24,7 +24,7 @@ export function useGetGemsGuideLoop() {
 
 const UPDATE_GEMS_GUIDE_LOOP = graphql(`
   mutation updateGemsGuideLoop(
-    $pk: Int!
+    $pk: PosInt!
     $aoEnabled: Boolean
     $focus: Boolean
     $rotation: Boolean

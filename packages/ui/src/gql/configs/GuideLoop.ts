@@ -30,7 +30,7 @@ export function useGetGuideLoop() {
 
 const UPDATE_GUIDE_LOOP = graphql(`
   mutation updateGuideLoop(
-    $pk: Int!
+    $pk: PosInt!
     $m2TipTiltEnable: Boolean
     $m2TipTiltSource: String
     $m2FocusEnable: Boolean

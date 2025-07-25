@@ -52,7 +52,7 @@ export function useEngineeringTargets() {
 
 const UPDATE_ENGINEERING_TARGET = graphql(`
   mutation updateEngineeringTarget(
-    $pk: Int!
+    $pk: PosInt!
     $id: String
     $name: String
     $coord1: Float

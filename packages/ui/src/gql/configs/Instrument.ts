@@ -83,7 +83,7 @@ export function useInstrument(options: OptionsOf<typeof GET_INSTRUMENT> = {}) {
 
 export const UPDATE_INSTRUMENT = graphql(`
   mutation updateInstrument(
-    $pk: Int!
+    $pk: PosInt!
     $name: Instrument
     $iaa: Float
     $issPort: Int

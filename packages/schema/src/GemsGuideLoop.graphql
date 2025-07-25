@@ -1,5 +1,7 @@
+#import PosInt from "lucuma-schemas/odb"
+
 type GemsGuideLoop {
-  pk: Int!
+  pk: PosInt!
   aoEnabled: Boolean!
   focus: Boolean!
   rotation: Boolean!
@@ -14,7 +16,7 @@ type Query {
 
 type Mutation {
   updateGemsGuideLoop(
-    pk: Int!
+    pk: PosInt!
     aoEnabled: Boolean
     focus: Boolean
     rotation: Boolean

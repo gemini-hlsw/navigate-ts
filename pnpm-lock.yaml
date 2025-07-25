@@ -17,8 +17,8 @@ catalogs:
       specifier: 16.11.0
       version: 16.11.0
     lucuma-core:
-      specifier: 0.137.1
-      version: 0.137.1
+      specifier: 0.137.4
+      version: 0.137.4
     lucuma-schemas:
       specifier: 0.149.0
       version: 0.149.0
@@ -101,7 +101,7 @@ importers:
         version: 1.24.2(graphql@16.11.0)
       lucuma-core:
         specifier: 'catalog:'
-        version: 0.137.1
+        version: 0.137.4
       navigate-schema:
         specifier: workspace:*
         version: link:../schema
@@ -207,7 +207,7 @@ importers:
         version: 2.12.5(@types/react@19.1.8)(react@19.1.0)
       lucuma-core:
         specifier: 'catalog:'
-        version: 0.137.1
+        version: 0.137.4
       lucuma-schemas:
         specifier: 'catalog:'
         version: 0.149.0
@@ -3276,8 +3276,8 @@ packages:
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==, tarball: https://registry.npmjs.org/lru-cache/-/lru-cache-5.1.1.tgz}
 
-  lucuma-core@0.137.1:
-    resolution: {integrity: sha512-pwXe+D+8B+pms+urAXSTKZGoow2aY+z165u/aIXEAY3T5E1mUzLbsEEEuUyTSfJceolFNI7baKccKoLivKhilg==, tarball: https://registry.npmjs.org/lucuma-core/-/lucuma-core-0.137.1.tgz}
+  lucuma-core@0.137.4:
+    resolution: {integrity: sha512-JMKYvrg9ZtzVSvkX2wH/oztueZGmLF9zSyBVA5tuadx/wI+g33/lJWyEB/kk7/S5JTMnYZjQSsNv5o5MPlaQiQ==, tarball: https://registry.npmjs.org/lucuma-core/-/lucuma-core-0.137.4.tgz}
 
   lucuma-schemas@0.149.0:
     resolution: {integrity: sha512-8PwU8MrKgBquUYLnU6vXOi9TzdXlk1SCmpFk18GW7uMfQSA67HlisjAnQOqmHNElTrPQlnlaS3e2vinKg8hEJg==, tarball: https://registry.npmjs.org/lucuma-schemas/-/lucuma-schemas-0.149.0.tgz}
@@ -8020,7 +8020,7 @@ snapshots:
     dependencies:
       yallist: 3.1.1
 
-  lucuma-core@0.137.1: {}
+  lucuma-core@0.137.4: {}
 
   lucuma-schemas@0.149.0: {}
 
