@@ -1,6 +1,8 @@
+#import PosInt from "lucuma-schemas/odb"
+
 type SlewFlags {
   "Record primary key"
-  pk: Int!
+  pk: PosInt!
   zeroChopThrow: Boolean!
   zeroSourceOffset: Boolean!
   zeroSourceDiffTrack: Boolean!
@@ -26,7 +28,7 @@ type Query {
 type Mutation {
   updateSlewFlags(
     "Primary key"
-    pk: Int!
+    pk: PosInt!
     zeroChopThrow: Boolean
     zeroSourceOffset: Boolean
     zeroSourceDiffTrack: Boolean

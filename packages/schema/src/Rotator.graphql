@@ -1,8 +1,9 @@
 #import RotatorTrackingMode from 'navigate-server-schema/navigate.graphql'
+#import PosInt from "lucuma-schemas/odb"
 
 type Rotator {
   "Record primary key"
-  pk: Int!
+  pk: PosInt!
   "Rotator angle"
   angle: Float!
   "Tracking mode"
@@ -16,7 +17,7 @@ type Query {
 type Mutation {
   updateRotator(
     "Primary key"
-    pk: Int!
+    pk: PosInt!
     "Rotator angle"
     angle: Float
     "Tracking mode"

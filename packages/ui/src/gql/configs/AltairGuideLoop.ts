@@ -26,7 +26,7 @@ export function useAltairGuideLoop() {
 
 const UPDATE_ALTAIR_GUIDE_LOOP = graphql(`
   mutation updateAltairGuideLoop(
-    $pk: Int!
+    $pk: PosInt!
     $aoEnabled: Boolean
     $oiBlend: Boolean
     $focus: Boolean

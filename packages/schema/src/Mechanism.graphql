@@ -1,3 +1,5 @@
+#import PosInt from "lucuma-schemas/odb"
+
 enum StatusType {
   PENDING
   ACTIVE
@@ -6,7 +8,7 @@ enum StatusType {
 }
 
 type Mechanism {
-  pk: Int!
+  pk: PosInt!
   mcs: StatusType!
   mcsPark: StatusType!
   mcsUnwrap: StatusType!
@@ -52,7 +54,7 @@ type Query {
 type Mutation {
   updateMechanism(
     "Primary key"
-    pk: Int!
+    pk: PosInt!
     mcs: StatusType
     mcsPark: StatusType
     mcsUnwrap: StatusType

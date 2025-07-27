@@ -1,11 +1,11 @@
-#import Instrument from 'lucuma-schemas/odb'
+#import Instrument, ObservationId, PosInt from 'lucuma-schemas/odb'
 
 enum GuidingType {
   NORMAL
 }
 
 type Configuration {
-  pk: Int!
+  pk: PosInt!
   selectedTarget: Int
   selectedOiTarget: Int
   selectedP1Target: Int
@@ -14,14 +14,14 @@ type Configuration {
   p1GuidingType: GuidingType!
   p2GuidingType: GuidingType!
   obsTitle: String
-  obsId: String
+  obsId: ObservationId
   obsInstrument: Instrument
   obsSubtitle: String
   obsReference: String
 }
 
 type Query {
-  configuration(pk: Int): Configuration
+  configuration(pk: PosInt): Configuration
 }
 
 type Mutation {
@@ -34,14 +34,14 @@ type Mutation {
     p1GuidingType: GuidingType!
     p2GuidingType: GuidingType!
     obsTitle: String
-    obsId: String
+    obsId: ObservationId
     obsInstrument: Instrument
     obsSubtitle: String
     obsReference: String
   ): Configuration!
 
   updateConfiguration(
-    pk: Int!
+    pk: PosInt!
     selectedTarget: Int
     selectedOiTarget: Int
     selectedP1Target: Int
@@ -50,7 +50,7 @@ type Mutation {
     p1GuidingType: GuidingType
     p2GuidingType: GuidingType
     obsTitle: String
-    obsId: String
+    obsId: ObservationId
     obsInstrument: Instrument
     obsSubtitle: String
     obsReference: String

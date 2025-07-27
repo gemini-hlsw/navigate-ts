@@ -1,10 +1,12 @@
+#import PosInt from "lucuma-schemas/odb"
+
 type User {
-  pk: Int!
+  pk: PosInt!
   name: String!
 }
 
 type Query {
-  user(pk: Int!): User
+  user(pk: PosInt!): User
   users: [User!]!
 }
 

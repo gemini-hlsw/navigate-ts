@@ -20,7 +20,7 @@ export function useGemsInstrument() {
 }
 
 const UPDATE_GEMS_INSTRUMENT = graphql(`
-  mutation updateGemsInstrument($pk: Int!, $beamsplitter: String, $adc: Boolean, $astrometricMode: String) {
+  mutation updateGemsInstrument($pk: PosInt!, $beamsplitter: String, $adc: Boolean, $astrometricMode: String) {
     updateGemsInstrument(pk: $pk, beamsplitter: $beamsplitter, adc: $adc, astrometricMode: $astrometricMode) {
       pk
       beamsplitter

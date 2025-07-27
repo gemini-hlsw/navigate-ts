@@ -1,5 +1,7 @@
+#import PosInt from "lucuma-schemas/odb"
+
 type GuideLoop {
-  pk: Int!
+  pk: PosInt!
   m2TipTiltEnable: Boolean!
   m2TipTiltSource: String!
   m2FocusEnable: Boolean!
@@ -21,7 +23,7 @@ type Query {
 type Mutation {
   updateGuideLoop(
     "Primary key"
-    pk: Int!
+    pk: PosInt!
     m2TipTiltEnable: Boolean
     m2TipTiltSource: String
     m2FocusEnable: Boolean

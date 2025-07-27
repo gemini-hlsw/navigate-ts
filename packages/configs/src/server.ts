@@ -1,7 +1,6 @@
 import { ApolloServer } from '@apollo/server';
 import { GraphQLFileLoader } from '@graphql-tools/graphql-file-loader';
 import { loadSchema } from '@graphql-tools/load';
-import { DateTimeResolver, JSONResolver } from 'graphql-scalars';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -16,6 +15,7 @@ import { GuideLoopResolver } from './graphql/resolvers/GuideLoop.js';
 import { InstrumentResolver } from './graphql/resolvers/Instrument.js';
 import { MechanismResolver } from './graphql/resolvers/Mechanism.js';
 import { RotatorResolver } from './graphql/resolvers/Rotator.js';
+import { ScalarResolvers } from './graphql/resolvers/Scalars.js';
 import { SlewFlagsResolver } from './graphql/resolvers/SlewFlags.js';
 import { TargetResolver } from './graphql/resolvers/Target.js';
 import { UserResolver } from './graphql/resolvers/User.js';
@@ -24,8 +24,7 @@ import type { Prisma } from './prisma/db.js';
 
 // Resolvers define how to fetch the types defined in your schema.
 const resolvers = {
-  DateTime: DateTimeResolver,
-  JSON: JSONResolver,
+  ...ScalarResolvers,
   Query: {
     ...AltairGuideLoopResolver.Query,
     ...AltairInstrumentResolver.Query,

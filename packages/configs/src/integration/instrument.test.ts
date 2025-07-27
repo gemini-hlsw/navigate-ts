@@ -11,7 +11,7 @@ await describe('Instrument', async () => {
   await it('updateInstrument mutation updates the instrument', async () => {
     await fixture.executeGraphql<MutationUpdateInstrumentArgs>({
       query: `#graphql
-        mutation updateInstrument($pk: Int!, $extraParams: JSON!) {
+        mutation updateInstrument($pk: PosInt!, $extraParams: JSON!) {
           updateInstrument(pk: $pk, extraParams: $extraParams) {
             pk
             extraParams

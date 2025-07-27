@@ -1,5 +1,7 @@
+#import PosInt from "lucuma-schemas/odb"
+
 type GemsInstrument {
-  pk: Int!
+  pk: PosInt!
   beamsplitter: String!
   adc: Boolean!
   astrometricMode: String!
@@ -10,5 +12,5 @@ type Query {
 }
 
 type Mutation {
-  updateGemsInstrument(pk: Int!, beamsplitter: String, adc: Boolean, astrometricMode: String): GemsInstrument!
+  updateGemsInstrument(pk: PosInt!, beamsplitter: String, adc: Boolean, astrometricMode: String): GemsInstrument!
 }
