@@ -4,6 +4,8 @@ import { parseObservationId, parseTargetId } from 'lucuma-core';
 
 import type { Resolvers } from '../gen/index.js';
 
+PositiveIntResolver.name = 'PosInt';
+
 export const ScalarResolvers: Resolvers = {
   DateTime: DateTimeResolver,
   JSON: JSONResolver,
