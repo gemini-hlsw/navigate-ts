@@ -41,7 +41,7 @@ export function Catalog() {
     await updateConfiguration({
       variables: {
         ...(configuration as ConfigurationType),
-        obsId: selectedTarget.id,
+        obsId: 'o-100',
         obsTitle: selectedTarget.name,
         obsSubtitle: '',
         obsInstrument: selectedTarget.instrument,
@@ -58,7 +58,7 @@ export function Catalog() {
           variables: {
             targets: [
               {
-                id: selectedTarget.id,
+                id: 't-100',
                 name: selectedTarget.name,
                 coord1: selectedTarget.type === 'FIXED' ? selectedTarget.az?.degrees : selectedTarget.ra?.degrees,
                 coord2: selectedTarget.type === 'FIXED' ? selectedTarget.el?.degrees : selectedTarget.dec?.degrees,
