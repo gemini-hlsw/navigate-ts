@@ -15,6 +15,7 @@
     "generate": "prisma generate",
     "prebuild": "pnpm generate && pnpm codegen",
     "build": "tsc -b",
+    "postbuild": "cp src/prisma/gen/*.node dist/prisma/gen/",
     "start": "pnpm build && pnpm preview",
     "preview": "node --enable-source-maps ./dist/index.js",
     "populate": "prisma migrate reset --force",
@@ -40,7 +41,7 @@
     "@graphql-codegen/typescript-resolvers": "4.5.1",
     "@parcel/watcher": "catalog:",
     "@testcontainers/postgresql": "11.4.0",
-    "@types/node": "22.16.5",
+    "@types/node": "catalog:",
     "execa": "9.6.0",
     "typescript": "catalog:"
   },

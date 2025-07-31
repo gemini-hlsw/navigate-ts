@@ -1,4 +1,4 @@
-import type { Prisma } from '../../../../gen/prisma/index.js';
+import type { Prisma } from '../../gen/client.js';
 
 export const INITIAL_GUIDE_LOOP: Prisma.GuideLoopCreateInput = {
   m2TipTiltEnable: true,

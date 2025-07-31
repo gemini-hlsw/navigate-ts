@@ -17,7 +17,7 @@ export default {
         useTypeImports: true,
         scalars: {
           DateTime: 'Date',
-          JSON: 'Record<string, unknown>',
+          JSON: 'any',
           PosInt: 'number',
 
           AttachmentId: 'string',
