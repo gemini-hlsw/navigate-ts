@@ -16,6 +16,10 @@
       "path": "packages/configs",
       "name": "configs",
     },
+    {
+      "path": "packages/e2e",
+      "name": "e2e",
+    },
   ],
   "extensions": {
     "recommendations": [
