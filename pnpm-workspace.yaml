@@ -9,6 +9,6 @@ catalog:
   lucuma-core: 0.138.0
   lucuma-schemas: 0.149.1
   navigate-server-schema: 0.1.0-20250718-e638d465
-  typescript: 5.8.3
+  typescript: 5.9.2
 
 injectWorkspacePackages: true
