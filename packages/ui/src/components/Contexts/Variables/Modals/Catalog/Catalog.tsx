@@ -46,6 +46,9 @@ export function Catalog() {
         obsSubtitle: '',
         obsInstrument: selectedTarget.instrument,
         obsReference: '',
+        selectedOiTarget: null,
+        selectedP1Target: null,
+        selectedP2Target: null,
       },
       async onCompleted() {
         setCatalogVisible(false);
