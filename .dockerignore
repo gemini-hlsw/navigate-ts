@@ -16,3 +16,4 @@ Dockerfile
 # Don't copy the UI project for configs build, saves some install time
 packages/ui
 .npmrc
+gen

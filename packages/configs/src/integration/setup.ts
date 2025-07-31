@@ -8,9 +8,9 @@ import type { Options } from 'execa';
 import { execa } from 'execa';
 import type { FormattedExecutionResult } from 'graphql';
 
-import { PrismaClient } from '../../gen/prisma/index.js';
 import type { Prisma } from '../prisma/db.js';
 import { extendPrisma } from '../prisma/extend.js';
+import { PrismaClient } from '../prisma/gen/client.js';
 import type { ApolloContext } from '../server.js';
 import { server } from '../server.js';
 
