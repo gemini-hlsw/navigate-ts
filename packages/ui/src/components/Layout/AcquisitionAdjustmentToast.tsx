@@ -4,6 +4,7 @@ import offsetsReceivedMp3 from '@assets/sounds/offsets-received.mp3';
 import offsetsReceivedWebm from '@assets/sounds/offsets-received.webm';
 import { useAcquisitionAdjustment, useAcquisitionAdjustmentState } from '@gql/server/AcquisitionAdjustment';
 import type { AcquisitionAdjustmentInput } from '@gql/server/gen/graphql';
+import { signedArcSeconds } from 'lucuma-core';
 import { Button } from 'primereact/button';
 import { ButtonGroup } from 'primereact/buttongroup';
 import type { ToastMessage } from 'primereact/toast';
@@ -71,10 +72,14 @@ function AcquisitionAdjustmentPrompt({ state }: { state: AcquisitionAdjustmentSt
   return (
     <div>
       <div className="acquisition-adjustment-prompt">
-        <span>P = {state.offset.p.arcseconds}</span>
-        <span>Q = {state.offset.q.arcseconds}</span>
-        <span>IPA = {state.ipa?.degrees ?? 'N/A'}</span>
-        <span>IAA = {state.iaa?.degrees ?? 'N/A'}</span>
+        <div>P:</div>
+        <div>{formatToFixed(signedArcSeconds(state.offset.p.arcseconds))}</div>
+        <div>Q:</div>
+        <div>{formatToFixed(signedArcSeconds(state.offset.q.arcseconds))}</div>
+        <div>IPA:</div>
+        <div>{state.ipa?.degrees ? formatToFixed(state.ipa.degrees) : 'N/A'}</div>
+        <div>IAA:</div>
+        <div>{state.iaa?.degrees ? formatToFixed(state.iaa.degrees) : 'N/A'}</div>
       </div>
       <ButtonGroup>
         <Button
@@ -114,4 +119,13 @@ function AcquisitionAdjustmentPrompt({ state }: { state: AcquisitionAdjustmentSt
       </ButtonGroup>
     </div>
   );
+}
+
+/**
+ * Formats value to 2 decimal places.
+ */
+function formatToFixed(value: number | string): string {
+  const digits = 2;
+  const num = typeof value === 'number' ? value : parseFloat(value);
+  return num.toFixed(digits);
 }

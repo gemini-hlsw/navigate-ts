@@ -60,8 +60,8 @@ export default function InstrumentHandset({ canEdit }: { canEdit: boolean }) {
       <OpenLoopsInput openLoops={openLoops} onChange={setOpenLoops} loading={loading} canEdit={canEdit} />
 
       <CurrentCoordinates
-        horizontal={offset?.deltaX.arcseconds as number}
-        vertical={offset?.deltaY.arcseconds as number}
+        horizontal={offset?.deltaX.arcseconds}
+        vertical={offset?.deltaY.arcseconds}
         horizontalLabel="X"
         verticalLabel="Y"
       />
