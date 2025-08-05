@@ -43,32 +43,40 @@ enum GuidingType {
 }
 
 model EngineeringTarget {
-  pk           Int           @id @default(autoincrement())
-  id           String?
-  name         String        @default("Test")
-  coord1       Float // RA or Az
-  coord2       Float // Dec or El
-  epoch        String?
-  type         TargetType    @default(FIXED)
-  wavelength   Int?
-  createdAt    DateTime      @default(now())
-  instrument   String
-  rotatorMode  TrackingType?
-  rotatorAngle Float?
+  pk             Int           @id @default(autoincrement())
+  id             String?
+  name           String        @default("Test")
+  coord1         Float // RA or Az
+  coord2         Float // Dec or El
+  pmRa           Float? // Proper Motion RA microArcsec/Year
+  pmDec          Float? // Proper Motion Dec microArcsec/Year
+  radialVelocity Float? // cm/s
+  parallax       Float? // microArcsec
+  epoch          String?
+  type           TargetType    @default(FIXED)
+  wavelength     Int?
+  createdAt      DateTime      @default(now())
+  instrument     String
+  rotatorMode    TrackingType?
+  rotatorAngle   Float?
 }
 
 model Target {
-  pk         Int        @id @default(autoincrement())
-  id         String?
-  name       String     @default("Test")
-  coord1     Float // RA or Az
-  coord2     Float // Dec or El
-  magnitude  Float? // Magnitude number (Brightness)
-  band       String? // Magnitude band
-  epoch      String     @default("J2000.000")
-  type       TargetType @default(SCIENCE) // FIXED | SCIENCE | BLINDOFFSET | OIWFS | PWFS1 | PWFS2
-  wavelength Int?
-  createdAt  DateTime   @default(now())
+  pk             Int        @id @default(autoincrement())
+  id             String?
+  name           String     @default("Test")
+  coord1         Float // RA or Az
+  coord2         Float // Dec or El
+  pmRa           Float? // Proper Motion RA microArcsec/Year
+  pmDec          Float? // Proper Motion Dec microArcsec/Year
+  radialVelocity Float? // cm/s
+  parallax       Float? // microArcsec
+  magnitude      Float? // Magnitude number (Brightness)
+  band           String? // Magnitude band
+  epoch          String     @default("J2000.000")
+  type           TargetType @default(SCIENCE)
+  wavelength     Int?
+  createdAt      DateTime   @default(now())
 }
 
 enum TargetType {
@@ -242,23 +250,3 @@ model GuideAlarm {
   limit   Int
   enabled Boolean @default(true)
 }
-
-// model pwfs1 {
-//   pk Int @id @default(autoincrement())
-//   filter String
-//   filterStop Float
-// }
-
-// model pwfs2 {
-//   pk Int @id @default(autoincrement())
-//   filter String
-//   filterStop Float
-// }
-
-// model acHr {
-//   pk Int @id @default(autoincrement())
-//   lens String
-//   filter String
-//   neuralDensity String
-//   roi String
-// }
