@@ -27,6 +27,12 @@ export const GET_TARGETS = graphql(`
         degrees
         dms
       }
+      properMotion {
+        ra
+        dec
+      }
+      radialVelocity
+      parallax
       magnitude
       band
       epoch
@@ -63,6 +69,10 @@ const UPDATE_TARGET = graphql(`
     $name: String
     $coord1: Float
     $coord2: Float
+    $pmRa: Float
+    $pmDec: Float
+    $radialVelocity: Float
+    $parallax: Float
     $magnitude: Float
     $band: String
     $epoch: String
@@ -75,6 +85,10 @@ const UPDATE_TARGET = graphql(`
       name: $name
       coord1: $coord1
       coord2: $coord2
+      pmRa: $pmRa
+      pmDec: $pmDec
+      radialVelocity: $radialVelocity
+      parallax: $parallax
       magnitude: $magnitude
       band: $band
       epoch: $epoch
@@ -100,6 +114,12 @@ const UPDATE_TARGET = graphql(`
         degrees
         dms
       }
+      properMotion {
+        ra
+        dec
+      }
+      radialVelocity
+      parallax
       magnitude
       band
       epoch
@@ -113,71 +133,6 @@ const UPDATE_TARGET = graphql(`
 export function useUpdateTarget() {
   const [mutationFunction] = useMutation(UPDATE_TARGET, {
     context: { clientName: 'navigateConfigs' },
-  });
-
-  return mutationFunction;
-}
-
-const CREATE_TARGET = graphql(`
-  mutation createTarget(
-    $id: TargetId
-    $name: String!
-    $ra: Float
-    $az: Float
-    $dec: Float
-    $el: Float
-    $magnitude: Float
-    $band: String
-    $epoch: String
-    $type: TargetType!
-    $wavelength: Int
-  ) {
-    createTarget(
-      id: $id
-      name: $name
-      ra: $ra
-      az: $az
-      dec: $dec
-      el: $el
-      magnitude: $magnitude
-      band: $band
-      epoch: $epoch
-      type: $type
-      wavelength: $wavelength
-    ) {
-      pk
-      id
-      name
-      ra {
-        degrees
-        hms
-      }
-      dec {
-        degrees
-        dms
-      }
-      az {
-        degrees
-        dms
-      }
-      el {
-        degrees
-        dms
-      }
-      magnitude
-      band
-      epoch
-      type
-      wavelength
-      createdAt
-    }
-  }
-`);
-
-export function useCreateTarget() {
-  const [mutationFunction] = useMutation(CREATE_TARGET, {
-    context: { clientName: 'navigateConfigs' },
-    refetchQueries: [GET_TARGETS],
   });
 
   return mutationFunction;
@@ -205,6 +160,12 @@ const REMOVE_AND_CREATE_BASE_TARGETS = graphql(`
         degrees
         dms
       }
+      properMotion {
+        ra
+        dec
+      }
+      radialVelocity
+      parallax
       magnitude
       band
       epoch
@@ -244,6 +205,12 @@ const REMOVE_AND_CREATE_WFS_TARGETS = graphql(`
         degrees
         dms
       }
+      properMotion {
+        ra
+        dec
+      }
+      radialVelocity
+      parallax
       magnitude
       band
       epoch

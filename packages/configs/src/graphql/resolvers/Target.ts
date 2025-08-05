@@ -19,20 +19,6 @@ export const TargetResolver: Resolvers = {
   },
 
   Mutation: {
-    createTarget: async (_parent, args, { prisma }) => {
-      if (args.type === 'FIXED') {
-        // Some logics depending on the input
-        delete Object.assign(args, { coord1: args.ra }).ra;
-        delete Object.assign(args, { coord2: args.dec }).dec;
-      } else {
-        delete Object.assign(args, { coord1: args.ra }).ra;
-        delete Object.assign(args, { coord2: args.dec }).dec;
-      }
-      return prisma.target.create({
-        data: args as typeof args & { coord1: number; coord2: number },
-      });
-    },
-
     updateTarget: async (_parent, args, { prisma }) => {
       return prisma.target.update({
         where: { pk: args.pk },

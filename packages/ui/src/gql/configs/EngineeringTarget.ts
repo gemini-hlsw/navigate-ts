@@ -26,6 +26,12 @@ const GET_ENGINEERING_TARGETS = graphql(`
         degrees
         dms
       }
+      properMotion {
+        ra
+        dec
+      }
+      radialVelocity
+      parallax
       epoch
       type
       wavelength
@@ -57,6 +63,10 @@ const UPDATE_ENGINEERING_TARGET = graphql(`
     $name: String
     $coord1: Float
     $coord2: Float
+    $pmRa: Float
+    $pmDec: Float
+    $radialVelocity: Float
+    $parallax: Float
     $epoch: String
     $type: TargetType
     $wavelength: Int
@@ -70,6 +80,10 @@ const UPDATE_ENGINEERING_TARGET = graphql(`
       name: $name
       coord1: $coord1
       coord2: $coord2
+      pmRa: $pmRa
+      pmDec: $pmDec
+      radialVelocity: $radialVelocity
+      parallax: $parallax
       epoch: $epoch
       type: $type
       wavelength: $wavelength
@@ -96,6 +110,12 @@ const UPDATE_ENGINEERING_TARGET = graphql(`
         degrees
         dms
       }
+      properMotion {
+        ra
+        dec
+      }
+      radialVelocity
+      parallax
       epoch
       type
       wavelength

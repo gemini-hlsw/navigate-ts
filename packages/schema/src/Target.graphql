@@ -20,6 +20,11 @@ type Dec {
   dms: String!
 }
 
+type ProperMotion {
+  ra: Float
+  dec: Float
+}
+
 type Az {
   degrees: Float!
   dms: String!
@@ -45,6 +50,12 @@ type Target {
   el: El
   "Declination"
   dec: Dec
+  "Proper Motions RA & Dec"
+  properMotion: ProperMotion
+  "Radial Velocity"
+  radialVelocity: Float
+  "Parallax"
+  parallax: Float
   "Magnitude of the target"
   magnitude: Float
   "Magnitude band"
@@ -69,6 +80,10 @@ input TargetInput {
   name: String
   coord1: Float
   coord2: Float
+  pmRa: Float
+  pmDec: Float
+  radialVelocity: Float
+  parallax: Float
   magnitude: Float
   band: String
   epoch: String
@@ -77,26 +92,16 @@ input TargetInput {
 }
 
 type Mutation {
-  createTarget(
-    id: TargetId
-    name: String!
-    ra: Float
-    az: Float
-    dec: Float
-    el: Float
-    magnitude: Float
-    band: String
-    epoch: String
-    type: TargetType!
-    wavelength: Int
-  ): Target!
-
   updateTarget(
     pk: PosInt!
     id: TargetId
     name: String
     coord1: Float
     coord2: Float
+    pmRa: Float
+    pmDec: Float
+    radialVelocity: Float
+    parallax: Float
     magnitude: Float
     band: String
     epoch: String

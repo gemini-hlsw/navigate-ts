@@ -61,6 +61,19 @@ export function extendPrisma(prisma: PrismaClient) {
             }
           },
         },
+        properMotion: {
+          needs: { type: true, pmRa: true, pmDec: true },
+          compute(target) {
+            if (target.type === 'FIXED') {
+              return undefined;
+            } else {
+              return {
+                ra: target.pmRa,
+                dec: target.pmDec,
+              };
+            }
+          },
+        },
       },
       engineeringTarget: {
         ra: {
@@ -112,6 +125,19 @@ export function extendPrisma(prisma: PrismaClient) {
               };
             } else {
               return undefined;
+            }
+          },
+        },
+        properMotion: {
+          needs: { type: true, pmRa: true, pmDec: true },
+          compute(target) {
+            if (target.type === 'FIXED') {
+              return undefined;
+            } else {
+              return {
+                ra: target.pmRa,
+                dec: target.pmDec,
+              };
             }
           },
         },

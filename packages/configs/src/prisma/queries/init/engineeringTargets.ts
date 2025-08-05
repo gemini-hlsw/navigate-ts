@@ -5,6 +5,10 @@ export const INITIAL_ENGINEERING_TARGETS: (Prisma.EngineeringTargetCreateInput &
   {
     coord1: 147.0,
     coord2: 89.9,
+    pmRa: null,
+    pmDec: null,
+    radialVelocity: null,
+    parallax: null,
     type: 'FIXED',
     name: 'Zenith',
     wavelength: 640.0,

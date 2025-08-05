@@ -55,8 +55,22 @@ describe(Slew.name, () => {
                 "dms": "-49:48:00.219525",
               },
               "epoch": "J2000.000",
+              "parallax": {
+                "microarcseconds": 789.123,
+              },
+              "properMotion": {
+                "dec": {
+                  "microarcsecondsPerYear": 654321,
+                },
+                "ra": {
+                  "microarcsecondsPerYear": 123456,
+                },
+              },
               "ra": {
                 "hms": "12:38:49.781122",
+              },
+              "radialVelocity": {
+                "centimetersPerSecond": 321.654,
               },
             },
             "wavelength": {
@@ -186,6 +200,12 @@ const getTargetsMock = {
           },
           az: null,
           el: null,
+          properMotion: {
+            ra: 123456,
+            dec: 654321,
+          },
+          parallax: 789.123,
+          radialVelocity: 321.654,
           magnitude: 13.792915,
           band: 'G',
           epoch: 'J2000.000',

@@ -1,5 +1,5 @@
 #import DateTime from "./Scalars.graphql"
-#import RA, Az, El, Dec, TargetType from "./Target.graphql"
+#import RA, Az, El, Dec, TargetType, ProperMotion from "./Target.graphql"
 #import RotatorTrackingMode from 'navigate-server-schema/navigate.graphql'
 #import Instrument, PosInt from "lucuma-schemas/odb"
 
@@ -18,6 +18,12 @@ type EngineeringTarget {
   el: El
   "Declination"
   dec: Dec
+  "Proper Motion RA & Dec"
+  properMotion: ProperMotion
+  "Radial Velocity"
+  radialVelocity: Float
+  "Parallax"
+  parallax: Float
   "Epoch of target"
   epoch: String
   "FIXED | SCIENCE | BLINDOFFSET | PWFS1 | PWFS2 | OIWFS"
@@ -47,6 +53,10 @@ type Mutation {
     az: Float
     dec: Float
     el: Float
+    pmRa: Float
+    pmDec: Float
+    radialVelocity: Float
+    parallax: Float
     epoch: String
     type: TargetType!
     instrument: Instrument!
@@ -61,6 +71,10 @@ type Mutation {
     name: String
     coord1: Float
     coord2: Float
+    pmRa: Float
+    pmDec: Float
+    radialVelocity: Float
+    parallax: Float
     epoch: String
     type: TargetType
     instrument: Instrument

@@ -231,6 +231,20 @@ export function Slew(props: ButtonProps) {
                 ra: { hms: selectedTarget?.ra?.hms },
                 dec: { dms: selectedTarget?.dec?.dms },
                 epoch: selectedTarget?.epoch,
+                properMotion: {
+                  ra: {
+                    microarcsecondsPerYear: selectedTarget.properMotion?.ra,
+                  },
+                  dec: {
+                    microarcsecondsPerYear: selectedTarget.properMotion?.dec,
+                  },
+                },
+                radialVelocity: {
+                  centimetersPerSecond: selectedTarget.radialVelocity,
+                },
+                parallax: {
+                  microarcseconds: selectedTarget.parallax,
+                },
               },
         azel:
           selectedTarget.type === 'FIXED'
@@ -251,6 +265,20 @@ export function Slew(props: ButtonProps) {
               ra: { hms: selectedOiTarget.ra?.hms },
               dec: { dms: selectedOiTarget.dec?.dms },
               epoch: selectedOiTarget.epoch,
+              properMotion: {
+                ra: {
+                  microarcsecondsPerYear: selectedOiTarget.properMotion?.ra,
+                },
+                dec: {
+                  microarcsecondsPerYear: selectedOiTarget.properMotion?.dec,
+                },
+              },
+              radialVelocity: {
+                centimetersPerSecond: selectedOiTarget.radialVelocity,
+              },
+              parallax: {
+                microarcseconds: selectedOiTarget.parallax,
+              },
             },
           },
           tracking: {

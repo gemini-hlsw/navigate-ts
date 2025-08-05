@@ -107,6 +107,16 @@ export function OdbImport() {
                   typeof selectedObservation.targetEnvironment?.firstScienceTarget?.sidereal?.dec.degrees === 'string'
                     ? parseFloat(selectedObservation.targetEnvironment?.firstScienceTarget?.sidereal?.dec.degrees)
                     : selectedObservation.targetEnvironment?.firstScienceTarget?.sidereal?.dec.degrees,
+                pmRa: selectedObservation.targetEnvironment?.firstScienceTarget?.sidereal?.properMotion?.ra
+                  .microarcsecondsPerYear,
+                pmDec:
+                  selectedObservation.targetEnvironment?.firstScienceTarget?.sidereal?.properMotion?.dec
+                    .microarcsecondsPerYear,
+                radialVelocity:
+                  selectedObservation.targetEnvironment?.firstScienceTarget?.sidereal?.radialVelocity
+                    ?.centimetersPerSecond,
+                parallax:
+                  selectedObservation.targetEnvironment?.firstScienceTarget?.sidereal?.parallax?.microarcseconds,
                 epoch: selectedObservation.targetEnvironment?.firstScienceTarget?.sidereal?.epoch,
                 magnitude: magnitude,
                 band: band,
@@ -255,6 +265,10 @@ function extractGuideTargets(data: GetGuideEnvironmentQuery | undefined) {
           typeof t.sidereal?.ra.degrees === 'string' ? parseFloat(t.sidereal?.ra.degrees) : t.sidereal?.ra.degrees,
         coord2:
           typeof t.sidereal?.dec.degrees === 'string' ? parseFloat(t.sidereal?.dec.degrees) : t.sidereal?.dec.degrees,
+        pmRa: t.sidereal?.properMotion?.ra.microarcsecondsPerYear,
+        pmDec: t.sidereal?.properMotion?.dec.microarcsecondsPerYear,
+        radialVelocity: t.sidereal?.radialVelocity?.centimetersPerSecond,
+        parallax: t.sidereal?.parallax?.microarcseconds,
         magnitude: magnitude,
         band: band,
       };

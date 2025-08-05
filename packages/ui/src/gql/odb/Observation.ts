@@ -53,6 +53,20 @@ const GET_OBSERVATIONS_BY_STATE = graphql(`
                 dms
                 degrees
               }
+              properMotion {
+                ra {
+                  microarcsecondsPerYear
+                }
+                dec {
+                  microarcsecondsPerYear
+                }
+              }
+              parallax {
+                microarcseconds
+              }
+              radialVelocity {
+                centimetersPerSecond
+              }
             }
             sourceProfile {
               point {
@@ -101,6 +115,20 @@ const GET_GUIDE_ENVIRONMENT = graphql(`
               dec {
                 dms
                 degrees
+              }
+              properMotion {
+                ra {
+                  microarcsecondsPerYear
+                }
+                dec {
+                  microarcsecondsPerYear
+                }
+              }
+              parallax {
+                microarcseconds
+              }
+              radialVelocity {
+                centimetersPerSecond
               }
             }
             sourceProfile {
