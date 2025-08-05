@@ -1,4 +1,5 @@
 import type { Configuration, WfsType } from '@gql/configs/gen/graphql';
+import { signedArcSeconds } from 'lucuma-core';
 
 export function isNotNullish<T>(val: T | undefined | null): val is T {
   return !isNullish(val);
@@ -23,4 +24,20 @@ export function getConfigWfs(configuration: Configuration | null | undefined): W
 
   // For now will return 'NONE' if any other case is detected.
   return 'NONE';
+}
+
+/**
+ * Format unsigned arcseconds of an angle to signed arcseconds, with two decimal places.
+ * If the value is nullish, it returns a default value.
+ */
+export function formatToSignedArcseconds(arcseconds: number | string | undefined | null, defaultValue = 'N/A'): string {
+  if (isNullish(arcseconds)) {
+    return defaultValue;
+  } else {
+    const num = typeof arcseconds === 'number' ? arcseconds : parseFloat(arcseconds);
+    if (isNaN(num)) {
+      return defaultValue;
+    }
+    return signedArcSeconds(num).toFixed(2);
+  }
 }

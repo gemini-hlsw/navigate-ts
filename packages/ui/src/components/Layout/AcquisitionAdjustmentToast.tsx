@@ -4,12 +4,12 @@ import offsetsReceivedMp3 from '@assets/sounds/offsets-received.mp3';
 import offsetsReceivedWebm from '@assets/sounds/offsets-received.webm';
 import { useAcquisitionAdjustment, useAcquisitionAdjustmentState } from '@gql/server/AcquisitionAdjustment';
 import type { AcquisitionAdjustmentInput } from '@gql/server/gen/graphql';
-import { signedArcSeconds } from 'lucuma-core';
 import { Button } from 'primereact/button';
 import { ButtonGroup } from 'primereact/buttongroup';
 import type { ToastMessage } from 'primereact/toast';
 import { useEffect } from 'react';
 
+import { formatToSignedArcseconds } from '@/Helpers/functions';
 import { useAudio } from '@/Helpers/hooks';
 import { useToast } from '@/Helpers/toast';
 
@@ -73,13 +73,13 @@ function AcquisitionAdjustmentPrompt({ state }: { state: AcquisitionAdjustmentSt
     <div>
       <div className="acquisition-adjustment-prompt">
         <div>P:</div>
-        <div>{formatToFixed(signedArcSeconds(state.offset.p.arcseconds))}</div>
+        <div>{formatToSignedArcseconds(state.offset.p.arcseconds)}</div>
         <div>Q:</div>
-        <div>{formatToFixed(signedArcSeconds(state.offset.q.arcseconds))}</div>
+        <div>{formatToSignedArcseconds(state.offset.q.arcseconds)}</div>
         <div>IPA:</div>
-        <div>{state.ipa?.degrees ? formatToFixed(state.ipa.degrees) : 'N/A'}</div>
+        <div>{formatToSignedArcseconds(state.ipa?.degrees)}</div>
         <div>IAA:</div>
-        <div>{state.iaa?.degrees ? formatToFixed(state.iaa.degrees) : 'N/A'}</div>
+        <div>{formatToSignedArcseconds(state.iaa?.degrees)}</div>
       </div>
       <ButtonGroup>
         <Button
@@ -119,13 +119,4 @@ function AcquisitionAdjustmentPrompt({ state }: { state: AcquisitionAdjustmentSt
       </ButtonGroup>
     </div>
   );
-}
-
-/**
- * Formats value to 2 decimal places.
- */
-function formatToFixed(value: number | string): string {
-  const digits = 2;
-  const num = typeof value === 'number' ? value : parseFloat(value);
-  return num.toFixed(digits);
 }
