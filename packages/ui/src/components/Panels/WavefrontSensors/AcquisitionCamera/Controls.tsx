@@ -7,6 +7,7 @@ import { Slider } from 'primereact/slider';
 import { useState } from 'react';
 
 import { CaretDown, CaretLeft, CaretRight, CaretUp } from '@/components/Icons';
+import { formatToSignedArcseconds } from '@/Helpers/functions';
 
 import type { Coords, HandsetStrategy } from './strategy';
 
@@ -198,7 +199,8 @@ export function CurrentCoordinates({
   const current = currentLabel ?? 'Current offset:';
   return (
     <div className="control-row">
-      <b>{current}</b> {horizontalLabel} {horizontal} {verticalLabel} {vertical}
+      <b>{current}</b> {horizontalLabel} {formatToSignedArcseconds(horizontal, '')} {verticalLabel}{' '}
+      {formatToSignedArcseconds(vertical, '')}
     </div>
   );
 }

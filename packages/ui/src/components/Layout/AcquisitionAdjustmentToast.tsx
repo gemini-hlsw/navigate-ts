@@ -9,6 +9,7 @@ import { ButtonGroup } from 'primereact/buttongroup';
 import type { ToastMessage } from 'primereact/toast';
 import { useEffect } from 'react';
 
+import { formatToSignedArcseconds } from '@/Helpers/functions';
 import { useAudio } from '@/Helpers/hooks';
 import { useToast } from '@/Helpers/toast';
 
@@ -71,10 +72,14 @@ function AcquisitionAdjustmentPrompt({ state }: { state: AcquisitionAdjustmentSt
   return (
     <div>
       <div className="acquisition-adjustment-prompt">
-        <span>P = {state.offset.p.arcseconds}</span>
-        <span>Q = {state.offset.q.arcseconds}</span>
-        <span>IPA = {state.ipa?.degrees ?? 'N/A'}</span>
-        <span>IAA = {state.iaa?.degrees ?? 'N/A'}</span>
+        <div>P:</div>
+        <div>{formatToSignedArcseconds(state.offset.p.arcseconds)}</div>
+        <div>Q:</div>
+        <div>{formatToSignedArcseconds(state.offset.q.arcseconds)}</div>
+        <div>IPA:</div>
+        <div>{formatToSignedArcseconds(state.ipa?.degrees)}</div>
+        <div>IAA:</div>
+        <div>{formatToSignedArcseconds(state.iaa?.degrees)}</div>
       </div>
       <ButtonGroup>
         <Button
