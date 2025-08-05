@@ -32,10 +32,10 @@ describe(Slew.name, () => {
             },
             "origin": {
               "x": {
-                "micrometers": 0,
+                "millimeters": 0,
               },
               "y": {
-                "micrometers": 0,
+                "millimeters": 0,
               },
             },
           },
