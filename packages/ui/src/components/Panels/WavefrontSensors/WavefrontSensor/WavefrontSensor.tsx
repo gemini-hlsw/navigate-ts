@@ -1,4 +1,5 @@
 import imgUrl from '@assets/underconstruction.png';
+import { useConfiguration } from '@gql/configs/Configuration';
 import type { GuideProbe } from '@gql/server/gen/graphql';
 import { useGuideState } from '@gql/server/GuideState';
 import { useOiwfsObserve, useOiwfsStopObserve, useTakeSky } from '@gql/server/WavefrontSensors';
@@ -6,7 +7,7 @@ import { clsx } from 'clsx';
 import { Button } from 'primereact/button';
 import { Checkbox } from 'primereact/checkbox';
 import { Dropdown } from 'primereact/dropdown';
-import { useCallback, useId, useState } from 'react';
+import { useCallback, useEffect, useId, useState } from 'react';
 
 import { Play, Stop } from '@/components/Icons';
 
@@ -20,20 +21,43 @@ export default function WavefrontSensor({
   className?: string;
 }) {
   const id = useId();
-  const [freq, setFreq] = useState(100);
+  const [freq, setFreq] = useState(200);
+  const [freqOptions, setFreqOptions] = useState([1, 2, 10, 20, 50, 100, 125, 200]);
+
+  const { data: configData, loading: configLoading } = useConfiguration();
+  const configuration = configData?.configuration;
+
+  useEffect(() => {
+    function checkFreqList(list: number[]) {
+      if (!list.includes(freq)) {
+        setFreq(200);
+      }
+      setFreqOptions(list);
+    }
+
+    if (!configuration?.obsInstrument) return;
+
+    if (configuration.obsInstrument.includes('GMOS')) {
+      checkFreqList([1, 2, 10, 20, 50, 100, 200]);
+    } else if (configuration.obsInstrument === 'FLAMINGOS2') {
+      checkFreqList([1, 2, 10, 20, 50, 125, 200]);
+    } else {
+      checkFreqList([1, 2, 10, 20, 50, 100, 125, 200]);
+    }
+  }, [configuration?.obsInstrument, freq]);
 
   let observeButton: React.ReactNode | undefined;
   let skyButton: React.ReactNode | undefined;
   if (wfs === 'OIWFS') {
-    observeButton = <OiwfsObserveButton freq={freq} canEdit={canEdit} />;
+    observeButton = <OiwfsObserveButton freq={freq} canEdit={canEdit && !configLoading} />;
     skyButton = <TakeSkyButton freq={freq} wfs="GMOS_OIWFS" canEdit={canEdit} />;
   } else if (wfs === 'PWFS1') {
     /* Show placeholder */
-    observeButton = <Pwfs1ObserveButton canEdit={canEdit} />;
+    observeButton = <Pwfs1ObserveButton canEdit={canEdit && !configLoading} />;
     skyButton = <TakeSkyButton freq={freq} wfs="PWFS_1" canEdit={canEdit} />;
   } else if (wfs === 'PWFS2') {
     /* Show placeholder */
-    observeButton = <Pwfs2ObserveButton canEdit={canEdit} />;
+    observeButton = <Pwfs2ObserveButton canEdit={canEdit && !configLoading} />;
     skyButton = <TakeSkyButton freq={freq} wfs="PWFS_2" canEdit={canEdit} />;
   }
 
@@ -44,14 +68,10 @@ export default function WavefrontSensor({
       <div className="controls">
         <span style={{ alignSelf: 'center', gridArea: 'g11' }}>Freq</span>
         <Dropdown
-          disabled={!canEdit}
+          disabled={!canEdit || configLoading}
           style={{ gridArea: 'g12' }}
           value={freq}
-          options={[
-            { label: '50', value: 50.0 },
-            { label: '100', value: 100.0 },
-            { label: '200', value: 200.0 },
-          ]}
+          options={freqOptions.map((f) => ({ label: f.toString(), value: f }))}
           onChange={(e) => setFreq(e.value as number)}
         />
         {observeButton}
