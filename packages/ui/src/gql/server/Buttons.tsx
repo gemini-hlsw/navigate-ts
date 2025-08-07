@@ -217,8 +217,8 @@ export function Slew(props: ButtonProps) {
         focusOffset: { micrometers: instrument.focusOffset },
         agName: instrument.name,
         origin: {
-          x: { millimeters: instrument.originX },
-          y: { millimeters: instrument.originY },
+          x: { arcseconds: instrument.originX },
+          y: { arcseconds: instrument.originY },
         },
       },
       sourceATarget: {
