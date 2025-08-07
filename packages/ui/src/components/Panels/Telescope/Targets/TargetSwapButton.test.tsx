@@ -151,7 +151,7 @@ const mocks = [
             iaa: { degrees: 359.877 },
             focusOffset: { micrometers: 0 },
             agName: 'GMOS_SOUTH',
-            origin: { x: { micrometers: 0 }, y: { micrometers: 0 } },
+            origin: { x: { arcseconds: 0 }, y: { arcseconds: 0 } },
           },
           rotator: { ipa: { degrees: 0 }, mode: 'TRACKING' },
           guideTarget: {
@@ -178,7 +178,7 @@ const mocks = [
             iaa: { degrees: 359.877 },
             focusOffset: { micrometers: 0 },
             agName: 'GMOS_SOUTH',
-            origin: { x: { micrometers: 0 }, y: { micrometers: 0 } },
+            origin: { x: { arcseconds: 0 }, y: { arcseconds: 0 } },
           },
           rotator: { ipa: { degrees: 0 }, mode: 'TRACKING' },
           sourceATarget: {

@@ -91,7 +91,7 @@ export function TargetSwapButton({
           iaa: { degrees: instrument.iaa },
           focusOffset: { micrometers: instrument.focusOffset },
           agName: instrument.name,
-          origin: { x: { micrometers: instrument.originX }, y: { micrometers: instrument.originY } },
+          origin: { x: { arcseconds: instrument.originX }, y: { arcseconds: instrument.originY } },
         };
 
         // Use the science target
@@ -141,7 +141,7 @@ export function TargetSwapButton({
           iaa: { degrees: acInst.iaa },
           focusOffset: { micrometers: acInst.focusOffset },
           agName: acInst.name,
-          origin: { x: { micrometers: acInst.originX }, y: { micrometers: acInst.originY } },
+          origin: { x: { arcseconds: acInst.originX }, y: { arcseconds: acInst.originY } },
         };
 
         // Use Guide target if swapping
