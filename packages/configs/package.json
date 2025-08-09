@@ -40,7 +40,7 @@
     "@graphql-codegen/typescript": "4.1.6",
     "@graphql-codegen/typescript-resolvers": "4.5.1",
     "@parcel/watcher": "catalog:",
-    "@testcontainers/postgresql": "11.5.0",
+    "@testcontainers/postgresql": "11.5.1",
     "@types/node": "catalog:",
     "execa": "9.6.0",
     "typescript": "catalog:"
