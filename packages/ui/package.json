@@ -44,7 +44,7 @@
     "jotai": "2.12.5",
     "lucuma-core": "catalog:",
     "lucuma-schemas": "catalog:",
-    "lucuma-ui-css": "0.150.0",
+    "lucuma-ui-css": "0.153.1",
     "navigate-schema": "workspace:*",
     "navigate-server-schema": "catalog:",
     "playwright": "1.54.2",
