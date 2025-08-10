@@ -14,7 +14,7 @@ export const minusVertical: CoordsMod = (step) => ({
   vertical: -step,
 });
 export const plusHorizontal: CoordsMod = (step) => ({
-  horizontal: +step,
+  horizontal: step,
   vertical: 0,
 });
 export const minusHorizontal: CoordsMod = (step) => ({
@@ -23,7 +23,7 @@ export const minusHorizontal: CoordsMod = (step) => ({
 });
 export const plusVertical: CoordsMod = (step) => ({
   horizontal: 0,
-  vertical: +step,
+  vertical: step,
 });
 
 interface LabelledCoordsMod {
