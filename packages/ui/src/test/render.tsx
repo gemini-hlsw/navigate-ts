@@ -91,15 +91,18 @@ const mocks: MockedResponse[] = [
 // Some typescript magic here 🧙
 // Basically it allows the `initialValues` array to be type-safe with its values
 // Copied from an internal Jotai type
-type AnyWritableAtom = WritableAtom<unknown, never[], unknown>;
 
-type AtomTuples = (readonly [AnyWritableAtom, unknown])[];
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnyWritableAtom = WritableAtom<unknown, any[], unknown>;
+
+type AtomTuples = (readonly [AnyWritableAtom, ...unknown[]])[];
 
 type InferAtomTuples<T> = {
-  [K in keyof T]: T[K] extends readonly [infer A, unknown]
-    ? // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      A extends WritableAtom<unknown, infer Args, infer _Result>
-      ? readonly [A, Args[0]]
+  [K in keyof T]: T[K] extends readonly [infer A, ...infer Rest]
+    ? A extends WritableAtom<unknown, infer Args, unknown>
+      ? Rest extends Args
+        ? readonly [A, ...Rest]
+        : never
       : T[K]
     : never;
 };
