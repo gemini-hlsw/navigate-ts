@@ -16,6 +16,7 @@
     "configs": "pnpm --filter navigate-configs",
     "e2e": "pnpm --filter navigate-e2e",
     "all": "pnpm -r",
+    "build": "tsc -b",
     "lint": "pnpm lint:prettier && pnpm -r lint:eslint",
     "lint:prettier": "prettier --check .",
     "tsc:watch": "tsc --build --watch",
