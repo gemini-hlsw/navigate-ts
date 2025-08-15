@@ -37,11 +37,9 @@ export default defineConfig({
   ],
 
   /* Run your local dev server before starting the tests */
-  webServer: process.env.CI
-    ? undefined
-    : {
-        command: 'pnpm ui start',
-        url: 'https://navigate.lucuma.xyz:5173',
-        reuseExistingServer: true,
-      },
+  // webServer: {
+  //   command: 'cd ../ui && pnpm dev',
+  //   url: 'https://navigate.lucuma.xyz:5173',
+  //   reuseExistingServer: true,
+  // },
 });
