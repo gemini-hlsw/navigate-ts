@@ -35,7 +35,7 @@
     "@vitejs/plugin-react-swc": "4.0.0",
     "@vitest/browser": "3.2.4",
     "@vitest/coverage-v8": "3.2.4",
-    "@xyflow/react": "12.8.2",
+    "@xyflow/react": "12.8.3",
     "clsx": "2.1.1",
     "date-fns": "4.1.0",
     "eslint-plugin-react": "7.37.5",
