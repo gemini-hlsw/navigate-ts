@@ -28,12 +28,12 @@
     "@apollo/server": "5.0.0",
     "@graphql-tools/graphql-file-loader": "8.0.22",
     "@graphql-tools/load": "8.1.2",
-    "@prisma/client": "6.13.0",
+    "@prisma/client": "6.14.0",
     "graphql": "catalog:",
     "graphql-scalars": "1.24.2",
     "lucuma-core": "catalog:",
     "navigate-schema": "workspace:*",
-    "prisma": "6.13.0"
+    "prisma": "6.14.0"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "catalog:",
