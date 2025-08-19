@@ -4,10 +4,15 @@
   "main": "dist/index.js",
   "license": "BSD-3-Clause",
   "type": "module",
+  "private": true,
   "repository": {
     "type": "git",
     "url": "git+https://github.com/gemini-hlsw/navigate-ts.git",
     "directory": "packages/configs"
+  },
+  "exports": {
+    ".": "./dist/index.js",
+    "./db": "./dist/prisma/db.js"
   },
   "scripts": {
     "test": "pnpm test:integration",

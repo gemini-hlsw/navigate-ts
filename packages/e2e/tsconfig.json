@@ -7,5 +7,10 @@
     "exactOptionalPropertyTypes": false,
     "noPropertyAccessFromIndexSignature": false
   },
-  "include": ["tests", "playwright.config.ts"]
+  "include": ["tests", "playwright.config.ts"],
+  "references": [
+    {
+      "path": "../configs/tsconfig.json"
+    }
+  ]
 }

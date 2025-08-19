@@ -98,7 +98,7 @@ importers:
         version: 8.1.2(graphql@16.11.0)
       '@prisma/client':
         specifier: 6.14.0
-        version: 6.14.0(prisma@6.14.0(magicast@0.3.5)(typescript@5.9.2))(typescript@5.9.2)
+        version: 6.14.0(prisma@6.14.0(typescript@5.9.2))(typescript@5.9.2)
       graphql:
         specifier: 'catalog:'
         version: 16.11.0
@@ -148,6 +148,9 @@ importers:
       '@types/node':
         specifier: 'catalog:'
         version: 24.3.0
+      navigate-configs:
+        specifier: workspace:*
+        version: file:packages/configs(typescript@5.9.2)
 
   packages/schema:
     dependencies:
@@ -3426,6 +3429,12 @@ packages:
   natural-compare@1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==, tarball: https://registry.npmjs.org/natural-compare/-/natural-compare-1.4.0.tgz}
 
+  navigate-configs@file:packages/configs:
+    resolution: {directory: packages/configs, type: directory}
+
+  navigate-schema@file:packages/schema:
+    resolution: {directory: packages/schema, type: directory}
+
   navigate-server-schema@0.1.0-20250807-122d2878:
     resolution: {integrity: sha512-ZTSd9nDFPXoLYZn9gsCqIN5aOPdeC1U3OF9EKt48aHqUeMpycNrxV4RzuPAaUqCIuaIb9Go7s4IYsfyyrfNQsQ==, tarball: https://registry.npmjs.org/navigate-server-schema/-/navigate-server-schema-0.1.0-20250807-122d2878.tgz}
 
@@ -5736,7 +5745,7 @@ snapshots:
 
   '@polka/url@1.0.0-next.29': {}
 
-  '@prisma/client@6.14.0(prisma@6.14.0(magicast@0.3.5)(typescript@5.9.2))(typescript@5.9.2)':
+  '@prisma/client@6.14.0(prisma@6.14.0(typescript@5.9.2))(typescript@5.9.2)':
     optionalDependencies:
       prisma: 6.14.0(magicast@0.3.5)(typescript@5.9.2)
       typescript: 5.9.2
@@ -8184,6 +8193,27 @@ snapshots:
   napi-postinstall@0.3.3: {}
 
   natural-compare@1.4.0: {}
+
+  navigate-configs@file:packages/configs(typescript@5.9.2):
+    dependencies:
+      '@apollo/server': 5.0.0(graphql@16.11.0)
+      '@graphql-tools/graphql-file-loader': 8.0.22(graphql@16.11.0)
+      '@graphql-tools/load': 8.1.2(graphql@16.11.0)
+      '@prisma/client': 6.14.0(prisma@6.14.0(typescript@5.9.2))(typescript@5.9.2)
+      graphql: 16.11.0
+      graphql-scalars: 1.24.2(graphql@16.11.0)
+      lucuma-core: 0.141.3
+      navigate-schema: file:packages/schema
+      prisma: 6.14.0(magicast@0.3.5)(typescript@5.9.2)
+    transitivePeerDependencies:
+      - magicast
+      - supports-color
+      - typescript
+
+  navigate-schema@file:packages/schema:
+    dependencies:
+      lucuma-schemas: 0.156.2
+      navigate-server-schema: 0.1.0-20250807-122d2878
 
   navigate-server-schema@0.1.0-20250807-122d2878: {}
 

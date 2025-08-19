@@ -10,7 +10,8 @@
     "resolveJsonModule": true,
     "forceConsistentCasingInFileNames": true,
     "exactOptionalPropertyTypes": false,
-    "noPropertyAccessFromIndexSignature": false
+    "noPropertyAccessFromIndexSignature": false,
+    "composite": true
   },
   "include": ["src"]
 }
