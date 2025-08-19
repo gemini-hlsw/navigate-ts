@@ -45,9 +45,6 @@
     "execa": "9.6.0",
     "typescript": "catalog:"
   },
-  "prisma": {
-    "seed": "pnpm preview populate"
-  },
   "files": [
     "dist",
     "prisma",
