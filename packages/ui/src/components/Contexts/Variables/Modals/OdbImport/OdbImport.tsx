@@ -12,7 +12,7 @@ import { useGetCentralWavelength, useGetGuideEnvironment, useObservationsByState
 import { dateToLocalObservingNight } from 'lucuma-core';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 
 import { useCanEdit } from '@/components/atoms/auth';
 import { useServerConfigValue } from '@/components/atoms/config';
@@ -61,7 +61,7 @@ export function OdbImport() {
     wfsTargetsLoading ||
     resetInstrumentsLoading;
 
-  const updateObs = useCallback(async () => {
+  async function updateObs() {
     if (!selectedObservation) {
       toast?.show({
         severity: 'warn',
@@ -197,20 +197,7 @@ export function OdbImport() {
         setOdbVisible(false);
       },
     });
-  }, [
-    configuration,
-    getCentralWavelength,
-    getGuideEnvironment,
-    removeAndCreateBaseTargets,
-    removeAndCreateWfsTargets,
-    resetInstruments,
-    rotator,
-    selectedObservation,
-    setOdbVisible,
-    toast,
-    updateConfiguration,
-    updateRotator,
-  ]);
+  }
 
   const header = (
     <div className="header-item">

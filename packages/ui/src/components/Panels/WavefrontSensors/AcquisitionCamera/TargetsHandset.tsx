@@ -8,7 +8,7 @@ import {
 import { Button } from 'primereact/button';
 import { ButtonGroup } from 'primereact/buttongroup';
 import { Dropdown } from 'primereact/dropdown';
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 
 import type { Alignment } from './Controls';
 import { AlignmentSelector, Autoadjust, CurrentCoordinates, InputControls, OpenLoopsInput } from './Controls';
@@ -56,17 +56,14 @@ export default function TargetsHandset({ canEdit }: { canEdit: boolean }) {
   // Derived state
   const strategy = strategies[alignment];
 
-  const handleApply = useCallback(
-    (coords: Coords) =>
-      adjustTarget({
-        variables: {
-          target: selectedTarget,
-          offset: strategy.toInput(coords),
-          openLoops,
-        },
-      }),
-    [adjustTarget, openLoops, selectedTarget, strategy],
-  );
+  const handleApply = (coords: Coords) =>
+    adjustTarget({
+      variables: {
+        target: selectedTarget,
+        offset: strategy.toInput(coords),
+        openLoops,
+      },
+    });
 
   return (
     <div className="handset">

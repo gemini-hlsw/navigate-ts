@@ -1,7 +1,6 @@
 import { useVersion as useConfigsVersion } from '@gql/configs/Version';
 import { useVersion as useServerVersion } from '@gql/server/Version';
 import { Dialog } from 'primereact/dialog';
-import { useCallback } from 'react';
 
 import { useAboutVisible } from '@/components/atoms/about';
 import { useServerConfigValue } from '@/components/atoms/config';
@@ -17,7 +16,7 @@ export function About() {
       ? 'development'
       : 'production';
 
-  const onHide = useCallback(() => toggleAboutVisible(false), [toggleAboutVisible]);
+  const onHide = () => toggleAboutVisible(false);
   const configsVersion = useConfigsVersion().data?.version.serverVersion;
   const serverVersion = useServerVersion().data?.serverVersion;
 

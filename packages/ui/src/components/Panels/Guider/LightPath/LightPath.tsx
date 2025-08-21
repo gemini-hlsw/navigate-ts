@@ -4,7 +4,6 @@ import type { LightSink, LightSource } from '@gql/server/gen/graphql';
 import { useLightpathConfig } from '@gql/server/Lightpath';
 import { Title } from '@Shared/Title/Title';
 import { Button } from 'primereact/button';
-import { useCallback, useMemo } from 'react';
 
 import { useCanEdit } from '@/components/atoms/auth';
 import { Check } from '@/components/Icons';
@@ -31,44 +30,40 @@ export function LightPath() {
 
   const { data, loading: getLoading } = useGetGuideLoop();
   const [updateGuideLoop, { loading: updateLoading }] = useUpdateGuideLoop();
-  const state = useMemo(() => data?.guideLoop ?? ({} as Partial<GuideLoop>), [data?.guideLoop]);
+  const state = data?.guideLoop ?? ({} as Partial<GuideLoop>);
   const lightPath = state.lightPath;
 
   const [updateLightpathConfig, { loading: lightpathConfigLoading }] = useLightpathConfig();
 
-  const modifyGuideLoop = useCallback(
-    async <T extends keyof UpdateGuideLoopMutationVariables>(name: T, value: UpdateGuideLoopMutationVariables[T]) => {
-      if (state.pk)
-        await updateGuideLoop({
-          variables: {
-            pk: state.pk,
+  async function modifyGuideLoop<T extends keyof UpdateGuideLoopMutationVariables>(
+    name: T,
+    value: UpdateGuideLoopMutationVariables[T],
+  ) {
+    if (state.pk)
+      await updateGuideLoop({
+        variables: {
+          pk: state.pk,
+          [name]: value,
+        },
+        optimisticResponse: {
+          updateGuideLoop: {
+            ...(state as GuideLoop),
             [name]: value,
           },
-          optimisticResponse: {
-            updateGuideLoop: {
-              ...(state as GuideLoop),
-              [name]: value,
-            },
-          },
-        });
-    },
-    [state, updateGuideLoop],
-  );
-
+        },
+      });
+  }
   const disabled = !canEdit;
   const loading = getLoading || updateLoading || lightpathConfigLoading;
 
-  const onClick = useCallback(
-    async (newLightPath: string, from: LightSource, to: LightSink) => {
-      await Promise.all([
-        modifyGuideLoop('lightPath', newLightPath),
-        updateLightpathConfig({
-          variables: { from, to },
-        }),
-      ]);
-    },
-    [modifyGuideLoop, updateLightpathConfig],
-  );
+  async function onClick(newLightPath: string, from: LightSource, to: LightSink) {
+    await Promise.all([
+      modifyGuideLoop('lightPath', newLightPath),
+      updateLightpathConfig({
+        variables: { from, to },
+      }),
+    ]);
+  }
 
   return (
     <div className="light-path">

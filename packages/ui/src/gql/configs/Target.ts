@@ -48,18 +48,20 @@ export function useTargets() {
     context: { clientName: 'navigateConfigs' },
   });
 
-  const filteredData = useMemo(() => {
+  return useMemo(() => {
     const targets: Target[] = result.data?.targets ?? [];
-    return {
-      baseTargets: targets.filter(isBaseTarget),
-      oiTargets: targets.filter(isOiTarget),
-      p1Targets: targets.filter(isP1Target),
-      p2Targets: targets.filter(isP2Target),
-      allTargets: targets,
-    };
-  }, [result.data]);
 
-  return { ...result, data: filteredData };
+    return {
+      ...result,
+      data: {
+        baseTargets: targets.filter(isBaseTarget),
+        oiTargets: targets.filter(isOiTarget),
+        p1Targets: targets.filter(isP1Target),
+        p2Targets: targets.filter(isP2Target),
+        allTargets: targets,
+      },
+    };
+  }, [result]);
 }
 
 const UPDATE_TARGET = graphql(`

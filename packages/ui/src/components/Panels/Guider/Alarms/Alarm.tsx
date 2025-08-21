@@ -6,7 +6,7 @@ import type { InputNumberValueChangeEvent } from 'primereact/inputnumber';
 import { InputNumber } from 'primereact/inputnumber';
 import type { ToggleButtonChangeEvent } from 'primereact/togglebutton';
 import { ToggleButton } from 'primereact/togglebutton';
-import { useCallback, useId } from 'react';
+import { useId } from 'react';
 
 import { Volume, VolumeSlash } from '@/components/Icons';
 import { isNotNullish } from '@/Helpers/functions';
@@ -31,19 +31,13 @@ export function Alarm({
   const limit = alarm?.limit;
   const enabled = alarm?.enabled ?? true;
 
-  const onLimitChange = useCallback(
-    (e: InputNumberValueChangeEvent) => {
-      if (isNotNullish(e.value)) onUpdateAlarm({ wfs, limit: e.value });
-    },
-    [onUpdateAlarm, wfs],
-  );
+  const onLimitChange = (e: InputNumberValueChangeEvent) => {
+    if (isNotNullish(e.value)) onUpdateAlarm({ wfs, limit: e.value });
+  };
 
-  const onEnabledChange = useCallback(
-    (e: ToggleButtonChangeEvent) => {
-      if (isNotNullish(e.value)) onUpdateAlarm({ wfs, enabled: e.value });
-    },
-    [onUpdateAlarm, wfs],
-  );
+  const onEnabledChange = (e: ToggleButtonChangeEvent) => {
+    if (isNotNullish(e.value)) onUpdateAlarm({ wfs, enabled: e.value });
+  };
 
   const disabledOrNoData = disabled || !guideQuality || !alarm;
 

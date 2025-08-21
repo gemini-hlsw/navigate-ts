@@ -2,7 +2,7 @@ import type { UpdateSlewFlagsMutationVariables } from '@gql/configs/gen/graphql'
 import { useSlewFlags, useUpdateSlewFlags } from '@gql/configs/SlewFlags';
 import { Dialog } from 'primereact/dialog';
 import { InputSwitch } from 'primereact/inputswitch';
-import { useCallback, useId } from 'react';
+import { useId } from 'react';
 
 import { useCanEdit } from '@/components/atoms/auth';
 import { useSlewVisible } from '@/components/atoms/slew';
@@ -11,7 +11,7 @@ import type { SlewFlagsType } from '@/types';
 export function SlewFlags() {
   const [slewVisible, setSlewVisible] = useSlewVisible();
 
-  const onHide = useCallback(() => setSlewVisible(false), [setSlewVisible]);
+  const onHide = () => setSlewVisible(false);
 
   const { data } = useSlewFlags();
   const slewFlags = data?.slewFlags ?? ({} as SlewFlagsType);
