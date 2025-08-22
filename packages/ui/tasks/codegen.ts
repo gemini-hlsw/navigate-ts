@@ -59,28 +59,41 @@ const sharedConfig = {
   // Generate union types (`'foo' | 'bar'`) for enums instead of non-standard typescript enums
   enumsAsTypes: true,
   useTypeImports: true,
-  // skipTypename: true,
+  defaultScalarType: 'unknown',
+  avoidOptionals: {
+    field: true,
+    inputValue: false,
+  },
+  skipTypeNameForRoot: true,
+};
+
+const presetConfig = {
+  fragmentMasking: false,
 };
 
 export default {
+  ignoreNoDocuments: true,
   generates: {
     './src/gql/odb/gen/': {
       schema: require.resolve('lucuma-schemas/odb'),
       documents: './src/gql/odb/*.{ts,tsx}',
       config: sharedConfig,
       preset: 'client',
+      presetConfig,
     },
     './src/gql/server/gen/': {
       schema: require.resolve('navigate-server-schema/navigate.graphql'),
       documents: './src/gql/server/*.{ts,tsx}',
       config: sharedConfig,
       preset: 'client',
+      presetConfig,
     },
     './src/gql/configs/gen/': {
       schema: join(dirname(require.resolve('navigate-schema')), 'src/**/*.graphql'),
-      config: sharedConfig,
       documents: './src/gql/configs/*.{ts,tsx}',
+      config: sharedConfig,
       preset: 'client',
+      presetConfig,
     },
   },
 } satisfies CodegenConfig;

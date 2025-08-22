@@ -1,4 +1,4 @@
-import type { MockedResponse } from '@apollo/client/testing';
+import type { MockLink } from '@apollo/client/testing';
 import { GET_GUIDE_ALARMS, UPDATE_GUIDE_ALARM } from '@gql/configs/GuideAlarm';
 import { GUIDE_QUALITY_QUERY, GUIDE_QUALITY_SUBSCRIPTION } from '@gql/server/GuideQuality';
 import { GUIDE_STATE_QUERY, GUIDE_STATE_SUBSCRIPTION } from '@gql/server/GuideState';
@@ -36,7 +36,7 @@ describe(Alarms.name, () => {
   });
 });
 
-const mocks: MockedResponse[] = [
+const mocks: MockLink.MockedResponse[] = [
   {
     request: {
       query: GET_GUIDE_ALARMS,
@@ -93,7 +93,7 @@ const mocks: MockedResponse[] = [
       query: GUIDE_QUALITY_SUBSCRIPTION,
       variables: {},
     },
-    maxUsageCount: 2,
+    maxUsageCount: Infinity,
     result: {
       data: {
         guidersQualityValues: {
@@ -153,7 +153,7 @@ const mocks: MockedResponse[] = [
       query: GUIDE_STATE_SUBSCRIPTION,
       variables: {},
     },
-    maxUsageCount: 2,
+    maxUsageCount: Infinity,
     result: {
       data: {
         guideState: {

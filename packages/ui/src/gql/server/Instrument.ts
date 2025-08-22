@@ -1,4 +1,4 @@
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import type { OptionsOf } from '@gql/util';
 
 import { isNullish } from '@/Helpers/functions';

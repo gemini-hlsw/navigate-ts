@@ -1,4 +1,4 @@
-import type { MockedResponse } from '@apollo/client/testing';
+import type { MockLink } from '@apollo/client/testing';
 import { GET_CONFIGURATION } from '@gql/configs/Configuration';
 import { GET_INSTRUMENT, UPDATE_INSTRUMENT } from '@gql/configs/Instrument';
 import { GET_INSTRUMENT_PORT } from '@gql/server/Instrument';
@@ -55,7 +55,7 @@ describe(Instrument.name, () => {
     const saveButton = sut.getByRole('button');
     await userEvent.click(saveButton, { timeout: 500 });
 
-    expect(updateInstrumentMock.result).toHaveBeenCalledOnce();
+    await expect.poll(() => updateInstrumentMock.result).toHaveBeenCalledOnce();
   });
 
   it('should query instrument using oiWfs', async () => {
@@ -66,11 +66,11 @@ describe(Instrument.name, () => {
     const saveButton = sut.getByRole('button');
     await expect.element(saveButton).toBeEnabled();
 
-    expect(getInstrumentMock.variableMatcher).toHaveBeenCalledWith(expect.objectContaining({ wfs: 'OIWFS' }));
+    expect(getInstrumentMock.request.variables).toHaveBeenCalledWith(expect.objectContaining({ wfs: 'OIWFS' }));
   });
 });
 
-const mocks: MockedResponse[] = [
+const mocks: MockLink.MockedResponse[] = [
   {
     request: {
       query: GET_CONFIGURATION,
@@ -97,9 +97,11 @@ const mocks: MockedResponse[] = [
     },
   } satisfies MockedResponseOf<typeof GET_CONFIGURATION>,
   {
-    request: { query: GET_INSTRUMENT_PORT },
+    request: {
+      query: GET_INSTRUMENT_PORT,
+      variables: () => true,
+    },
     maxUsageCount: Infinity,
-    variableMatcher: () => true,
     result: {
       data: {
         instrumentPort: 3,
@@ -111,9 +113,8 @@ const mocks: MockedResponse[] = [
 const getInstrumentMock = {
   request: {
     query: GET_INSTRUMENT,
+    variables: vi.fn().mockReturnValue(true),
   },
-  maxUsageCount: 5,
-  variableMatcher: vi.fn().mockReturnValue(true),
   result: {
     data: {
       instrument: {
@@ -135,8 +136,8 @@ const getInstrumentMock = {
 const updateInstrumentMock = {
   request: {
     query: UPDATE_INSTRUMENT,
+    variables: () => true,
   },
-  variableMatcher: () => true,
   result: vi.fn().mockReturnValue({
     data: {
       updateInstrument: {

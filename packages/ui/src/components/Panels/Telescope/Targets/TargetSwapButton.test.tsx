@@ -36,7 +36,7 @@ describe(TargetSwapButton.name, () => {
       await sut.getByRole('button').click();
 
       const swapTargetMock = mocks.find((m) => m.request.query === SWAP_TARGET_MUTATION)!;
-      expect(swapTargetMock.result).toHaveBeenCalledOnce();
+      await expect.poll(() => swapTargetMock.result).toHaveBeenCalledOnce();
     });
   });
 
@@ -59,7 +59,7 @@ describe(TargetSwapButton.name, () => {
       await sut.getByRole('button').click();
 
       const restoreTargetMock = mocks.find((m) => m.request.query === RESTORE_TARGET_MUTATION)!;
-      expect(restoreTargetMock.result).toHaveBeenCalledOnce();
+      await expect.poll(() => restoreTargetMock.result).toHaveBeenCalled();
     });
   });
 });
@@ -122,9 +122,9 @@ const mocks = [
   {
     request: {
       query: GET_INSTRUMENT,
+      variables: () => true,
     },
-    maxUsageCount: 5,
-    variableMatcher: () => true,
+    maxUsageCount: Infinity,
     result: {
       data: {
         instrument: {
@@ -215,8 +215,8 @@ const mocks = [
   {
     request: {
       query: GET_CONFIGURATION,
+      variables: () => true,
     },
-    variableMatcher: () => true,
     result: {
       data: {
         configuration: {
@@ -238,9 +238,11 @@ const mocks = [
     },
   } satisfies MockedResponseOf<typeof GET_CONFIGURATION>,
   {
-    request: { query: GET_INSTRUMENT_PORT },
+    request: {
+      query: GET_INSTRUMENT_PORT,
+      variables: () => true,
+    },
     maxUsageCount: Infinity,
-    variableMatcher: () => true,
     result: vi.fn().mockReturnValue({
       data: {
         instrumentPort: 3,

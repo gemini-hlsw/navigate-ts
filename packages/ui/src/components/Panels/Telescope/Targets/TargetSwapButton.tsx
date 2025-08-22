@@ -1,4 +1,3 @@
-import { isNullish } from '@apollo/client/cache/inmemory/helpers';
 import { useConfiguration } from '@gql/configs/Configuration';
 import type { Target } from '@gql/configs/gen/graphql';
 import { useInstrument } from '@gql/configs/Instrument';
@@ -16,7 +15,7 @@ import { useRestoreTarget, useSwapTarget } from '@gql/server/TargetSwap';
 import { Button } from 'primereact/button';
 
 import { useCanEdit } from '@/components/atoms/auth';
-import { getConfigWfs } from '@/Helpers/functions';
+import { getConfigWfs, isNullish } from '@/Helpers/functions';
 import { useToast } from '@/Helpers/toast';
 
 export function TargetSwapButton({

@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import type { OptionsOf } from '@gql/util';
 
 import { graphql } from './gen';
@@ -26,7 +26,7 @@ const GET_DISTINCT_PORTS = graphql(`
   }
 `);
 
-export function useDistinctPorts(options: OptionsOf<typeof GET_DISTINCT_PORTS> = {}) {
+export function useDistinctPorts(options: OptionsOf<typeof GET_DISTINCT_PORTS>) {
   return useQuery(GET_DISTINCT_PORTS, {
     context: { clientName: 'navigateConfigs' },
     ...options,
@@ -50,7 +50,7 @@ export const GET_INSTRUMENTS = graphql(`
   }
 `);
 
-export function useInstruments(options: OptionsOf<typeof GET_INSTRUMENTS> = {}) {
+export function useInstruments(options: OptionsOf<typeof GET_INSTRUMENTS>) {
   return useQuery(GET_INSTRUMENTS, {
     context: { clientName: 'navigateConfigs' },
     ...options,

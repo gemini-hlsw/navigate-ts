@@ -1,4 +1,4 @@
-import { useLazyQuery, useQuery } from '@apollo/client';
+import { useLazyQuery, useQuery } from '@apollo/client/react';
 import type { OptionsOf } from '@gql/util';
 
 import { graphql } from './gen';
@@ -149,9 +149,7 @@ const GET_GUIDE_ENVIRONMENT = graphql(`
 `);
 
 export function useGetGuideEnvironment() {
-  return useLazyQuery(GET_GUIDE_ENVIRONMENT, {
-    context: { clientName: 'odb' },
-  });
+  return useLazyQuery(GET_GUIDE_ENVIRONMENT);
 }
 
 const GET_CENTRAL_WAVELENGTH = graphql(`
@@ -207,7 +205,5 @@ const GET_CENTRAL_WAVELENGTH = graphql(`
 `);
 
 export function useGetCentralWavelength() {
-  return useLazyQuery(GET_CENTRAL_WAVELENGTH, {
-    context: { clientName: 'odb' },
-  });
+  return useLazyQuery(GET_CENTRAL_WAVELENGTH);
 }
