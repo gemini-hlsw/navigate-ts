@@ -1,5 +1,5 @@
-import type { ApolloError, DocumentNode, MaybeMasked } from '@apollo/client';
-import { useQuery } from '@apollo/client';
+import type { DocumentNode } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import type { ResultOf } from '@graphql-typed-document-node/core';
 import { useEffect } from 'react';
 
@@ -23,30 +23,27 @@ export interface QueryAndSubscriptionOptions {
 export function useQueryAndSubscription<
   TQuery extends DocumentNode,
   TSub extends DocumentNode,
-  K extends keyof MaybeMasked<ResultOf<TQuery | TSub>>,
+  K extends keyof Omit<ResultOf<TQuery | TSub>, '__typename'>,
 >(
   queryNode: TQuery,
   subscriptionNode: TSub,
   key: K,
   options: QueryAndSubscriptionOptions = { useStale: true },
-): {
-  data: NonNullable<MaybeMasked<ResultOf<TQuery | TSub>>>[K] | undefined;
-  loading: boolean;
-  error?: ApolloError;
+): Pick<useQuery.Result<TQuery | TSub>, 'error' | 'loading'> & {
+  data: ResultOf<TQuery | TSub>[K] | undefined;
   setStale: SetStale;
 } {
   const [stale, setStale] = useStale();
 
-  const query = useQuery<ResultOf<TQuery>>(queryNode, {
+  const query = useQuery<ResultOf<TQuery | TSub>>(queryNode, {
     nextFetchPolicy: 'cache-only',
-    returnPartialData: true,
   });
 
   useEffect(
     () =>
       query.subscribeToMore({
         document: subscriptionNode,
-        updateQuery: (prev, { subscriptionData }) => subscriptionData.data ?? prev,
+        updateQuery: (prev, { subscriptionData }) => subscriptionData.data ?? (prev as ResultOf<TQuery>),
       }),
     [query, subscriptionNode],
   );

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 import type { DocumentNode, OperationVariables } from '@apollo/client';
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 import { useConfiguration } from '@gql/configs/Configuration';
 import { useInstrument } from '@gql/configs/Instrument';
 import { useRotator } from '@gql/configs/Rotator';

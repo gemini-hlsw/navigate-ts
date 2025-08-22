@@ -1,4 +1,4 @@
-import { useMutation, useSubscription } from '@apollo/client';
+import { useMutation, useSubscription } from '@apollo/client/react';
 
 import { graphql } from './gen';
 

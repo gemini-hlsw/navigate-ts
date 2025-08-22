@@ -79,124 +79,122 @@ export function OdbImport() {
         obsInstrument: selectedObservation.instrument,
         obsReference: selectedObservation.reference?.label,
       },
-      async onCompleted() {
-        // Observation selected
-        // First try to get a central wavelength associated to the observation
-        const obsWithWavelength = await getCentralWavelength({
-          variables: { obsId: selectedObservation.id },
-        });
+    });
 
-        const wavelength = extractCentralWavelength(selectedObservation.instrument, obsWithWavelength.data);
+    // Observation selected
+    // First try to get a central wavelength associated to the observation
+    const obsWithWavelength = await getCentralWavelength({
+      context: { clientName: 'odb' },
+      variables: { obsId: selectedObservation.id },
+    });
 
-        const { name: band, value: magnitude } = extractMagnitude(
-          selectedObservation.targetEnvironment?.firstScienceTarget?.sourceProfile as SourceProfile,
-        );
+    const wavelength = extractCentralWavelength(selectedObservation.instrument, obsWithWavelength.data);
 
-        // Second create the observation base target (SCIENCE)
-        await removeAndCreateBaseTargets({
-          variables: {
-            targets: [
-              {
-                id: selectedObservation.targetEnvironment?.firstScienceTarget?.id,
-                name: selectedObservation.targetEnvironment?.firstScienceTarget?.name,
-                coord1:
-                  typeof selectedObservation.targetEnvironment?.firstScienceTarget?.sidereal?.ra.degrees === 'string'
-                    ? parseFloat(selectedObservation.targetEnvironment?.firstScienceTarget?.sidereal?.ra.degrees)
-                    : selectedObservation.targetEnvironment?.firstScienceTarget?.sidereal?.ra.degrees,
-                coord2:
-                  typeof selectedObservation.targetEnvironment?.firstScienceTarget?.sidereal?.dec.degrees === 'string'
-                    ? parseFloat(selectedObservation.targetEnvironment?.firstScienceTarget?.sidereal?.dec.degrees)
-                    : selectedObservation.targetEnvironment?.firstScienceTarget?.sidereal?.dec.degrees,
-                pmRa: selectedObservation.targetEnvironment?.firstScienceTarget?.sidereal?.properMotion?.ra
-                  .microarcsecondsPerYear,
-                pmDec:
-                  selectedObservation.targetEnvironment?.firstScienceTarget?.sidereal?.properMotion?.dec
-                    .microarcsecondsPerYear,
-                radialVelocity:
-                  selectedObservation.targetEnvironment?.firstScienceTarget?.sidereal?.radialVelocity
-                    ?.centimetersPerSecond,
-                parallax:
-                  selectedObservation.targetEnvironment?.firstScienceTarget?.sidereal?.parallax?.microarcseconds,
-                epoch: selectedObservation.targetEnvironment?.firstScienceTarget?.sidereal?.epoch,
-                magnitude: magnitude,
-                band: band,
-                type: 'SCIENCE',
-                wavelength: wavelength,
-              },
-            ],
+    const { name: band, value: magnitude } = extractMagnitude(
+      selectedObservation.targetEnvironment?.firstScienceTarget?.sourceProfile as SourceProfile,
+    );
+
+    // Second create the observation base target (SCIENCE)
+    const { data: t } = await removeAndCreateBaseTargets({
+      variables: {
+        targets: [
+          {
+            id: selectedObservation.targetEnvironment?.firstScienceTarget?.id,
+            name: selectedObservation.targetEnvironment?.firstScienceTarget?.name,
+            coord1:
+              typeof selectedObservation.targetEnvironment?.firstScienceTarget?.sidereal?.ra.degrees === 'string'
+                ? parseFloat(selectedObservation.targetEnvironment?.firstScienceTarget?.sidereal?.ra.degrees)
+                : selectedObservation.targetEnvironment?.firstScienceTarget?.sidereal?.ra.degrees,
+            coord2:
+              typeof selectedObservation.targetEnvironment?.firstScienceTarget?.sidereal?.dec.degrees === 'string'
+                ? parseFloat(selectedObservation.targetEnvironment?.firstScienceTarget?.sidereal?.dec.degrees)
+                : selectedObservation.targetEnvironment?.firstScienceTarget?.sidereal?.dec.degrees,
+            pmRa: selectedObservation.targetEnvironment?.firstScienceTarget?.sidereal?.properMotion?.ra
+              .microarcsecondsPerYear,
+            pmDec:
+              selectedObservation.targetEnvironment?.firstScienceTarget?.sidereal?.properMotion?.dec
+                .microarcsecondsPerYear,
+            radialVelocity:
+              selectedObservation.targetEnvironment?.firstScienceTarget?.sidereal?.radialVelocity?.centimetersPerSecond,
+            parallax: selectedObservation.targetEnvironment?.firstScienceTarget?.sidereal?.parallax?.microarcseconds,
+            epoch: selectedObservation.targetEnvironment?.firstScienceTarget?.sidereal?.epoch,
+            magnitude: magnitude,
+            band: band,
+            type: 'SCIENCE',
+            wavelength: wavelength,
           },
-          async onCompleted(t) {
-            await updateConfiguration({
-              variables: {
-                pk: configuration?.pk ?? 1,
-                selectedTarget: t.removeAndCreateBaseTargets[0]?.pk,
-              },
-            });
-          },
-        });
-
-        // If there is a rotator, retrieve guide targets and create them
-        if (rotator) {
-          // Get the guide environment separately to avoid large query times for _all_ observations
-          const guideEnv = await getGuideEnvironment({
-            variables: { obsId: selectedObservation.id },
-          });
-
-          const { oiwfs, pwfs1, pwfs2 } = extractGuideTargets(guideEnv.data);
-
-          const [oi, p1, p2] = await Promise.all([
-            removeAndCreateWfsTargets({
-              variables: {
-                wfs: 'OIWFS',
-                targets: oiwfs,
-              },
-            }),
-            removeAndCreateWfsTargets({
-              variables: {
-                wfs: 'PWFS1',
-                targets: pwfs1,
-              },
-            }),
-            removeAndCreateWfsTargets({
-              variables: {
-                wfs: 'PWFS2',
-                targets: pwfs2,
-              },
-            }),
-            updateRotator({
-              variables: {
-                pk: rotator?.pk,
-                angle:
-                  typeof guideEnv.data?.observation?.targetEnvironment.guideEnvironment.posAngle.degrees === 'string'
-                    ? parseFloat(guideEnv.data?.observation?.targetEnvironment.guideEnvironment.posAngle.degrees)
-                    : (guideEnv.data?.observation?.targetEnvironment.guideEnvironment.posAngle.degrees ?? 0),
-                tracking: 'TRACKING',
-              },
-            }),
-          ]);
-
-          // Set the first of each result as the selected target if there is only 1
-          const selectedOiTarget = firstIfOnlyOne(oi.data?.removeAndCreateWfsTargets)?.pk ?? null;
-          const selectedP1Target = firstIfOnlyOne(p1.data?.removeAndCreateWfsTargets)?.pk ?? null;
-          const selectedP2Target = firstIfOnlyOne(p2.data?.removeAndCreateWfsTargets)?.pk ?? null;
-
-          if (configuration?.pk) {
-            await updateConfiguration({
-              variables: { pk: configuration.pk, selectedOiTarget, selectedP1Target, selectedP2Target },
-            });
-          }
-        }
-
-        if (selectedObservation.instrument) {
-          await resetInstruments({
-            variables: { name: selectedObservation.instrument },
-            refetchQueries: ['getInstrument'],
-          });
-        }
-
-        setOdbVisible(false);
+        ],
       },
     });
+
+    await updateConfiguration({
+      variables: {
+        pk: configuration?.pk ?? 1,
+        selectedTarget: t?.removeAndCreateBaseTargets[0]?.pk,
+      },
+    });
+
+    // If there is a rotator, retrieve guide targets and create them
+    if (rotator) {
+      // Get the guide environment separately to avoid large query times for _all_ observations
+      const guideEnv = await getGuideEnvironment({
+        context: { clientName: 'odb' },
+        variables: { obsId: selectedObservation.id },
+      });
+
+      const { oiwfs, pwfs1, pwfs2 } = extractGuideTargets(guideEnv.data);
+
+      const [oi, p1, p2] = await Promise.all([
+        removeAndCreateWfsTargets({
+          variables: {
+            wfs: 'OIWFS',
+            targets: oiwfs,
+          },
+        }),
+        removeAndCreateWfsTargets({
+          variables: {
+            wfs: 'PWFS1',
+            targets: pwfs1,
+          },
+        }),
+        removeAndCreateWfsTargets({
+          variables: {
+            wfs: 'PWFS2',
+            targets: pwfs2,
+          },
+        }),
+        updateRotator({
+          variables: {
+            pk: rotator?.pk,
+            angle:
+              typeof guideEnv.data?.observation?.targetEnvironment.guideEnvironment.posAngle.degrees === 'string'
+                ? parseFloat(guideEnv.data?.observation?.targetEnvironment.guideEnvironment.posAngle.degrees)
+                : (guideEnv.data?.observation?.targetEnvironment.guideEnvironment.posAngle.degrees ?? 0),
+            tracking: 'TRACKING',
+          },
+        }),
+      ]);
+
+      // Set the first of each result as the selected target if there is only 1
+      const selectedOiTarget = firstIfOnlyOne(oi.data?.removeAndCreateWfsTargets)?.pk ?? null;
+      const selectedP1Target = firstIfOnlyOne(p1.data?.removeAndCreateWfsTargets)?.pk ?? null;
+      const selectedP2Target = firstIfOnlyOne(p2.data?.removeAndCreateWfsTargets)?.pk ?? null;
+
+      if (configuration?.pk) {
+        await updateConfiguration({
+          variables: { pk: configuration.pk, selectedOiTarget, selectedP1Target, selectedP2Target },
+        });
+      }
+    }
+
+    if (selectedObservation.instrument) {
+      await resetInstruments({
+        variables: { name: selectedObservation.instrument },
+        refetchQueries: ['getInstrument'],
+      });
+    }
+
+    setOdbVisible(false);
   }
 
   const header = (

@@ -1,4 +1,4 @@
-import { ApolloProvider } from '@apollo/client';
+import { ApolloProvider } from '@apollo/client/react';
 import { Authentication } from '@Contexts/Auth/Authentication';
 import { Modals } from '@Contexts/Variables/Modals/Modals';
 import { client } from '@gql/ApolloConfigs';

@@ -55,7 +55,6 @@ fixCssRoot.postcss = true;
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
   define: {
-    'globalThis.__DEV__': JSON.stringify(mode !== 'production'),
     'import.meta.env.FRONTEND_VERSION': JSON.stringify(frontendVersion),
   },
   resolve: {

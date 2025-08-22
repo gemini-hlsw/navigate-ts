@@ -1,11 +1,18 @@
 // Apollo
-import { ApolloClient, ApolloLink, defaultDataIdFromObject, HttpLink, InMemoryCache } from '@apollo/client';
-import { setContext } from '@apollo/client/link/context';
-import { onError } from '@apollo/client/link/error';
+import {
+  ApolloClient,
+  ApolloLink,
+  CombinedGraphQLErrors,
+  defaultDataIdFromObject,
+  HttpLink,
+  InMemoryCache,
+  ServerError,
+} from '@apollo/client';
+import { SetContextLink } from '@apollo/client/link/context';
+import { ErrorLink } from '@apollo/client/link/error';
 // Subscription channel
 import { WebSocketLink } from '@apollo/client/link/ws';
-import { getMainDefinition } from '@apollo/client/utilities';
-import { Kind, OperationTypeNode } from 'graphql/language';
+import { OperationTypeNode } from 'graphql/language';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
 
 import { odbTokenAtom } from '@/components/atoms/auth';
@@ -29,10 +36,13 @@ const navigateServerWsURI = withAbsoluteUri('/navigate/ws', true);
 const navigateConfigsURI = withAbsoluteUri('/db');
 
 // Log errors to the console and show a toast
-const errorLink = onError(({ operation, graphQLErrors, networkError }) => {
+const errorLink = new ErrorLink(({ error, result, operation }) => {
   const ctx = operation.getContext();
-  // Extract either the context error message, or the first GraphQL error message
-  const errorMessage = ctx.error?.detail ?? graphQLErrors?.[0]?.message?.trim();
+
+  const combinedErrors = CombinedGraphQLErrors.is(error) ? new CombinedGraphQLErrors(result!, error.errors) : undefined;
+
+  const errorMessage = ctx.error?.detail ?? combinedErrors?.message ?? error.message;
+
   if (errorMessage) {
     store.get(toastAtom)?.show({
       severity: 'error',
@@ -43,11 +53,15 @@ const errorLink = onError(({ operation, graphQLErrors, networkError }) => {
     });
   }
 
-  graphQLErrors?.forEach(({ message, locations, path }) => {
-    console.warn(`[GraphQL error]`, message.trim(), { path, locations, ctx });
-  });
-
-  if (networkError) console.error(`[Network error]`, networkError);
+  if (combinedErrors) {
+    combinedErrors.errors.forEach(({ message, locations, path }) =>
+      console.warn(`[GraphQL error]: Message: ${message}, Location:`, locations, `Path:`, path),
+    );
+  } else if (ServerError.is(error)) {
+    console.error(`Server error: ${error.message}`);
+  } else if (error) {
+    console.error(`Other error: ${error.message}`);
+  }
 });
 
 function createClient() {
@@ -55,7 +69,7 @@ function createClient() {
 
   const navigateConfigs = new HttpLink({ uri: navigateConfigsURI });
 
-  const odbAuthLink = setContext((_, { headers }) => {
+  const odbAuthLink = new SetContextLink(({ headers }) => {
     const token = store.get(odbTokenAtom);
     if (!token) {
       store.get(toastAtom)?.show({
@@ -65,7 +79,7 @@ function createClient() {
       });
     }
 
-    const prevHeaders = (headers ?? {}) as Record<string, string>;
+    const prevHeaders = headers ?? {};
     return {
       headers: token ? { ...prevHeaders, Authorization: `Bearer ${token}` } : prevHeaders,
     };
@@ -93,10 +107,14 @@ function createClient() {
   subscriptionClient.onDisconnected(setWebsocketDisconnected);
   subscriptionClient.onReconnected(setWebSocketConnected);
 
+  // eslint-disable-next-line @typescript-eslint/no-deprecated
   const wsLink = new WebSocketLink(subscriptionClient);
 
   return new ApolloClient({
-    name: 'navigate-ui',
+    clientAwareness: {
+      name: 'navigate-ui',
+      version: import.meta.env.FRONTEND_VERSION,
+    },
     link: ApolloLink.from([
       errorLink,
       ApolloLink.split(
@@ -106,12 +124,7 @@ function createClient() {
           (operation) => operation.getContext().clientName === 'navigateConfigs',
           navigateConfigs,
           ApolloLink.split(
-            ({ query }) => {
-              const definition = getMainDefinition(query);
-              return (
-                definition.kind === Kind.OPERATION_DEFINITION && definition.operation === OperationTypeNode.SUBSCRIPTION
-              );
-            },
+            ({ operationType }) => operationType === OperationTypeNode.SUBSCRIPTION,
             wsLink,
             navigateCommandServer,
           ),

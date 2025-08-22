@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import { isBaseTarget, isOiTarget, isP1Target, isP2Target } from '@gql/util';
 import { useMemo } from 'react';
 

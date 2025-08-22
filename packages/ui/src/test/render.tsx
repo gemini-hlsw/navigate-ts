@@ -1,5 +1,5 @@
-import type { MockedResponse } from '@apollo/client/testing';
-import { MockedProvider } from '@apollo/client/testing';
+import type { MockLink } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { GET_SLEW_FLAGS } from '@gql/configs/SlewFlags';
 import type { MockedResponseOf } from '@gql/util';
 import type { WritableAtom } from 'jotai';
@@ -13,7 +13,7 @@ import { odbTokenAtom } from '@/components/atoms/auth';
 import { longExpirationJwt } from '@/test/helpers';
 
 interface CreateOptions<T> {
-  mocks?: MockedResponse[];
+  mocks?: MockLink.MockedResponse[];
   initialValues?: InferAtomTuples<T>;
 }
 
@@ -45,9 +45,7 @@ export function renderWithContext<T extends AtomTuples>(
   const renderResult = render(
     <Provider store={store}>
       <HydrateAtoms initialValues={initialValues}>
-        <MockedProvider mocks={[...mocks, ...(createOptions.mocks ?? [])]} addTypename={false}>
-          {ui}
-        </MockedProvider>
+        <MockedProvider mocks={[...mocks, ...(createOptions.mocks ?? [])]}>{ui}</MockedProvider>
       </HydrateAtoms>
     </Provider>,
     options,
@@ -56,7 +54,7 @@ export function renderWithContext<T extends AtomTuples>(
   return { ...renderResult, store };
 }
 
-const mocks: MockedResponse[] = [
+const mocks: MockLink.MockedResponse[] = [
   {
     request: {
       query: GET_SLEW_FLAGS,
