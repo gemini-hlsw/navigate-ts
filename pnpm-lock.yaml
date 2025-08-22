@@ -233,8 +233,8 @@ importers:
         specifier: 'catalog:'
         version: 0.156.2
       lucuma-ui-css:
-        specifier: 0.155.3
-        version: 0.155.3
+        specifier: 0.156.2
+        version: 0.156.2
       navigate-schema:
         specifier: workspace:*
         version: link:../schema
@@ -1165,7 +1165,7 @@ packages:
     engines: {node: '>=14'}
 
   '@playwright/test@1.54.1':
-    resolution: {integrity: sha512-FS8hQ12acieG2dYSksmLOF7BNxnVf2afRJdCuM1eMSxj6QTSE6G4InGF7oApGgDb65MX7AwMVlIkpru0yZA4Xw==, tarball: https://registry.npmjs.org/@playwright/test/-/test-1.54.1.tgz}
+    resolution: {integrity: sha512-FS8hQ12acieG2dYSksmLOF7BNxnVf2afRJdCuM1eMSxj6QTSE6G4InGF7oApGgDb65MX7AwMVlIkpru0yZA4Xw==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -3302,8 +3302,8 @@ packages:
   lucuma-schemas@0.156.2:
     resolution: {integrity: sha512-KsqzQ0fEzNH0/+qFRhcdJYI9GLLyfNO8GdXMmOyU6DGvHbI76mMBPG9aNvZveiMFc7bLljggN+AX/uyHdH7ZbQ==}
 
-  lucuma-ui-css@0.155.3:
-    resolution: {integrity: sha512-iQt0uDokR7UZRxF9xp0SLi05aim51NX1aLdYzoR4jXqbLG9YYXLSxwdZ4fJMYqGoAnuIO83qdXSVejhFDhEB/w==}
+  lucuma-ui-css@0.156.2:
+    resolution: {integrity: sha512-7EUZK/yF3mnVwD2ZkOFGksSVp+pn6HzKiYClLN9i5n6RgARA0pus6o2eo9Dvg+VUePZ8gujN1z9Lg8oeAtS9Kw==}
 
   lz-string@1.5.0:
     resolution: {integrity: sha512-h5bgJWpxJNswbU7qCrV0tIKQCaS3blPDrqKWx+QxzuzL1zGUzij9XCWLrSLsJPu5t+eWA/ycetzYAO5IOMcWAQ==}
@@ -3661,7 +3661,7 @@ packages:
     resolution: {integrity: sha512-2SM/GZGAEkPp3KWORxQZns4M+WSeXbC2HEvmOIJe3Cmiv6ieAJvdVhDldtHqM5J1Y7MrR1XhkBT/rMlhh9FdqQ==}
 
   playwright-core@1.54.1:
-    resolution: {integrity: sha512-Nbjs2zjj0htNhzgiy5wu+3w09YetDx5pkrpI/kZotDlDUaYk0HVA5xrBVPdow4SAUIlhgKcJeJg4GRKW6xHusA==, tarball: https://registry.npmjs.org/playwright-core/-/playwright-core-1.54.1.tgz}
+    resolution: {integrity: sha512-Nbjs2zjj0htNhzgiy5wu+3w09YetDx5pkrpI/kZotDlDUaYk0HVA5xrBVPdow4SAUIlhgKcJeJg4GRKW6xHusA==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -3671,7 +3671,7 @@ packages:
     hasBin: true
 
   playwright@1.54.1:
-    resolution: {integrity: sha512-peWpSwIBmSLi6aW2auvrUtf2DqY16YYcCMO8rTVx486jKmDTJg7UAhyrraP98GB8BoPURZP8+nxO7TSd4cPr5g==, tarball: https://registry.npmjs.org/playwright/-/playwright-1.54.1.tgz}
+    resolution: {integrity: sha512-peWpSwIBmSLi6aW2auvrUtf2DqY16YYcCMO8rTVx486jKmDTJg7UAhyrraP98GB8BoPURZP8+nxO7TSd4cPr5g==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -8104,7 +8104,7 @@ snapshots:
 
   lucuma-schemas@0.156.2: {}
 
-  lucuma-ui-css@0.155.3: {}
+  lucuma-ui-css@0.156.2: {}
 
   lz-string@1.5.0: {}
 
