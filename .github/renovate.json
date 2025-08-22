@@ -24,7 +24,7 @@
     },
     {
       "groupName": "GraphQL packages",
-      "matchPackageNames": ["@graphql-codegen/**", "@graphql-typed-document-node/**", "**graphql**", "@apollo/**"]
+      "matchPackageNames": ["@graphql-codegen/**", "@graphql-typed-document-node/**", "/graphql/", "@apollo/**"]
     },
     {
       "groupName": "Types",
@@ -32,7 +32,7 @@
     },
     {
       "groupName": "Vite packages",
-      "matchPackageNames": ["**vite**", "@vitest/**"]
+      "matchPackageNames": ["/vite/", "@vitest/**"]
     },
     {
       "groupName": "TSConfig bases",
