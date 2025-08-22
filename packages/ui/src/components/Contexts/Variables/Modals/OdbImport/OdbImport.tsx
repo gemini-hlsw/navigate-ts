@@ -98,34 +98,37 @@ export function OdbImport() {
       // Second create the observation base target (SCIENCE)
       const { data: t } = await removeAndCreateBaseTargets({
         variables: {
-          targets: [
-            {
-              id: selectedObservation.targetEnvironment?.firstScienceTarget?.id,
-              name: selectedObservation.targetEnvironment?.firstScienceTarget?.name,
-              coord1:
-                typeof selectedObservation.targetEnvironment?.firstScienceTarget?.sidereal?.ra.degrees === 'string'
-                  ? parseFloat(selectedObservation.targetEnvironment?.firstScienceTarget?.sidereal?.ra.degrees)
-                  : selectedObservation.targetEnvironment?.firstScienceTarget?.sidereal?.ra.degrees,
-              coord2:
-                typeof selectedObservation.targetEnvironment?.firstScienceTarget?.sidereal?.dec.degrees === 'string'
-                  ? parseFloat(selectedObservation.targetEnvironment?.firstScienceTarget?.sidereal?.dec.degrees)
-                  : selectedObservation.targetEnvironment?.firstScienceTarget?.sidereal?.dec.degrees,
-              pmRa: selectedObservation.targetEnvironment?.firstScienceTarget?.sidereal?.properMotion?.ra
-                .microarcsecondsPerYear,
-              pmDec:
-                selectedObservation.targetEnvironment?.firstScienceTarget?.sidereal?.properMotion?.dec
-                  .microarcsecondsPerYear,
-              radialVelocity:
-                selectedObservation.targetEnvironment?.firstScienceTarget?.sidereal?.radialVelocity
-                  ?.centimetersPerSecond,
-              parallax: selectedObservation.targetEnvironment?.firstScienceTarget?.sidereal?.parallax?.microarcseconds,
-              epoch: selectedObservation.targetEnvironment?.firstScienceTarget?.sidereal?.epoch,
-              magnitude: magnitude,
-              band: band,
-              type: 'SCIENCE',
-              wavelength: wavelength,
-            },
-          ],
+          targets: selectedObservation.targetEnvironment.firstScienceTarget
+            ? [
+                {
+                  id: selectedObservation.targetEnvironment.firstScienceTarget.id,
+                  name: selectedObservation.targetEnvironment.firstScienceTarget.name,
+                  coord1:
+                    typeof selectedObservation.targetEnvironment.firstScienceTarget.sidereal?.ra.degrees === 'string'
+                      ? parseFloat(selectedObservation.targetEnvironment.firstScienceTarget.sidereal?.ra.degrees)
+                      : selectedObservation.targetEnvironment.firstScienceTarget.sidereal?.ra.degrees,
+                  coord2:
+                    typeof selectedObservation.targetEnvironment.firstScienceTarget.sidereal?.dec.degrees === 'string'
+                      ? parseFloat(selectedObservation.targetEnvironment.firstScienceTarget.sidereal?.dec.degrees)
+                      : selectedObservation.targetEnvironment.firstScienceTarget.sidereal?.dec.degrees,
+                  pmRa: selectedObservation.targetEnvironment.firstScienceTarget.sidereal?.properMotion?.ra
+                    .microarcsecondsPerYear,
+                  pmDec:
+                    selectedObservation.targetEnvironment.firstScienceTarget.sidereal?.properMotion?.dec
+                      .microarcsecondsPerYear,
+                  radialVelocity:
+                    selectedObservation.targetEnvironment.firstScienceTarget.sidereal?.radialVelocity
+                      ?.centimetersPerSecond,
+                  parallax:
+                    selectedObservation.targetEnvironment.firstScienceTarget.sidereal?.parallax?.microarcseconds,
+                  epoch: selectedObservation.targetEnvironment.firstScienceTarget.sidereal?.epoch,
+                  magnitude: magnitude,
+                  band: band,
+                  type: 'SCIENCE',
+                  wavelength: wavelength,
+                },
+              ]
+            : [],
         },
       });
 
@@ -244,9 +247,10 @@ function extractGuideTargets(data: GetGuideEnvironmentQuery | undefined) {
   return (data?.observation?.targetEnvironment.guideEnvironment.guideTargets ?? []).reduce<
     Record<'oiwfs' | 'pwfs1' | 'pwfs2', TargetInput[]>
   >(
-    (acc, t) => {
+    (acc, t, i) => {
       const { name: band, value: magnitude } = extractMagnitude(t.sourceProfile as SourceProfile);
       const auxTarget: Omit<TargetInput, 'type'> = {
+        id: `t-00${i + 1}`,
         name: t.name,
         epoch: t.sidereal?.epoch,
         coord1:

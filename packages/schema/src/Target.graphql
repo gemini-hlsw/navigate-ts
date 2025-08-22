@@ -76,7 +76,7 @@ type Query {
 }
 
 input TargetInput {
-  id: TargetId
+  id: TargetId!
   name: String
   coord1: Float
   coord2: Float
