@@ -250,7 +250,7 @@ function extractGuideTargets(data: GetGuideEnvironmentQuery | undefined) {
     (acc, t, i) => {
       const { name: band, value: magnitude } = extractMagnitude(t.sourceProfile as SourceProfile);
       const auxTarget: Omit<TargetInput, 'type'> = {
-        id: `t-00${i + 1}`,
+        id: `t-${i + 1}`,
         name: t.name,
         epoch: t.sidereal?.epoch,
         coord1:
