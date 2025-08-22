@@ -5,7 +5,7 @@ import { Button } from 'primereact/button';
 import { Checkbox } from 'primereact/checkbox';
 import { Dropdown } from 'primereact/dropdown';
 import { Splitter, SplitterPanel } from 'primereact/splitter';
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 
 import { Play, Stop } from '@/components/Icons';
 
@@ -21,15 +21,12 @@ export default function AcquisitionCamera({ canEdit, ac }: { canEdit: boolean; a
 
   const [exp, setExp] = useState(0.01);
 
-  const onClick = useCallback(
-    () =>
-      integrating
-        ? stopObserve({})
-        : startObserve({
-            variables: { period: { milliseconds: exp * 1000 } },
-          }),
-    [exp, integrating, startObserve, stopObserve],
-  );
+  const onClick = () =>
+    integrating
+      ? stopObserve({})
+      : startObserve({
+          variables: { period: { milliseconds: exp * 1000 } },
+        });
 
   const loading = guideStateLoading || startObserveLoading || stopObserveLoading;
 

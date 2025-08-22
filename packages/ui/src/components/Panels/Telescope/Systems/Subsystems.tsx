@@ -6,7 +6,7 @@ import { Button } from 'primereact/button';
 import { Dropdown } from 'primereact/dropdown';
 import { InputNumber } from 'primereact/inputnumber';
 import { Slider } from 'primereact/slider';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { BTN_CLASSES } from '@/Helpers/constants';
 import type { MechanismType } from '@/types';
@@ -63,16 +63,13 @@ export function BotSubsystems({ canEdit }: { canEdit: boolean }) {
 
   const updateMechanism = useUpdateMechanism();
 
-  const modifyMechanism = useCallback(
-    (vars: Omit<UpdateMechanismMutationVariables, 'pk'>) =>
-      updateMechanism({
-        variables: {
-          pk: state.pk,
-          ...vars,
-        },
-      }),
-    [state.pk, updateMechanism],
-  );
+  const modifyMechanism = (vars: Omit<UpdateMechanismMutationVariables, 'pk'>) =>
+    updateMechanism({
+      variables: {
+        pk: state.pk,
+        ...vars,
+      },
+    });
 
   return (
     <div className="bottom">

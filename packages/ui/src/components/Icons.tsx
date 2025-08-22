@@ -40,13 +40,14 @@ import {
 import type { FontAwesomeIconProps } from '@fortawesome/react-fontawesome';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-const iconFactory = (icon: IconDefinition) => {
-  const renderFontAwesomeIcon = (props: Omit<FontAwesomeIconProps, 'icon'>) => (
-    <FontAwesomeIcon {...props} icon={icon} />
+const iconFactory = (icon: IconDefinition) =>
+  Object.assign(
+    (props: Omit<FontAwesomeIconProps, 'icon'>) => {
+      'use memo';
+      return <FontAwesomeIcon {...props} icon={icon} />;
+    },
+    { displayName: icon.iconName },
   );
-  renderFontAwesomeIcon.displayName = icon.iconName;
-  return renderFontAwesomeIcon;
-};
 
 export const Astronaut = iconFactory(faUserAstronaut);
 export const Camera = iconFactory(faCamera);

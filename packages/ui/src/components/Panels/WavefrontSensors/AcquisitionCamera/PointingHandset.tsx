@@ -8,7 +8,7 @@ import {
 import { Title } from '@Shared/Title/Title';
 import { Button } from 'primereact/button';
 import { ButtonGroup } from 'primereact/buttongroup';
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 
 import { type Alignment, AlignmentSelector, CurrentCoordinates, InputControls } from './Controls';
 import type { Coords } from './strategy';
@@ -30,10 +30,7 @@ export default function PointingHandset({ canEdit }: { canEdit: boolean }) {
   // Derived state
   const strategy = strategies[alignment];
 
-  const handleApply = useCallback(
-    (coords: Coords) => adjustPointing({ variables: { offset: strategy.toInput(coords) } }),
-    [adjustPointing, strategy],
-  );
+  const handleApply = (coords: Coords) => adjustPointing({ variables: { offset: strategy.toInput(coords) } });
 
   const loading =
     offsetLoading ||

@@ -106,7 +106,8 @@ interface LocationInterface {
 export function useGuestLogin() {
   const toast = useToast();
   const setToken = useSetOdbToken();
-  const location = useLocation();
+  const { state: locationState } = useLocation() as { state: LocationInterface };
+
   const { ssoUri } = useServerConfigValue();
 
   const navigate = useNavigate();
@@ -125,14 +126,14 @@ export function useGuestLogin() {
     const token = await response.text();
     if (token) setToken(token);
 
-    const from = (location.state as LocationInterface)?.from?.pathname ?? '/';
+    const from = locationState?.from?.pathname ?? '/';
     toast?.show({
       severity: 'success',
       summary: 'Login Success',
       detail: 'Logged in as guest',
     });
     await navigate(from, { replace: true });
-  }, [location.state, navigate, setToken, ssoUri, toast]);
+  }, [locationState, navigate, setToken, ssoUri, toast]);
 
   return guestLogin;
 }

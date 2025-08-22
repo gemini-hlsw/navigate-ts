@@ -3,7 +3,7 @@ import type { Instrument as InstrumentName } from '@gql/odb/gen/graphql';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { Dropdown } from 'primereact/dropdown';
-import { useCallback, useMemo, useState } from 'react';
+import { useState } from 'react';
 
 import { useImportInstrument } from '@/components/atoms/instrument';
 import type { InstrumentType } from '@/types';
@@ -27,17 +27,14 @@ export function Instrument() {
     variables: { name: name as InstrumentName, issPort: port },
   });
 
-  const nameOptions = useMemo(
-    () => distinctInstrumentsData?.distinctInstruments.map((e) => e.name) ?? [],
-    [distinctInstrumentsData],
-  );
-  const portOptions = useMemo(() => distinctPortsData?.distinctPorts.map((e) => e.issPort) ?? [], [distinctPortsData]);
+  const nameOptions = distinctInstrumentsData?.distinctInstruments.map((e) => e.name) ?? [];
+  const portOptions = distinctPortsData?.distinctPorts.map((e) => e.issPort) ?? [];
 
   const loading = distinctInstrumentsLoading || distinctPortsLoading || instrumentsLoading;
 
-  const modifyInstrument = useCallback(() => {
+  const modifyInstrument = () => {
     setImportInstrument(false);
-  }, [setImportInstrument]);
+  };
 
   const footer = (
     <div className="modal-footer">

@@ -8,7 +8,7 @@ import { Divider } from 'primereact/divider';
 import type { InputNumberProps } from 'primereact/inputnumber';
 import { InputNumber } from 'primereact/inputnumber';
 import { InputText } from 'primereact/inputtext';
-import { useCallback, useEffect, useId, useMemo, useState } from 'react';
+import { useEffect, useId, useState } from 'react';
 
 import { useSetImportInstrument } from '@/components/atoms/instrument';
 import { FloppyDisk, List } from '@/components/Icons';
@@ -47,18 +47,15 @@ export function Instrument({ canEdit }: { canEdit: boolean }) {
 
   const loading = configurationLoading || instrumentLoading || updateInstrumentLoading || instrumentPortLoading;
 
-  const onUpdateInstrument = useCallback(
-    (variables: Partial<InstrumentType>) => {
-      if (auxInstrument)
-        setAuxInstrument({
-          ...auxInstrument,
-          ...variables,
-        });
-    },
-    [auxInstrument],
-  );
+  const onUpdateInstrument = (variables: Partial<InstrumentType>) => {
+    if (auxInstrument)
+      setAuxInstrument({
+        ...auxInstrument,
+        ...variables,
+      });
+  };
 
-  const onClickSave = useCallback(async () => {
+  const onClickSave = async () => {
     if (auxInstrument && instrument)
       await updateInstrument({
         variables: {
@@ -67,17 +64,13 @@ export function Instrument({ canEdit }: { canEdit: boolean }) {
           pk: instrument.pk,
         },
       });
-  }, [auxInstrument, instrument, updateInstrument]);
+  };
 
   // Check if any of the auxInstrument properties are different from the server instrument data. If so the save button is enabled
-  const hasUnsavedChanges = useMemo(
-    () =>
-      !!instrument &&
-      !!auxInstrument &&
-      Object.entries(auxInstrument).some(([key, value]) => instrument[key as keyof InstrumentType] !== value),
-    [auxInstrument, instrument],
-  );
-
+  const hasUnsavedChanges =
+    !!instrument &&
+    !!auxInstrument &&
+    Object.entries(auxInstrument).some(([key, value]) => instrument[key as keyof InstrumentType] !== value);
   if (!instrument?.name || !configuration?.obsInstrument) {
     return null;
   }

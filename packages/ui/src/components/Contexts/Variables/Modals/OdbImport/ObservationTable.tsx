@@ -6,7 +6,7 @@ import { IconField } from 'primereact/iconfield';
 import { InputIcon } from 'primereact/inputicon';
 import { InputText } from 'primereact/inputtext';
 import { MultiSelect } from 'primereact/multiselect';
-import { useCallback, useMemo, useState } from 'react';
+import { useState } from 'react';
 
 import { Search } from '@/components/Icons';
 import type { OdbObservationType } from '@/types';
@@ -64,29 +64,23 @@ export function ObservationTable({
   headerItems,
 }: ParamsInterface) {
   const [columns, setColumns] = useState(defaultColumns);
-  const visibleColumns = useMemo(() => columns.filter((c) => c.visible), [columns]);
+  const visibleColumns = columns.filter((c) => c.visible);
   const [globalFilterValue, setGlobalFilterValue] = useState('');
-  const filters = useMemo(
-    () =>
-      visibleColumns.reduce((acc, c) => ({ ...acc, [c.field]: { value: '', matchMode: FilterMatchMode.CONTAINS } }), {
-        global: { value: globalFilterValue, matchMode: FilterMatchMode.CONTAINS },
-      }),
-    [visibleColumns, globalFilterValue],
-  );
-
-  const onGlobalFilterChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const value = e.target.value;
-      setGlobalFilterValue(value);
+  const filters = visibleColumns.reduce(
+    (acc, c) => ({ ...acc, [c.field]: { value: '', matchMode: FilterMatchMode.CONTAINS } }),
+    {
+      global: { value: globalFilterValue, matchMode: FilterMatchMode.CONTAINS },
     },
-    [setGlobalFilterValue],
   );
 
-  const onMultiSelectChange = useCallback(
-    (e: { value: ColumnProps[] }) =>
-      setColumns(columns.map((c) => ({ ...c, visible: e.value.some((v) => v.field === c.field) }))),
-    [setColumns, columns],
-  );
+  const onGlobalFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setGlobalFilterValue(value);
+  };
+
+  const onMultiSelectChange = (e: { value: ColumnProps[] }) => {
+    setColumns(columns.map((c) => ({ ...c, visible: e.value.some((v) => v.field === c.field) })));
+  };
 
   const header = (
     <div className="header-table">

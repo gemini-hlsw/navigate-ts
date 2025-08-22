@@ -1,5 +1,5 @@
 /// <reference types="vitest" />
-import react from '@vitejs/plugin-react-swc';
+import react from '@vitejs/plugin-react';
 import { execSync } from 'child_process';
 import path from 'path';
 import type { Plugin } from 'vite';
@@ -108,7 +108,11 @@ export default defineConfig(({ mode }) => ({
     },
   },
   plugins: [
-    react({}),
+    react({
+      babel: {
+        plugins: ['babel-plugin-react-compiler'],
+      },
+    }),
     mode === 'development' &&
       mkcert({ hosts: ['localhost', 'local.lucuma.xyz', 'navigate.lucuma.xyz', 'navigate.gemini.edu'] }),
     mode === 'production' && buildVersionFile,

@@ -2,7 +2,6 @@ import { useMutation, useQuery } from '@apollo/client';
 import { useMemo } from 'react';
 
 import { graphql } from './gen';
-import type { EngineeringTarget } from './gen/graphql';
 
 const GET_ENGINEERING_TARGETS = graphql(`
   query getEngineeringTargets {
@@ -48,12 +47,7 @@ export function useEngineeringTargets() {
     context: { clientName: 'navigateConfigs' },
   });
 
-  const filteredData = useMemo(() => {
-    const targets: EngineeringTarget[] = result.data?.engineeringTargets ?? [];
-    return targets;
-  }, [result.data]);
-
-  return { ...result, data: filteredData };
+  return useMemo(() => ({ ...result, data: result.data?.engineeringTargets ?? [] }), [result]);
 }
 
 const UPDATE_ENGINEERING_TARGET = graphql(`

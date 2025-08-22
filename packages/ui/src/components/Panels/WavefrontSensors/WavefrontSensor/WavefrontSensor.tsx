@@ -7,7 +7,7 @@ import { clsx } from 'clsx';
 import { Button } from 'primereact/button';
 import { Checkbox } from 'primereact/checkbox';
 import { Dropdown } from 'primereact/dropdown';
-import { useCallback, useEffect, useId, useState } from 'react';
+import { useEffect, useId, useState } from 'react';
 
 import { Play, Stop } from '@/components/Icons';
 
@@ -100,15 +100,12 @@ function OiwfsObserveButton({ freq, canEdit }: { freq: number; canEdit: boolean 
 
   const integrating = guideStateData?.oiIntegrating;
 
-  const onClick = useCallback(
-    () =>
-      integrating
-        ? stopObserve({})
-        : startObserve({
-            variables: { period: { milliseconds: (1 / freq) * 1000 } },
-          }),
-    [freq, integrating, startObserve, stopObserve],
-  );
+  const onClick = () =>
+    integrating
+      ? stopObserve({})
+      : startObserve({
+          variables: { period: { milliseconds: (1 / freq) * 1000 } },
+        });
 
   return (
     <Button
@@ -153,10 +150,7 @@ function Pwfs2ObserveButton({ canEdit }: { canEdit: boolean }) {
 function TakeSkyButton({ freq, wfs, canEdit }: { freq: number; wfs: GuideProbe; canEdit: boolean }) {
   const [takeSky, { loading: takeSkyLoading }] = useTakeSky();
 
-  const onClick = useCallback(
-    () => takeSky({ variables: { wfs, period: { milliseconds: (1 / freq) * 1000 } } }),
-    [freq, takeSky, wfs],
-  );
+  const onClick = () => takeSky({ variables: { wfs, period: { milliseconds: (1 / freq) * 1000 } } });
 
   return (
     <Button
