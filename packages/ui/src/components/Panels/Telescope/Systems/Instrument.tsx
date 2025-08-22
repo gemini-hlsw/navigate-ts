@@ -1,7 +1,6 @@
 import { useConfiguration } from '@gql/configs/Configuration';
-import { useInstrument, useUpdateInstrument } from '@gql/configs/Instrument';
+import { useConfiguredInstrument, useUpdateInstrument } from '@gql/configs/Instrument';
 import type { Instrument } from '@gql/odb/gen/graphql';
-import { useInstrumentPort } from '@gql/server/Instrument';
 import { Title, TitleDropdown } from '@Shared/Title/Title';
 import { Button } from 'primereact/button';
 import { Divider } from 'primereact/divider';
@@ -12,7 +11,6 @@ import { useEffect, useId, useState } from 'react';
 
 import { useSetImportInstrument } from '@/components/atoms/instrument';
 import { FloppyDisk, List } from '@/components/Icons';
-import { getConfigWfs, isNullish } from '@/Helpers/functions';
 import type { InstrumentType } from '@/types';
 
 export function Instrument({ canEdit }: { canEdit: boolean }) {
@@ -21,23 +19,7 @@ export function Instrument({ canEdit }: { canEdit: boolean }) {
   const configuration = configurationData?.configuration;
   const setImportInstrument = useSetImportInstrument();
 
-  const { data: portData, loading: instrumentPortLoading } = useInstrumentPort({
-    variables: {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
-      instrument: configuration?.obsInstrument! as Instrument,
-    },
-  });
-
-  const { data, loading: instrumentLoading } = useInstrument({
-    skip: isNullish(configuration?.obsInstrument) || isNullish(portData?.instrumentPort),
-    variables: {
-      name: configuration?.obsInstrument,
-      issPort: portData?.instrumentPort,
-      wfs: getConfigWfs(configuration),
-    },
-  });
-
-  const instrument = data?.instrument;
+  const { data: instrument, loading: instrumentLoading } = useConfiguredInstrument();
 
   const [auxInstrument, setAuxInstrument] = useState<InstrumentType | undefined>(undefined);
 
@@ -45,7 +27,7 @@ export function Instrument({ canEdit }: { canEdit: boolean }) {
     setAuxInstrument(instrument ?? undefined);
   }, [instrument]);
 
-  const loading = configurationLoading || instrumentLoading || updateInstrumentLoading || instrumentPortLoading;
+  const loading = configurationLoading || instrumentLoading || updateInstrumentLoading;
 
   const onUpdateInstrument = (variables: Partial<InstrumentType>) => {
     if (auxInstrument)

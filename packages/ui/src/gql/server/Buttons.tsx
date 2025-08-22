@@ -2,7 +2,7 @@
 import type { DocumentNode, OperationVariables } from '@apollo/client';
 import { useMutation } from '@apollo/client/react';
 import { useConfiguration } from '@gql/configs/Configuration';
-import { useInstrument } from '@gql/configs/Instrument';
+import { useConfiguredInstrument } from '@gql/configs/Instrument';
 import { useRotator } from '@gql/configs/Rotator';
 import { useSlewFlags } from '@gql/configs/SlewFlags';
 import { useTargets } from '@gql/configs/Target';
@@ -14,14 +14,12 @@ import type { ReactNode } from 'react';
 
 import { Crosshairs, CrosshairsSlash, Parking, ParkingSlash } from '@/components/Icons';
 import { BTN_CLASSES } from '@/Helpers/constants';
-import { getConfigWfs, isNullish } from '@/Helpers/functions';
 import type { SetStale } from '@/Helpers/hooks';
 import type { SlewFlagsType } from '@/types';
 
 import { MOUNT_FOLLOW_MUTATION, OIWFS_FOLLOW_MUTATION, ROTATOR_FOLLOW_MUTATION, SCS_FOLLOW_MUTATION } from './follow';
 import { graphql } from './gen';
 import type { Instrument, MechSystemState } from './gen/graphql';
-import { useInstrumentPort } from './Instrument';
 import { MOUNT_PARK_MUTATION, OIWFS_PARK_MUTATION, ROTATOR_PARK_MUTATION } from './park';
 
 // Generic mutation button
@@ -175,23 +173,9 @@ export function Slew(props: ButtonProps) {
   const { data: configData, loading: configLoading } = useConfiguration();
   const configuration = configData?.configuration;
 
-  const { data: instrumentPortData, loading: instrumentPortLoading } = useInstrumentPort({
-    // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
-    variables: { instrument: configuration?.obsInstrument! as Instrument },
-  });
+  const { data: instrument, loading: instrumentLoading } = useConfiguredInstrument();
 
-  const { data: instrumentData, loading: instrumentLoading } = useInstrument({
-    skip: isNullish(configuration?.obsInstrument) || isNullish(instrumentPortData?.instrumentPort),
-    variables: {
-      name: configuration?.obsInstrument,
-      issPort: instrumentPortData?.instrumentPort,
-      wfs: getConfigWfs(configuration),
-    },
-  });
-  const instrument = instrumentData?.instrument;
-
-  const loading =
-    targetsLoading || slewLoading || rotatorLoading || configLoading || instrumentLoading || instrumentPortLoading;
+  const loading = targetsLoading || slewLoading || rotatorLoading || configLoading || instrumentLoading;
 
   const selectedTarget = baseTargets.find((t) => t.pk === configuration?.selectedTarget);
   const selectedOiTarget = oiTargets.find((t) => t.pk === configuration?.selectedOiTarget);

@@ -6,9 +6,12 @@ import { useCanEdit } from '@/components/atoms/auth';
 import { useSetSlewVisible } from '@/components/atoms/slew';
 import { Gear } from '@/components/Icons';
 
+import { ApplyParameters } from './ApplyParameters';
+
 export function Footer() {
   const canEdit = useCanEdit();
   const setSlewVisible = useSetSlewVisible();
+
   return (
     <div className="footer">
       <TitleDropdown icon={<Gear />}>
@@ -20,13 +23,13 @@ export function Footer() {
         />
       </TitleDropdown>
       <Slew label="Slew Telescope" disabled={!canEdit} />
-      <Button disabled={!canEdit} label="Apply Parameters" aria-label="Apply Parameters" />
+      <ApplyParameters canEdit={canEdit} />
       <div></div>
       <Button
         disabled={!canEdit}
         severity="danger"
         size="small"
-        className="right"
+        className="right under-construction"
         label="Shutdown"
         aria-label="Shutdown"
       />

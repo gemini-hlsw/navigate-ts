@@ -7,7 +7,7 @@ type EngineeringTarget {
   "Primary Key"
   pk: PosInt!
   "Target ID"
-  id: String
+  id: String!
   "Name of the target"
   name: String!
   "Right Ascention"
@@ -47,7 +47,7 @@ type Query {
 
 type Mutation {
   createEngineeringTarget(
-    id: String
+    id: String!
     name: String!
     ra: Float
     az: Float
