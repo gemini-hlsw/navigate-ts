@@ -48,7 +48,7 @@
     "lucuma-ui-css": "0.156.2",
     "navigate-schema": "workspace:*",
     "navigate-server-schema": "catalog:",
-    "playwright": "1.54.2",
+    "playwright": "1.55.0",
     "primereact": "10.9.6",
     "react": "19.1.1",
     "react-dom": "19.1.1",
