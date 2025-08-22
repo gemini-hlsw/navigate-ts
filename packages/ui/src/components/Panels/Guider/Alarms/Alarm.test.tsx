@@ -50,7 +50,7 @@ describe(Alarm.name, () => {
   });
 
   it('should call onUpdateAlarm when enabled changes', async () => {
-    const checkbox = sut.getByRole('switch');
+    const checkbox = sut.getByRole('checkbox', { name: 'Enable alarm' });
 
     await switchEnabled(checkbox);
     expect(onUpdateAlarm).toHaveBeenCalledWith({ wfs: 'PWFS1', enabled: false });
