@@ -36,9 +36,9 @@ export default function Navbar() {
 
   const userSession = () => {
     if (isLoggedIn) {
-      void signout();
+      return signout();
     } else {
-      void navigateToSignIn();
+      return navigateToSignIn();
     }
   };
 
@@ -51,6 +51,7 @@ export default function Navbar() {
     {
       label: isLoggedIn ? 'Logout' : 'Login',
       icon: <SignInIcon className="p-menuitem-icon" />,
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises
       command: userSession,
     },
     {

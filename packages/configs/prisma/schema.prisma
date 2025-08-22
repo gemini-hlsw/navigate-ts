@@ -44,7 +44,7 @@ enum GuidingType {
 
 model EngineeringTarget {
   pk             Int           @id @default(autoincrement())
-  id             String?
+  id             String
   name           String        @default("Test")
   coord1         Float // RA or Az
   coord2         Float // Dec or El
@@ -63,7 +63,7 @@ model EngineeringTarget {
 
 model Target {
   pk             Int        @id @default(autoincrement())
-  id             String?
+  id             String
   name           String     @default("Test")
   coord1         Float // RA or Az
   coord2         Float // Dec or El

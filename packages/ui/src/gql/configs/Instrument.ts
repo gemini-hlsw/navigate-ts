@@ -1,6 +1,10 @@
 import { useMutation, useQuery } from '@apollo/client/react';
+import { useInstrumentPort } from '@gql/server/Instrument';
 import type { OptionsOf } from '@gql/util';
 
+import { getConfigWfs, isNullish } from '@/Helpers/functions';
+
+import { useConfiguration } from './Configuration';
 import { graphql } from './gen';
 
 const GET_DISTINCT_INSTRUMENTS = graphql(`
@@ -147,4 +151,31 @@ export function useResetInstruments() {
   return useMutation(RESET_INSTRUMENTS, {
     context: { clientName: 'navigateConfigs' },
   });
+}
+
+export function useConfiguredInstrument(options: Omit<OptionsOf<typeof GET_INSTRUMENT>, 'variables'> = {}) {
+  const { data: configurationData, loading: configurationLoading } = useConfiguration();
+  const configuration = configurationData?.configuration;
+
+  const { data: instrumentPortData, loading: instrumentPortLoading } = useInstrumentPort({
+    skip: isNullish(configuration?.obsInstrument),
+    // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
+    variables: { instrument: configuration?.obsInstrument! },
+  });
+
+  const instrument = useInstrument({
+    ...options,
+    skip: isNullish(configuration?.obsInstrument) || isNullish(instrumentPortData?.instrumentPort) || options.skip,
+    variables: {
+      name: configuration?.obsInstrument,
+      issPort: instrumentPortData?.instrumentPort,
+      wfs: getConfigWfs(configuration),
+    },
+  });
+
+  return {
+    ...instrument,
+    data: instrument.data?.instrument,
+    loading: configurationLoading || instrumentPortLoading || instrument.loading,
+  };
 }
