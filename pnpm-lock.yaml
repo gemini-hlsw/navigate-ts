@@ -245,8 +245,8 @@ importers:
         specifier: 1.55.0
         version: 1.55.0
       primereact:
-        specifier: 10.9.6
-        version: 10.9.6(@types/react@19.1.10)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+        specifier: 10.9.7
+        version: 10.9.7(@types/react@19.1.10)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       react:
         specifier: 19.1.1
         version: 19.1.1
@@ -3697,8 +3697,8 @@ packages:
     resolution: {integrity: sha512-4yf0QO/sllf/1zbZWYnvWw3NxCQwLXKzIj0G849LSufP15BXKM0rbD2Z3wVnkMfjdn/CB0Dpp444gYAACdsplg==}
     engines: {node: '>=18'}
 
-  primereact@10.9.6:
-    resolution: {integrity: sha512-0Jjz/KzfUURSHaPTXJwjL2Dc7CDPnbO17MivyJz7T5smGAMLY5d+IqpQhV61R22G/rDmhMh3+32LCNva2M8fRw==}
+  primereact@10.9.7:
+    resolution: {integrity: sha512-Ap/lg9GGaS8Pq7IIlzguuG3qlaU6PYF6E0cCRo0rnWauRw/SQGvfreSVIIxqEhtR6xqlf7OV759lyvVOvBzmsQ==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
       '@types/react': ^17.0.0 || ^18.0.0 || ^19.0.0
@@ -8432,7 +8432,7 @@ snapshots:
     dependencies:
       parse-ms: 4.0.0
 
-  primereact@10.9.6(@types/react@19.1.10)(react-dom@19.1.1(react@19.1.1))(react@19.1.1):
+  primereact@10.9.7(@types/react@19.1.10)(react-dom@19.1.1(react@19.1.1))(react@19.1.1):
     dependencies:
       '@types/react-transition-group': 4.4.12(@types/react@19.1.10)
       react: 19.1.1

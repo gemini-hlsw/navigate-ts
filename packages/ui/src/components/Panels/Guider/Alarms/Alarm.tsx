@@ -56,6 +56,7 @@ export function Alarm({
           disabled={disabledOrNoData}
           checked={enabled}
           onChange={onEnabledChange}
+          aria-label="Enable alarm"
         />
       </div>
       <div className="body">
