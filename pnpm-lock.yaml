@@ -173,8 +173,8 @@ importers:
         specifier: 7.0.0
         version: 7.0.0
       '@fortawesome/react-fontawesome':
-        specifier: 3.0.0
-        version: 3.0.0(@fortawesome/fontawesome-svg-core@7.0.0)(react@19.1.1)
+        specifier: 3.0.1
+        version: 3.0.1(@fortawesome/fontawesome-svg-core@7.0.0)(react@19.1.1)
       '@graphql-codegen/cli':
         specifier: 'catalog:'
         version: 5.0.7(@parcel/watcher@2.5.1)(@types/node@24.3.0)(graphql@16.11.0)(typescript@5.9.2)
@@ -723,8 +723,9 @@ packages:
     resolution: {integrity: sha512-GM8SvhbHplrtE6osW6KZgu308ncR8PlcjYbwVoYWhp5zKLWSuLqu7pVczeEJIf5OzJ0UZLOi4Iqk4c6Jk1t3HA==}
     engines: {node: '>=6'}
 
-  '@fortawesome/react-fontawesome@3.0.0':
-    resolution: {integrity: sha512-x6boc1RLEjf/QPrMS20VJcabTZeGCb1hbwNybPPLjJohGPowXfjOpwQlVK6aH6MVKfCq2JXeHRIlx+tYpS18FA==}
+  '@fortawesome/react-fontawesome@3.0.1':
+    resolution: {integrity: sha512-kpVyf85UHhQ+Y/TPyiNaUldqylhhXiVXv20z7sq+CLmhKLXWbzjIHaRPDrHIydnrL6Qq9oFwuNHq66alJdDM5Q==}
+    engines: {node: '>=20'}
     peerDependencies:
       '@fortawesome/fontawesome-svg-core': ~6 || ~7
       react: ^18.0.0 || ^19.0.0
@@ -5052,7 +5053,7 @@ snapshots:
     dependencies:
       '@fortawesome/fontawesome-common-types': 7.0.0
 
-  '@fortawesome/react-fontawesome@3.0.0(@fortawesome/fontawesome-svg-core@7.0.0)(react@19.1.1)':
+  '@fortawesome/react-fontawesome@3.0.1(@fortawesome/fontawesome-svg-core@7.0.0)(react@19.1.1)':
     dependencies:
       '@fortawesome/fontawesome-svg-core': 7.0.0
       react: 19.1.1
