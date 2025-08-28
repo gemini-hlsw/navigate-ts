@@ -25,7 +25,7 @@
     "@apollo/client": "4.0.0",
     "@fortawesome/pro-regular-svg-icons": "7.0.0",
     "@fortawesome/pro-solid-svg-icons": "7.0.0",
-    "@fortawesome/react-fontawesome": "3.0.0",
+    "@fortawesome/react-fontawesome": "3.0.1",
     "@graphql-codegen/cli": "catalog:",
     "@graphql-codegen/client-preset": "4.8.3",
     "@graphql-typed-document-node/core": "3.2.0",
