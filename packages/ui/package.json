@@ -22,7 +22,7 @@
     "codegen": "graphql-codegen --config tasks/codegen.ts"
   },
   "devDependencies": {
-    "@apollo/client": "4.0.2",
+    "@apollo/client": "4.0.3",
     "@fortawesome/pro-regular-svg-icons": "7.0.0",
     "@fortawesome/pro-solid-svg-icons": "7.0.0",
     "@fortawesome/react-fontawesome": "3.0.1",
