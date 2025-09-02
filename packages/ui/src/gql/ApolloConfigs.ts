@@ -10,10 +10,9 @@ import {
 } from '@apollo/client';
 import { SetContextLink } from '@apollo/client/link/context';
 import { ErrorLink } from '@apollo/client/link/error';
-// Subscription channel
-import { WebSocketLink } from '@apollo/client/link/ws';
+import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { OperationTypeNode } from 'graphql/language';
-import { SubscriptionClient } from 'subscriptions-transport-ws';
+import { createClient as createWsClient } from 'graphql-ws';
 
 import { odbTokenAtom } from '@/components/atoms/auth';
 import { serverConfigAtom } from '@/components/atoms/config';
@@ -87,8 +86,9 @@ function createClient() {
 
   const odbLink = new HttpLink({ uri: () => store.get(serverConfigAtom)?.odbUri ?? '/odb' });
 
-  const subscriptionClient = new SubscriptionClient(navigateServerWsURI, {
-    reconnect: true,
+  const subscriptionClient = createWsClient({
+    url: navigateServerWsURI,
+    shouldRetry: () => true,
   });
 
   // How long to wait until we assume the websocket is disconnected
@@ -103,12 +103,10 @@ function createClient() {
     clearTimeout(wsIsConnectedTimer);
     wsIsConnectedTimer = setTimeout(() => store.set(wsIsConnectedAtom, false), disconnectTimeoutMs);
   };
-  subscriptionClient.onConnected(setWebSocketConnected);
-  subscriptionClient.onDisconnected(setWebsocketDisconnected);
-  subscriptionClient.onReconnected(setWebSocketConnected);
+  subscriptionClient.on('connected', setWebSocketConnected);
+  subscriptionClient.on('closed', setWebsocketDisconnected);
 
-  // eslint-disable-next-line @typescript-eslint/no-deprecated
-  const wsLink = new WebSocketLink(subscriptionClient);
+  const wsLink = new GraphQLWsLink(subscriptionClient);
 
   return new ApolloClient({
     clientAwareness: {
