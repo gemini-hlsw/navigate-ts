@@ -50,6 +50,9 @@ export const GET_INSTRUMENTS = graphql(`
       originY
       ao
       extraParams
+      isTemporary
+      comment
+      createdAt
     }
   }
 `);
@@ -74,6 +77,9 @@ export const GET_INSTRUMENT = graphql(`
       originY
       ao
       extraParams
+      isTemporary
+      comment
+      createdAt
     }
   }
 `);
@@ -81,6 +87,56 @@ export const GET_INSTRUMENT = graphql(`
 export function useInstrument(options: OptionsOf<typeof GET_INSTRUMENT> = {}) {
   return useQuery(GET_INSTRUMENT, {
     ...options,
+    context: { clientName: 'navigateConfigs' },
+  });
+}
+
+export const CREATE_INSTRUMENT = graphql(`
+  mutation createInstrument(
+    $name: Instrument!
+    $iaa: Float
+    $issPort: Int!
+    $focusOffset: Float
+    $wfs: WfsType
+    $originX: Float
+    $originY: Float
+    $ao: Boolean!
+    $extraParams: JSON
+    $isTemporary: Boolean!
+    $comment: String
+  ) {
+    createInstrument(
+      name: $name
+      iaa: $iaa
+      issPort: $issPort
+      focusOffset: $focusOffset
+      wfs: $wfs
+      originX: $originX
+      originY: $originY
+      ao: $ao
+      extraParams: $extraParams
+      isTemporary: $isTemporary
+      comment: $comment
+    ) {
+      pk
+      name
+      iaa
+      issPort
+      focusOffset
+      wfs
+      originX
+      originY
+      ao
+      extraParams
+      isTemporary
+      comment
+      createdAt
+    }
+  }
+`);
+
+export function useCreateInstrument() {
+  return useMutation(CREATE_INSTRUMENT, {
     context: { clientName: 'navigateConfigs' },
   });
 }
@@ -97,6 +153,8 @@ export const UPDATE_INSTRUMENT = graphql(`
     $originY: Float
     $ao: Boolean
     $extraParams: JSON
+    $isTemporary: Boolean
+    $comment: String
   ) {
     updateInstrument(
       pk: $pk
@@ -109,6 +167,8 @@ export const UPDATE_INSTRUMENT = graphql(`
       originY: $originY
       ao: $ao
       extraParams: $extraParams
+      isTemporary: $isTemporary
+      comment: $comment
     ) {
       pk
       name
@@ -120,6 +180,9 @@ export const UPDATE_INSTRUMENT = graphql(`
       originY
       ao
       extraParams
+      isTemporary
+      comment
+      createdAt
     }
   }
 `);
@@ -132,18 +195,7 @@ export function useUpdateInstrument() {
 
 const RESET_INSTRUMENTS = graphql(`
   mutation resetInstruments($name: Instrument!) {
-    resetInstruments(name: $name) {
-      pk
-      name
-      iaa
-      issPort
-      focusOffset
-      wfs
-      originX
-      originY
-      ao
-      extraParams
-    }
+    resetInstruments(name: $name)
   }
 `);
 

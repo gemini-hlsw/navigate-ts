@@ -12,6 +12,8 @@ export const INITIAL_INSTRUMENTS: (Prisma.InstrumentCreateInput & { name: Instru
     originX: 0.0,
     originY: 0.0,
     extraParams: {},
+    isTemporary: false,
+    comment: 'Initial configuration',
   },
   {
     wfs: 'OIWFS',
@@ -23,6 +25,8 @@ export const INITIAL_INSTRUMENTS: (Prisma.InstrumentCreateInput & { name: Instru
     originX: 0.0,
     originY: 0.0,
     extraParams: {},
+    isTemporary: false,
+    comment: 'Initial configuration',
   },
   {
     wfs: 'PWFS1',
@@ -34,6 +38,8 @@ export const INITIAL_INSTRUMENTS: (Prisma.InstrumentCreateInput & { name: Instru
     originX: 0.0,
     originY: 0.0,
     extraParams: {},
+    isTemporary: false,
+    comment: 'Initial configuration',
   },
   {
     wfs: 'PWFS2',
@@ -45,6 +51,8 @@ export const INITIAL_INSTRUMENTS: (Prisma.InstrumentCreateInput & { name: Instru
     originX: 0.0,
     originY: 0.0,
     extraParams: {},
+    isTemporary: false,
+    comment: 'Initial configuration',
   },
   {
     wfs: 'NONE',
@@ -56,6 +64,8 @@ export const INITIAL_INSTRUMENTS: (Prisma.InstrumentCreateInput & { name: Instru
     originX: 29.41,
     originY: -2.09,
     extraParams: { ifu: true },
+    isTemporary: false,
+    comment: 'Initial configuration',
   },
   {
     wfs: 'OIWFS',
@@ -67,6 +77,8 @@ export const INITIAL_INSTRUMENTS: (Prisma.InstrumentCreateInput & { name: Instru
     originX: 29.41,
     originY: -2.09,
     extraParams: { ifu: true },
+    isTemporary: false,
+    comment: 'Initial configuration',
   },
   {
     wfs: 'PWFS1',
@@ -78,6 +90,8 @@ export const INITIAL_INSTRUMENTS: (Prisma.InstrumentCreateInput & { name: Instru
     originX: 29.41,
     originY: -2.09,
     extraParams: { ifu: true },
+    isTemporary: false,
+    comment: 'Initial configuration',
   },
   {
     wfs: 'PWFS2',
@@ -89,6 +103,8 @@ export const INITIAL_INSTRUMENTS: (Prisma.InstrumentCreateInput & { name: Instru
     originX: 29.41,
     originY: -2.09,
     extraParams: { ifu: true },
+    isTemporary: false,
+    comment: 'Initial configuration',
   },
   {
     wfs: 'NONE',
@@ -100,6 +116,8 @@ export const INITIAL_INSTRUMENTS: (Prisma.InstrumentCreateInput & { name: Instru
     originX: 0.0,
     originY: 0.0,
     extraParams: {},
+    isTemporary: false,
+    comment: 'Initial configuration',
   },
   {
     wfs: 'OIWFS',
@@ -111,6 +129,8 @@ export const INITIAL_INSTRUMENTS: (Prisma.InstrumentCreateInput & { name: Instru
     originX: 0.0,
     originY: 0.0,
     extraParams: {},
+    isTemporary: false,
+    comment: 'Initial configuration',
   },
   {
     wfs: 'PWFS1',
@@ -122,6 +142,8 @@ export const INITIAL_INSTRUMENTS: (Prisma.InstrumentCreateInput & { name: Instru
     originX: 0.0,
     originY: 0.0,
     extraParams: {},
+    isTemporary: false,
+    comment: 'Initial configuration',
   },
   {
     wfs: 'PWFS2',
@@ -133,6 +155,8 @@ export const INITIAL_INSTRUMENTS: (Prisma.InstrumentCreateInput & { name: Instru
     originX: 0.0,
     originY: 0.0,
     extraParams: {},
+    isTemporary: false,
+    comment: 'Initial configuration',
   },
   {
     wfs: 'NONE',
@@ -144,6 +168,8 @@ export const INITIAL_INSTRUMENTS: (Prisma.InstrumentCreateInput & { name: Instru
     originX: 0.0,
     originY: 0.0,
     extraParams: { ifu: true },
+    isTemporary: false,
+    comment: 'Initial configuration',
   },
   {
     wfs: 'OIWFS',
@@ -155,6 +181,8 @@ export const INITIAL_INSTRUMENTS: (Prisma.InstrumentCreateInput & { name: Instru
     originX: 0.0,
     originY: 0.0,
     extraParams: { ifu: true },
+    isTemporary: false,
+    comment: 'Initial configuration',
   },
   {
     wfs: 'PWFS1',
@@ -166,6 +194,8 @@ export const INITIAL_INSTRUMENTS: (Prisma.InstrumentCreateInput & { name: Instru
     originX: 0.0,
     originY: 0.0,
     extraParams: { ifu: true },
+    isTemporary: false,
+    comment: 'Initial configuration',
   },
   {
     wfs: 'PWFS2',
@@ -177,6 +207,8 @@ export const INITIAL_INSTRUMENTS: (Prisma.InstrumentCreateInput & { name: Instru
     originX: 0.0,
     originY: 0.0,
     extraParams: { ifu: true },
+    isTemporary: false,
+    comment: 'Initial configuration',
   },
   // TODO: Check GSAOI origin when available
   {
@@ -189,6 +221,8 @@ export const INITIAL_INSTRUMENTS: (Prisma.InstrumentCreateInput & { name: Instru
     originX: 2.82,
     originY: -2.96,
     extraParams: {},
+    isTemporary: false,
+    comment: 'Initial configuration',
   },
   {
     wfs: 'NONE',
@@ -200,6 +234,8 @@ export const INITIAL_INSTRUMENTS: (Prisma.InstrumentCreateInput & { name: Instru
     originX: 0.0,
     originY: -7.0,
     extraParams: {},
+    isTemporary: false,
+    comment: 'Initial configuration',
   },
   {
     wfs: 'NONE',
@@ -211,6 +247,8 @@ export const INITIAL_INSTRUMENTS: (Prisma.InstrumentCreateInput & { name: Instru
     originX: 0.0,
     originY: 0.0,
     extraParams: {},
+    isTemporary: false,
+    comment: 'Initial configuration',
   },
   {
     wfs: 'PWFS2',
@@ -222,6 +260,8 @@ export const INITIAL_INSTRUMENTS: (Prisma.InstrumentCreateInput & { name: Instru
     originX: 0.0,
     originY: 0.0,
     extraParams: {},
+    isTemporary: false,
+    comment: 'Initial configuration',
   },
   // TODO: GHOST has multiple configs depending on the target
   {
@@ -234,6 +274,8 @@ export const INITIAL_INSTRUMENTS: (Prisma.InstrumentCreateInput & { name: Instru
     originX: 0.0,
     originY: 0.0,
     extraParams: {},
+    isTemporary: false,
+    comment: 'Initial configuration',
   },
   {
     wfs: 'PWFS2',
@@ -245,6 +287,8 @@ export const INITIAL_INSTRUMENTS: (Prisma.InstrumentCreateInput & { name: Instru
     originX: 0.0,
     originY: 0.0,
     extraParams: {},
+    isTemporary: false,
+    comment: 'Initial configuration',
   },
   {
     wfs: 'NONE',
@@ -256,6 +300,8 @@ export const INITIAL_INSTRUMENTS: (Prisma.InstrumentCreateInput & { name: Instru
     originX: 0.0,
     originY: 0.0,
     extraParams: {},
+    isTemporary: false,
+    comment: 'Initial configuration',
   },
   {
     wfs: 'PWFS2',
@@ -267,6 +313,8 @@ export const INITIAL_INSTRUMENTS: (Prisma.InstrumentCreateInput & { name: Instru
     originX: 0.0,
     originY: 0.0,
     extraParams: {},
+    isTemporary: false,
+    comment: 'Initial configuration',
   },
   {
     wfs: 'NONE',
@@ -278,6 +326,8 @@ export const INITIAL_INSTRUMENTS: (Prisma.InstrumentCreateInput & { name: Instru
     originX: 0.0,
     originY: 0.0,
     extraParams: {},
+    isTemporary: false,
+    comment: 'Initial configuration',
   },
   {
     wfs: 'NONE',
@@ -289,6 +339,8 @@ export const INITIAL_INSTRUMENTS: (Prisma.InstrumentCreateInput & { name: Instru
     originX: 0.5,
     originY: -31.3,
     extraParams: {},
+    isTemporary: false,
+    comment: 'Initial configuration',
   },
   {
     wfs: 'NONE',
@@ -300,6 +352,8 @@ export const INITIAL_INSTRUMENTS: (Prisma.InstrumentCreateInput & { name: Instru
     originX: 0.0,
     originY: 0.0,
     extraParams: {},
+    isTemporary: false,
+    comment: 'Initial configuration',
   },
 ];
 

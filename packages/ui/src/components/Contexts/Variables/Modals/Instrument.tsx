@@ -9,11 +9,38 @@ import { useImportInstrument } from '@/components/atoms/instrument';
 import type { InstrumentType } from '@/types';
 
 export function Instrument() {
+  const [importInstrument, setImportInstrument] = useImportInstrument();
+
+  const modifyInstrument = () => {
+    setImportInstrument(false);
+  };
+
+  const footer = (
+    <div className="modal-footer">
+      <div className="right">
+        <Button label="Import" onClick={modifyInstrument} />
+        <Button severity="danger" label="Cancel" onClick={() => setImportInstrument(false)} />
+      </div>
+    </div>
+  );
+
+  return (
+    <Dialog
+      header="Import instrument"
+      visible={importInstrument}
+      footer={footer}
+      modal
+      onHide={() => setImportInstrument(false)}
+    >
+      <InstrumentModalContent importInstrument={importInstrument} />
+    </Dialog>
+  );
+}
+
+function InstrumentModalContent({ importInstrument }: { importInstrument: boolean }) {
   const [name, setName] = useState<InstrumentName | ''>('');
   const [port, setPort] = useState(0);
   const [currentInstrument, setCurrentInstrument] = useState<InstrumentType | undefined>();
-
-  const [importInstrument, setImportInstrument] = useImportInstrument();
 
   const { data: distinctInstrumentsData, loading: distinctInstrumentsLoading } = useDistinctInstruments({
     skip: !importInstrument,
@@ -31,19 +58,6 @@ export function Instrument() {
   const portOptions = distinctPortsData?.distinctPorts.map((e) => e.issPort) ?? [];
 
   const loading = distinctInstrumentsLoading || distinctPortsLoading || instrumentsLoading;
-
-  const modifyInstrument = () => {
-    setImportInstrument(false);
-  };
-
-  const footer = (
-    <div className="modal-footer">
-      <div className="right">
-        <Button label="Import" onClick={modifyInstrument} />
-        <Button severity="danger" label="Cancel" onClick={() => setImportInstrument(false)} />
-      </div>
-    </div>
-  );
 
   const tableData = instrumentsData?.instruments.map((i) => (
     <InstrumentDetails
@@ -75,38 +89,30 @@ export function Instrument() {
   }
 
   return (
-    <Dialog
-      header="Import instrument"
-      visible={importInstrument}
-      footer={footer}
-      modal
-      onHide={() => setImportInstrument(false)}
-    >
-      <div className="import-instrument">
-        <div className="selectors">
-          <label htmlFor="instrument-import-name">Instrument</label>
-          <Dropdown
-            inputId="instrument-import-name"
-            value={name}
-            loading={loading}
-            options={nameOptions}
-            onChange={(e) => setName(e.target.value as InstrumentName)}
-            placeholder="Select instrument"
-          />
-          <label htmlFor="instrument-import-issPort">issPort</label>
-          <Dropdown
-            inputId="instrument-import-issPort"
-            loading={loading}
-            disabled={portOptions.length <= 0}
-            value={port}
-            options={portOptions}
-            onChange={(e) => setPort(e.target.value as number)}
-            placeholder="Select port"
-          />
-        </div>
-        {table}
+    <div className="import-instrument">
+      <div className="selectors">
+        <label htmlFor="instrument-import-name">Instrument</label>
+        <Dropdown
+          inputId="instrument-import-name"
+          value={name}
+          loading={loading}
+          options={nameOptions}
+          onChange={(e) => setName(e.target.value as InstrumentName)}
+          placeholder="Select instrument"
+        />
+        <label htmlFor="instrument-import-issPort">issPort</label>
+        <Dropdown
+          inputId="instrument-import-issPort"
+          loading={loading}
+          disabled={portOptions.length <= 0}
+          value={port}
+          options={portOptions}
+          onChange={(e) => setPort(e.target.value as number)}
+          placeholder="Select port"
+        />
       </div>
-    </Dialog>
+      {table}
+    </div>
   );
 }
 

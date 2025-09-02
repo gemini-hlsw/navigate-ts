@@ -1,4 +1,4 @@
-#import JSON from "./Scalars.graphql"
+#import DateTime, Void, JSON from "./Scalars.graphql"
 #import Instrument, PosInt from "lucuma-schemas/odb"
 
 enum WfsType {
@@ -29,6 +29,12 @@ type InstrumentConfig {
   ao: Boolean!
   "Instrument dependent set of parameters"
   extraParams: JSON!
+  "Whether the instrument parameters are temporary (not a new configuration)"
+  isTemporary: Boolean!
+  "Comment about the update"
+  comment: String
+  "Datetime when it was created"
+  createdAt: DateTime!
 }
 
 type DistinctInstrument {
@@ -69,6 +75,10 @@ type Mutation {
     ao: Boolean
     "Instrument dependent set of parameters"
     extraParams: JSON
+    "Whether the instrument parameters are temporary (not a new configuration)"
+    isTemporary: Boolean
+    "Comment about the update"
+    comment: String
   ): InstrumentConfig!
 
   updateInstrument(
@@ -82,8 +92,10 @@ type Mutation {
     originY: Float
     ao: Boolean
     extraParams: JSON
+    isTemporary: Boolean
+    comment: String
   ): InstrumentConfig!
 
-  "Reset the instruments to their default values"
-  resetInstruments(name: Instrument!): [InstrumentConfig!]!
+  "Reset the instruments to their default values, removing all temporary configurations"
+  resetInstruments(name: Instrument!): Void
 }
