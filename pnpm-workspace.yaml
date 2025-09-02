@@ -8,7 +8,7 @@ catalog:
   '@parcel/watcher': 2.5.1
   lucuma-core: 0.142.0
   lucuma-schemas: 0.157.2
-  navigate-server-schema: 0.1.0-20250807-122d2878
+  navigate-server-schema: 0.1.0-20250828-eaf1f783
   typescript: 5.9.2
 
 injectWorkspacePackages: true
