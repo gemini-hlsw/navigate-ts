@@ -16,7 +16,7 @@
   },
   "scripts": {
     "test": "pnpm test:integration",
-    "test:integration": "node --test --enable-source-maps --test-timeout 20000 'dist/integration/**/*.test.js'",
+    "test:integration": "node --test --enable-source-maps --test-timeout 20000 'src/integration/**/*.test.ts'",
     "generate": "prisma generate",
     "prebuild": "pnpm generate && pnpm codegen",
     "build": "tsc -b",
@@ -24,7 +24,7 @@
     "start": "pnpm build && pnpm preview",
     "preview": "node --enable-source-maps ./dist/index.js",
     "populate": "prisma migrate reset --force",
-    "dev": "node --env-file=.env --watch --enable-source-maps ./dist/index.js",
+    "dev": "node --env-file=.env --watch --enable-source-maps ./src/index.ts",
     "codegen": "graphql-codegen --config tasks/codegen.ts",
     "codegen:watch": "pnpm codegen --watch 'src/graphql/**/*.ts' --watch '../schema/src/*.graphql'",
     "lint:eslint": "eslint ."

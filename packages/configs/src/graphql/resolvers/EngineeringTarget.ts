@@ -1,4 +1,4 @@
-import type { EngineeringTarget, Resolvers } from '../gen/index.js';
+import type { EngineeringTarget, Resolvers } from '../gen/index.ts';
 
 export const EngineeringTargetResolver: Resolvers = {
   Query: {

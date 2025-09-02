@@ -1,5 +1,5 @@
-import type { Prisma } from '../../prisma/gen/client.js';
-import type { InstrumentConfig, Resolvers } from '../gen/index.js';
+import type { Prisma } from '../../prisma/gen/client.ts';
+import type { InstrumentConfig, Resolvers } from '../gen/index.ts';
 
 // Temporary instruments first, then most recent first
 const orderBy: Prisma.InstrumentOrderByWithRelationInput[] = [{ isTemporary: 'desc' }, { createdAt: 'desc' }];

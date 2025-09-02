@@ -4,23 +4,23 @@ import { loadSchema } from '@graphql-tools/load';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
-import { AltairGuideLoopResolver } from './graphql/resolvers/AltairGuideLoop.js';
-import { AltairInstrumentResolver } from './graphql/resolvers/AltairInstrument.js';
-import { ConfigurationResolver } from './graphql/resolvers/Configuration.js';
-import { EngineeringTargetResolver } from './graphql/resolvers/EngineeringTarget.js';
-import { GemsGuideLoopResolver } from './graphql/resolvers/GemsGuideLoop.js';
-import { GemsInstrumentResolver } from './graphql/resolvers/GemsInstrument.js';
-import { GuideAlarmResolver } from './graphql/resolvers/GuideAlarm.js';
-import { GuideLoopResolver } from './graphql/resolvers/GuideLoop.js';
-import { InstrumentResolver } from './graphql/resolvers/Instrument.js';
-import { MechanismResolver } from './graphql/resolvers/Mechanism.js';
-import { RotatorResolver } from './graphql/resolvers/Rotator.js';
-import { ScalarResolvers } from './graphql/resolvers/Scalars.js';
-import { SlewFlagsResolver } from './graphql/resolvers/SlewFlags.js';
-import { TargetResolver } from './graphql/resolvers/Target.js';
-import { UserResolver } from './graphql/resolvers/User.js';
-import { VersionResolver } from './graphql/resolvers/Version.js';
-import type { Prisma } from './prisma/db.js';
+import { AltairGuideLoopResolver } from './graphql/resolvers/AltairGuideLoop.ts';
+import { AltairInstrumentResolver } from './graphql/resolvers/AltairInstrument.ts';
+import { ConfigurationResolver } from './graphql/resolvers/Configuration.ts';
+import { EngineeringTargetResolver } from './graphql/resolvers/EngineeringTarget.ts';
+import { GemsGuideLoopResolver } from './graphql/resolvers/GemsGuideLoop.ts';
+import { GemsInstrumentResolver } from './graphql/resolvers/GemsInstrument.ts';
+import { GuideAlarmResolver } from './graphql/resolvers/GuideAlarm.ts';
+import { GuideLoopResolver } from './graphql/resolvers/GuideLoop.ts';
+import { InstrumentResolver } from './graphql/resolvers/Instrument.ts';
+import { MechanismResolver } from './graphql/resolvers/Mechanism.ts';
+import { RotatorResolver } from './graphql/resolvers/Rotator.ts';
+import { ScalarResolvers } from './graphql/resolvers/Scalars.ts';
+import { SlewFlagsResolver } from './graphql/resolvers/SlewFlags.ts';
+import { TargetResolver } from './graphql/resolvers/Target.ts';
+import { UserResolver } from './graphql/resolvers/User.ts';
+import { VersionResolver } from './graphql/resolvers/Version.ts';
+import type { Prisma } from './prisma/db.ts';
 
 // Resolvers define how to fetch the types defined in your schema.
 const resolvers = {

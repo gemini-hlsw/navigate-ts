@@ -1,5 +1,5 @@
-import { extendPrisma } from './extend.js';
-import { PrismaClient } from './gen/client.js';
+import { extendPrisma } from './extend.ts';
+import { PrismaClient } from './gen/client.ts';
 
 export const prisma = extendPrisma(new PrismaClient());
 

@@ -1,4 +1,4 @@
-import type { Configuration, Resolvers } from '../gen/index.js';
+import type { Configuration, Resolvers } from '../gen/index.ts';
 
 export const ConfigurationResolver: Resolvers = {
   Query: {
