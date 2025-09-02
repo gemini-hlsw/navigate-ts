@@ -26,8 +26,8 @@ catalogs:
       specifier: 0.157.2
       version: 0.157.2
     navigate-server-schema:
-      specifier: 0.1.0-20250807-122d2878
-      version: 0.1.0-20250807-122d2878
+      specifier: 0.1.0-20250828-eaf1f783
+      version: 0.1.0-20250828-eaf1f783
     typescript:
       specifier: 5.9.2
       version: 5.9.2
@@ -159,7 +159,7 @@ importers:
         version: 0.157.2
       navigate-server-schema:
         specifier: 'catalog:'
-        version: 0.1.0-20250807-122d2878
+        version: 0.1.0-20250828-eaf1f783
 
   packages/ui:
     devDependencies:
@@ -240,7 +240,7 @@ importers:
         version: link:../schema
       navigate-server-schema:
         specifier: 'catalog:'
-        version: 0.1.0-20250807-122d2878
+        version: 0.1.0-20250828-eaf1f783
       playwright:
         specifier: 1.55.0
         version: 1.55.0
@@ -3438,8 +3438,8 @@ packages:
   navigate-schema@file:packages/schema:
     resolution: {directory: packages/schema, type: directory}
 
-  navigate-server-schema@0.1.0-20250807-122d2878:
-    resolution: {integrity: sha512-ZTSd9nDFPXoLYZn9gsCqIN5aOPdeC1U3OF9EKt48aHqUeMpycNrxV4RzuPAaUqCIuaIb9Go7s4IYsfyyrfNQsQ==}
+  navigate-server-schema@0.1.0-20250828-eaf1f783:
+    resolution: {integrity: sha512-Ue1O4caHj4smzDeW5k1l08y4Vxr92HLvWv6bzIQkbz8riwZQ7Pvrl8CIoVMSxyDeqao8+1KwdeDapbCi4XtLpg==}
 
   negotiator@1.0.0:
     resolution: {integrity: sha512-8Ofs/AUQh8MaEcrlq5xOX0CQ9ypTF5dl78mjlMNfOK08fzpgTHQRQPBxcPlEtIw0yRpws+Zo/3r+5WRby7u3Gg==}
@@ -8172,9 +8172,9 @@ snapshots:
   navigate-schema@file:packages/schema:
     dependencies:
       lucuma-schemas: 0.157.2
-      navigate-server-schema: 0.1.0-20250807-122d2878
+      navigate-server-schema: 0.1.0-20250828-eaf1f783
 
-  navigate-server-schema@0.1.0-20250807-122d2878: {}
+  navigate-server-schema@0.1.0-20250828-eaf1f783: {}
 
   negotiator@1.0.0: {}
 
