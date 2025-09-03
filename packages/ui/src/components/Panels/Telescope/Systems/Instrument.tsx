@@ -35,8 +35,12 @@ export function Instrument({ canEdit }: { canEdit: boolean }) {
             ...variables,
             pk: instrument.pk,
           },
-          refetchQueries: [GET_INSTRUMENT],
-          awaitRefetchQueries: true,
+          optimisticResponse: {
+            updateInstrument: {
+              ...instrument,
+              ...variables,
+            },
+          },
         });
       } else {
         await createInstrument({
@@ -52,23 +56,12 @@ export function Instrument({ canEdit }: { canEdit: boolean }) {
     }
   };
 
-  // When clicking save, update the instrument to be non-temporary
-  const onClickSave = async () => {
-    if (instrument)
-      await updateInstrument({
-        variables: {
-          ...instrument,
-          isTemporary: false,
-        },
-      });
-  };
-
   const saveButton = (
     <Button
       className="save-instrument"
       disabled={!instrument?.isTemporary}
       loading={loading}
-      onClick={onClickSave}
+      onClick={() => onUpdateInstrument({ isTemporary: false })}
       icon={<FloppyDisk />}
     />
   );

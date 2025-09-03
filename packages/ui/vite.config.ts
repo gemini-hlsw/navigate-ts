@@ -119,7 +119,7 @@ export default defineConfig(({ mode }) => ({
   test: {
     clearMocks: true,
     globals: true,
-    setupFiles: ['src/gql/dev-messages.ts', 'vitest-browser-react'],
+    setupFiles: ['src/gql/dev-messages.ts', 'vitest-browser-react', 'src/test/disable-animations.css'],
     browser: {
       enabled: true,
       provider: 'playwright',
@@ -127,6 +127,8 @@ export default defineConfig(({ mode }) => ({
         {
           browser: 'chromium',
           name: 'chromium',
+          // Disable animations in tests to speed them up
+          context: { reducedMotion: 'reduce' },
         },
       ],
     },

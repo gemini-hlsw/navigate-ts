@@ -35,17 +35,17 @@ export function useQueryAndSubscription<
 } {
   const [stale, setStale] = useStale();
 
-  const query = useQuery<ResultOf<TQuery | TSub>>(queryNode, {
+  const { subscribeToMore, ...query } = useQuery<ResultOf<TQuery | TSub>>(queryNode, {
     nextFetchPolicy: 'cache-only',
   });
 
   useEffect(
     () =>
-      query.subscribeToMore({
+      subscribeToMore({
         document: subscriptionNode,
         updateQuery: (prev, { subscriptionData }) => subscriptionData.data ?? (prev as ResultOf<TQuery>),
       }),
-    [query, subscriptionNode],
+    [subscribeToMore, subscriptionNode],
   );
 
   useEffect(() => {

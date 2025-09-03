@@ -1,3 +1,4 @@
+import { skipToken } from '@apollo/client/react';
 import { useConfiguration, useUpdateConfiguration } from '@gql/configs/Configuration';
 import { useResetInstruments } from '@gql/configs/Instrument';
 import { useRotator, useUpdateRotator } from '@gql/configs/Rotator';
@@ -20,7 +21,7 @@ import { useOdbVisible } from '@/components/atoms/odb';
 import { extractMagnitude } from '@/Helpers/bands';
 import { useToast } from '@/Helpers/toast';
 import type { ConfigurationType, OdbObservationType, TargetInput } from '@/types';
-import { skipToken } from '@apollo/client/react';
+
 import { ObservationTable } from './ObservationTable';
 
 export function OdbImport() {

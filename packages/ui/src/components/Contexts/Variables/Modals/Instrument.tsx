@@ -1,3 +1,4 @@
+import { skipToken } from '@apollo/client/react';
 import { useDistinctInstruments, useDistinctPorts, useInstruments } from '@gql/configs/Instrument';
 import type { Instrument as InstrumentName } from '@gql/odb/gen/graphql';
 import { Button } from 'primereact/button';
@@ -7,7 +8,6 @@ import { useState } from 'react';
 
 import { useImportInstrument } from '@/components/atoms/instrument';
 import type { InstrumentType } from '@/types';
-import { skipToken } from '@apollo/client/react';
 
 export function Instrument() {
   const [importInstrument, setImportInstrument] = useImportInstrument();
