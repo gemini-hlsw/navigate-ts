@@ -20,7 +20,7 @@ import { useOdbVisible } from '@/components/atoms/odb';
 import { extractMagnitude } from '@/Helpers/bands';
 import { useToast } from '@/Helpers/toast';
 import type { ConfigurationType, OdbObservationType, TargetInput } from '@/types';
-
+import { skipToken } from '@apollo/client/react';
 import { ObservationTable } from './ObservationTable';
 
 export function OdbImport() {
@@ -33,14 +33,17 @@ export function OdbImport() {
 
   const observingNight = dateToLocalObservingNight(new Date());
 
-  const { data, loading } = useObservationsByState({
-    skip: !odbVisible || !site,
-    variables: {
-      date: observingNight,
-      site,
-      states: ['READY', 'ONGOING'],
-    },
-  });
+  const { data, loading } = useObservationsByState(
+    !odbVisible || !site
+      ? skipToken
+      : {
+          variables: {
+            date: observingNight,
+            site,
+            states: ['READY', 'ONGOING'],
+          },
+        },
+  );
 
   const [getGuideEnvironment, { loading: getGuideEnvironmentLoading }] = useGetGuideEnvironment();
   const [getCentralWavelength, { loading: getCentralWavelengthLoading }] = useGetCentralWavelength();

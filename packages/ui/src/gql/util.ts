@@ -1,5 +1,5 @@
 import type { DocumentNode, OperationVariables } from '@apollo/client';
-import type { useQuery } from '@apollo/client/react';
+import type { SkipToken, useQuery } from '@apollo/client/react';
 import type { MockLink } from '@apollo/client/testing';
 import type { ResultOf, VariablesOf } from '@graphql-typed-document-node/core';
 
@@ -9,7 +9,9 @@ import type { TargetType } from '@/types';
  * Options for useQuery hook.
  */
 export type OptionsOf<T extends DocumentNode> =
-  VariablesOf<T> extends OperationVariables ? Omit<useQuery.Options<ResultOf<T>, VariablesOf<T>>, 'context'> : never;
+  VariablesOf<T> extends OperationVariables
+    ? SkipToken | Omit<useQuery.Options<ResultOf<T>, VariablesOf<T>>, 'context'>
+    : never;
 
 export function isBaseTarget(target: Pick<TargetType, 'type'>) {
   return ['SCIENCE', 'BLINDOFFSET', 'FIXED'].includes(target.type);

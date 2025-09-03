@@ -31,9 +31,7 @@ const UPDATE_GEMS_INSTRUMENT = graphql(`
 `);
 
 export function useUpdateGemsInstrument() {
-  const [mutationFunction] = useMutation(UPDATE_GEMS_INSTRUMENT, {
+  return useMutation(UPDATE_GEMS_INSTRUMENT, {
     context: { clientName: 'navigateConfigs' },
   });
-
-  return mutationFunction;
 }

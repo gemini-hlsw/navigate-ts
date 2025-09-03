@@ -49,7 +49,7 @@ export function BotSubsystems({ canEdit }: { canEdit: boolean }) {
   const [WVGate, setWVGate] = useState(50);
   const [EVGate, setEVGate] = useState(50);
 
-  const { data, loading } = useMechanism();
+  const { data, loading: mechanismLoading } = useMechanism();
   useEffect(() => {
     if (data?.mechanism) {
       setDomeMode(data.mechanism.domeMode);
@@ -61,7 +61,9 @@ export function BotSubsystems({ canEdit }: { canEdit: boolean }) {
   }, [data]);
   const state = data?.mechanism ?? ({} as MechanismType);
 
-  const updateMechanism = useUpdateMechanism();
+  const [updateMechanism, { loading: updateLoading }] = useUpdateMechanism();
+
+  const loading = mechanismLoading || updateLoading;
 
   const modifyMechanism = (vars: Omit<UpdateMechanismMutationVariables, 'pk'>) =>
     updateMechanism({
@@ -101,7 +103,8 @@ export function BotSubsystems({ canEdit }: { canEdit: boolean }) {
         label="Park"
         className={clsx(BTN_CLASSES[state.domePark], 'under-construction')}
       />
-      <span
+      <label
+        htmlFor="dome-mode"
         style={{
           textAlign: 'center',
           alignSelf: 'center',
@@ -109,8 +112,9 @@ export function BotSubsystems({ canEdit }: { canEdit: boolean }) {
         }}
       >
         Mode
-      </span>
+      </label>
       <Dropdown
+        inputId="dome-mode"
         disabled={!canEdit}
         style={{ gridArea: 'g43' }}
         value={domeMode}
@@ -132,7 +136,8 @@ export function BotSubsystems({ canEdit }: { canEdit: boolean }) {
         label="Park"
         className={clsx(BTN_CLASSES[state.shuttersPark], 'under-construction')}
       />
-      <span
+      <label
+        htmlFor="shutter-mode"
         style={{
           textAlign: 'center',
           alignSelf: 'center',
@@ -140,8 +145,9 @@ export function BotSubsystems({ canEdit }: { canEdit: boolean }) {
         }}
       >
         Mode
-      </span>
+      </label>
       <Dropdown
+        inputId="shutter-mode"
         disabled={!canEdit}
         style={{ gridArea: 'g53' }}
         value={shutterMode}
@@ -150,7 +156,8 @@ export function BotSubsystems({ canEdit }: { canEdit: boolean }) {
         placeholder="Select a Shutter Mode"
         className="under-construction"
       />
-      <span
+      <label
+        htmlFor="aperture"
         style={{
           textAlign: 'center',
           alignSelf: 'center',
@@ -158,8 +165,9 @@ export function BotSubsystems({ canEdit }: { canEdit: boolean }) {
         }}
       >
         Aperture
-      </span>
+      </label>
       <InputNumber
+        inputId="aperture"
         disabled={!canEdit}
         style={{ gridArea: 'g55' }}
         value={aperture}

@@ -133,11 +133,9 @@ const UPDATE_TARGET = graphql(`
 `);
 
 export function useUpdateTarget() {
-  const [mutationFunction] = useMutation(UPDATE_TARGET, {
+  return useMutation(UPDATE_TARGET, {
     context: { clientName: 'navigateConfigs' },
   });
-
-  return mutationFunction;
 }
 
 const REMOVE_AND_CREATE_BASE_TARGETS = graphql(`

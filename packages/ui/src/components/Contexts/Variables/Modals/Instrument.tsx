@@ -7,6 +7,7 @@ import { useState } from 'react';
 
 import { useImportInstrument } from '@/components/atoms/instrument';
 import type { InstrumentType } from '@/types';
+import { skipToken } from '@apollo/client/react';
 
 export function Instrument() {
   const [importInstrument, setImportInstrument] = useImportInstrument();
@@ -42,17 +43,19 @@ function InstrumentModalContent({ importInstrument }: { importInstrument: boolea
   const [port, setPort] = useState(0);
   const [currentInstrument, setCurrentInstrument] = useState<InstrumentType | undefined>();
 
-  const { data: distinctInstrumentsData, loading: distinctInstrumentsLoading } = useDistinctInstruments({
-    skip: !importInstrument,
-  });
-  const { data: distinctPortsData, loading: distinctPortsLoading } = useDistinctPorts({
-    skip: !importInstrument || !name,
-    variables: { name: name as InstrumentName },
-  });
-  const { data: instrumentsData, loading: instrumentsLoading } = useInstruments({
-    skip: !importInstrument || !name || !port,
-    variables: { name: name as InstrumentName, issPort: port },
-  });
+  const { data: distinctInstrumentsData, loading: distinctInstrumentsLoading } = useDistinctInstruments(
+    !importInstrument ? skipToken : undefined,
+  );
+  const { data: distinctPortsData, loading: distinctPortsLoading } = useDistinctPorts(
+    !importInstrument || !name ? skipToken : { variables: { name } },
+  );
+  const { data: instrumentsData, loading: instrumentsLoading } = useInstruments(
+    !importInstrument || !name || !port
+      ? skipToken
+      : {
+          variables: { name, issPort: port },
+        },
+  );
 
   const nameOptions = distinctInstrumentsData?.distinctInstruments.map((e) => e.name) ?? [];
   const portOptions = distinctPortsData?.distinctPorts.map((e) => e.issPort) ?? [];

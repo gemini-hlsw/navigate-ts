@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from '@apollo/client/react';
+import { skipToken, useMutation, useQuery } from '@apollo/client/react';
 import { useInstrumentPort } from '@gql/server/Instrument';
 import type { OptionsOf } from '@gql/util';
 
@@ -16,10 +16,15 @@ const GET_DISTINCT_INSTRUMENTS = graphql(`
 `);
 
 export function useDistinctInstruments(options: OptionsOf<typeof GET_DISTINCT_INSTRUMENTS> = {}) {
-  return useQuery(GET_DISTINCT_INSTRUMENTS, {
-    context: { clientName: 'navigateConfigs' },
-    ...options,
-  });
+  return useQuery(
+    GET_DISTINCT_INSTRUMENTS,
+    options === skipToken
+      ? skipToken
+      : {
+          ...options,
+          context: { clientName: 'navigateConfigs' },
+        },
+  );
 }
 
 const GET_DISTINCT_PORTS = graphql(`
@@ -31,10 +36,15 @@ const GET_DISTINCT_PORTS = graphql(`
 `);
 
 export function useDistinctPorts(options: OptionsOf<typeof GET_DISTINCT_PORTS>) {
-  return useQuery(GET_DISTINCT_PORTS, {
-    context: { clientName: 'navigateConfigs' },
-    ...options,
-  });
+  return useQuery(
+    GET_DISTINCT_PORTS,
+    options === skipToken
+      ? skipToken
+      : {
+          ...options,
+          context: { clientName: 'navigateConfigs' },
+        },
+  );
 }
 
 export const GET_INSTRUMENTS = graphql(`
@@ -58,10 +68,15 @@ export const GET_INSTRUMENTS = graphql(`
 `);
 
 export function useInstruments(options: OptionsOf<typeof GET_INSTRUMENTS>) {
-  return useQuery(GET_INSTRUMENTS, {
-    context: { clientName: 'navigateConfigs' },
-    ...options,
-  });
+  return useQuery(
+    GET_INSTRUMENTS,
+    options === skipToken
+      ? skipToken
+      : {
+          ...options,
+          context: { clientName: 'navigateConfigs' },
+        },
+  );
 }
 
 export const GET_INSTRUMENT = graphql(`
@@ -85,10 +100,15 @@ export const GET_INSTRUMENT = graphql(`
 `);
 
 export function useInstrument(options: OptionsOf<typeof GET_INSTRUMENT> = {}) {
-  return useQuery(GET_INSTRUMENT, {
-    ...options,
-    context: { clientName: 'navigateConfigs' },
-  });
+  return useQuery(
+    GET_INSTRUMENT,
+    options === skipToken
+      ? skipToken
+      : {
+          ...options,
+          context: { clientName: 'navigateConfigs' },
+        },
+  );
 }
 
 export const CREATE_INSTRUMENT = graphql(`
@@ -205,25 +225,29 @@ export function useResetInstruments() {
   });
 }
 
-export function useConfiguredInstrument(options: Omit<OptionsOf<typeof GET_INSTRUMENT>, 'variables'> = {}) {
+export function useConfiguredInstrument() {
   const { data: configurationData, loading: configurationLoading } = useConfiguration();
   const configuration = configurationData?.configuration;
 
-  const { data: instrumentPortData, loading: instrumentPortLoading } = useInstrumentPort({
-    skip: isNullish(configuration?.obsInstrument),
-    // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
-    variables: { instrument: configuration?.obsInstrument! },
-  });
+  const { data: instrumentPortData, loading: instrumentPortLoading } = useInstrumentPort(
+    isNullish(configuration?.obsInstrument)
+      ? skipToken
+      : {
+          variables: { instrument: configuration.obsInstrument },
+        },
+  );
 
-  const instrument = useInstrument({
-    ...options,
-    skip: isNullish(configuration?.obsInstrument) || isNullish(instrumentPortData?.instrumentPort) || options.skip,
-    variables: {
-      name: configuration?.obsInstrument,
-      issPort: instrumentPortData?.instrumentPort,
-      wfs: getConfigWfs(configuration),
-    },
-  });
+  const instrument = useInstrument(
+    isNullish(configuration?.obsInstrument) || isNullish(instrumentPortData?.instrumentPort)
+      ? skipToken
+      : {
+          variables: {
+            name: configuration.obsInstrument,
+            issPort: instrumentPortData.instrumentPort,
+            wfs: getConfigWfs(configuration),
+          },
+        },
+  );
 
   return {
     ...instrument,

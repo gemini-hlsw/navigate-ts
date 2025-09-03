@@ -1,4 +1,4 @@
-import { useLazyQuery, useQuery } from '@apollo/client/react';
+import { skipToken, useLazyQuery, useQuery } from '@apollo/client/react';
 import type { OptionsOf } from '@gql/util';
 
 import { graphql } from './gen';
@@ -86,10 +86,15 @@ const GET_OBSERVATIONS_BY_STATE = graphql(`
 `);
 
 export function useObservationsByState(options: OptionsOf<typeof GET_OBSERVATIONS_BY_STATE>) {
-  return useQuery(GET_OBSERVATIONS_BY_STATE, {
-    context: { clientName: 'odb' },
-    ...options,
-  });
+  return useQuery(
+    GET_OBSERVATIONS_BY_STATE,
+    options === skipToken
+      ? skipToken
+      : {
+          ...options,
+          context: { clientName: 'odb' },
+        },
+  );
 }
 
 const GET_GUIDE_ENVIRONMENT = graphql(`
