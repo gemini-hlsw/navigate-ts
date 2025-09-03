@@ -35,7 +35,7 @@ export function useQueryAndSubscription<
 } {
   const [stale, setStale] = useStale();
 
-  const { subscribeToMore, ...query } = useQuery<ResultOf<TQuery | TSub>>(queryNode, {
+  const { subscribeToMore, data, ...query } = useQuery<ResultOf<TQuery | TSub>>(queryNode, {
     nextFetchPolicy: 'cache-only',
   });
 
@@ -50,12 +50,12 @@ export function useQueryAndSubscription<
 
   useEffect(() => {
     if (options.useStale) setStale(false);
-  }, [query.data, setStale, options.useStale]);
+  }, [data, setStale, options.useStale]);
 
   return {
     ...query,
-    data: query.data?.[key],
-    loading: query.loading || query.data === undefined || (options.useStale && stale),
+    data: data?.[key],
+    loading: query.loading || data === undefined || (options.useStale && stale),
     setStale,
   };
 }
