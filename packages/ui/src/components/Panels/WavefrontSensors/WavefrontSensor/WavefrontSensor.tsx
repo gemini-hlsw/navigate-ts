@@ -62,7 +62,7 @@ export default function WavefrontSensor({
   }
 
   return (
-    <div className={clsx('wfs', className)}>
+    <div className={clsx('wfs', className)} data-testid={`${wfs.toLowerCase()}-controls`}>
       <span className="wfs-name">{wfs}</span>
       <img src={imgUrl} alt="wfs" />
       <div className="controls">
