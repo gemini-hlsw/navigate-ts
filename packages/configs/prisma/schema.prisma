@@ -89,16 +89,19 @@ enum TargetType {
 }
 
 model Instrument {
-  pk          Int     @id @default(autoincrement())
+  pk          Int      @id @default(autoincrement())
   name        String
-  iaa         Float   @default(0.0)
+  iaa         Float    @default(0.0)
   issPort     Int
-  focusOffset Float   @default(0.0)
-  wfs         WfsType @default(NONE)
-  originX     Float   @default(0.0)
-  originY     Float   @default(0.0)
-  ao          Boolean @default(false)
+  focusOffset Float    @default(0.0)
+  wfs         WfsType  @default(NONE)
+  originX     Float    @default(0.0)
+  originY     Float    @default(0.0)
+  ao          Boolean  @default(false)
   extraParams Json
+  isTemporary Boolean  @default(true)
+  comment     String?
+  createdAt   DateTime @default(now())
 }
 
 enum WfsType {

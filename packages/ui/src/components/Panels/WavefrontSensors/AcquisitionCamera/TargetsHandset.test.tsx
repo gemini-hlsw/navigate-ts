@@ -13,6 +13,7 @@ import {
   TARGET_ADJUSTMENT_OFFSETS_SUBSCRIPTION,
 } from '@gql/server/TargetsHandset';
 import type { MockedResponseOf } from '@gql/util';
+import type { ResultOf } from '@graphql-typed-document-node/core';
 import { userEvent } from '@vitest/browser/context';
 import type { Mock } from 'vitest';
 
@@ -323,7 +324,7 @@ describe(TargetsHandset.name, () => {
   }
 });
 
-const targetAdjustmentOffsetsData = {
+const targetAdjustmentOffsetsData: ResultOf<typeof TARGET_ADJUSTMENT_OFFSETS_QUERY> = {
   targetAdjustmentOffsets: {
     sourceA: {
       deltaX: {
@@ -371,7 +372,7 @@ const resetTargetAdjustmentMutationMock = {
         result: 'SUCCESS',
         msg: null,
       },
-    },
+    } satisfies ResultOf<typeof RESET_TARGET_ADJUSTMENT_MUTATION>,
   }),
 } satisfies MockedResponseOf<typeof RESET_TARGET_ADJUSTMENT_MUTATION>;
 
@@ -387,7 +388,7 @@ const adjustTargetMutationMock = {
         result: 'SUCCESS',
         msg: null,
       },
-    },
+    } satisfies ResultOf<typeof ADJUST_TARGET_MUTATION>,
   }),
 } satisfies MockedResponseOf<typeof ADJUST_TARGET_MUTATION>;
 
@@ -402,7 +403,7 @@ const absorbTargetAdjustmentMutationMock = {
         result: 'SUCCESS',
         msg: null,
       },
-    },
+    } satisfies ResultOf<typeof ABSORB_TARGET_ADJUSTMENT_MUTATION>,
   }),
 } satisfies MockedResponseOf<typeof ABSORB_TARGET_ADJUSTMENT_MUTATION>;
 
@@ -412,7 +413,6 @@ const mocks: MockLink.MockedResponse[] = [
       query: TARGET_ADJUSTMENT_OFFSETS_QUERY,
       variables: {},
     },
-
     result: {
       data: targetAdjustmentOffsetsData,
     },

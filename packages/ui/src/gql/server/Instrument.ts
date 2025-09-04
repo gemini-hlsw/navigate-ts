@@ -1,4 +1,4 @@
-import { useQuery } from '@apollo/client/react';
+import { skipToken, useQuery } from '@apollo/client/react';
 import type { OptionsOf } from '@gql/util';
 
 import { isNullish } from '@/Helpers/functions';
@@ -12,8 +12,8 @@ export const GET_INSTRUMENT_PORT = graphql(`
 `);
 
 export function useInstrumentPort(options: OptionsOf<typeof GET_INSTRUMENT_PORT>) {
-  return useQuery(GET_INSTRUMENT_PORT, {
-    skip: isNullish(options.variables?.instrument),
-    ...options,
-  });
+  return useQuery(
+    GET_INSTRUMENT_PORT,
+    options === skipToken || isNullish(options.variables?.instrument) ? skipToken : options,
+  );
 }

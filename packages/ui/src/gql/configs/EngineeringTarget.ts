@@ -122,9 +122,7 @@ const UPDATE_ENGINEERING_TARGET = graphql(`
 `);
 
 export function useUpdateTarget() {
-  const [mutationFunction] = useMutation(UPDATE_ENGINEERING_TARGET, {
+  return useMutation(UPDATE_ENGINEERING_TARGET, {
     context: { clientName: 'navigateConfigs' },
   });
-
-  return mutationFunction;
 }

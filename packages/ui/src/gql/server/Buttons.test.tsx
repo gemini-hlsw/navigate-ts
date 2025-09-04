@@ -3,7 +3,7 @@ import { GET_INSTRUMENT } from '@gql/configs/Instrument';
 import { GET_ROTATOR } from '@gql/configs/Rotator';
 import { GET_TARGETS } from '@gql/configs/Target';
 import type { MockedResponseOf } from '@gql/util';
-import type { VariablesOf } from '@graphql-typed-document-node/core';
+import type { ResultOf, VariablesOf } from '@graphql-typed-document-node/core';
 
 import { renderWithContext } from '@/test/render';
 
@@ -131,7 +131,6 @@ const configurationMock = {
 const instrumentPortMock = {
   request: {
     query: GET_INSTRUMENT_PORT,
-
     variables: () => true,
   },
   maxUsageCount: Infinity,
@@ -177,6 +176,9 @@ const instrumentMock = {
         originY: 0,
         ao: false,
         extraParams: {},
+        isTemporary: false,
+        comment: null,
+        createdAt: new Date().toISOString(),
       },
     },
   },
@@ -231,6 +233,6 @@ const slewMutationMock = {
       slew: {
         result: 'SUCCESS',
       },
-    },
+    } satisfies ResultOf<typeof SLEW_MUTATION>,
   }),
 } satisfies MockedResponseOf<typeof SLEW_MUTATION>;

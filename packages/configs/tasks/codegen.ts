@@ -19,6 +19,7 @@ export default {
           DateTime: 'Date',
           JSON: 'any',
           PosInt: 'number',
+          Void: 'void',
 
           AttachmentId: 'string',
           CallForProposalsId: 'string',

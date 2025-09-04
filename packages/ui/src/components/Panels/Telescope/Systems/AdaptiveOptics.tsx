@@ -15,7 +15,7 @@ import { Title } from '../../../Shared/Title/Title';
 
 export function GeMS({ canEdit }: { canEdit: boolean }) {
   const state = useGemsInstrument().data?.gemsInstrument ?? ({} as GemsInstrumentType);
-  const updateGemsInstrument = useUpdateGemsInstrument();
+  const [updateGemsInstrument, { loading }] = useUpdateGemsInstrument();
 
   async function modifyGemsInstrument<T extends keyof UpdateGemsInstrumentMutationVariables>(
     name: T,
@@ -38,21 +38,36 @@ export function GeMS({ canEdit }: { canEdit: boolean }) {
 
   return (
     <div className="ao-gems under-construction">
-      <Title title={'GeMS'} />
+      <Title title="GeMS" />
       <div className="body">
-        <span className="label">ADC</span>
-        <Checkbox disabled={!canEdit} checked={state.adc} onChange={() => modifyGemsInstrument('adc', !state.adc)} />
-        <span className="label">Beamsplitter</span>
+        <label htmlFor="adc" className="label">
+          ADC
+        </label>
+        <Checkbox
+          inputId="adc"
+          disabled={!canEdit || loading}
+          checked={state.adc}
+          onChange={() => modifyGemsInstrument('adc', !state.adc)}
+        />
+        <label htmlFor="beamsplitter" className="label">
+          Beamsplitter
+        </label>
         <Dropdown
+          inputId="beamsplitter"
           disabled={!canEdit}
+          loading={loading}
           value={state.beamsplitter}
           options={['400 nm', '550 nm', '700nm', '850 nm', '1000 nm']}
           onChange={(e) => modifyGemsInstrument('beamsplitter', e.target.value as string)}
           placeholder="Select a beamsplitter"
         />
-        <span className="label">Astrometric mode</span>
+        <label htmlFor="asometric-mode" className="label">
+          Astrometric mode
+        </label>
         <Dropdown
+          inputId="asometric-mode"
           disabled={!canEdit}
+          loading={loading}
           value={state.astrometricMode}
           options={['Best', 'Average']}
           onChange={(e) => modifyGemsInstrument('astrometricMode', e.target.value as string)}
@@ -65,7 +80,7 @@ export function GeMS({ canEdit }: { canEdit: boolean }) {
 
 export function Altair({ canEdit }: { canEdit: boolean }) {
   const state = useAltairInstrument().data?.altairInstrument ?? ({} as AltairInstrumentType);
-  const updateAltairInstrument = useUpdateAltairInstrument();
+  const [updateAltairInstrument, { loading }] = useUpdateAltairInstrument();
 
   async function modifyAltairInstrument<T extends keyof UpdateAltairInstrumentMutationVariables>(
     name: T,
@@ -90,64 +105,99 @@ export function Altair({ canEdit }: { canEdit: boolean }) {
     <div className="ao-altair under-construction">
       <Title title={'Altair'} />
       <div className="body">
-        <span className="label">Beamsplitter</span>
+        <label htmlFor="beamsplitter" className="label">
+          Beamsplitter
+        </label>
         <Dropdown
+          inputId="beamsplitter"
+          loading={loading}
           disabled={!canEdit}
           value={state.beamsplitter}
           options={['400 nm', '550 nm', '700nm', '850 nm', '1000 nm']}
           onChange={(e) => modifyAltairInstrument('beamsplitter', e.target.value as string)}
           placeholder="Select a tracking"
         />
-        <span className="label">ND filter</span>
+        <label htmlFor="nd-filter" className="label">
+          ND filter
+        </label>
         <Checkbox
-          disabled={!canEdit}
+          inputId="nd-filter"
+          disabled={!canEdit || loading}
           checked={state.ndFilter}
           onChange={() => modifyAltairInstrument('ndFilter', !state.ndFilter)}
         />
-        <span className="label">Star Mag</span>
+        <label htmlFor="star-mag" className="label">
+          Star Mag
+        </label>
         <InputNumber
-          disabled={!canEdit}
+          inputId="star-mag"
+          disabled={!canEdit || loading}
           value={state.startMagnitude}
           onValueChange={(e) => modifyAltairInstrument('startMagnitude', e.target.value ?? 0.0)}
         />
-        <span className="label">Field Lens</span>
+        <label htmlFor="field-lens" className="label">
+          Field Lens
+        </label>
         <Checkbox
-          disabled={!canEdit}
+          inputId="field-lens"
+          disabled={!canEdit || loading}
           checked={state.fieldLens}
           onChange={() => modifyAltairInstrument('fieldLens', !state.fieldLens)}
         />
-        <span className="label">Seeing r0</span>
+        <label htmlFor="seeing" className="label">
+          Seeing r0
+        </label>
         <InputNumber
-          disabled={!canEdit}
+          inputId="seeing"
+          disabled={!canEdit || loading}
           value={state.seeing}
           onValueChange={(e) => modifyAltairInstrument('seeing', e.target.value ?? 0.0)}
         />
-        <span className="label">Deploy ADC</span>
+        <label htmlFor="deploy-adc" className="label">
+          Deploy ADC
+        </label>
         <Checkbox
-          disabled={!canEdit}
+          inputId="deploy-adc"
+          disabled={!canEdit || loading}
           checked={state.deployAdc}
           onChange={() => modifyAltairInstrument('deployAdc', !state.deployAdc)}
         />
-        <span className="label">Wind speed</span>
+        <label htmlFor="wind-speed" className="label">
+          Wind speed
+        </label>
         <InputNumber
-          disabled={!canEdit}
+          inputId="wind-speed"
+          disabled={!canEdit || loading}
           value={state.windSpeed}
           onValueChange={(e) => modifyAltairInstrument('windSpeed', e.target.value ?? 0.0)}
         />
-        <span className="label">Adjust ADC</span>
+        <label htmlFor="adjust-adc" className="label">
+          Adjust ADC
+        </label>
         <Checkbox
-          disabled={!canEdit}
+          inputId="adjust-adc"
+          disabled={!canEdit || loading}
           checked={state.adjustAdc}
           onChange={() => modifyAltairInstrument('adjustAdc', !state.adjustAdc)}
         />
-        <span className="label">Force Mode</span>
+        <label htmlFor="force-mode" className="label">
+          Force Mode
+        </label>
         <Checkbox
-          disabled={!canEdit}
+          inputId="force-mode"
+          disabled={!canEdit || loading}
           checked={state.forceMode}
           onChange={() => modifyAltairInstrument('forceMode', !state.forceMode)}
         />
-        <span className="label">Use LGS</span>
-        <Checkbox disabled={!canEdit} checked={state.lgs} onChange={() => modifyAltairInstrument('lgs', !state.lgs)} />
+        <label htmlFor="lgs" className="label">
+          Use LGS
+        </label>
+        <Checkbox
+          inputId="lgs"
+          disabled={!canEdit}
+          checked={state.lgs}
+          onChange={() => modifyAltairInstrument('lgs', !state.lgs)}
+        />
       </div>
     </div>
   );

@@ -6,6 +6,7 @@ import { GET_INSTRUMENT_PORT } from '@gql/server/Instrument';
 import { NAVIGATE_STATE, NAVIGATE_STATE_SUBSCRIPTION } from '@gql/server/NavigateState';
 import { RESTORE_TARGET_MUTATION, SWAP_TARGET_MUTATION } from '@gql/server/TargetSwap';
 import type { MockedResponseOf } from '@gql/util';
+import type { ResultOf } from '@graphql-typed-document-node/core';
 import type { RenderResult } from 'vitest-browser-react';
 
 import { renderWithContext } from '@/test/render';
@@ -138,6 +139,9 @@ const mocks = [
           originX: 0.0,
           originY: 0.0,
           extraParams: {},
+          isTemporary: false,
+          comment: null,
+          createdAt: new Date().toISOString(),
         },
       },
     },
@@ -166,7 +170,11 @@ const mocks = [
         },
       },
     },
-    result: vi.fn().mockReturnValue({ data: { swapTarget: { result: 'SUCCESS', msg: '' } } }),
+    result: vi.fn().mockReturnValue({
+      data: {
+        swapTarget: { result: 'SUCCESS', msg: '' },
+      } satisfies ResultOf<typeof SWAP_TARGET_MUTATION>,
+    }),
   } satisfies MockedResponseOf<typeof SWAP_TARGET_MUTATION>,
   {
     request: {
@@ -210,7 +218,11 @@ const mocks = [
         },
       },
     },
-    result: vi.fn().mockReturnValue({ data: { restoreTarget: { result: 'SUCCESS', msg: '' } } }),
+    result: vi.fn().mockReturnValue({
+      data: {
+        restoreTarget: { result: 'SUCCESS', msg: '' },
+      } satisfies ResultOf<typeof RESTORE_TARGET_MUTATION>,
+    }),
   } satisfies MockedResponseOf<typeof RESTORE_TARGET_MUTATION>,
   {
     request: {
@@ -246,7 +258,7 @@ const mocks = [
     result: vi.fn().mockReturnValue({
       data: {
         instrumentPort: 3,
-      },
+      } satisfies ResultOf<typeof GET_INSTRUMENT_PORT>,
     }),
   } satisfies MockedResponseOf<typeof GET_INSTRUMENT_PORT>,
 ];
