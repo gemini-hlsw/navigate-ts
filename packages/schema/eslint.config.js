@@ -1,11 +1,11 @@
 // @ts-check
 
 import graphqlPlugin from '@graphql-eslint/eslint-plugin';
-import { config } from 'typescript-eslint';
+import { defineConfig } from 'eslint/config';
 
 import shared from '../../eslint.config.shared.js';
 
-export default config(...shared, {
+export default defineConfig(...shared, {
   files: ['src/**/*.graphql'],
   languageOptions: {
     parser: graphqlPlugin.parser,
@@ -16,6 +16,7 @@ export default config(...shared, {
     },
   },
   plugins: {
+    // @ts-expect-error - incorrect type
     '@graphql-eslint': graphqlPlugin,
   },
   rules: {
