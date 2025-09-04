@@ -2,7 +2,7 @@ import { GraphQLScalarType, Kind } from 'graphql';
 import { DateTimeResolver, JSONResolver, PositiveIntResolver, VoidResolver } from 'graphql-scalars';
 import { parseObservationId, parseTargetId } from 'lucuma-core';
 
-import type { Resolvers } from '../gen/index.js';
+import type { Resolvers } from '../gen/index.ts';
 
 PositiveIntResolver.name = 'PosInt';
 

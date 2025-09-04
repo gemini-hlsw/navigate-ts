@@ -1,9 +1,9 @@
 import { startStandaloneServer } from '@apollo/server/standalone';
 
-import { prisma } from './prisma/db.js';
-import { populateDb } from './prisma/queries/main.js';
-import type { ApolloContext } from './server.js';
-import { server } from './server.js';
+import { prisma } from './prisma/db.ts';
+import { populateDb } from './prisma/queries/main.ts';
+import type { ApolloContext } from './server.ts';
+import { server } from './server.ts';
 
 if (process.argv.includes('populate')) {
   // Populate DB

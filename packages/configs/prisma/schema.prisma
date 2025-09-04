@@ -8,8 +8,6 @@ generator client {
   // Optional
   runtime                = "nodejs"
   moduleFormat           = "esm"
-  generatedFileExtension = "ts"
-  importFileExtension    = "js"
 }
 
 datasource db {

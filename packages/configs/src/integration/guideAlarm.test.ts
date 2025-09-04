@@ -1,8 +1,8 @@
 import assert from 'node:assert';
 import { describe, it } from 'node:test';
 
-import type { MutationUpdateGuideAlarmArgs } from '../graphql/gen/index.js';
-import { initializeServerFixture } from './setup.js';
+import type { MutationUpdateGuideAlarmArgs } from '../graphql/gen/index.ts';
+import { initializeServerFixture } from './setup.ts';
 
 await describe('GuideAlarm', async () => {
   const fixture = initializeServerFixture();

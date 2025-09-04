@@ -1,5 +1,5 @@
-import type { Target } from '../../prisma/gen/client.js';
-import type { Resolvers } from '../gen/index.js';
+import type { Target } from '../../prisma/gen/client.ts';
+import type { Resolvers } from '../gen/index.ts';
 
 export const TargetResolver: Resolvers = {
   Query: {
