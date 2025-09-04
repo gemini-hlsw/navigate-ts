@@ -8,6 +8,7 @@ import { INITIAL_MECHANISM } from './init/mechanism.ts';
 import { INITIAL_ROTATOR } from './init/rotator.ts';
 import { INITIAL_SLEW_FLAGS } from './init/slewFlags.ts';
 import { INITIAL_USERS } from './init/users.ts';
+import { INITIAL_WINDOW_CENTER } from './init/windowCenter.ts';
 
 async function createUsers() {
   console.log('Creating user reader');
@@ -92,6 +93,13 @@ async function createEngineeringTargets() {
   });
 }
 
+async function createWindowCenters() {
+  console.log('Creating initial window centers');
+  await prisma.windowCenter.createMany({
+    data: INITIAL_WINDOW_CENTER,
+  });
+}
+
 export async function write() {
   await createUsers();
   await createInstruments();
@@ -102,4 +110,5 @@ export async function write() {
   await createMechanism();
   await createGuideAlarms();
   await createEngineeringTargets();
+  await createWindowCenters();
 }

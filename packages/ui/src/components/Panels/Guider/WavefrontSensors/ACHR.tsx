@@ -1,7 +1,9 @@
+import { useSetWindowCenter, useWindowCenter } from '@gql/configs/WindowCenter';
 import { useAcFilter, useAcLens, useAcMechsState, useAcNdFilter, useAcWindowSize } from '@gql/server/AcquisitionCamera';
-import type { AcFilter, AcLens, AcNdFilter, AcWindowCenter, AcWindowSize } from '@gql/server/gen/graphql';
+import type { AcFilter, AcLens, AcNdFilter, AcWindowSize } from '@gql/server/gen/graphql';
 import { Button } from 'primereact/button';
 import { Dropdown } from 'primereact/dropdown';
+import { InputNumber } from 'primereact/inputnumber';
 import { useEffect, useState } from 'react';
 
 import { useServerConfigValue } from '@/components/atoms/config';
@@ -11,12 +13,12 @@ const lensOptions: { value: AcLens; label: string }[] = [
   { value: 'HRWFS', label: 'HRWFS' },
 ];
 const filterOptions: { value: AcFilter; label: string }[] = [
-  { value: 'NEUTRAL', label: 'NEUTRAL' },
-  { value: 'B_BLUE', label: 'B_BLUE' },
-  { value: 'V_GREEN', label: 'V_GREEN' },
-  { value: 'U_RED1', label: 'U_RED1' },
-  { value: 'R_RED2', label: 'R_RED2' },
-  { value: 'I_RED3', label: 'I_RED3' },
+  { value: 'NEUTRAL', label: 'neutral' },
+  { value: 'B_BLUE', label: 'B-blue' },
+  { value: 'V_GREEN', label: 'V-green' },
+  { value: 'U_RED1', label: 'U-red1' },
+  { value: 'R_RED2', label: 'R-red2' },
+  { value: 'I_RED3', label: 'I-red3' },
 ];
 
 const gsNdFilterOptions: { value: AcNdFilter; label: string }[] = [
@@ -27,13 +29,13 @@ const gsNdFilterOptions: { value: AcNdFilter; label: string }[] = [
 ];
 
 const gnNdFilterOptions: { value: AcNdFilter; label: string }[] = [
-  { value: 'Open', label: 'Open' },
+  { value: 'Open', label: 'open' },
 
-  { value: 'ND100', label: 'ND100' },
-  { value: 'ND1000', label: 'ND1000' },
-  { value: 'FILT04', label: 'FILT04' },
-  { value: 'FILT06', label: 'FILT06' },
-  { value: 'FILT08', label: 'FILT08' },
+  { value: 'ND100', label: 'nd100' },
+  { value: 'ND1000', label: 'nd1000' },
+  { value: 'FILT04', label: 'filt04' },
+  { value: 'FILT06', label: 'filt06' },
+  { value: 'FILT08', label: 'filt08' },
 ];
 const windowSizeOptions: { value: AcWindowSize; label: string }[] = [
   { value: 'WINDOW_100X100', label: '100x100' },
@@ -42,17 +44,26 @@ const windowSizeOptions: { value: AcWindowSize; label: string }[] = [
 ];
 
 export function ACHR({ disabled }: { disabled: boolean }) {
-  const { data: mechsState, loading: mechsStateLoading, setStale } = useAcMechsState();
   const { site } = useServerConfigValue();
 
-  const windowCenter: AcWindowCenter = site === 'GN' ? { x: 518, y: 550 } : { x: 449, y: 522 };
+  const { data: mechsState, loading: mechsStateLoading, setStale } = useAcMechsState();
+  const { data: windowCenterData, loading: windowCenterLoading } = useWindowCenter(site);
+  const windowCenter = windowCenterData?.windowCenter;
 
   const [setLens, { loading: lensLoading }] = useAcLens(setStale);
   const [setFilter, { loading: filterLoading }] = useAcFilter(setStale);
   const [setNdFilter, { loading: ndFilterLoading }] = useAcNdFilter(setStale);
   const [setWindowSize, { loading: windowSizeLoading }] = useAcWindowSize(setStale);
+  const [setWindowCenter, { loading: setWindowCenterLoading }] = useSetWindowCenter();
 
-  const loading = mechsStateLoading || lensLoading || ndFilterLoading || filterLoading || windowSizeLoading;
+  const loading =
+    mechsStateLoading ||
+    windowCenterLoading ||
+    lensLoading ||
+    ndFilterLoading ||
+    filterLoading ||
+    windowSizeLoading ||
+    setWindowCenterLoading;
 
   const ndFilterOptions = site === 'GN' ? gnNdFilterOptions : gsNdFilterOptions;
 
@@ -65,13 +76,12 @@ export function ACHR({ disabled }: { disabled: boolean }) {
     if (mechsState?.lens) setAuxLens(mechsState.lens);
     if (mechsState?.filter) setAuxFilter(mechsState.filter);
     if (mechsState?.ndFilter) setAuxNdFilter(mechsState.ndFilter);
-    // TODO: windowSize update from configs db
   }, [mechsState]);
 
   const lensValueLabel = lensOptions.find(({ value }) => value === mechsState?.lens)?.label ?? '';
   const filterValueLabel = filterOptions.find(({ value }) => value === mechsState?.filter)?.label ?? '';
   const ndFilterValueLabel = ndFilterOptions.find(({ value }) => value === mechsState?.ndFilter)?.label ?? '';
-  const windowSizeValueLabel = 'TODO';
+  const windowSizeValueLabel = '';
 
   return (
     <div className="achr">
@@ -136,23 +146,50 @@ export function ACHR({ disabled }: { disabled: boolean }) {
         ROI
       </label>
       <span title="Current value">{windowSizeValueLabel}</span>
-      <Dropdown
-        loading={windowSizeLoading}
-        className="under-construction"
-        inputId="achr-window-size"
-        disabled={disabled}
-        value={auxWindowSize}
-        options={windowSizeOptions}
-        onChange={(e) => setAuxWindowSize(e.value as AcWindowSize)}
-        placeholder="Select ROI"
-      />
+      <div className="window-size">
+        <Dropdown
+          loading={windowSizeLoading}
+          className="under-construction"
+          inputId="achr-window-size"
+          disabled={disabled}
+          value={auxWindowSize}
+          options={windowSizeOptions}
+          onChange={(e) => setAuxWindowSize(e.value as AcWindowSize)}
+          placeholder="Select ROI"
+        />
+        <div className="window-size-inputs">
+          <label htmlFor="achr-window-center-x" className="label">
+            X
+          </label>
+          <InputNumber
+            inputId="achr-window-center-x"
+            disabled={disabled || auxWindowSize === 'FULL' || setWindowCenterLoading}
+            value={windowCenter?.x ?? null}
+            onValueChange={(e) => setWindowCenter({ variables: { site, x: e.value } })}
+            maxFractionDigits={0}
+          />
+          <label htmlFor="achr-window-center-y" className="label">
+            Y
+          </label>
+          <InputNumber
+            inputId="achr-window-center-y"
+            disabled={disabled || auxWindowSize === 'FULL' || setWindowCenterLoading}
+            value={windowCenter?.y ?? null}
+            onValueChange={(e) => setWindowCenter({ variables: { site, y: e.value } })}
+            maxFractionDigits={0}
+          />
+        </div>
+      </div>
       <Button
         disabled={loading}
         label="Set"
         onClick={() =>
           setWindowSize({
             variables: {
-              size: { type: auxWindowSize, center: auxWindowSize !== 'FULL' ? windowCenter : undefined },
+              size: {
+                type: auxWindowSize,
+                center: auxWindowSize !== 'FULL' ? { x: windowCenter?.x, y: windowCenter?.y } : undefined,
+              },
             },
           })
         }
