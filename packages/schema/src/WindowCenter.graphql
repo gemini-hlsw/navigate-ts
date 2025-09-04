@@ -1,0 +1,15 @@
+#import Site, PosInt from "lucuma-schemas/odb"
+
+type WindowCenter {
+  site: Site!
+  x: Float!
+  y: Float!
+}
+
+type Query {
+  windowCenter(site: Site!): WindowCenter!
+}
+
+type Mutation {
+  setWindowCenter(site: Site!, x: Float, y: Float): WindowCenter!
+}

@@ -6,8 +6,8 @@ generator client {
   output   = "../src/prisma/gen"
 
   // Optional
-  runtime                = "nodejs"
-  moduleFormat           = "esm"
+  runtime      = "nodejs"
+  moduleFormat = "esm"
 }
 
 datasource db {
@@ -250,4 +250,15 @@ model GuideAlarm {
   wfs     WfsType @id
   limit   Int
   enabled Boolean @default(true)
+}
+
+enum Site {
+  GN
+  GS
+}
+
+model WindowCenter {
+  site Site  @id
+  x    Float
+  y    Float
 }

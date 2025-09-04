@@ -20,6 +20,7 @@ import { SlewFlagsResolver } from './graphql/resolvers/SlewFlags.ts';
 import { TargetResolver } from './graphql/resolvers/Target.ts';
 import { UserResolver } from './graphql/resolvers/User.ts';
 import { VersionResolver } from './graphql/resolvers/Version.ts';
+import { WindowCenterResolver } from './graphql/resolvers/WindowCenter.ts';
 import type { Prisma } from './prisma/db.ts';
 
 // Resolvers define how to fetch the types defined in your schema.
@@ -41,6 +42,7 @@ const resolvers = {
     ...TargetResolver.Query,
     ...UserResolver.Query,
     ...VersionResolver.Query,
+    ...WindowCenterResolver.Query,
   },
   Mutation: {
     ...AltairGuideLoopResolver.Mutation,
@@ -58,6 +60,7 @@ const resolvers = {
     ...TargetResolver.Mutation,
     ...UserResolver.Mutation,
     ...VersionResolver.Mutation,
+    ...WindowCenterResolver.Mutation,
   },
 };
 

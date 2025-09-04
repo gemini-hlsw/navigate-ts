@@ -244,10 +244,28 @@
               display: grid;
               font-size: 0.9rem;
               grid-template-columns: 1fr 1fr 2fr 40px;
-              grid-template-rows: repeat(4, 22px);
-              gap: 4px;
-              > span {
-                align-self: center;
+              grid-template-rows: repeat(4, auto);
+              gap: 8px;
+              align-items: center;
+
+              .window-size {
+                display: flex;
+                flex-direction: column;
+                gap: 4px;
+                .window-size-inputs {
+                  display: flex;
+                  flex-direction: row;
+                  gap: 8px;
+                  align-items: center;
+
+                  .p-inputnumber {
+                    max-width: 48px;
+                    input {
+                      padding-top: 2px;
+                      padding-bottom: 2px;
+                    }
+                  }
+                }
               }
             }
           }
