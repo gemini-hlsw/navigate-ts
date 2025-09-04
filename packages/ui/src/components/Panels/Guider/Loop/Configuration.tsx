@@ -1,6 +1,7 @@
+import { useConfiguration } from '@gql/configs/Configuration';
 import type { GuideLoop, UpdateGuideLoopMutationVariables } from '@gql/configs/gen/graphql';
 import { useGetGuideLoop, useUpdateGuideLoop } from '@gql/configs/GuideLoop';
-import type { GuideConfigurationInput, M1CorrectionSource, TipTiltSource } from '@gql/server/gen/graphql';
+import type { GuideConfigurationInput, GuideProbe, M1CorrectionSource, TipTiltSource } from '@gql/server/gen/graphql';
 import { useGuideDisable, useGuideEnable } from '@gql/server/GuideState';
 import { Button } from 'primereact/button';
 import { Checkbox } from 'primereact/checkbox';
@@ -12,6 +13,7 @@ import { useCallback, useEffect, useMemo } from 'react';
 
 import { useCanEdit } from '@/components/atoms/auth';
 import { useServerConfigValue } from '@/components/atoms/config';
+import { instrumentToOiwfs } from '@/Helpers/functions';
 
 import { Altair, GeMS } from './AdaptiveOptics';
 import { BrokenChain, ConnectedChain } from './Chain';
@@ -19,6 +21,8 @@ import { BrokenChain, ConnectedChain } from './Chain';
 export function Configuration() {
   const canEdit = useCanEdit();
   const { data, loading: guideLoopLoading } = useGetGuideLoop();
+  const { data: configData } = useConfiguration();
+  const instrument = configData?.configuration?.obsInstrument;
 
   const { site } = useServerConfigValue();
   const state = useMemo(
@@ -56,6 +60,19 @@ export function Configuration() {
     [state, updateGuideLoop],
   );
 
+  function guideProbeName(probe: string | undefined): GuideProbe | undefined {
+    switch (probe) {
+      case 'OI':
+        return instrumentToOiwfs(instrument);
+      case 'P1':
+        return 'PWFS_1';
+      case 'P2':
+        return 'PWFS_2';
+      default:
+        return undefined;
+    }
+  }
+
   function translateStateGuideInput(): GuideConfigurationInput {
     const m2Inputs: TipTiltSource[] = [];
     if (state.m2TipTiltEnable) {
@@ -83,8 +100,8 @@ export function Configuration() {
       mountOffload: state.mountOffload,
       daytimeMode: state.daytimeMode,
       probeGuide: {
-        from: probeFrom === 'OI' ? 'GMOS_OIWFS' : probeFrom === 'P1' ? 'PWFS_1' : 'PWFS_2',
-        to: probeTo === 'OI' ? 'GMOS_OIWFS' : probeTo === 'P1' ? 'PWFS_1' : 'PWFS_2',
+        from: guideProbeName(probeFrom),
+        to: guideProbeName(probeTo),
       },
     };
   }

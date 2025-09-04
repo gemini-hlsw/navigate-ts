@@ -10,9 +10,8 @@ import { ButtonGroup } from 'primereact/buttongroup';
 import { Dropdown } from 'primereact/dropdown';
 import { useCallback, useState } from 'react';
 
-import type { Alignment } from './Controls';
 import { AlignmentSelector, Autoadjust, CurrentCoordinates, InputControls, OpenLoopsInput } from './Controls';
-import type { Coords } from './strategy';
+import type { Coords, Strategy } from './strategy';
 import { strategies } from './strategy';
 
 type FocalPlaneOffset = NonNullable<GetTargetAdjustmentOffsetsQuery['targetAdjustmentOffsets']['oiwfs']>;
@@ -31,7 +30,8 @@ export default function TargetsHandset({ canEdit }: { canEdit: boolean }) {
   // State
   const [selectedTarget, setSelectedTarget] = useState(targetOptions[0]!.value);
 
-  const [alignment, setAlignment] = useState<Alignment>('AC');
+  const defaultAlignment = 'AC';
+  const [strategy, setStrategy] = useState<Strategy>(strategies[defaultAlignment]);
 
   let offset: FocalPlaneOffset | undefined;
   switch (selectedTarget) {
@@ -53,9 +53,6 @@ export default function TargetsHandset({ canEdit }: { canEdit: boolean }) {
 
   const [openLoops, setOpenLoops] = useState(false);
 
-  // Derived state
-  const strategy = strategies[alignment];
-
   const handleApply = useCallback(
     (coords: Coords) =>
       adjustTarget({
@@ -72,7 +69,12 @@ export default function TargetsHandset({ canEdit }: { canEdit: boolean }) {
     <div className="handset">
       <div className="selector-group">
         <TargetSelector loading={loading} target={selectedTarget} onChange={setSelectedTarget} canEdit={canEdit} />
-        <AlignmentSelector alignment={alignment} onChange={setAlignment} loading={loading} canEdit={canEdit} />
+        <AlignmentSelector
+          defaultAlignment={defaultAlignment}
+          onChange={setStrategy}
+          loading={loading}
+          canEdit={canEdit}
+        />
       </div>
 
       <InputControls loading={loading} handleApply={handleApply} strategy={strategy} canEdit={canEdit} />

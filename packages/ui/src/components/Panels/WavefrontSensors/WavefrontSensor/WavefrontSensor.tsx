@@ -10,6 +10,7 @@ import { Dropdown } from 'primereact/dropdown';
 import { useCallback, useEffect, useId, useState } from 'react';
 
 import { Play, Stop } from '@/components/Icons';
+import { instrumentToOiwfs } from '@/Helpers/functions';
 
 export default function WavefrontSensor({
   canEdit,
@@ -153,16 +154,26 @@ function Pwfs2ObserveButton({ canEdit }: { canEdit: boolean }) {
 function TakeSkyButton({ freq, wfs, canEdit }: { freq: number; wfs: GuideProbe; canEdit: boolean }) {
   const [takeSky, { loading: takeSkyLoading }] = useTakeSky();
 
+  // Instrument being used
+  const { data: configData, loading: configLoading } = useConfiguration();
+  const instrument = configData?.configuration?.obsInstrument;
+
   const onClick = useCallback(
-    () => takeSky({ variables: { wfs, period: { milliseconds: (1 / freq) * 1000 } } }),
-    [freq, takeSky, wfs],
+    () =>
+      takeSky({
+        variables: {
+          wfs: wfs.includes('OIWFS') ? instrumentToOiwfs(instrument)! : wfs,
+          period: { milliseconds: (1 / freq) * 1000 },
+        },
+      }),
+    [freq, takeSky, wfs, instrument],
   );
 
   return (
     <Button
       className={wfs.includes('OIWFS') ? '' : 'under-construction'}
       loading={takeSkyLoading}
-      disabled={!canEdit}
+      disabled={!canEdit || configLoading}
       style={{ gridArea: 'g23' }}
       aria-label="Take Sky"
       tooltip="Take Sky"

@@ -1,15 +1,17 @@
+import { useConfiguration } from '@gql/configs/Configuration';
 import { Button } from 'primereact/button';
 import { Divider } from 'primereact/divider';
 import { Dropdown } from 'primereact/dropdown';
 import { InputNumber } from 'primereact/inputnumber';
 import { InputSwitch } from 'primereact/inputswitch';
 import { Slider } from 'primereact/slider';
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { CaretDown, CaretLeft, CaretRight, CaretUp } from '@/components/Icons';
-import { formatToSignedArcseconds } from '@/Helpers/functions';
+import { formatToSignedArcseconds, instrumentToOiwfs } from '@/Helpers/functions';
 
-import type { Coords, HandsetStrategy } from './strategy';
+import type { Coords, HandsetStrategy, Strategy } from './strategy';
+import { strategies, wfsStrategy } from './strategy';
 
 export type CoordOnChange = (value: Coords) => void;
 
@@ -18,24 +20,41 @@ export type Alignment = (typeof alignmentOptions)[number];
 
 export function AlignmentSelector({
   onChange,
-  alignment,
+  defaultAlignment,
   loading,
   canEdit,
 }: {
-  onChange: (value: Alignment) => void;
-  alignment: Alignment;
+  onChange: (strategy: Strategy) => void;
+  defaultAlignment: Alignment;
   loading: boolean;
   canEdit: boolean;
 }) {
+  // Local State
+  const [alignment, setAlignment] = useState<Alignment>(defaultAlignment);
+
+  // Instrument being used
+  const { data: configData, loading: configLoading } = useConfiguration();
+  const instrument = configData?.configuration?.obsInstrument;
+
+  const updateAlignment = useCallback(() => {
+    if (alignment === 'OIWFS') {
+      onChange(wfsStrategy(instrumentToOiwfs(instrument)!));
+    } else {
+      onChange(strategies[alignment]);
+    }
+  }, [alignment, instrument, onChange]);
+
+  useEffect(() => updateAlignment(), [instrument, updateAlignment, alignment]);
+
   return (
     <>
       <label htmlFor="coord-system">Alignment</label>
       <Dropdown
         inputId="coord-system"
-        disabled={loading || !canEdit}
+        disabled={loading || !canEdit || configLoading}
         value={alignment}
         options={alignmentOptions.map((cs) => cs)}
-        onChange={(e) => onChange(e.value as Alignment)}
+        onChange={(e) => setAlignment(e.value as Alignment)}
       />
     </>
   );

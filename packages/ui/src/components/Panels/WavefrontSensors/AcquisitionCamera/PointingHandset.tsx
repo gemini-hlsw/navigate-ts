@@ -10,9 +10,8 @@ import { Button } from 'primereact/button';
 import { ButtonGroup } from 'primereact/buttongroup';
 import { useCallback, useState } from 'react';
 
-import { type Alignment, AlignmentSelector, CurrentCoordinates, InputControls } from './Controls';
-import type { Coords } from './strategy';
-import { strategies } from './strategy';
+import { AlignmentSelector, CurrentCoordinates, InputControls } from './Controls';
+import { type Coords, strategies, type Strategy } from './strategy';
 
 export default function PointingHandset({ canEdit }: { canEdit: boolean }) {
   // GraphQL Queries
@@ -25,10 +24,8 @@ export default function PointingHandset({ canEdit }: { canEdit: boolean }) {
   const [absorbAdjustment, { loading: absorbAdjustmentLoading }] = useAbsorbGuidePointingAdjustment();
 
   // State
-  const [alignment, setAlignment] = useState<Alignment>('Az/El');
-
-  // Derived state
-  const strategy = strategies[alignment];
+  const defaultAlignment = 'Az/El';
+  const [strategy, setStrategy] = useState<Strategy>(strategies[defaultAlignment]);
 
   const handleApply = useCallback(
     (coords: Coords) => adjustPointing({ variables: { offset: strategy.toInput(coords) } }),
@@ -45,7 +42,12 @@ export default function PointingHandset({ canEdit }: { canEdit: boolean }) {
   return (
     <div className="handset">
       <div className="selector-group">
-        <AlignmentSelector alignment={alignment} onChange={setAlignment} loading={loading} canEdit={canEdit} />
+        <AlignmentSelector
+          defaultAlignment={defaultAlignment}
+          onChange={setStrategy}
+          loading={loading}
+          canEdit={canEdit}
+        />
       </div>
 
       <InputControls loading={loading} handleApply={handleApply} strategy={strategy} canEdit={canEdit} />
