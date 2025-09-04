@@ -157,28 +157,30 @@ export function ACHR({ disabled }: { disabled: boolean }) {
           onChange={(e) => setAuxWindowSize(e.value as AcWindowSize)}
           placeholder="Select ROI"
         />
-        <div className="window-size-inputs">
-          <label htmlFor="achr-window-center-x" className="label">
-            X
-          </label>
-          <InputNumber
-            inputId="achr-window-center-x"
-            disabled={disabled || auxWindowSize === 'FULL' || setWindowCenterLoading}
-            value={windowCenter?.x ?? null}
-            onValueChange={(e) => setWindowCenter({ variables: { site, x: e.value } })}
-            maxFractionDigits={0}
-          />
-          <label htmlFor="achr-window-center-y" className="label">
-            Y
-          </label>
-          <InputNumber
-            inputId="achr-window-center-y"
-            disabled={disabled || auxWindowSize === 'FULL' || setWindowCenterLoading}
-            value={windowCenter?.y ?? null}
-            onValueChange={(e) => setWindowCenter({ variables: { site, y: e.value } })}
-            maxFractionDigits={0}
-          />
-        </div>
+        {auxWindowSize !== 'FULL' && (
+          <div className="window-size-inputs">
+            <label htmlFor="achr-window-center-x" className="label">
+              X
+            </label>
+            <InputNumber
+              inputId="achr-window-center-x"
+              disabled={disabled || setWindowCenterLoading}
+              value={windowCenter?.x ?? null}
+              onValueChange={(e) => setWindowCenter({ variables: { site, x: e.value } })}
+              maxFractionDigits={0}
+            />
+            <label htmlFor="achr-window-center-y" className="label">
+              Y
+            </label>
+            <InputNumber
+              inputId="achr-window-center-y"
+              disabled={disabled || setWindowCenterLoading}
+              value={windowCenter?.y ?? null}
+              onValueChange={(e) => setWindowCenter({ variables: { site, y: e.value } })}
+              maxFractionDigits={0}
+            />
+          </div>
+        )}
       </div>
       <Button
         disabled={loading}
