@@ -56,6 +56,7 @@
     "src",
     "tasks",
     "gen",
-    "start-server.sh"
+    "start-server.sh",
+    "prisma.config.ts"
   ]
 }
