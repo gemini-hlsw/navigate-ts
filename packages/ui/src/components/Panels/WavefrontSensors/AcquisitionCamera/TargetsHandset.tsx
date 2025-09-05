@@ -8,7 +8,7 @@ import {
 import { Button } from 'primereact/button';
 import { ButtonGroup } from 'primereact/buttongroup';
 import { Dropdown } from 'primereact/dropdown';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import { AlignmentSelector, Autoadjust, CurrentCoordinates, InputControls, OpenLoopsInput } from './Controls';
 import type { Coords, Strategy } from './strategy';
