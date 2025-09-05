@@ -107,10 +107,10 @@ export const strategies = {
   },
   PWFS1: wfsStrategy('PWFS_1'),
   PWFS2: wfsStrategy('PWFS_2'),
-  OIWFS: wfsStrategy('GMOS_OIWFS'),
+  OIWFS: {} as HandsetStrategy,
 } satisfies Record<Alignment, HandsetStrategy>;
 
-function wfsStrategy(probe: GuideProbe): HandsetStrategy {
+export function wfsStrategy(probe: GuideProbe): HandsetStrategy {
   return {
     up: { label: undefined, mod: plusVertical },
     down: { label: undefined, mod: minusVertical },
@@ -118,7 +118,7 @@ function wfsStrategy(probe: GuideProbe): HandsetStrategy {
     left: { label: undefined, mod: minusHorizontal },
     horizontal: 'u',
     vertical: 'v',
-    toInput: (coords) => ({
+    toInput: (coords: Coords) => ({
       probeFrameAdjustment: {
         probeFrame: probe,
         deltaV: { arcseconds: coords.vertical },
@@ -127,3 +127,5 @@ function wfsStrategy(probe: GuideProbe): HandsetStrategy {
     }),
   };
 }
+
+export type Strategy = (typeof strategies)[keyof typeof strategies];

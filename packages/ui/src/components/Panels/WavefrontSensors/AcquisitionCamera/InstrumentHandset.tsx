@@ -6,17 +6,10 @@ import {
 } from '@gql/server/OriginHandset';
 import { Button } from 'primereact/button';
 import { ButtonGroup } from 'primereact/buttongroup';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
-import {
-  type Alignment,
-  AlignmentSelector,
-  Autoadjust,
-  CurrentCoordinates,
-  InputControls,
-  OpenLoopsInput,
-} from './Controls';
-import type { Coords } from './strategy';
+import { AlignmentSelector, Autoadjust, CurrentCoordinates, InputControls, OpenLoopsInput } from './Controls';
+import type { Coords, Strategy } from './strategy';
 import { strategies } from './strategy';
 
 export default function InstrumentHandset({ canEdit }: { canEdit: boolean }) {
@@ -29,27 +22,32 @@ export default function InstrumentHandset({ canEdit }: { canEdit: boolean }) {
   const [absorbAdjustment, { loading: absorbAdjustmentLoading }] = useAbsorbOriginAdjustment();
 
   // State
-  const [alignment, setAlignment] = useState<Alignment>('AC');
-
+  const defaultAlignment = 'AC';
+  const [strategy, setStrategy] = useState<Strategy>(strategies[defaultAlignment]);
   const [openLoops, setOpenLoops] = useState(false);
 
-  // Derived state
-  const strategy = strategies[alignment];
-
-  const handleApply = async (coords: Coords) =>
-    adjustOrigin({
-      variables: {
-        offset: strategy.toInput(coords),
-        openLoops,
-      },
-    });
+  const handleApply = useCallback(
+    async (coords: Coords) =>
+      adjustOrigin({
+        variables: {
+          offset: strategy.toInput(coords),
+          openLoops,
+        },
+      }),
+    [adjustOrigin, openLoops, strategy],
+  );
 
   const loading = offsetLoading || adjustOriginLoading || resetAdjustmentLoading || absorbAdjustmentLoading;
 
   return (
     <div className="handset">
       <div className="selector-group">
-        <AlignmentSelector alignment={alignment} onChange={setAlignment} loading={loading} canEdit={canEdit} />
+        <AlignmentSelector
+          defaultAlignment={defaultAlignment}
+          onChange={setStrategy}
+          loading={loading}
+          canEdit={canEdit}
+        />
       </div>
 
       <InputControls loading={loading} handleApply={handleApply} strategy={strategy} canEdit={canEdit} />

@@ -1,4 +1,5 @@
 import type { Configuration, WfsType } from '@gql/configs/gen/graphql';
+import type { GuideProbe, Instrument } from '@gql/server/gen/graphql';
 import { signedArcSeconds } from 'lucuma-core';
 
 export function isNotNullish<T>(val: T | undefined | null): val is T {
@@ -39,5 +40,21 @@ export function formatToSignedArcseconds(arcseconds: number | string | undefined
       return defaultValue;
     }
     return signedArcSeconds(num).toFixed(2);
+  }
+}
+
+/**
+ * Convert instrument to OIWFS name.
+ * TODO: Add other instruments when odb supports them.
+ */
+export function instrumentToOiwfs(instrument: Instrument | null | undefined): GuideProbe | undefined {
+  switch (instrument) {
+    case 'GMOS_NORTH':
+    case 'GMOS_SOUTH':
+      return 'GMOS_OIWFS';
+    case 'FLAMINGOS2':
+      return 'FLAMINGOS2_OIWFS';
+    default:
+      return undefined;
   }
 }
