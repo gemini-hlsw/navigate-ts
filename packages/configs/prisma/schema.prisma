@@ -6,10 +6,8 @@ generator client {
   output   = "../src/prisma/gen"
 
   // Optional
-  runtime                = "nodejs"
-  moduleFormat           = "esm"
-  generatedFileExtension = "ts"
-  importFileExtension    = "js"
+  runtime      = "nodejs"
+  moduleFormat = "esm"
 }
 
 datasource db {
@@ -44,7 +42,7 @@ enum GuidingType {
 
 model EngineeringTarget {
   pk             Int           @id @default(autoincrement())
-  id             String?
+  id             String
   name           String        @default("Test")
   coord1         Float // RA or Az
   coord2         Float // Dec or El
@@ -63,7 +61,7 @@ model EngineeringTarget {
 
 model Target {
   pk             Int        @id @default(autoincrement())
-  id             String?
+  id             String
   name           String     @default("Test")
   coord1         Float // RA or Az
   coord2         Float // Dec or El
@@ -89,16 +87,19 @@ enum TargetType {
 }
 
 model Instrument {
-  pk          Int     @id @default(autoincrement())
+  pk          Int      @id @default(autoincrement())
   name        String
-  iaa         Float   @default(0.0)
+  iaa         Float    @default(0.0)
   issPort     Int
-  focusOffset Float   @default(0.0)
-  wfs         WfsType @default(NONE)
-  originX     Float   @default(0.0)
-  originY     Float   @default(0.0)
-  ao          Boolean @default(false)
+  focusOffset Float    @default(0.0)
+  wfs         WfsType  @default(NONE)
+  originX     Float    @default(0.0)
+  originY     Float    @default(0.0)
+  ao          Boolean  @default(false)
   extraParams Json
+  isTemporary Boolean  @default(true)
+  comment     String?
+  createdAt   DateTime @default(now())
 }
 
 enum WfsType {
@@ -249,4 +250,15 @@ model GuideAlarm {
   wfs     WfsType @id
   limit   Int
   enabled Boolean @default(true)
+}
+
+enum Site {
+  GN
+  GS
+}
+
+model WindowCenter {
+  site Site  @id
+  x    Float
+  y    Float
 }

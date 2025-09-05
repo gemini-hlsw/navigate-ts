@@ -18,15 +18,15 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: pnpm/action-setup@v4
       - name: Use Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version-file: '.nvmrc'
           cache: 'pnpm'
       - run: pnpm install --frozen-lockfile
-      - run: pnpm -w ui exec playwright install chromium
+      - run: pnpm ui exec playwright install chromium
       - run: pnpm -r build
       - run: pnpm lint
       - run: pnpm -r test
@@ -41,13 +41,52 @@ jobs:
         with:
           working-directory: 'packages/ui'
 
+  e2e:
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          username: nlsoftware
+          password: ${{ secrets.DOCKER_HUB_TOKEN }}
+      - uses: pnpm/action-setup@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'pnpm'
+      - name: Add hosts to /etc/hosts
+        run: |
+          sudo echo "127.0.0.1 navigate.lucuma.xyz" | sudo tee -a /etc/hosts
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm e2e exec playwright install firefox
+      - run: pnpm ui build
+      - run: docker compose -f packages/e2e/docker-compose.yml up -d --wait
+        env:
+          LUCUMA_REFRESH_TOKEN: ${{ secrets.LUCUMA_DEV_API_KEY }}
+
+      - name: Run Playwright tests
+        run: pnpm e2e test:e2e
+        env:
+          LUCUMA_REFRESH_TOKEN: ${{ secrets.LUCUMA_DEV_API_KEY }}
+          DATABASE_URL: 'postgresql://jimmy:banana@127.0.0.1:5432/configs'
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: packages/e2e/playwright-report/
+          retention-days: 30
+
   build-docker:
     runs-on: ubuntu-latest
     env:
       REGISTRY_USERNAME: 'nlsoftware'
       REGISTRY_IMAGE: noirlab/gpp-nav-configs
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: pnpm/action-setup@v4
 
       - name: Log in to the Container registry
@@ -112,7 +151,7 @@ jobs:
       REGISTRY_USERNAME: 'nlsoftware'
       REGISTRY_IMAGE: noirlab/gpp-nav
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
@@ -157,7 +196,7 @@ jobs:
       REGISTRY_IMAGE: noirlab/gpp-nav
       HEROKU_APP_NAME: navigate-dev-gn
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Log in to the Container registry
         uses: docker/login-action@v3
         with:
@@ -183,7 +222,7 @@ jobs:
       REGISTRY_IMAGE: noirlab/gpp-nav-configs
       HEROKU_APP_NAME: navigate-configs-dev-gn
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Log in to the Container registry
         uses: docker/login-action@v3
         with:

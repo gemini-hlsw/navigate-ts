@@ -20,5 +20,6 @@ declare module '@apollo/client' {
     };
 
     clientName?: 'odb' | 'navigateConfigs';
+    headers?: Record<string, string>;
   }
 }

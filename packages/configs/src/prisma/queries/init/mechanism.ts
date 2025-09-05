@@ -1,4 +1,4 @@
-import type { Prisma } from '../../gen/client.js';
+import type { Prisma } from '../../gen/client.ts';
 
 export const INITIAL_MECHANISM: Prisma.MechanismCreateInput = {
   mcs: 'PENDING',

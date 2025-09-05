@@ -1,4 +1,4 @@
-import { useSubscription } from '@apollo/client';
+import { useSubscription } from '@apollo/client/react';
 import { useState } from 'react';
 
 import { graphql } from './gen';

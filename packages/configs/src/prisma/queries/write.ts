@@ -1,13 +1,14 @@
-import { prisma } from '../db.js';
-import { INITIAL_CONFIGURATION } from './init/configuration.js';
-import { INITIAL_ENGINEERING_TARGETS } from './init/engineeringTargets.js';
-import { INITIAL_GUIDE_ALARMS } from './init/guideAlarm.js';
-import { INITIAL_ALTAIR_GUIDE_LOOP, INITIAL_GEMS_GUIDE_LOOP, INITIAL_GUIDE_LOOP } from './init/guideLoop.js';
-import { INITIAL_ALTAIR_INSTRUMENT, INITIAL_GEMS_INSTRUMENT, INITIAL_INSTRUMENTS } from './init/instruments.js';
-import { INITIAL_MECHANISM } from './init/mechanism.js';
-import { INITIAL_ROTATOR } from './init/rotator.js';
-import { INITIAL_SLEW_FLAGS } from './init/slewFlags.js';
-import { INITIAL_USERS } from './init/users.js';
+import { prisma } from '../db.ts';
+import { INITIAL_CONFIGURATION } from './init/configuration.ts';
+import { INITIAL_ENGINEERING_TARGETS } from './init/engineeringTargets.ts';
+import { INITIAL_GUIDE_ALARMS } from './init/guideAlarm.ts';
+import { INITIAL_ALTAIR_GUIDE_LOOP, INITIAL_GEMS_GUIDE_LOOP, INITIAL_GUIDE_LOOP } from './init/guideLoop.ts';
+import { INITIAL_ALTAIR_INSTRUMENT, INITIAL_GEMS_INSTRUMENT, INITIAL_INSTRUMENTS } from './init/instruments.ts';
+import { INITIAL_MECHANISM } from './init/mechanism.ts';
+import { INITIAL_ROTATOR } from './init/rotator.ts';
+import { INITIAL_SLEW_FLAGS } from './init/slewFlags.ts';
+import { INITIAL_USERS } from './init/users.ts';
+import { INITIAL_WINDOW_CENTER } from './init/windowCenter.ts';
 
 async function createUsers() {
   console.log('Creating user reader');
@@ -92,6 +93,13 @@ async function createEngineeringTargets() {
   });
 }
 
+async function createWindowCenters() {
+  console.log('Creating initial window centers');
+  await prisma.windowCenter.createMany({
+    data: INITIAL_WINDOW_CENTER,
+  });
+}
+
 export async function write() {
   await createUsers();
   await createInstruments();
@@ -102,4 +110,5 @@ export async function write() {
   await createMechanism();
   await createGuideAlarms();
   await createEngineeringTargets();
+  await createWindowCenters();
 }

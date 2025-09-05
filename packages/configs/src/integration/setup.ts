@@ -8,11 +8,11 @@ import type { Options } from 'execa';
 import { execa } from 'execa';
 import type { FormattedExecutionResult } from 'graphql';
 
-import type { Prisma } from '../prisma/db.js';
-import { extendPrisma } from '../prisma/extend.js';
-import { PrismaClient } from '../prisma/gen/client.js';
-import type { ApolloContext } from '../server.js';
-import { server } from '../server.js';
+import type { Prisma } from '../prisma/db.ts';
+import { extendPrisma } from '../prisma/extend.ts';
+import { PrismaClient } from '../prisma/gen/client.ts';
+import type { ApolloContext } from '../server.ts';
+import { server } from '../server.ts';
 
 export interface ServerFixture {
   /**

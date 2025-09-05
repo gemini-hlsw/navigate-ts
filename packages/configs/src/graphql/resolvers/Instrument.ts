@@ -1,17 +1,20 @@
-import { INITIAL_INSTRUMENTS } from '../../prisma/queries/init/instruments.js';
-import type { InstrumentConfig, Resolvers } from '../gen/index.js';
+import type { Prisma } from '../../prisma/gen/client.ts';
+import type { InstrumentConfig, Resolvers } from '../gen/index.ts';
+
+// Temporary instruments first, then most recent first
+const orderBy: Prisma.InstrumentOrderByWithRelationInput[] = [{ isTemporary: 'desc' }, { createdAt: 'desc' }];
 
 export const InstrumentResolver: Resolvers = {
   Query: {
     instrument: async (_parent, args, { prisma }) => {
-      const instrument = await prisma.instrument.findFirst({ where: args });
+      const instrument = await prisma.instrument.findFirst({ where: args, orderBy });
       if (!instrument) {
         throw new Error(`Instrument not found for args: ${JSON.stringify(args)}`);
       }
       return instrument as InstrumentConfig;
     },
     instruments: (_parent, args, { prisma }) => {
-      return prisma.instrument.findMany({ where: args }) as Promise<InstrumentConfig[]>;
+      return prisma.instrument.findMany({ where: args, orderBy }) as Promise<InstrumentConfig[]>;
     },
     distinctInstruments: (_parent, _args, { prisma }) => {
       return prisma.instrument.findMany({
@@ -38,16 +41,7 @@ export const InstrumentResolver: Resolvers = {
       }) as Promise<InstrumentConfig>;
     },
     resetInstruments: async (_parent, args, { prisma }) => {
-      const initialInstruments = INITIAL_INSTRUMENTS.filter((i) => i.name === args.name);
-      if (!initialInstruments.length) {
-        throw new Error(`No initial instruments found for name: ${args.name}`);
-      }
-
-      return prisma.$transaction(async (tx) => {
-        await tx.instrument.deleteMany({ where: args });
-
-        return tx.instrument.createManyAndReturn({ data: initialInstruments });
-      }) as Promise<InstrumentConfig[]>;
+      await prisma.instrument.deleteMany({ where: { ...args, isTemporary: true } });
     },
   },
 };

@@ -18,7 +18,7 @@ export function Target() {
   const [c1String, setc1String] = useState<string | undefined>('');
   const [c2String, setc2String] = useState<string | undefined>('');
 
-  const updateTarget = useUpdateTarget();
+  const [updateTarget, { loading }] = useUpdateTarget();
 
   useEffect(() => {
     if (targetEdit !== undefined) {
@@ -54,7 +54,7 @@ export function Target() {
   const footer = (
     <div className="modal-footer">
       <div className="right">
-        <Button label="Update" onClick={updateObservation} />
+        <Button label="Update" loading={loading} onClick={updateObservation} />
         <Button
           severity="danger"
           label="Cancel"

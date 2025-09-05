@@ -3,7 +3,7 @@
   "description": "Monorepo for navigate typescript projects",
   "version": "1.0.0",
   "type": "module",
-  "packageManager": "pnpm@10.14.0",
+  "packageManager": "pnpm@10.15.1",
   "license": "BSD-3-Clause",
   "private": true,
   "repository": {
@@ -14,28 +14,32 @@
     "ui": "pnpm --filter navigate-ui",
     "schema": "pnpm --filter navigate-schema",
     "configs": "pnpm --filter navigate-configs",
+    "e2e": "pnpm --filter navigate-e2e",
     "all": "pnpm -r",
+    "build": "tsc -b",
     "lint": "pnpm lint:prettier && pnpm -r lint:eslint",
     "lint:prettier": "prettier --check .",
     "tsc:watch": "tsc --build --watch",
     "prepare": "node .husky/install.js"
   },
   "devDependencies": {
-    "@eslint/js": "9.32.0",
+    "@eslint/js": "9.34.0",
     "@graphql-eslint/eslint-plugin": "4.4.0",
+    "@tsconfig/node-ts": "23.6.1",
     "@tsconfig/node24": "24.0.1",
     "@tsconfig/strictest": "2.0.5",
     "@tsconfig/vite-react": "7.0.0",
-    "eslint": "9.32.0",
+    "@types/node": "catalog:",
+    "eslint": "9.34.0",
     "eslint-import-resolver-typescript": "4.4.4",
     "eslint-plugin-import-x": "4.16.1",
     "eslint-plugin-simple-import-sort": "12.1.1",
     "globals": "16.3.0",
     "husky": "9.1.7",
-    "lint-staged": "16.1.4",
+    "lint-staged": "16.1.6",
     "prettier": "3.6.2",
     "typescript": "catalog:",
-    "typescript-eslint": "8.38.0"
+    "typescript-eslint": "8.42.0"
   },
   "lint-staged": {
     "*.{js,mjs,ts,tsx,jsx,css,md,json,yml,yaml}": "prettier --write"

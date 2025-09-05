@@ -1,4 +1,5 @@
 import { createStore } from 'jotai';
+import type { Store } from 'jotai/vanilla/store';
 
 import type { GuestUser, ServiceUser, StandardUser } from '@/auth/user';
 
@@ -13,7 +14,7 @@ import {
 } from './auth';
 
 describe('auth atoms', () => {
-  let store: ReturnType<typeof createStore>;
+  let store: Store;
   beforeEach(() => {
     store = createStore();
   });

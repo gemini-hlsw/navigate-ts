@@ -1,8 +1,9 @@
-import type { MockedResponse } from '@apollo/client/testing';
+import type { MockLink } from '@apollo/client/testing';
 import { GET_CONFIGURATION } from '@gql/configs/Configuration';
-import { GET_INSTRUMENT, UPDATE_INSTRUMENT } from '@gql/configs/Instrument';
+import { CREATE_INSTRUMENT, GET_INSTRUMENT, UPDATE_INSTRUMENT } from '@gql/configs/Instrument';
 import { GET_INSTRUMENT_PORT } from '@gql/server/Instrument';
 import type { MockedResponseOf } from '@gql/util';
+import type { ResultOf } from '@graphql-typed-document-node/core';
 import { userEvent } from '@vitest/browser/context';
 
 import { importInstrumentAtom } from '@/components/atoms/instrument';
@@ -15,7 +16,7 @@ describe(Instrument.name, () => {
   let sut: RenderResultWithStore;
   beforeEach(() => {
     sut = renderWithContext(<Instrument canEdit={true} />, {
-      mocks: [...mocks, getInstrumentMock, updateInstrumentMock],
+      mocks: [...mocks, getInstrumentMock, updateInstrumentMock, createInstrumentMock],
     });
   });
 
@@ -32,7 +33,7 @@ describe(Instrument.name, () => {
     await expect.element(originXInput).not.toBeDisabled();
     await expect.element(originXInput).toHaveValue('0.20');
     await expect.element(sut.getByRole('button')).not.toBeDisabled();
-    expect(updateInstrumentMock.result).not.toHaveBeenCalled();
+    expect(updateInstrumentMock.result).toHaveBeenCalledExactlyOnceWith({ originX: 0.2, pk: 1 });
   });
 
   it('opens the instrument modal when the import button is clicked', async () => {
@@ -47,15 +48,10 @@ describe(Instrument.name, () => {
   });
 
   it('should call updateInstrument when save button is clicked', async () => {
-    const originXInput = sut.getByLabelText('Origin X');
-
-    await userEvent.clear(originXInput);
-    await userEvent.type(originXInput, '0.2{Enter}');
-
     const saveButton = sut.getByRole('button');
     await userEvent.click(saveButton, { timeout: 500 });
 
-    expect(updateInstrumentMock.result).toHaveBeenCalledOnce();
+    await expect.poll(() => updateInstrumentMock.result).toHaveBeenCalledExactlyOnceWith({ pk: 1, isTemporary: false });
   });
 
   it('should query instrument using oiWfs', async () => {
@@ -66,11 +62,11 @@ describe(Instrument.name, () => {
     const saveButton = sut.getByRole('button');
     await expect.element(saveButton).toBeEnabled();
 
-    expect(getInstrumentMock.variableMatcher).toHaveBeenCalledWith(expect.objectContaining({ wfs: 'OIWFS' }));
+    expect(getInstrumentMock.request.variables).toHaveBeenCalledWith(expect.objectContaining({ wfs: 'OIWFS' }));
   });
 });
 
-const mocks: MockedResponse[] = [
+const mocks: MockLink.MockedResponse[] = [
   {
     request: {
       query: GET_CONFIGURATION,
@@ -97,9 +93,11 @@ const mocks: MockedResponse[] = [
     },
   } satisfies MockedResponseOf<typeof GET_CONFIGURATION>,
   {
-    request: { query: GET_INSTRUMENT_PORT },
+    request: {
+      query: GET_INSTRUMENT_PORT,
+      variables: () => true,
+    },
     maxUsageCount: Infinity,
-    variableMatcher: () => true,
     result: {
       data: {
         instrumentPort: 3,
@@ -108,12 +106,14 @@ const mocks: MockedResponse[] = [
   } satisfies MockedResponseOf<typeof GET_INSTRUMENT_PORT>,
 ];
 
+const createdAt = new Date().toISOString();
+
 const getInstrumentMock = {
   request: {
     query: GET_INSTRUMENT,
+    variables: vi.fn().mockReturnValue(true),
   },
-  maxUsageCount: 5,
-  variableMatcher: vi.fn().mockReturnValue(true),
+  maxUsageCount: Infinity,
   result: {
     data: {
       instrument: {
@@ -127,6 +127,9 @@ const getInstrumentMock = {
         originY: 0,
         ao: false,
         extraParams: {},
+        isTemporary: true,
+        comment: null,
+        createdAt,
       },
     },
   },
@@ -135,8 +138,9 @@ const getInstrumentMock = {
 const updateInstrumentMock = {
   request: {
     query: UPDATE_INSTRUMENT,
+    variables: () => true,
   },
-  variableMatcher: () => true,
+  maxUsageCount: Infinity,
   result: vi.fn().mockReturnValue({
     data: {
       updateInstrument: {
@@ -150,7 +154,37 @@ const updateInstrumentMock = {
         originY: 0,
         ao: false,
         extraParams: {},
+        comment: null,
+        isTemporary: true,
+        createdAt,
       },
-    },
+    } satisfies ResultOf<typeof UPDATE_INSTRUMENT>,
   }),
 } satisfies MockedResponseOf<typeof UPDATE_INSTRUMENT>;
+
+const createInstrumentMock = {
+  request: {
+    query: CREATE_INSTRUMENT,
+    variables: () => true,
+  },
+  maxUsageCount: Infinity,
+  result: vi.fn().mockReturnValue({
+    data: {
+      createInstrument: {
+        pk: 1,
+        name: 'GMOS_NORTH',
+        iaa: 359.877,
+        issPort: 3,
+        focusOffset: 0,
+        wfs: 'NONE',
+        originX: 0.2,
+        originY: 0,
+        ao: false,
+        extraParams: {},
+        comment: null,
+        isTemporary: true,
+        createdAt,
+      },
+    } satisfies ResultOf<typeof CREATE_INSTRUMENT>,
+  }),
+} satisfies MockedResponseOf<typeof CREATE_INSTRUMENT>;

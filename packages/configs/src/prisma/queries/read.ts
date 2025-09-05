@@ -1,4 +1,4 @@
-import { prisma } from '../db.js';
+import { prisma } from '../db.ts';
 
 async function getUser() {
   return await prisma.user.findFirst();

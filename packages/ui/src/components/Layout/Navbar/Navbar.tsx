@@ -5,7 +5,6 @@ import { clsx } from 'clsx';
 import { Button } from 'primereact/button';
 import type { MenuItem } from 'primereact/menuitem';
 import { SplitButton } from 'primereact/splitbutton';
-import { useCallback } from 'react';
 import { Link } from 'react-router';
 
 import { useNavigateToLogin, useSignout } from '@/auth/hooks';
@@ -35,13 +34,13 @@ export default function Navbar() {
   const ThemeIcon = theme === 'dark' ? Moon : Sun;
   const SignInIcon = isLoggedIn ? SignIn : SignOut;
 
-  const userSession = useCallback(() => {
+  const userSession = () => {
     if (isLoggedIn) {
-      void signout();
+      return signout();
     } else {
-      void navigateToSignIn();
+      return navigateToSignIn();
     }
-  }, [isLoggedIn, navigateToSignIn, signout]);
+  };
 
   const items: MenuItem[] = [
     {
@@ -52,6 +51,7 @@ export default function Navbar() {
     {
       label: isLoggedIn ? 'Logout' : 'Login',
       icon: <SignInIcon className="p-menuitem-icon" />,
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises
       command: userSession,
     },
     {

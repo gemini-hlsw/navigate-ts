@@ -39,7 +39,7 @@ type Target {
   "Primary Key"
   pk: PosInt!
   "Target ID"
-  id: TargetId
+  id: TargetId!
   "Name of the target"
   name: String!
   "Right Ascension"
@@ -76,7 +76,7 @@ type Query {
 }
 
 input TargetInput {
-  id: TargetId
+  id: TargetId!
   name: String
   coord1: Float
   coord2: Float

@@ -1,0 +1,24 @@
+{
+  "name": "navigate-e2e",
+  "version": "1.0.0",
+  "private": true,
+  "license": "BSD-3-Clause",
+  "type": "module",
+  "description": "End-to-end tests for Navigate",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gemini-hlsw/navigate-ts.git",
+    "directory": "packages/e2e"
+  },
+  "scripts": {
+    "test:e2e": "playwright test",
+    "lint:eslint": "eslint .",
+    "build": "tsc -b"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@playwright/test": "1.55.0",
+    "@types/node": "catalog:",
+    "navigate-configs": "workspace:*"
+  }
+}

@@ -1,4 +1,4 @@
-import { useLazyQuery, useQuery } from '@apollo/client';
+import { skipToken, useLazyQuery, useQuery } from '@apollo/client/react';
 import type { OptionsOf } from '@gql/util';
 
 import { graphql } from './gen';
@@ -86,10 +86,15 @@ const GET_OBSERVATIONS_BY_STATE = graphql(`
 `);
 
 export function useObservationsByState(options: OptionsOf<typeof GET_OBSERVATIONS_BY_STATE>) {
-  return useQuery(GET_OBSERVATIONS_BY_STATE, {
-    context: { clientName: 'odb' },
-    ...options,
-  });
+  return useQuery(
+    GET_OBSERVATIONS_BY_STATE,
+    options === skipToken
+      ? skipToken
+      : {
+          ...options,
+          context: { clientName: 'odb' },
+        },
+  );
 }
 
 const GET_GUIDE_ENVIRONMENT = graphql(`
@@ -149,9 +154,7 @@ const GET_GUIDE_ENVIRONMENT = graphql(`
 `);
 
 export function useGetGuideEnvironment() {
-  return useLazyQuery(GET_GUIDE_ENVIRONMENT, {
-    context: { clientName: 'odb' },
-  });
+  return useLazyQuery(GET_GUIDE_ENVIRONMENT);
 }
 
 const GET_CENTRAL_WAVELENGTH = graphql(`
@@ -207,7 +210,5 @@ const GET_CENTRAL_WAVELENGTH = graphql(`
 `);
 
 export function useGetCentralWavelength() {
-  return useLazyQuery(GET_CENTRAL_WAVELENGTH, {
-    context: { clientName: 'odb' },
-  });
+  return useLazyQuery(GET_CENTRAL_WAVELENGTH);
 }

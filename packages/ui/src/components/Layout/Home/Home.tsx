@@ -3,7 +3,7 @@ import './Home.scss';
 import { Guider } from '@Guider/Guider';
 import { Telescope } from '@Telescope/Telescope';
 import { WavefrontSensors } from '@WavefrontSensors/WavefrontSensors';
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 
 import type { PanelType } from '@/types';
 
@@ -12,14 +12,11 @@ export default function Home() {
   const [panelDisplay, setPanelDisplay] = useState<PanelType>('Telescope');
   const [touchPos, setTouchPos] = useState<number>(0);
 
-  const handleTouchStart = useCallback(
-    (e: React.TouchEvent) => {
-      setTouchPos(e.touches[0]!.pageX);
-    },
-    [setTouchPos],
-  );
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchPos(e.touches[0]!.pageX);
+  };
 
-  const nextPanel = useCallback(() => {
+  const nextPanel = () => {
     switch (panelDisplay) {
       case 'Telescope':
         setPanelDisplay('WavefrontSensors');
@@ -33,9 +30,9 @@ export default function Home() {
       default:
         break;
     }
-  }, [panelDisplay, setPanelDisplay]);
+  };
 
-  const prevPanel = useCallback(() => {
+  const prevPanel = () => {
     switch (panelDisplay) {
       case 'Telescope':
         setPanelDisplay('Guider');
@@ -49,19 +46,16 @@ export default function Home() {
       default:
         break;
     }
-  }, [panelDisplay, setPanelDisplay]);
+  };
 
-  const handleTouchEnd = useCallback(
-    (e: React.TouchEvent) => {
-      const movement = e.changedTouches[0]!.pageX - touchPos;
-      if (movement > TOUCH_THRESHOLD) {
-        prevPanel();
-      } else if (movement < -TOUCH_THRESHOLD) {
-        nextPanel();
-      }
-    },
-    [touchPos, prevPanel, nextPanel],
-  );
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    const movement = e.changedTouches[0]!.pageX - touchPos;
+    if (movement > TOUCH_THRESHOLD) {
+      prevPanel();
+    } else if (movement < -TOUCH_THRESHOLD) {
+      nextPanel();
+    }
+  };
 
   return (
     <div className={`main-body ${panelDisplay}`} onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>

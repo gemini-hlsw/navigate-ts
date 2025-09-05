@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from '@apollo/client';
+import { skipToken, useMutation, useQuery } from '@apollo/client/react';
 import type { OptionsOf } from '@gql/util';
 
 import { graphql } from './gen';
@@ -48,10 +48,15 @@ const GET_MECHANISM = graphql(`
 `);
 
 export function useMechanism(options: OptionsOf<typeof GET_MECHANISM> = {}) {
-  return useQuery(GET_MECHANISM, {
-    ...options,
-    context: { clientName: 'navigateConfigs' },
-  });
+  return useQuery(
+    GET_MECHANISM,
+    options === skipToken
+      ? skipToken
+      : {
+          ...options,
+          context: { clientName: 'navigateConfigs' },
+        },
+  );
 }
 
 const UPDATE_MECHANISM = graphql(`
@@ -175,9 +180,7 @@ const UPDATE_MECHANISM = graphql(`
 `);
 
 export function useUpdateMechanism() {
-  const [mutationFunction] = useMutation(UPDATE_MECHANISM, {
+  return useMutation(UPDATE_MECHANISM, {
     context: { clientName: 'navigateConfigs' },
   });
-
-  return mutationFunction;
 }

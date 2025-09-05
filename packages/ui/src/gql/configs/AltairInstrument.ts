@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 
 import { graphql } from './gen';
 
@@ -69,9 +69,7 @@ const UPDATE_ALTAIR_INSTRUMENT = graphql(`
 `);
 
 export function useUpdateAltairInstrument() {
-  const [mutationFunction] = useMutation(UPDATE_ALTAIR_INSTRUMENT, {
+  return useMutation(UPDATE_ALTAIR_INSTRUMENT, {
     context: { clientName: 'navigateConfigs' },
   });
-
-  return mutationFunction;
 }

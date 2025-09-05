@@ -33,7 +33,7 @@ export function TelescopeTitle({ prevPanel, nextPanel }: ParamsInterface) {
           onClick={() => setCatalogVisible(true)}
         />
         <Divider />
-        <Button disabled={!canEdit} className="p-button-text" label="Edit targets" />
+        <Button disabled={!canEdit} className="p-button-text under-construction" label="Edit targets" />
       </TitleDropdown>
     </Title>
   );

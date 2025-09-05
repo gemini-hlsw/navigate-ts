@@ -6,6 +6,7 @@ import { GET_INSTRUMENT_PORT } from '@gql/server/Instrument';
 import { NAVIGATE_STATE, NAVIGATE_STATE_SUBSCRIPTION } from '@gql/server/NavigateState';
 import { RESTORE_TARGET_MUTATION, SWAP_TARGET_MUTATION } from '@gql/server/TargetSwap';
 import type { MockedResponseOf } from '@gql/util';
+import type { ResultOf } from '@graphql-typed-document-node/core';
 import type { RenderResult } from 'vitest-browser-react';
 
 import { renderWithContext } from '@/test/render';
@@ -36,7 +37,7 @@ describe(TargetSwapButton.name, () => {
       await sut.getByRole('button').click();
 
       const swapTargetMock = mocks.find((m) => m.request.query === SWAP_TARGET_MUTATION)!;
-      expect(swapTargetMock.result).toHaveBeenCalledOnce();
+      await expect.poll(() => swapTargetMock.result).toHaveBeenCalledOnce();
     });
   });
 
@@ -59,7 +60,7 @@ describe(TargetSwapButton.name, () => {
       await sut.getByRole('button').click();
 
       const restoreTargetMock = mocks.find((m) => m.request.query === RESTORE_TARGET_MUTATION)!;
-      expect(restoreTargetMock.result).toHaveBeenCalledOnce();
+      await expect.poll(() => restoreTargetMock.result).toHaveBeenCalled();
     });
   });
 });
@@ -122,9 +123,9 @@ const mocks = [
   {
     request: {
       query: GET_INSTRUMENT,
+      variables: () => true,
     },
-    maxUsageCount: 5,
-    variableMatcher: () => true,
+    maxUsageCount: Infinity,
     result: {
       data: {
         instrument: {
@@ -138,6 +139,9 @@ const mocks = [
           originX: 0.0,
           originY: 0.0,
           extraParams: {},
+          isTemporary: false,
+          comment: null,
+          createdAt: new Date().toISOString(),
         },
       },
     },
@@ -166,7 +170,11 @@ const mocks = [
         },
       },
     },
-    result: vi.fn().mockReturnValue({ data: { swapTarget: { result: 'SUCCESS', msg: '' } } }),
+    result: vi.fn().mockReturnValue({
+      data: {
+        swapTarget: { result: 'SUCCESS', msg: '' },
+      } satisfies ResultOf<typeof SWAP_TARGET_MUTATION>,
+    }),
   } satisfies MockedResponseOf<typeof SWAP_TARGET_MUTATION>,
   {
     request: {
@@ -210,13 +218,17 @@ const mocks = [
         },
       },
     },
-    result: vi.fn().mockReturnValue({ data: { restoreTarget: { result: 'SUCCESS', msg: '' } } }),
+    result: vi.fn().mockReturnValue({
+      data: {
+        restoreTarget: { result: 'SUCCESS', msg: '' },
+      } satisfies ResultOf<typeof RESTORE_TARGET_MUTATION>,
+    }),
   } satisfies MockedResponseOf<typeof RESTORE_TARGET_MUTATION>,
   {
     request: {
       query: GET_CONFIGURATION,
+      variables: () => true,
     },
-    variableMatcher: () => true,
     result: {
       data: {
         configuration: {
@@ -238,13 +250,15 @@ const mocks = [
     },
   } satisfies MockedResponseOf<typeof GET_CONFIGURATION>,
   {
-    request: { query: GET_INSTRUMENT_PORT },
+    request: {
+      query: GET_INSTRUMENT_PORT,
+      variables: () => true,
+    },
     maxUsageCount: Infinity,
-    variableMatcher: () => true,
     result: vi.fn().mockReturnValue({
       data: {
         instrumentPort: 3,
-      },
+      } satisfies ResultOf<typeof GET_INSTRUMENT_PORT>,
     }),
   } satisfies MockedResponseOf<typeof GET_INSTRUMENT_PORT>,
 ];

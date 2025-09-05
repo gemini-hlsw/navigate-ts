@@ -3,7 +3,7 @@ import { useGuideAlarms, useUpdateGuideAlarm } from '@gql/configs/GuideAlarm';
 import { useGuideQualities } from '@gql/server/GuideQuality';
 import { useGuideState } from '@gql/server/GuideState';
 import { Title } from '@Shared/Title/Title';
-import { useCallback, useEffect } from 'react';
+import { useEffect } from 'react';
 
 import { useSetGuideAlarmSound } from '@/components/atoms/alarm';
 import { useCanEdit } from '@/components/atoms/auth';
@@ -36,10 +36,7 @@ export function Alarms() {
     toggleGuideAlarm(hasAlarm);
   }, [alarms, guideQualities, guideState, toggleGuideAlarm]);
 
-  const onUpdateAlarm = useCallback(
-    (variables: UpdateGuideAlarmMutationVariables) => updateAlarm({ variables }),
-    [updateAlarm],
-  );
+  const onUpdateAlarm = (variables: UpdateGuideAlarmMutationVariables) => updateAlarm({ variables });
 
   const disabled = !canEdit || subscriptionLoading || alarmsLoading || updateLoading || guideStateLoading;
 

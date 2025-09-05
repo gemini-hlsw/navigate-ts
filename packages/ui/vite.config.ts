@@ -1,5 +1,5 @@
 /// <reference types="vitest" />
-import react from '@vitejs/plugin-react-swc';
+import react from '@vitejs/plugin-react';
 import { execSync } from 'child_process';
 import path from 'path';
 import type { Plugin } from 'vite';
@@ -55,7 +55,6 @@ fixCssRoot.postcss = true;
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
   define: {
-    'globalThis.__DEV__': JSON.stringify(mode !== 'production'),
     'import.meta.env.FRONTEND_VERSION': JSON.stringify(frontendVersion),
   },
   resolve: {
@@ -108,7 +107,11 @@ export default defineConfig(({ mode }) => ({
     },
   },
   plugins: [
-    react({}),
+    react({
+      babel: {
+        plugins: ['babel-plugin-react-compiler'],
+      },
+    }),
     mode === 'development' &&
       mkcert({ hosts: ['localhost', 'local.lucuma.xyz', 'navigate.lucuma.xyz', 'navigate.gemini.edu'] }),
     mode === 'production' && buildVersionFile,
@@ -116,7 +119,7 @@ export default defineConfig(({ mode }) => ({
   test: {
     clearMocks: true,
     globals: true,
-    setupFiles: ['src/gql/dev-messages.ts', 'vitest-browser-react'],
+    setupFiles: ['src/gql/dev-messages.ts', 'vitest-browser-react', 'src/test/disable-animations.css'],
     browser: {
       enabled: true,
       provider: 'playwright',
@@ -124,6 +127,8 @@ export default defineConfig(({ mode }) => ({
         {
           browser: 'chromium',
           name: 'chromium',
+          // Disable animations in tests to speed them up
+          context: { reducedMotion: 'reduce' },
         },
       ],
     },

@@ -31,10 +31,11 @@ export function CatalogTable({
 
   function onGlobalFilterChange(e: React.ChangeEvent<HTMLInputElement>) {
     const value = e.target.value;
-    const _filters = { ...filters };
-    _filters.global.value = value;
 
-    setFilters(_filters);
+    setFilters({
+      ...filters,
+      global: { ...filters.global, value: value },
+    });
     setGlobalFilterValue(value);
   }
 

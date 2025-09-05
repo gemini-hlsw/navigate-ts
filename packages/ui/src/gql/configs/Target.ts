@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import { isBaseTarget, isOiTarget, isP1Target, isP2Target } from '@gql/util';
 import { useMemo } from 'react';
 
@@ -48,18 +48,20 @@ export function useTargets() {
     context: { clientName: 'navigateConfigs' },
   });
 
-  const filteredData = useMemo(() => {
+  return useMemo(() => {
     const targets: Target[] = result.data?.targets ?? [];
-    return {
-      baseTargets: targets.filter(isBaseTarget),
-      oiTargets: targets.filter(isOiTarget),
-      p1Targets: targets.filter(isP1Target),
-      p2Targets: targets.filter(isP2Target),
-      allTargets: targets,
-    };
-  }, [result.data]);
 
-  return { ...result, data: filteredData };
+    return {
+      ...result,
+      data: {
+        baseTargets: targets.filter(isBaseTarget),
+        oiTargets: targets.filter(isOiTarget),
+        p1Targets: targets.filter(isP1Target),
+        p2Targets: targets.filter(isP2Target),
+        allTargets: targets,
+      },
+    };
+  }, [result]);
 }
 
 const UPDATE_TARGET = graphql(`
@@ -131,11 +133,9 @@ const UPDATE_TARGET = graphql(`
 `);
 
 export function useUpdateTarget() {
-  const [mutationFunction] = useMutation(UPDATE_TARGET, {
+  return useMutation(UPDATE_TARGET, {
     context: { clientName: 'navigateConfigs' },
   });
-
-  return mutationFunction;
 }
 
 const REMOVE_AND_CREATE_BASE_TARGETS = graphql(`

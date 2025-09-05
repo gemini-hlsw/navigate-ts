@@ -3,12 +3,12 @@ packages:
 
 catalog:
   graphql: 16.11.0
-  '@types/node': 24.1.0
+  '@types/node': 24.3.0
   '@graphql-codegen/cli': 5.0.7
   '@parcel/watcher': 2.5.1
-  lucuma-core: 0.140.1
-  lucuma-schemas: 0.149.1
-  navigate-server-schema: 0.1.0-20250807-122d2878
+  lucuma-core: 0.142.0
+  lucuma-schemas: 0.160.0
+  navigate-server-schema: 0.1.0-20250904-b00fa041
   typescript: 5.9.2
 
 injectWorkspacePackages: true

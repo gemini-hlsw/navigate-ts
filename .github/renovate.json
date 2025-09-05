@@ -19,16 +19,12 @@
   },
   "packageRules": [
     {
-      "matchDepTypes": ["devDependencies"],
-      "automerge": true
-    },
-    {
       "matchUpdateTypes": ["minor", "patch", "pin", "digest", "lockFileMaintenance"],
       "automerge": true
     },
     {
       "groupName": "GraphQL packages",
-      "matchPackageNames": ["@graphql-codegen/**", "@graphql-typed-document-node/**", "**graphql**", "@apollo/**"]
+      "matchPackageNames": ["@graphql-codegen/**", "@graphql-typed-document-node/**", "/graphql/", "@apollo/**"]
     },
     {
       "groupName": "Types",
@@ -36,11 +32,15 @@
     },
     {
       "groupName": "Vite packages",
-      "matchPackageNames": ["**vite**", "@vitest/**"]
+      "matchPackageNames": ["/vite/", "@vitest/**"]
     },
     {
       "groupName": "TSConfig bases",
       "matchPackageNames": ["@tsconfig/**"]
+    },
+    {
+      "groupName": "Fontawesome",
+      "matchPackageNames": ["@fortawesome/**"]
     },
     {
       "description": "Schedule schema updates to run daily",

@@ -1,4 +1,4 @@
-import type { MockedResponse } from '@apollo/client/testing';
+import type { MockLink } from '@apollo/client/testing';
 import type {
   AdjustTarget,
   MutationAdjustOriginArgs,
@@ -13,6 +13,7 @@ import {
   TARGET_ADJUSTMENT_OFFSETS_SUBSCRIPTION,
 } from '@gql/server/TargetsHandset';
 import type { MockedResponseOf } from '@gql/util';
+import type { ResultOf } from '@graphql-typed-document-node/core';
 import { userEvent } from '@vitest/browser/context';
 import type { Mock } from 'vitest';
 
@@ -35,43 +36,46 @@ describe(TargetsHandset.name, () => {
   it('clicking applies calls adjustTarget mutation', async () => {
     await sut.getByRole('button', { name: 'Apply' }).click();
 
-    expect(adjustTargetMutationMock.result).toHaveBeenCalledOnce();
-    expect(adjustTargetMutationMock.variableMatcher).toHaveBeenCalledWith({
-      target: 'OIWFS',
-      offset: {
-        focalPlaneAdjustment: {
-          deltaX: { arcseconds: 0.0 },
-          deltaY: { arcseconds: 0.0 },
+    await expect
+      .poll(() => adjustTargetMutationMock.result)
+      .toHaveBeenCalledExactlyOnceWith({
+        target: 'OIWFS',
+        offset: {
+          focalPlaneAdjustment: {
+            deltaX: { arcseconds: 0.0 },
+            deltaY: { arcseconds: 0.0 },
+          },
         },
-      },
-      openLoops: false,
-    });
+        openLoops: false,
+      });
   });
 
   it('clicking reset calls resetTargetAdjustment mutation', async () => {
     await sut.getByRole('button', { name: 'Reset' }).click();
 
-    expect(resetTargetAdjustmentMutationMock.result).toHaveBeenCalledOnce();
-    expect(resetTargetAdjustmentMutationMock.variableMatcher).toHaveBeenCalledWith({
-      target: 'OIWFS',
-      openLoops: false,
-    });
+    await expect
+      .poll(() => resetTargetAdjustmentMutationMock.request.variables)
+      .toHaveBeenCalledExactlyOnceWith({
+        target: 'OIWFS',
+        openLoops: false,
+      });
   });
 
   it('clicking absorb calls absorbTargetAdjustment mutation', async () => {
     await sut.getByRole('button', { name: 'Absorb' }).click();
 
-    expect(absorbTargetAdjustmentMutationMock.result).toHaveBeenCalledOnce();
-    expect(absorbTargetAdjustmentMutationMock.variableMatcher).toHaveBeenCalledWith({
-      target: 'OIWFS',
-    });
+    await expect
+      .poll(() => absorbTargetAdjustmentMutationMock.request.variables)
+      .toHaveBeenCalledExactlyOnceWith({
+        target: 'OIWFS',
+      });
   });
 
   it('switching target sends different target to absorbTargetAdjustment mutation', async () => {
     await selectTarget('PWFS1');
     await sut.getByRole('button', { name: 'Absorb' }).click();
 
-    expect(absorbTargetAdjustmentMutationMock.variableMatcher).toHaveBeenCalledWith({
+    expect(absorbTargetAdjustmentMutationMock.request.variables).toHaveBeenCalledWith({
       target: 'PWFS1',
     });
   });
@@ -120,7 +124,7 @@ describe(TargetsHandset.name, () => {
     ],
   ])('inputs for Az/El %s matches %s', async (testId, label, expectedInput) => {
     await selectAlignment('Az/El');
-    await testDirectionButtonClick(testId, label, adjustTargetMutationMock.variableMatcher, {
+    await testDirectionButtonClick(testId, label, adjustTargetMutationMock.request.variables, {
       target: 'OIWFS',
       offset: { horizontalAdjustment: expectedInput },
       openLoops: false,
@@ -162,7 +166,7 @@ describe(TargetsHandset.name, () => {
     ],
   ])('inputs for AC %s matches %s', async (testId, label, expectedInput) => {
     await sut.getByLabelText('Open loops').click();
-    await testDirectionButtonClick(testId, label, adjustTargetMutationMock.variableMatcher, {
+    await testDirectionButtonClick(testId, label, adjustTargetMutationMock.request.variables, {
       target: 'OIWFS',
       openLoops: true,
       offset: { focalPlaneAdjustment: expectedInput },
@@ -204,7 +208,7 @@ describe(TargetsHandset.name, () => {
     ],
   ])('inputs for Instrument %s matches %s', async (testId, label, expectedInput) => {
     await selectAlignment('Instrument');
-    await testDirectionButtonClick(testId, label, adjustTargetMutationMock.variableMatcher, {
+    await testDirectionButtonClick(testId, label, adjustTargetMutationMock.request.variables, {
       target: 'OIWFS',
       offset: { instrumentAdjustment: expectedInput },
       openLoops: false,
@@ -246,7 +250,7 @@ describe(TargetsHandset.name, () => {
     ],
   ])('inputs for RA/Dec %s matches %s', async (testId, label, expectedInput) => {
     await selectAlignment('RA/Dec');
-    await testDirectionButtonClick(testId, label, adjustTargetMutationMock.variableMatcher, {
+    await testDirectionButtonClick(testId, label, adjustTargetMutationMock.request.variables, {
       target: 'OIWFS',
       offset: { equatorialAdjustment: expectedInput },
       openLoops: false,
@@ -284,7 +288,7 @@ describe(TargetsHandset.name, () => {
     ],
   ] as const)('inputs for PWFS2 %s matches', async (testId, expectedInput) => {
     await selectAlignment('PWFS2');
-    await testDirectionButtonClick(testId, undefined, adjustTargetMutationMock.variableMatcher, {
+    await testDirectionButtonClick(testId, undefined, adjustTargetMutationMock.request.variables, {
       target: 'OIWFS',
       openLoops: false,
       offset: { probeFrameAdjustment: { ...expectedInput, probeFrame: 'PWFS_2' } },
@@ -316,11 +320,11 @@ describe(TargetsHandset.name, () => {
     if (label) expect(button).toHaveAttribute('aria-label', label);
     await button.click();
 
-    expect(mock).toHaveBeenCalledWith(expectedInput);
+    await expect.poll(() => mock).toHaveBeenCalledWith(expectedInput);
   }
 });
 
-const targetAdjustmentOffsetsData = {
+const targetAdjustmentOffsetsData: ResultOf<typeof TARGET_ADJUSTMENT_OFFSETS_QUERY> = {
   targetAdjustmentOffsets: {
     sourceA: {
       deltaX: {
@@ -360,56 +364,55 @@ const targetAdjustmentOffsetsData = {
 const resetTargetAdjustmentMutationMock = {
   request: {
     query: RESET_TARGET_ADJUSTMENT_MUTATION,
+    variables: vi.fn().mockReturnValue(true),
   },
-  variableMatcher: vi.fn().mockReturnValue(true),
   result: vi.fn().mockReturnValue({
     data: {
       resetTargetAdjustment: {
         result: 'SUCCESS',
         msg: null,
       },
-    },
+    } satisfies ResultOf<typeof RESET_TARGET_ADJUSTMENT_MUTATION>,
   }),
 } satisfies MockedResponseOf<typeof RESET_TARGET_ADJUSTMENT_MUTATION>;
 
 const adjustTargetMutationMock = {
   request: {
     query: ADJUST_TARGET_MUTATION,
+    variables: vi.fn().mockReturnValue(true),
   },
   maxUsageCount: Infinity,
-  variableMatcher: vi.fn().mockReturnValue(true),
   result: vi.fn().mockReturnValue({
     data: {
       adjustTarget: {
         result: 'SUCCESS',
         msg: null,
       },
-    },
+    } satisfies ResultOf<typeof ADJUST_TARGET_MUTATION>,
   }),
 } satisfies MockedResponseOf<typeof ADJUST_TARGET_MUTATION>;
 
 const absorbTargetAdjustmentMutationMock = {
   request: {
     query: ABSORB_TARGET_ADJUSTMENT_MUTATION,
+    variables: vi.fn().mockReturnValue(true),
   },
-  variableMatcher: vi.fn().mockReturnValue(true),
   result: vi.fn().mockReturnValue({
     data: {
       absorbTargetAdjustment: {
         result: 'SUCCESS',
         msg: null,
       },
-    },
+    } satisfies ResultOf<typeof ABSORB_TARGET_ADJUSTMENT_MUTATION>,
   }),
 } satisfies MockedResponseOf<typeof ABSORB_TARGET_ADJUSTMENT_MUTATION>;
 
-const mocks: MockedResponse[] = [
+const mocks: MockLink.MockedResponse[] = [
   {
     request: {
       query: TARGET_ADJUSTMENT_OFFSETS_QUERY,
       variables: {},
     },
-
     result: {
       data: targetAdjustmentOffsetsData,
     },
@@ -419,7 +422,7 @@ const mocks: MockedResponse[] = [
       query: TARGET_ADJUSTMENT_OFFSETS_SUBSCRIPTION,
       variables: {},
     },
-    maxUsageCount: 2,
+    maxUsageCount: Infinity,
     result: {
       data: targetAdjustmentOffsetsData,
     },

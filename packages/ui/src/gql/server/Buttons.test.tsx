@@ -3,7 +3,7 @@ import { GET_INSTRUMENT } from '@gql/configs/Instrument';
 import { GET_ROTATOR } from '@gql/configs/Rotator';
 import { GET_TARGETS } from '@gql/configs/Target';
 import type { MockedResponseOf } from '@gql/util';
-import type { VariablesOf } from '@graphql-typed-document-node/core';
+import type { ResultOf, VariablesOf } from '@graphql-typed-document-node/core';
 
 import { renderWithContext } from '@/test/render';
 
@@ -17,8 +17,8 @@ describe(Slew.name, () => {
     });
     await sut.getByRole('button').click();
 
-    expect(slewMutationMock.variableMatcher).toHaveBeenCalledOnce();
-    const variables = slewMutationMock.variableMatcher.mock.calls[0]?.[0] as VariablesOf<typeof SLEW_MUTATION>;
+    expect(slewMutationMock.request.variables).toHaveBeenCalledOnce();
+    const variables = slewMutationMock.request.variables.mock.calls[0]?.[0] as VariablesOf<typeof SLEW_MUTATION>;
     expect(variables).toMatchInlineSnapshot(`
       {
         "config": {
@@ -105,8 +105,8 @@ describe(Slew.name, () => {
 const configurationMock = {
   request: {
     query: GET_CONFIGURATION,
+    variables: () => true,
   },
-  variableMatcher: () => true,
   result: {
     data: {
       configuration: {
@@ -129,9 +129,11 @@ const configurationMock = {
 } satisfies MockedResponseOf<typeof GET_CONFIGURATION>;
 
 const instrumentPortMock = {
-  request: { query: GET_INSTRUMENT_PORT },
+  request: {
+    query: GET_INSTRUMENT_PORT,
+    variables: () => true,
+  },
   maxUsageCount: Infinity,
-  variableMatcher: () => true,
   result: {
     data: {
       instrumentPort: 3,
@@ -158,9 +160,9 @@ const rotatorMock = {
 const instrumentMock = {
   request: {
     query: GET_INSTRUMENT,
+    variables: () => true,
   },
-  maxUsageCount: 5,
-  variableMatcher: () => true,
+  maxUsageCount: Infinity,
   result: {
     data: {
       instrument: {
@@ -174,6 +176,9 @@ const instrumentMock = {
         originY: 0,
         ao: false,
         extraParams: {},
+        isTemporary: false,
+        comment: null,
+        createdAt: new Date().toISOString(),
       },
     },
   },
@@ -221,13 +226,13 @@ const getTargetsMock = {
 const slewMutationMock = {
   request: {
     query: SLEW_MUTATION,
+    variables: vi.fn().mockReturnValue(true),
   },
-  variableMatcher: vi.fn().mockReturnValue(true),
   result: vi.fn().mockReturnValue({
     data: {
       slew: {
         result: 'SUCCESS',
       },
-    },
+    } satisfies ResultOf<typeof SLEW_MUTATION>,
   }),
 } satisfies MockedResponseOf<typeof SLEW_MUTATION>;

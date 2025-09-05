@@ -1,0 +1,49 @@
+# Docker-compose for starting Navigate server, including UI, configs server and database. Used in e2e tests on GitHub Actions.
+# Also can be used for local development.
+services:
+  server:
+    build:
+      context: ../ui/
+      dockerfile: ./Dockerfile
+    ports:
+      - '9070:9070'
+      - 5064:5064
+      - 5065:5065
+    container_name: navigate-server
+    environment:
+      - SITE=GN
+      - EXTERNAL_BASE_URL=http://navigate.lucuma.xyz:9070
+      - PROXY_BASE_URI=http://configs:4000
+      - SSO_SERVICE_JWT=${LUCUMA_REFRESH_TOKEN}
+      - PORT=9070
+    networks:
+      - navigate-network
+
+  configs:
+    build:
+      context: ../../
+      dockerfile: ./packages/configs/Dockerfile
+    container_name: navigate-configs
+    environment:
+      - DATABASE_URL=postgresql://jimmy:banana@database:5432/configs
+      - PORT=4000
+    networks:
+      - navigate-network
+    depends_on:
+      - database
+
+  database:
+    image: postgres:17
+    container_name: navigate-db
+    environment:
+      - POSTGRES_USER=jimmy
+      - POSTGRES_PASSWORD=banana
+      - POSTGRES_DB=configs
+    ports:
+      - '5432:5432'
+    networks:
+      - navigate-network
+
+networks:
+  navigate-network:
+    driver: bridge

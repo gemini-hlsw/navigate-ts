@@ -1,17 +1,19 @@
 // @ts-check
 
 import eslint from '@eslint/js';
-import { flatConfigs } from 'eslint-plugin-import-x';
+import { importX } from 'eslint-plugin-import-x';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import globals from 'globals';
-import { config, configs } from 'typescript-eslint';
+import { configs } from 'typescript-eslint';
+import { defineConfig } from 'eslint/config';
 
-export default config(
+export default defineConfig(
   eslint.configs.recommended,
   ...configs.stylisticTypeChecked,
   ...configs.strictTypeChecked,
-  flatConfigs.recommended,
-  flatConfigs.typescript,
+  // @ts-expect-error - incorrect type
+  importX.flatConfigs.recommended,
+  importX.flatConfigs.typescript,
   {
     files: ['**/*.ts', '**/*.tsx'],
     languageOptions: {
@@ -38,11 +40,6 @@ export default config(
       ],
       '@typescript-eslint/no-unnecessary-condition': 'off',
 
-      'import-x/newline-after-import': 'error',
-
-      'simple-import-sort/exports': 'error',
-      'simple-import-sort/imports': 'error',
-
       // Allow passing `() => Promise<void>` to a React prop that expects `() => void`. Mostly for Primereact
       '@typescript-eslint/no-misused-promises': [
         'error',
@@ -52,6 +49,14 @@ export default config(
           },
         },
       ],
+    },
+  },
+  {
+    rules: {
+      'import-x/newline-after-import': 'error',
+
+      'simple-import-sort/exports': 'error',
+      'simple-import-sort/imports': 'error',
 
       eqeqeq: 'error',
     },

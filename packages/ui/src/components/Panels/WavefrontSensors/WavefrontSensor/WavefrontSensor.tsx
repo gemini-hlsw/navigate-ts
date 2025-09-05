@@ -7,7 +7,7 @@ import { clsx } from 'clsx';
 import { Button } from 'primereact/button';
 import { Checkbox } from 'primereact/checkbox';
 import { Dropdown } from 'primereact/dropdown';
-import { useCallback, useEffect, useId, useState } from 'react';
+import { useEffect, useId, useState } from 'react';
 
 import { Play, Stop } from '@/components/Icons';
 import { instrumentToOiwfs } from '@/Helpers/functions';
@@ -63,7 +63,7 @@ export default function WavefrontSensor({
   }
 
   return (
-    <div className={clsx('wfs', className)}>
+    <div className={clsx('wfs', className)} data-testid={`${wfs.toLowerCase()}-controls`}>
       <span className="wfs-name">{wfs}</span>
       <img src={imgUrl} alt="wfs" />
       <div className="controls">
@@ -101,15 +101,12 @@ function OiwfsObserveButton({ freq, canEdit }: { freq: number; canEdit: boolean 
 
   const integrating = guideStateData?.oiIntegrating;
 
-  const onClick = useCallback(
-    () =>
-      integrating
-        ? stopObserve({})
-        : startObserve({
-            variables: { period: { milliseconds: (1 / freq) * 1000 } },
-          }),
-    [freq, integrating, startObserve, stopObserve],
-  );
+  const onClick = () =>
+    integrating
+      ? stopObserve({})
+      : startObserve({
+          variables: { period: { milliseconds: (1 / freq) * 1000 } },
+        });
 
   return (
     <Button

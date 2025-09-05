@@ -6,7 +6,7 @@ import {
 } from '@gql/server/OriginHandset';
 import { Button } from 'primereact/button';
 import { ButtonGroup } from 'primereact/buttongroup';
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 
 import { AlignmentSelector, Autoadjust, CurrentCoordinates, InputControls, OpenLoopsInput } from './Controls';
 import type { Coords, Strategy } from './strategy';

@@ -1,5 +1,5 @@
-import type { MockedResponse } from '@apollo/client/testing';
-import { MockedProvider } from '@apollo/client/testing';
+import type { MockLink } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { GET_SLEW_FLAGS } from '@gql/configs/SlewFlags';
 import type { MockedResponseOf } from '@gql/util';
 import type { WritableAtom } from 'jotai';
@@ -13,7 +13,7 @@ import { odbTokenAtom } from '@/components/atoms/auth';
 import { longExpirationJwt } from '@/test/helpers';
 
 interface CreateOptions<T> {
-  mocks?: MockedResponse[];
+  mocks?: MockLink.MockedResponse[];
   initialValues?: InferAtomTuples<T>;
 }
 
@@ -45,9 +45,7 @@ export function renderWithContext<T extends AtomTuples>(
   const renderResult = render(
     <Provider store={store}>
       <HydrateAtoms initialValues={initialValues}>
-        <MockedProvider mocks={[...mocks, ...(createOptions.mocks ?? [])]} addTypename={false}>
-          {ui}
-        </MockedProvider>
+        <MockedProvider mocks={[...mocks, ...(createOptions.mocks ?? [])]}>{ui}</MockedProvider>
       </HydrateAtoms>
     </Provider>,
     options,
@@ -56,7 +54,7 @@ export function renderWithContext<T extends AtomTuples>(
   return { ...renderResult, store };
 }
 
-const mocks: MockedResponse[] = [
+const mocks: MockLink.MockedResponse[] = [
   {
     request: {
       query: GET_SLEW_FLAGS,
@@ -91,15 +89,18 @@ const mocks: MockedResponse[] = [
 // Some typescript magic here 🧙
 // Basically it allows the `initialValues` array to be type-safe with its values
 // Copied from an internal Jotai type
-type AnyWritableAtom = WritableAtom<unknown, never[], unknown>;
 
-type AtomTuples = (readonly [AnyWritableAtom, unknown])[];
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnyWritableAtom = WritableAtom<unknown, any[], unknown>;
+
+type AtomTuples = (readonly [AnyWritableAtom, ...unknown[]])[];
 
 type InferAtomTuples<T> = {
-  [K in keyof T]: T[K] extends readonly [infer A, unknown]
-    ? // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      A extends WritableAtom<unknown, infer Args, infer _Result>
-      ? readonly [A, Args[0]]
+  [K in keyof T]: T[K] extends readonly [infer A, ...infer Rest]
+    ? A extends WritableAtom<unknown, infer Args, unknown>
+      ? Rest extends Args
+        ? readonly [A, ...Rest]
+        : never
       : T[K]
     : never;
 };

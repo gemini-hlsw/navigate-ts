@@ -65,14 +65,14 @@ function Flow() {
   const configuration = useConfiguration().data?.configuration;
 
   const [sourceNodes, sourceEdges] = useMemo<[Node[], Edge[]]>(() => {
-    function isSourceActive(source: string | undefined | null) {
+    function isSourceActive(source: string | undefined | null): boolean {
       switch (source) {
         case 'OIWFS':
-          return state.oiIntegrating;
+          return state.oiIntegrating ?? false;
         case 'PWFS1':
-          return state.p1Integrating;
+          return state.p1Integrating ?? false;
         case 'PWFS2':
-          return state.p2Integrating;
+          return state.p2Integrating ?? false;
         default:
           return false;
       }

@@ -4,14 +4,19 @@
   "main": "dist/index.js",
   "license": "BSD-3-Clause",
   "type": "module",
+  "private": true,
   "repository": {
     "type": "git",
     "url": "git+https://github.com/gemini-hlsw/navigate-ts.git",
     "directory": "packages/configs"
   },
+  "exports": {
+    ".": "./dist/index.js",
+    "./db": "./dist/prisma/db.js"
+  },
   "scripts": {
     "test": "pnpm test:integration",
-    "test:integration": "node --test --enable-source-maps --test-timeout 20000 'dist/integration/**/*.test.js'",
+    "test:integration": "node --test --enable-source-maps --test-timeout 20000 'src/integration/**/*.test.ts'",
     "generate": "prisma generate",
     "prebuild": "pnpm generate && pnpm codegen",
     "build": "tsc -b",
@@ -19,34 +24,31 @@
     "start": "pnpm build && pnpm preview",
     "preview": "node --enable-source-maps ./dist/index.js",
     "populate": "prisma migrate reset --force",
-    "dev": "node --env-file=.env --watch --enable-source-maps ./dist/index.js",
+    "dev": "node --env-file=.env --watch --enable-source-maps ./src/index.ts",
     "codegen": "graphql-codegen --config tasks/codegen.ts",
     "codegen:watch": "pnpm codegen --watch 'src/graphql/**/*.ts' --watch '../schema/src/*.graphql'",
     "lint:eslint": "eslint ."
   },
   "dependencies": {
     "@apollo/server": "5.0.0",
-    "@graphql-tools/graphql-file-loader": "8.0.22",
+    "@graphql-tools/graphql-file-loader": "8.1.0",
     "@graphql-tools/load": "8.1.2",
-    "@prisma/client": "6.13.0",
+    "@prisma/client": "6.15.0",
     "graphql": "catalog:",
     "graphql-scalars": "1.24.2",
     "lucuma-core": "catalog:",
     "navigate-schema": "workspace:*",
-    "prisma": "6.13.0"
+    "prisma": "6.15.0"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "catalog:",
     "@graphql-codegen/typescript": "4.1.6",
-    "@graphql-codegen/typescript-resolvers": "4.5.1",
+    "@graphql-codegen/typescript-resolvers": "4.5.2",
     "@parcel/watcher": "catalog:",
-    "@testcontainers/postgresql": "11.5.0",
+    "@testcontainers/postgresql": "11.5.1",
     "@types/node": "catalog:",
     "execa": "9.6.0",
     "typescript": "catalog:"
-  },
-  "prisma": {
-    "seed": "pnpm preview populate"
   },
   "files": [
     "dist",
@@ -54,6 +56,7 @@
     "src",
     "tasks",
     "gen",
-    "start-server.sh"
+    "start-server.sh",
+    "prisma.config.ts"
   ]
 }

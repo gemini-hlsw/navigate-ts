@@ -50,51 +50,49 @@ export function Catalog() {
         selectedP1Target: null,
         selectedP2Target: null,
       },
-      async onCompleted() {
-        setCatalogVisible(false);
+    });
 
-        // Second create the observation base target
-        await removeAndCreateBaseTargets({
-          variables: {
-            targets: [
-              {
-                id: 't-100',
-                name: selectedTarget.name,
-                coord1: selectedTarget.type === 'FIXED' ? selectedTarget.az?.degrees : selectedTarget.ra?.degrees,
-                coord2: selectedTarget.type === 'FIXED' ? selectedTarget.el?.degrees : selectedTarget.dec?.degrees,
-                epoch: selectedTarget.epoch,
-                magnitude: undefined,
-                pmRa: null,
-                pmDec: null,
-                radialVelocity: null,
-                parallax: null,
-                band: undefined,
-                type: selectedTarget.type,
-                wavelength: selectedTarget.wavelength,
-              },
-            ],
-          },
-          async onCompleted(t) {
-            await updateConfiguration({
-              variables: {
-                pk: configuration?.pk ?? 1,
-                selectedTarget: t.removeAndCreateBaseTargets[0]?.pk,
-              },
-            });
-          },
-        });
+    setCatalogVisible(false);
 
-        if (rotator && selectedTarget.rotatorMode && selectedTarget.rotatorAngle !== null) {
-          await updateRotator({
-            variables: {
-              pk: rotator.pk,
-              angle: selectedTarget.rotatorAngle,
-              tracking: selectedTarget.rotatorMode,
-            },
-          });
-        }
+    // Second create the observation base target
+    const { data: t } = await removeAndCreateBaseTargets({
+      variables: {
+        targets: [
+          {
+            id: 't-100',
+            name: selectedTarget.name,
+            coord1: selectedTarget.type === 'FIXED' ? selectedTarget.az?.degrees : selectedTarget.ra?.degrees,
+            coord2: selectedTarget.type === 'FIXED' ? selectedTarget.el?.degrees : selectedTarget.dec?.degrees,
+            epoch: selectedTarget.epoch,
+            magnitude: undefined,
+            pmRa: null,
+            pmDec: null,
+            radialVelocity: null,
+            parallax: null,
+            band: undefined,
+            type: selectedTarget.type,
+            wavelength: selectedTarget.wavelength,
+          },
+        ],
       },
     });
+
+    await updateConfiguration({
+      variables: {
+        pk: configuration?.pk ?? 1,
+        selectedTarget: t?.removeAndCreateBaseTargets[0]?.pk,
+      },
+    });
+
+    if (rotator && selectedTarget.rotatorMode && selectedTarget.rotatorAngle !== null) {
+      await updateRotator({
+        variables: {
+          pk: rotator.pk,
+          angle: selectedTarget.rotatorAngle,
+          tracking: selectedTarget.rotatorMode,
+        },
+      });
+    }
   }
 
   const footer = (

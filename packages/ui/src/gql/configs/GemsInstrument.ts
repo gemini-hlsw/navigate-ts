@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 
 import { graphql } from './gen';
 
@@ -31,9 +31,7 @@ const UPDATE_GEMS_INSTRUMENT = graphql(`
 `);
 
 export function useUpdateGemsInstrument() {
-  const [mutationFunction] = useMutation(UPDATE_GEMS_INSTRUMENT, {
+  return useMutation(UPDATE_GEMS_INSTRUMENT, {
     context: { clientName: 'navigateConfigs' },
   });
-
-  return mutationFunction;
 }

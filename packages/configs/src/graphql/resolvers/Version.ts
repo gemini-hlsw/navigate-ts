@@ -1,5 +1,5 @@
 import pkgJson from '../../../package.json' with { type: 'json' };
-import type { Resolvers } from '../gen/index.js';
+import type { Resolvers } from '../gen/index.ts';
 
 export const VersionResolver: Resolvers = {
   Query: {
