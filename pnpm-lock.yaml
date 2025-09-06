@@ -94,8 +94,8 @@ importers:
         specifier: 5.0.0
         version: 5.0.0(graphql@16.11.0)
       '@graphql-tools/graphql-file-loader':
-        specifier: 8.1.0
-        version: 8.1.0(graphql@16.11.0)
+        specifier: 8.1.1
+        version: 8.1.1(graphql@16.11.0)
       '@graphql-tools/load':
         specifier: 8.1.2
         version: 8.1.2(graphql@16.11.0)
@@ -915,8 +915,8 @@ packages:
     peerDependencies:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
 
-  '@graphql-tools/graphql-file-loader@8.1.0':
-    resolution: {integrity: sha512-UBeM8iXidQNGIp6oKSGpRC9soSXnoCHGR7sQaxicOBCp7890VIIfFeP7zbq4CQYU6CnuoqBS0ygtomozGOyLow==}
+  '@graphql-tools/graphql-file-loader@8.1.1':
+    resolution: {integrity: sha512-5JaUE3zMHW21Oh3bGSNKcr/Mi6oZ9/QWlBCNYbGy+09U23EOZmhPn9a44zP3gXcnnj0C+YVEr8dsMaoaB3UVGQ==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
@@ -927,8 +927,8 @@ packages:
     peerDependencies:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
 
-  '@graphql-tools/import@7.1.0':
-    resolution: {integrity: sha512-rpdqQ338hACwXSp/5lpi6XDDOoO9CeEx4UCJCAewN9KFhPRQBu2I2TXjOYAIoz7VsREFapIgbKHbyHIFW/2GdA==}
+  '@graphql-tools/import@7.1.1':
+    resolution: {integrity: sha512-zhlhaUmeTfV76vMoLRn9xCVMVc7sLf10ve5GKEhXFFDcWA6+vEZGk9CCm1VlPf2kyKGlF7bwLVzfepb3ZoOU9Q==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
@@ -5086,7 +5086,7 @@ snapshots:
       '@graphql-tools/code-file-loader': 8.1.22(graphql@16.11.0)
       '@graphql-tools/git-loader': 8.0.26(graphql@16.11.0)
       '@graphql-tools/github-loader': 8.0.22(@types/node@24.3.0)(graphql@16.11.0)
-      '@graphql-tools/graphql-file-loader': 8.1.0(graphql@16.11.0)
+      '@graphql-tools/graphql-file-loader': 8.1.1(graphql@16.11.0)
       '@graphql-tools/json-file-loader': 8.0.20(graphql@16.11.0)
       '@graphql-tools/load': 8.1.2(graphql@16.11.0)
       '@graphql-tools/prisma-loader': 8.0.17(@types/node@24.3.0)(graphql@16.11.0)
@@ -5407,9 +5407,9 @@ snapshots:
       - '@types/node'
       - supports-color
 
-  '@graphql-tools/graphql-file-loader@8.1.0(graphql@16.11.0)':
+  '@graphql-tools/graphql-file-loader@8.1.1(graphql@16.11.0)':
     dependencies:
-      '@graphql-tools/import': 7.1.0(graphql@16.11.0)
+      '@graphql-tools/import': 7.1.1(graphql@16.11.0)
       '@graphql-tools/utils': 10.9.1(graphql@16.11.0)
       globby: 11.1.0
       graphql: 16.11.0
@@ -5431,7 +5431,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@graphql-tools/import@7.1.0(graphql@16.11.0)':
+  '@graphql-tools/import@7.1.1(graphql@16.11.0)':
     dependencies:
       '@graphql-tools/utils': 10.9.1(graphql@16.11.0)
       '@theguild/federation-composition': 0.19.1(graphql@16.11.0)
@@ -7540,7 +7540,7 @@ snapshots:
 
   graphql-config@5.1.5(@types/node@24.3.0)(graphql@16.11.0)(typescript@5.9.2):
     dependencies:
-      '@graphql-tools/graphql-file-loader': 8.1.0(graphql@16.11.0)
+      '@graphql-tools/graphql-file-loader': 8.1.1(graphql@16.11.0)
       '@graphql-tools/json-file-loader': 8.0.20(graphql@16.11.0)
       '@graphql-tools/load': 8.1.2(graphql@16.11.0)
       '@graphql-tools/merge': 9.1.1(graphql@16.11.0)
@@ -8166,7 +8166,7 @@ snapshots:
   navigate-configs@file:packages/configs(typescript@5.9.2):
     dependencies:
       '@apollo/server': 5.0.0(graphql@16.11.0)
-      '@graphql-tools/graphql-file-loader': 8.1.0(graphql@16.11.0)
+      '@graphql-tools/graphql-file-loader': 8.1.1(graphql@16.11.0)
       '@graphql-tools/load': 8.1.2(graphql@16.11.0)
       '@prisma/client': 6.15.0(prisma@6.15.0(typescript@5.9.2))(typescript@5.9.2)
       graphql: 16.11.0
