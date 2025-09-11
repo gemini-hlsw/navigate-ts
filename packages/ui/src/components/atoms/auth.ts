@@ -31,7 +31,7 @@ export const decodedTokenPayloadAtom = atom((get) => {
   const payload = token.split('.')?.[1];
   if (!payload) return null;
 
-  const decodedPayload = atob(payload);
+  const decodedPayload = new TextDecoder().decode(Uint8Array.from(atob(payload), (m) => m.charCodeAt(0)));
 
   return JSON.parse(decodedPayload) as OdbTokenPayload;
 });
