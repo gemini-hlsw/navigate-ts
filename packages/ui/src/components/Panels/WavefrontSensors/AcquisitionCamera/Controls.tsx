@@ -10,7 +10,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { CaretDown, CaretLeft, CaretRight, CaretUp } from '@/components/Icons';
 import { formatToSignedArcseconds, instrumentToOiwfs } from '@/Helpers/functions';
 
-import type { Coords, HandsetStrategy, Strategy } from './strategy';
+import type { Coords, HandsetStrategy } from './strategy';
 import { strategies, wfsStrategy } from './strategy';
 
 export type CoordOnChange = (value: Coords) => void;
@@ -24,7 +24,7 @@ export function AlignmentSelector({
   loading,
   canEdit,
 }: {
-  onChange: (strategy: Strategy) => void;
+  onChange: (strategy: HandsetStrategy) => void;
   defaultAlignment: Alignment;
   loading: boolean;
   canEdit: boolean;

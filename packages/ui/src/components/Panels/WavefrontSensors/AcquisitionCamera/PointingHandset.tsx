@@ -11,7 +11,7 @@ import { ButtonGroup } from 'primereact/buttongroup';
 import { useState } from 'react';
 
 import { AlignmentSelector, CurrentCoordinates, InputControls } from './Controls';
-import { type Coords, strategies, type Strategy } from './strategy';
+import { type Coords, strategies, type HandsetStrategy } from './strategy';
 
 export default function PointingHandset({ canEdit }: { canEdit: boolean }) {
   // GraphQL Queries
@@ -25,7 +25,7 @@ export default function PointingHandset({ canEdit }: { canEdit: boolean }) {
 
   // State
   const defaultAlignment = 'Az/El';
-  const [strategy, setStrategy] = useState<Strategy>(strategies[defaultAlignment]);
+  const [strategy, setStrategy] = useState<HandsetStrategy>(strategies[defaultAlignment]);
 
   const handleApply = (coords: Coords) => adjustPointing({ variables: { offset: strategy.toInput(coords) } });
 
