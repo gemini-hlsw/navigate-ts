@@ -1,6 +1,6 @@
 import type { MockLink } from '@apollo/client/testing';
 import { GET_CONFIGURATION } from '@gql/configs/Configuration';
-import { CREATE_INSTRUMENT, GET_INSTRUMENT, UPDATE_INSTRUMENT } from '@gql/configs/Instrument';
+import { GET_INSTRUMENT, SET_TEMPORARY_INSTRUMENT, UPDATE_INSTRUMENT } from '@gql/configs/Instrument';
 import { GET_INSTRUMENT_PORT } from '@gql/server/Instrument';
 import type { MockedResponseOf } from '@gql/util';
 import type { ResultOf } from '@graphql-typed-document-node/core';
@@ -16,7 +16,7 @@ describe(Instrument.name, () => {
   let sut: RenderResultWithStore;
   beforeEach(() => {
     sut = renderWithContext(<Instrument canEdit={true} />, {
-      mocks: [...mocks, getInstrumentMock, updateInstrumentMock, createInstrumentMock],
+      mocks: [...mocks, getInstrumentMock, updateInstrumentMock, setTempInstrumentMock],
     });
   });
 
@@ -33,7 +33,21 @@ describe(Instrument.name, () => {
     await expect.element(originXInput).not.toBeDisabled();
     await expect.element(originXInput).toHaveValue('0.20');
     await expect.element(sut.getByRole('button')).not.toBeDisabled();
-    expect(updateInstrumentMock.result).toHaveBeenCalledExactlyOnceWith({ originX: 0.2, pk: 1 });
+    expect(setTempInstrumentMock.result).toHaveBeenCalledExactlyOnceWith({
+      pk: 1,
+      name: 'GMOS_NORTH',
+      iaa: 359.877,
+      issPort: 3,
+      focusOffset: 0,
+      wfs: 'OIWFS',
+      originX: 0.2,
+      originY: 0,
+      ao: false,
+      extraParams: {},
+      comment: null,
+      isTemporary: true,
+      createdAt,
+    });
   });
 
   it('opens the instrument modal when the import button is clicked', async () => {
@@ -162,15 +176,15 @@ const updateInstrumentMock = {
   }),
 } satisfies MockedResponseOf<typeof UPDATE_INSTRUMENT>;
 
-const createInstrumentMock = {
+const setTempInstrumentMock = {
   request: {
-    query: CREATE_INSTRUMENT,
+    query: SET_TEMPORARY_INSTRUMENT,
     variables: () => true,
   },
   maxUsageCount: Infinity,
   result: vi.fn().mockReturnValue({
     data: {
-      createInstrument: {
+      setTemporaryInstrument: {
         pk: 1,
         name: 'GMOS_NORTH',
         iaa: 359.877,
@@ -185,6 +199,6 @@ const createInstrumentMock = {
         isTemporary: true,
         createdAt,
       },
-    } satisfies ResultOf<typeof CREATE_INSTRUMENT>,
+    } satisfies ResultOf<typeof SET_TEMPORARY_INSTRUMENT>,
   }),
-} satisfies MockedResponseOf<typeof CREATE_INSTRUMENT>;
+} satisfies MockedResponseOf<typeof SET_TEMPORARY_INSTRUMENT>;

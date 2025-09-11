@@ -1,4 +1,5 @@
 import type { MockLink } from '@apollo/client/testing';
+import { GET_CONFIGURATION } from '@gql/configs/Configuration';
 import type {
   AdjustTarget,
   MutationAdjustOriginArgs,
@@ -408,6 +409,31 @@ const absorbTargetAdjustmentMutationMock = {
 } satisfies MockedResponseOf<typeof ABSORB_TARGET_ADJUSTMENT_MUTATION>;
 
 const mocks: MockLink.MockedResponse[] = [
+  {
+    request: {
+      query: GET_CONFIGURATION,
+      variables: {},
+    },
+    result: {
+      data: {
+        configuration: {
+          pk: 1,
+          selectedTarget: 1,
+          selectedOiTarget: 3,
+          selectedP1Target: null,
+          selectedP2Target: null,
+          oiGuidingType: 'NORMAL',
+          p1GuidingType: 'NORMAL',
+          p2GuidingType: 'NORMAL',
+          obsTitle: 'Feige 110',
+          obsId: 'o-2790',
+          obsInstrument: 'GMOS_NORTH',
+          obsSubtitle: null,
+          obsReference: 'G-2025A-ENG-GMOSN-01-0004',
+        },
+      },
+    },
+  } satisfies MockedResponseOf<typeof GET_CONFIGURATION>,
   {
     request: {
       query: TARGET_ADJUSTMENT_OFFSETS_QUERY,

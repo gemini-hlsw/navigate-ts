@@ -1,6 +1,6 @@
 import { skipToken } from '@apollo/client/react';
 import { useConfiguration, useUpdateConfiguration } from '@gql/configs/Configuration';
-import { useResetInstruments } from '@gql/configs/Instrument';
+import { GET_INSTRUMENT, useResetInstruments } from '@gql/configs/Instrument';
 import { useRotator, useUpdateRotator } from '@gql/configs/Rotator';
 import { useRemoveAndCreateBaseTargets, useRemoveAndCreateWfsTargets } from '@gql/configs/Target';
 import type {
@@ -199,7 +199,7 @@ export function OdbImport() {
       if (selectedObservation.instrument) {
         await resetInstruments({
           variables: { name: selectedObservation.instrument },
-          refetchQueries: ['getInstrument'],
+          refetchQueries: [GET_INSTRUMENT],
         });
       }
     } finally {
