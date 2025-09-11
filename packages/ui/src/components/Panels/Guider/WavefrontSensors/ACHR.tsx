@@ -22,14 +22,14 @@ const filterOptions: { value: AcFilter; label: string }[] = [
 ];
 
 const gsNdFilterOptions: { value: AcNdFilter; label: string }[] = [
-  { value: 'Open', label: 'Open' },
+  { value: 'OPEN', label: 'Open' },
   { value: 'ND1', label: 'ND1' },
   { value: 'ND2', label: 'ND2' },
   { value: 'ND3', label: 'ND3' },
 ];
 
 const gnNdFilterOptions: { value: AcNdFilter; label: string }[] = [
-  { value: 'Open', label: 'open' },
+  { value: 'OPEN', label: 'open' },
 
   { value: 'ND100', label: 'nd100' },
   { value: 'ND1000', label: 'nd1000' },
