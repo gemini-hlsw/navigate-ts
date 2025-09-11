@@ -11,7 +11,7 @@ import { ButtonGroup } from 'primereact/buttongroup';
 import { useState } from 'react';
 
 import { AlignmentSelector, CurrentCoordinates, InputControls } from './Controls';
-import { type Coords, strategies, type HandsetStrategy } from './strategy';
+import { type Coords, type HandsetStrategy, strategies } from './strategy';
 
 export default function PointingHandset({ canEdit }: { canEdit: boolean }) {
   // GraphQL Queries
