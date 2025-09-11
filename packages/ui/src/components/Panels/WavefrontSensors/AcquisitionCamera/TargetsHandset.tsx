@@ -11,7 +11,7 @@ import { Dropdown } from 'primereact/dropdown';
 import { useCallback, useState } from 'react';
 
 import { AlignmentSelector, Autoadjust, CurrentCoordinates, InputControls, OpenLoopsInput } from './Controls';
-import type { Coords, Strategy } from './strategy';
+import type { Coords, HandsetStrategy } from './strategy';
 import { strategies } from './strategy';
 
 type FocalPlaneOffset = NonNullable<GetTargetAdjustmentOffsetsQuery['targetAdjustmentOffsets']['oiwfs']>;
@@ -31,7 +31,7 @@ export default function TargetsHandset({ canEdit }: { canEdit: boolean }) {
   const [selectedTarget, setSelectedTarget] = useState(targetOptions[0]!.value);
 
   const defaultAlignment = 'AC';
-  const [strategy, setStrategy] = useState<Strategy>(strategies[defaultAlignment]);
+  const [strategy, setStrategy] = useState<HandsetStrategy>(strategies[defaultAlignment]);
 
   let offset: FocalPlaneOffset | undefined;
   switch (selectedTarget) {

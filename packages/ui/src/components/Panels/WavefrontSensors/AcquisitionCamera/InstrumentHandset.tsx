@@ -9,7 +9,7 @@ import { ButtonGroup } from 'primereact/buttongroup';
 import { useCallback, useState } from 'react';
 
 import { AlignmentSelector, Autoadjust, CurrentCoordinates, InputControls, OpenLoopsInput } from './Controls';
-import type { Coords, Strategy } from './strategy';
+import type { Coords, HandsetStrategy } from './strategy';
 import { strategies } from './strategy';
 
 export default function InstrumentHandset({ canEdit }: { canEdit: boolean }) {
@@ -23,7 +23,7 @@ export default function InstrumentHandset({ canEdit }: { canEdit: boolean }) {
 
   // State
   const defaultAlignment = 'AC';
-  const [strategy, setStrategy] = useState<Strategy>(strategies[defaultAlignment]);
+  const [strategy, setStrategy] = useState<HandsetStrategy>(strategies[defaultAlignment]);
   const [openLoops, setOpenLoops] = useState(false);
 
   const handleApply = useCallback(

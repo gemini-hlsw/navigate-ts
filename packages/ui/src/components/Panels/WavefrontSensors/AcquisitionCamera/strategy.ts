@@ -107,7 +107,7 @@ export const strategies = {
   },
   PWFS1: wfsStrategy('PWFS_1'),
   PWFS2: wfsStrategy('PWFS_2'),
-  OIWFS: {} as HandsetStrategy,
+  OIWFS: wfsStrategy('GMOS_OIWFS'),
 } satisfies Record<Alignment, HandsetStrategy>;
 
 export function wfsStrategy(probe: GuideProbe): HandsetStrategy {
@@ -127,5 +127,3 @@ export function wfsStrategy(probe: GuideProbe): HandsetStrategy {
     }),
   };
 }
-
-export type Strategy = (typeof strategies)[keyof typeof strategies];
