@@ -16,18 +16,22 @@ export const InstrumentResolver: Resolvers = {
     instruments: (_parent, args, { prisma }) => {
       return prisma.instrument.findMany({ where: args, orderBy }) as Promise<InstrumentConfig[]>;
     },
-    distinctInstruments: (_parent, _args, { prisma }) => {
-      return prisma.instrument.findMany({
+    distinctInstruments: async (_parent, _args, { prisma }) => {
+      const results = await prisma.instrument.findMany({
         distinct: ['name'],
         select: { name: true },
+        orderBy: { name: 'asc' },
       });
+      return results.map((r) => r.name);
     },
-    distinctPorts: (_parent, args, { prisma }) => {
-      return prisma.instrument.findMany({
+    distinctPorts: async (_parent, args, { prisma }) => {
+      const results = await prisma.instrument.findMany({
         where: args,
         distinct: ['issPort'],
         select: { issPort: true },
+        orderBy: { issPort: 'asc' },
       });
+      return results.map((r) => r.issPort);
     },
   },
   Mutation: {
@@ -39,6 +43,23 @@ export const InstrumentResolver: Resolvers = {
         where: { pk: args.pk },
         data: args,
       }) as Promise<InstrumentConfig>;
+    },
+    setTemporaryInstrument: async (_parent, args, { prisma }) => {
+      const tempInstrument = await prisma.instrument.findFirst({
+        where: { name: args.name, issPort: args.issPort, wfs: args.wfs, isTemporary: true },
+        select: { pk: true },
+        orderBy,
+      });
+      if (tempInstrument) {
+        return prisma.instrument.update({
+          where: { pk: tempInstrument.pk },
+          data: args,
+        }) as Promise<InstrumentConfig>;
+      } else {
+        return prisma.instrument.create({
+          data: { extraParams: {}, ...args, isTemporary: true },
+        }) as Promise<InstrumentConfig>;
+      }
     },
     resetInstruments: async (_parent, args, { prisma }) => {
       await prisma.instrument.deleteMany({ where: { ...args, isTemporary: true } });

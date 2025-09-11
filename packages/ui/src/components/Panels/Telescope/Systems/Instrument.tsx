@@ -1,10 +1,10 @@
+import type { SetTemporaryInstrumentMutationVariables } from '@gql/configs/gen/graphql';
 import {
   GET_INSTRUMENT,
   useConfiguredInstrument,
-  useCreateInstrument,
+  useSetTemporaryInstrument,
   useUpdateInstrument,
 } from '@gql/configs/Instrument';
-import type { Instrument } from '@gql/odb/gen/graphql';
 import { Title, TitleDropdown } from '@Shared/Title/Title';
 import { Button } from 'primereact/button';
 import { Divider } from 'primereact/divider';
@@ -15,44 +15,38 @@ import { useId } from 'react';
 
 import { useSetImportInstrument } from '@/components/atoms/instrument';
 import { FloppyDisk, List } from '@/components/Icons';
-import type { InstrumentType } from '@/types';
 
 export function Instrument({ canEdit }: { canEdit: boolean }) {
   const [updateInstrument, { loading: updateInstrumentLoading }] = useUpdateInstrument();
-  const [createInstrument, { loading: createInstrumentLoading }] = useCreateInstrument();
+  const [setTemporaryInstrument, { loading: setTemporaryInstrumentLoading }] = useSetTemporaryInstrument();
   const setImportInstrument = useSetImportInstrument();
 
   const { data: instrument, loading: instrumentLoading } = useConfiguredInstrument();
 
-  const loading = instrumentLoading || updateInstrumentLoading || createInstrumentLoading;
+  const loading = instrumentLoading || updateInstrumentLoading || setTemporaryInstrumentLoading;
 
-  // When changing any field, update the instrument (with a new temporary instrument if needed)
-  const onUpdateInstrument = async (variables: Partial<InstrumentType>) => {
+  // When changing any field, update the instrument as a temporary instrument
+  const onUpdateInstrument = async (variables: Partial<SetTemporaryInstrumentMutationVariables>) => {
     if (instrument) {
-      if (instrument.isTemporary) {
-        await updateInstrument({
-          variables: {
-            ...variables,
-            pk: instrument.pk,
-          },
-          optimisticResponse: {
-            updateInstrument: {
-              ...instrument,
-              ...variables,
-            },
-          },
-        });
-      } else {
-        await createInstrument({
-          variables: {
-            ...instrument,
-            ...variables,
-            isTemporary: true,
-          },
-          refetchQueries: [GET_INSTRUMENT],
-          awaitRefetchQueries: true,
-        });
-      }
+      await setTemporaryInstrument({
+        variables: {
+          ...instrument,
+          ...variables,
+        },
+        refetchQueries: [GET_INSTRUMENT],
+        awaitRefetchQueries: true,
+      });
+    }
+  };
+
+  const saveInstrument = async () => {
+    if (instrument) {
+      await updateInstrument({
+        variables: { pk: instrument.pk, isTemporary: false },
+        optimisticResponse: {
+          updateInstrument: { ...instrument, isTemporary: false },
+        },
+      });
     }
   };
 
@@ -61,7 +55,7 @@ export function Instrument({ canEdit }: { canEdit: boolean }) {
       className="save-instrument"
       disabled={!instrument?.isTemporary}
       loading={loading}
-      onClick={() => onUpdateInstrument({ isTemporary: false })}
+      onClick={saveInstrument}
       icon={<FloppyDisk />}
     />
   );

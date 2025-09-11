@@ -9,9 +9,7 @@ import { graphql } from './gen';
 
 const GET_DISTINCT_INSTRUMENTS = graphql(`
   query getDistinctInstruments {
-    distinctInstruments {
-      name
-    }
+    distinctInstruments
   }
 `);
 
@@ -29,9 +27,7 @@ export function useDistinctInstruments(options: OptionsOf<typeof GET_DISTINCT_IN
 
 const GET_DISTINCT_PORTS = graphql(`
   query getDistinctPorts($name: Instrument!) {
-    distinctPorts(name: $name) {
-      issPort
-    }
+    distinctPorts(name: $name)
   }
 `);
 
@@ -48,7 +44,7 @@ export function useDistinctPorts(options: OptionsOf<typeof GET_DISTINCT_PORTS>) 
 }
 
 export const GET_INSTRUMENTS = graphql(`
-  query getInstruments($name: Instrument!, $issPort: Int!) {
+  query getInstruments($name: Instrument!, $issPort: Int) {
     instruments(name: $name, issPort: $issPort) {
       pk
       name
@@ -80,7 +76,7 @@ export function useInstruments(options: OptionsOf<typeof GET_INSTRUMENTS>) {
 }
 
 export const GET_INSTRUMENT = graphql(`
-  query getInstrument($name: Instrument, $issPort: Int, $wfs: WfsType) {
+  query getInstrument($name: Instrument!, $issPort: Int, $wfs: WfsType) {
     instrument(name: $name, issPort: $issPort, wfs: $wfs) {
       pk
       name
@@ -99,20 +95,21 @@ export const GET_INSTRUMENT = graphql(`
   }
 `);
 
-export function useInstrument(options: OptionsOf<typeof GET_INSTRUMENT> = {}) {
+export function useInstrument(options: OptionsOf<typeof GET_INSTRUMENT>) {
   return useQuery(
     GET_INSTRUMENT,
     options === skipToken
       ? skipToken
       : {
           ...options,
+          skip: isNullish(options.variables?.name),
           context: { clientName: 'navigateConfigs' },
         },
   );
 }
 
-export const CREATE_INSTRUMENT = graphql(`
-  mutation createInstrument(
+export const SET_TEMPORARY_INSTRUMENT = graphql(`
+  mutation setTemporaryInstrument(
     $name: Instrument!
     $iaa: Float
     $issPort: Int!
@@ -122,10 +119,9 @@ export const CREATE_INSTRUMENT = graphql(`
     $originY: Float
     $ao: Boolean!
     $extraParams: JSON
-    $isTemporary: Boolean!
     $comment: String
   ) {
-    createInstrument(
+    setTemporaryInstrument(
       name: $name
       iaa: $iaa
       issPort: $issPort
@@ -135,7 +131,6 @@ export const CREATE_INSTRUMENT = graphql(`
       originY: $originY
       ao: $ao
       extraParams: $extraParams
-      isTemporary: $isTemporary
       comment: $comment
     ) {
       pk
@@ -155,8 +150,8 @@ export const CREATE_INSTRUMENT = graphql(`
   }
 `);
 
-export function useCreateInstrument() {
-  return useMutation(CREATE_INSTRUMENT, {
+export function useSetTemporaryInstrument() {
+  return useMutation(SET_TEMPORARY_INSTRUMENT, {
     context: { clientName: 'navigateConfigs' },
   });
 }
@@ -238,12 +233,12 @@ export function useConfiguredInstrument() {
   );
 
   const instrument = useInstrument(
-    isNullish(configuration?.obsInstrument) || isNullish(instrumentPortData?.instrumentPort)
+    isNullish(configuration?.obsInstrument)
       ? skipToken
       : {
           variables: {
             name: configuration.obsInstrument,
-            issPort: instrumentPortData.instrumentPort,
+            issPort: instrumentPortData?.instrumentPort ?? undefined,
             wfs: getConfigWfs(configuration),
           },
         },

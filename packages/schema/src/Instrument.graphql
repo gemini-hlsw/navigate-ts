@@ -37,22 +37,14 @@ type InstrumentConfig {
   createdAt: DateTime!
 }
 
-type DistinctInstrument {
-  name: String!
-}
-
-type DistinctPort {
-  issPort: Int!
-}
-
 type Query {
   instrument(name: Instrument, issPort: Int, wfs: WfsType, extraParams: JSON): InstrumentConfig!
 
   instruments(name: Instrument, issPort: Int, wfs: WfsType, extraParams: JSON): [InstrumentConfig!]!
 
-  distinctInstruments: [DistinctInstrument!]!
+  distinctInstruments: [String!]!
 
-  distinctPorts(name: Instrument): [DistinctPort!]!
+  distinctPorts(name: Instrument): [Int!]!
 }
 
 type Mutation {
@@ -93,6 +85,20 @@ type Mutation {
     ao: Boolean
     extraParams: JSON
     isTemporary: Boolean
+    comment: String
+  ): InstrumentConfig!
+
+  "Set temporary instrument parameters, that will not be saved as a new configuration"
+  setTemporaryInstrument(
+    name: Instrument!
+    iaa: Float
+    issPort: Int!
+    focusOffset: Float
+    wfs: WfsType
+    originX: Float
+    originY: Float
+    ao: Boolean
+    extraParams: JSON
     comment: String
   ): InstrumentConfig!
 

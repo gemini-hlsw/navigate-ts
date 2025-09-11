@@ -14,6 +14,6 @@ export const GET_INSTRUMENT_PORT = graphql(`
 export function useInstrumentPort(options: OptionsOf<typeof GET_INSTRUMENT_PORT>) {
   return useQuery(
     GET_INSTRUMENT_PORT,
-    options === skipToken || isNullish(options.variables?.instrument) ? skipToken : options,
+    options === skipToken ? skipToken : { ...options, skip: isNullish(options.variables.instrument) },
   );
 }
