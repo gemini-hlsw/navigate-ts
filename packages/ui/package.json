@@ -16,7 +16,7 @@
     "prebuild": "pnpm run codegen",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "test": "vitest --run",
+    "test": "vitest run",
     "coverage": "vitest run --coverage",
     "lint:eslint": "eslint .",
     "codegen": "graphql-codegen --config tasks/codegen.ts"
