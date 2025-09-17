@@ -16,8 +16,7 @@
     "prebuild": "pnpm run codegen",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "test": "vitest --run",
-    "coverage": "vitest run --coverage",
+    "test": "vitest run",
     "lint:eslint": "eslint .",
     "codegen": "graphql-codegen --config tasks/codegen.ts"
   },
@@ -34,7 +33,6 @@
     "@types/react-dom": "19.1.9",
     "@vitejs/plugin-react": "5.0.2",
     "@vitest/browser": "3.2.4",
-    "@vitest/coverage-v8": "3.2.4",
     "@xyflow/react": "12.8.4",
     "babel-plugin-react-compiler": "19.1.0-rc.3",
     "clsx": "2.1.1",
