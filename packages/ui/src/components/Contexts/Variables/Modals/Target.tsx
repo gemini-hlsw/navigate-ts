@@ -53,20 +53,18 @@ export function Target() {
 
   const footer = (
     <div className="modal-footer">
-      <div className="right">
-        <Button label="Update" loading={loading} onClick={updateObservation} />
-        <Button
-          severity="danger"
-          label="Cancel"
-          onClick={() =>
-            setTargetEdit({
-              isVisible: false,
-              target: {} as TargetType,
-              targetIndex: undefined,
-            })
-          }
-        />
-      </div>
+      <Button label="Update" loading={loading} onClick={updateObservation} />
+      <Button
+        severity="danger"
+        label="Cancel"
+        onClick={() =>
+          setTargetEdit({
+            isVisible: false,
+            target: {} as TargetType,
+            targetIndex: undefined,
+          })
+        }
+      />
     </div>
   );
 

@@ -1,4 +1,4 @@
-import './Layout.scss';
+import './Layout.css';
 
 import { Outlet } from 'react-router';
 

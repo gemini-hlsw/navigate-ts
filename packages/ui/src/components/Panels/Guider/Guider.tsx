@@ -1,4 +1,4 @@
-import './Guider.scss';
+import './Guider.css';
 
 import { Title } from '@Shared/Title/Title';
 

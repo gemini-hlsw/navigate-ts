@@ -1,4 +1,4 @@
-import './Telescope.scss';
+import './Telescope.css';
 
 import { useConfiguration } from '@gql/configs/Configuration';
 import { useTargets } from '@gql/configs/Target';

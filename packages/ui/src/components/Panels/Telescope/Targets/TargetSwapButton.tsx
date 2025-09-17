@@ -107,7 +107,7 @@ export function TargetSwapButton({
   return (
     <Button
       disabled={disabled}
-      className="footer w-100"
+      className="footer"
       label={label}
       onClick={onClick}
       severity={severity}

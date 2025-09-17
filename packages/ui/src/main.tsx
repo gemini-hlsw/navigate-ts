@@ -1,4 +1,4 @@
-import './styles/main.scss';
+import './styles/main.css';
 import './gql/dev-messages';
 
 import { StrictMode } from 'react';

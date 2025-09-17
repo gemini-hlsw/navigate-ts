@@ -51,7 +51,7 @@ export function TitleDropdown({ children, icon }: React.PropsWithChildren<{ icon
 
   return (
     <span className="title-dropdown" aria-label="Settings" onClick={(e) => op.current?.toggle(e)}>
-      <i className="ml-2">{icon}</i>
+      <i>{icon}</i>
       <OverlayPanel ref={op}>{children}</OverlayPanel>
     </span>
   );

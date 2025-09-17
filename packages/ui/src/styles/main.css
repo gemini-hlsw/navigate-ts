@@ -1,25 +1,13 @@
-@use 'sass:meta';
-@include meta.load-css('lucuma-ui-css/lucuma-ui-common.scss');
+@import url('./lucuma-ui.scss');
+@import url('./helpers.css');
 
-.light {
-  @include meta.load-css('lucuma-ui-css/light-theme');
-}
-
-.dark {
-  @include meta.load-css('lucuma-ui-css/dark-theme');
-}
-
-@include meta.load-css('lucuma-ui-css/lucuma-ui-prime');
-
-@include meta.load-css('helpers');
 /* stylelint-enable no-invalid-position-at-import-rule */
-
 :root {
   --navigate-accent-color: rgba(144, 238, 144, 80%);
   --input-font-size: 0.8rem;
 }
 
-// Base styles
+/* Base styles */
 body {
   padding: 0;
   margin: 0;
@@ -39,7 +27,7 @@ a {
   height: 100%;
 }
 
-// Smaller inputs
+/* Smaller inputs */
 .p-dropdown {
   width: 100% !important;
 
@@ -156,7 +144,7 @@ button.p-component.p-button {
 
 .graphql-error-toast .p-toast-detail {
   font-size: 0.8rem;
-  // Whitespaces in the error message are preserved
+  /* Whitespaces in the error message are preserved */
   white-space: pre-wrap;
 }
 
@@ -186,7 +174,7 @@ button.p-component.p-button {
   display: none;
 }
 
-// Under construction styles
+/* Under construction styles */
 button.under-construction {
   background-color: transparent !important;
   border-color: var(--yellow-400) !important;
@@ -214,7 +202,7 @@ button.under-construction {
   }
 }
 
-// Content only visible to screenreaders
+/* Content only visible to screenreaders */
 .sr-only {
   position: absolute;
   width: 1px;

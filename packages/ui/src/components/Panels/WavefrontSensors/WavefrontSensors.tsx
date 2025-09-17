@@ -1,4 +1,4 @@
-import './WavefrontSensors.scss';
+import './WavefrontSensors.css';
 
 import { Title } from '@Shared/Title/Title';
 

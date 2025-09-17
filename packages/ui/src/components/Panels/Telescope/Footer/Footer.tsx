@@ -29,7 +29,7 @@ export function Footer() {
         disabled={!canEdit}
         severity="danger"
         size="small"
-        className="right under-construction"
+        className="under-construction"
         label="Shutdown"
         aria-label="Shutdown"
       />

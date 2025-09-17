@@ -217,18 +217,16 @@ export function OdbImport() {
 
   const footer = (
     <div className="modal-footer">
-      <div className="right">
-        <Button
-          disabled={
-            !(canEdit && selectedObservation?.targetEnvironment?.firstScienceTarget?.name) ||
-            !selectedObservation?.targetEnvironment?.firstScienceTarget?.name
-          }
-          label="Import to Navigate"
-          loading={updateLoading}
-          onClick={updateObs}
-        />
-        <Button disabled={!canEdit} severity="danger" label="Cancel" onClick={() => setOdbVisible(false)} />
-      </div>
+      <Button
+        disabled={
+          !(canEdit && selectedObservation?.targetEnvironment?.firstScienceTarget?.name) ||
+          !selectedObservation?.targetEnvironment?.firstScienceTarget?.name
+        }
+        label="Import to Navigate"
+        loading={updateLoading}
+        onClick={updateObs}
+      />
+      <Button disabled={!canEdit} severity="danger" label="Cancel" onClick={() => setOdbVisible(false)} />
     </div>
   );
 

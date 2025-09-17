@@ -40,9 +40,6 @@
   }
 
   .left {
-    text-align: left;
-    width: 33%;
-
     > .site {
       margin-left: 20px;
       color: var(--primary-color-text);
@@ -54,15 +51,7 @@
     color: var(--purple-200);
   }
 
-  .right {
-    text-align: right;
-    width: 33%;
-  }
-
   .center {
-    text-align: center;
-    width: 33%;
-
     > .observation {
       color: var(--primary-color-text);
     }
@@ -86,10 +75,32 @@
       animation: move-text 0.75s forwards;
     }
 
-    @for $i from 1 through 9 {
-      span:nth-child(#{$i}n) {
-        animation-delay: #{$i * 0.2}s;
-      }
+    span:nth-child(1n) {
+      animation-delay: 0.2s;
+    }
+    span:nth-child(2n) {
+      animation-delay: 0.4s;
+    }
+    span:nth-child(3n) {
+      animation-delay: 0.6s;
+    }
+    span:nth-child(4n) {
+      animation-delay: 0.8s;
+    }
+    span:nth-child(5n) {
+      animation-delay: 1s;
+    }
+    span:nth-child(6n) {
+      animation-delay: 1.2s;
+    }
+    span:nth-child(7n) {
+      animation-delay: 1.4s;
+    }
+    span:nth-child(8n) {
+      animation-delay: 1.6s;
+    }
+    span:nth-child(9n) {
+      animation-delay: 1.8s;
     }
   }
 }

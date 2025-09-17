@@ -1,4 +1,4 @@
-import './Navbar.scss';
+import './Navbar.css';
 
 import { useConfiguration } from '@gql/configs/Configuration';
 import { clsx } from 'clsx';
@@ -86,7 +86,7 @@ export default function Navbar() {
         {configuration?.obsTitle && <span className="observation">{configuration.obsTitle}</span>}
         {configuration?.obsReference && <span className="observation-ref">{configuration.obsReference}</span>}
       </div>
-      <div className="right">
+      <div>
         <ConnectionLost />
 
         <SplitButton

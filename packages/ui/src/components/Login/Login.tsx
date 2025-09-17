@@ -1,4 +1,4 @@
-import './Login.scss';
+import './Login.css';
 
 import orcidLogo from '@assets/orcid-logo.svg';
 import { Button } from 'primereact/button';

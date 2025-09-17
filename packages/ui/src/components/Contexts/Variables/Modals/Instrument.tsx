@@ -71,10 +71,8 @@ export function Instrument() {
 
   const footer = (
     <div className="modal-footer">
-      <div className="right">
-        <Button label="Import" disabled={!instrument} loading={loading} onClick={modifyInstrument} />
-        <Button severity="danger" label="Cancel" onClick={closeModal} />
-      </div>
+      <Button label="Import" disabled={!instrument} loading={loading} onClick={modifyInstrument} />
+      <Button severity="danger" label="Cancel" onClick={closeModal} />
     </div>
   );
 

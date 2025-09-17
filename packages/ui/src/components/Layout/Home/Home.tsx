@@ -1,4 +1,4 @@
-import './Home.scss';
+import './Home.css';
 
 import { Guider } from '@Guider/Guider';
 import { Telescope } from '@Telescope/Telescope';

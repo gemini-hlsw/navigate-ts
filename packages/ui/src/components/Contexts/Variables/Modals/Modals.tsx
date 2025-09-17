@@ -1,4 +1,4 @@
-import './Modals.scss';
+import './Modals.css';
 
 import { About } from './About';
 import { Catalog } from './Catalog/Catalog';
