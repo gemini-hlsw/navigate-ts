@@ -1,9 +1,8 @@
 @import url('./lucuma-ui.scss');
 @import url('./helpers.css');
 
-/* stylelint-enable no-invalid-position-at-import-rule */
 :root {
-  --navigate-accent-color: rgba(144, 238, 144, 80%);
+  --navigate-accent-color: rgb(144 238 144 / 80%);
   --input-font-size: 0.8rem;
 }
 
@@ -108,7 +107,7 @@ button.p-component.p-button {
 
 .dark .p-dialog .p-dialog-header,
 .light .p-dialog .p-dialog-header {
-  padding: 1.5rem 1.5rem 0.5rem 1.5rem;
+  padding: 1.5rem 1.5rem 0.5rem;
 }
 
 .p-overlaypanel {
@@ -144,8 +143,29 @@ button.p-component.p-button {
 
 .graphql-error-toast .p-toast-detail {
   font-size: 0.8rem;
+
   /* Whitespaces in the error message are preserved */
   white-space: pre-wrap;
+}
+
+.under-construction {
+  .p-inputnumber-input,
+  .p-checkbox-box,
+  .p-dropdown,
+  button.p-button {
+    background-color: transparent !important;
+    border-color: var(--yellow-400) !important;
+    color: var(--yellow-400) !important;
+    cursor: not-allowed;
+
+    > span {
+      color: var(--yellow-400) !important;
+    }
+
+    svg {
+      color: var(--yellow-400) !important;
+    }
+  }
 }
 
 .dark .p-checkbox .p-checkbox-box,
@@ -182,26 +202,6 @@ button.under-construction {
   cursor: not-allowed;
 }
 
-.under-construction {
-  button.p-button,
-  .p-inputnumber-input,
-  .p-checkbox-box,
-  .p-dropdown {
-    background-color: transparent !important;
-    border-color: var(--yellow-400) !important;
-    color: var(--yellow-400) !important;
-    cursor: not-allowed;
-
-    > span {
-      color: var(--yellow-400) !important;
-    }
-
-    svg {
-      color: var(--yellow-400) !important;
-    }
-  }
-}
-
 /* Content only visible to screenreaders */
 .sr-only {
   position: absolute;
@@ -210,7 +210,6 @@ button.under-construction {
   padding: 0;
   margin: -1px;
   overflow: hidden;
-  clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border-width: 0;
 }

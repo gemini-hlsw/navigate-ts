@@ -17,8 +17,9 @@
     "e2e": "pnpm --filter navigate-e2e",
     "all": "pnpm -r",
     "build": "tsc -b",
-    "lint": "pnpm lint:prettier && pnpm -r lint:eslint",
+    "lint": "pnpm lint:prettier && pnpm lint:style && pnpm -r lint:eslint",
     "lint:prettier": "prettier --check .",
+    "lint:style": "stylelint 'packages/ui/src/**/*.css'",
     "tsc:watch": "tsc --build --watch",
     "prepare": "node .husky/install.js"
   },
@@ -38,11 +39,14 @@
     "husky": "9.1.7",
     "lint-staged": "16.1.6",
     "prettier": "3.6.2",
+    "stylelint-config-standard": "39.0.0",
+    "stylelint": "16.24.0",
     "typescript": "catalog:",
     "typescript-eslint": "8.43.0"
   },
   "lint-staged": {
-    "*.{js,mjs,ts,tsx,jsx,css,md,json,yml,yaml}": "prettier --write"
+    "*.{js,mjs,ts,tsx,jsx,css,md,json,yml,yaml}": "prettier --write",
+    "*.css": "stylelint --fix"
   },
   "pnpm": {
     "onlyBuiltDependencies": [

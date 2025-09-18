@@ -27,12 +27,22 @@
       "esbenp.prettier-vscode",
       "ms-playwright.playwright",
       "prisma.prisma",
+      "stylelint.vscode-stylelint",
     ],
   },
   "settings": {
+    "editor.formatOnSave": true,
+    "files.associations": {
+      "*.css": "css",
+    },
     "editor.codeActionsOnSave": {
       "source.fixAll.eslint": "explicit",
     },
     "eslint.rules.customizations": [{ "rule": "*", "severity": "warn" }],
+    "[css]": {
+      "editor.codeActionsOnSave": {
+        "source.fixAll.stylelint": "explicit",
+      },
+    },
   },
 }

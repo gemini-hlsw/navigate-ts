@@ -5,7 +5,7 @@
     background-color: var(--surface-a);
     color: var(--text-color);
     border: 1px solid var(--surface-border);
-    width: 33.33333%;
+    width: 33.3333%;
     display: block;
     height: calc(100vh - 28px);
     font-family: var(--font-family);
@@ -52,9 +52,8 @@
   }
 }
 
-@media only screen and (max-width: 1250px) {
+@media only screen and (width <= 1250px) {
   .main-body {
-    height: inherit;
     width: 300vw;
     height: calc(100vh - 26px);
     position: fixed;
@@ -83,7 +82,6 @@
         display: block;
         text-align: left;
         width: 50px;
-        color: var(--primary-color-text);
         top: 2px;
         background: none;
         color: inherit;
@@ -98,12 +96,6 @@
           display: block;
           transform: translateX(calc(100% - 16px));
         }
-
-        &:hover {
-          > i {
-            animation: move-back 1s infinite ease-in-out;
-          }
-        }
       }
 
       .n-panel {
@@ -113,55 +105,57 @@
           display: block;
           transform: translateX(0%);
         }
+      }
 
-        &:hover {
-          > i {
-            animation: move-forward 1s infinite ease-in-out;
-          }
-        }
+      .p-panel:hover i {
+        animation: move-back 1s infinite ease-in-out;
+      }
+
+      .n-panel:hover i {
+        animation: move-forward 1s infinite ease-in-out;
       }
     }
 
-    &.WavefrontSensors {
+    &.wavefront-sensors {
       transform: translateX(-100vw);
     }
 
-    &.Guider {
+    &.guider {
       transform: translateX(-200vw);
     }
   }
-}
 
-@keyframes move-back {
-  0% {
-    transform: translateX(calc(100% - 16px));
-    color: var(--primary-color-text);
+  @keyframes move-back {
+    0% {
+      transform: translateX(calc(100% - 16px));
+      color: var(--primary-color-text);
+    }
+
+    70% {
+      transform: translateX(0%);
+      color: var(--primary-color);
+    }
+
+    100% {
+      transform: translateX(calc(100% - 16px));
+      color: var(--primary-color-text);
+    }
   }
 
-  70% {
-    transform: translateX(0%);
-    color: var(--primary-color);
-  }
+  @keyframes move-forward {
+    0% {
+      transform: translateX(0%);
+      color: var(--primary-color-text);
+    }
 
-  100% {
-    transform: translateX(calc(100% - 16px));
-    color: var(--primary-color-text);
-  }
-}
+    70% {
+      transform: translateX(calc(100% - 16px));
+      color: var(--primary-color);
+    }
 
-@keyframes move-forward {
-  0% {
-    transform: translateX(0%);
-    color: var(--primary-color-text);
-  }
-
-  70% {
-    transform: translateX(calc(100% - 16px));
-    color: var(--primary-color);
-  }
-
-  100% {
-    transform: translateX(0%);
-    color: var(--primary-color-text);
+    100% {
+      transform: translateX(0%);
+      color: var(--primary-color-text);
+    }
   }
 }

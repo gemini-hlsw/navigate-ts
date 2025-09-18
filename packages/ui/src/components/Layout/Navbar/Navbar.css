@@ -11,7 +11,7 @@
   width: 100vw;
 
   .blink-btn {
-    color: rgba(255, 0, 0, 1) !important;
+    color: rgb(255 0 0 / 100%) !important;
     animation: blink 3s infinite;
   }
 
@@ -35,6 +35,7 @@
   }
 
   .p-button-icon,
+  /* stylelint-disable-next-line selector-class-pattern */
   .svg-inline--fa {
     padding: 0 10px;
   }
@@ -69,6 +70,7 @@
     letter-spacing: 0.3em;
 
     span,
+    /* stylelint-disable-next-line selector-class-pattern */
     .svg-inline--fa {
       position: relative;
       opacity: 0;
@@ -78,34 +80,42 @@
     span:nth-child(1n) {
       animation-delay: 0.2s;
     }
+
     span:nth-child(2n) {
       animation-delay: 0.4s;
     }
+
     span:nth-child(3n) {
       animation-delay: 0.6s;
     }
+
     span:nth-child(4n) {
       animation-delay: 0.8s;
     }
+
     span:nth-child(5n) {
       animation-delay: 1s;
     }
+
     span:nth-child(6n) {
       animation-delay: 1.2s;
     }
+
     span:nth-child(7n) {
       animation-delay: 1.4s;
     }
+
     span:nth-child(8n) {
       animation-delay: 1.6s;
     }
+
     span:nth-child(9n) {
       animation-delay: 1.8s;
     }
   }
 }
 
-@media (max-width: 700px) {
+@media (width <= 700px) {
   .top-bar {
     .main-title {
       display: none;
@@ -117,12 +127,15 @@
   0% {
     opacity: 0;
   }
+
   30% {
     opacity: 1;
   }
+
   70% {
     opacity: 1;
   }
+
   100% {
     opacity: 0;
   }

@@ -59,13 +59,13 @@ export default function Home() {
 
   return (
     <div className={`main-body ${panelDisplay}`} onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
-      <div className="panel Telescope">
+      <div className="panel telescope">
         <Telescope prevPanel={prevPanel} nextPanel={nextPanel} />
       </div>
-      <div className="panel WavefrontSensors">
+      <div className="panel wavefront-sensors">
         <WavefrontSensors prevPanel={prevPanel} nextPanel={nextPanel} />
       </div>
-      <div className="panel Guider">
+      <div className="panel guider">
         <Guider prevPanel={prevPanel} nextPanel={nextPanel} />
       </div>
     </div>

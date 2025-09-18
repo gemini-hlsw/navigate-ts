@@ -1,4 +1,4 @@
-.Telescope > .telescope {
+.panel > .telescope {
   display: flex;
   height: 100%;
   flex-direction: column;
@@ -17,6 +17,26 @@
     > .base-target {
       flex-grow: 1;
       border-top: 1px solid var(--surface-border);
+    }
+
+    > .footer {
+      flex-shrink: 1;
+      border-top: 1px solid var(--surface-border);
+      padding: 5px 0;
+      display: grid;
+      grid-template-columns: 30px 120px 120px 1fr 120px;
+      grid-template-rows: 26px;
+
+      > .title-dropdown {
+        text-align: center;
+        vertical-align: middle;
+        line-height: 26px;
+        cursor: pointer;
+      }
+
+      > button {
+        margin-right: 0.25rem;
+      }
     }
 
     > .guiders {
@@ -64,6 +84,7 @@
 
       > .body {
         padding: 4px;
+
         > .row {
           margin-bottom: 4px;
           display: grid;
@@ -75,8 +96,8 @@
           }
 
           > .error {
-            background-color: rgba(150, 0, 0, 0.2);
-            color: rgba(255, 0, 0, 1);
+            background-color: rgb(150 0 0 / 20%);
+            color: rgb(255 0 0 / 100%);
           }
         }
       }
@@ -85,11 +106,13 @@
     .target {
       max-height: 120px;
       overflow-y: auto;
+
       .target-name {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
       }
+
       > .selected-target {
         display: grid;
         grid-template-columns: 1fr 1fr 1fr 30px 1fr 30px;
@@ -177,118 +200,6 @@
         background-color: var(--surface-a);
       }
 
-      > .right {
-        float: right;
-        position: relative;
-        width: calc(100% - 100px);
-        padding: 3px;
-        padding-left: 20px;
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-        border-right: 1px solid var(--surface-border);
-        z-index: 1;
-
-        > .rotator {
-          > .body {
-            margin-top: 5px;
-            font-size: 0.9rem;
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            grid-template-rows: 26px;
-            column-gap: 8px;
-            row-gap: 4px;
-
-            > .label {
-              justify-self: baseline;
-              align-self: center;
-            }
-
-            > .p-inputnumber > input {
-              width: 40px;
-            }
-          }
-        }
-
-        > .instrument {
-          > .body {
-            margin-top: 5px;
-            font-size: 0.9rem;
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            grid-template-rows: repeat(3, 26px);
-            column-gap: 8px;
-            row-gap: 4px;
-
-            > .label {
-              justify-self: baseline;
-              align-self: center;
-            }
-
-            > .p-inputnumber > input {
-              width: 40px;
-            }
-
-            > input {
-              width: 100%;
-              text-align: center;
-              font-size: 1em;
-            }
-          }
-        }
-
-        > .ao-gems {
-          > .body {
-            margin-top: 5px;
-            font-size: 0.9rem;
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            grid-template-rows: repeat(3, 26px);
-            justify-items: center;
-            column-gap: 8px;
-            row-gap: 4px;
-
-            > .label {
-              justify-self: baseline;
-              align-self: center;
-            }
-
-            > .p-inputswitch {
-              height: 20px;
-              align-self: center;
-            }
-          }
-        }
-
-        > .ao-altair {
-          > .body {
-            margin-top: 5px;
-            font-size: 0.9rem;
-            display: grid;
-            grid-template-columns: repeat(4, 25%);
-            grid-template-rows: repeat(5, 22px);
-            justify-items: center;
-            column-gap: 8px;
-            row-gap: 4px;
-
-            > .label {
-              justify-self: baseline;
-              align-self: center;
-            }
-
-            > .p-inputswitch {
-              height: 20px;
-              align-self: center;
-            }
-            > .p-inputnumber {
-              > .p-inputtext {
-                width: 100%;
-              }
-            }
-          }
-        }
-      }
-
       > .grid-wrapper {
         background-color: var(--surface-a);
         position: absolute;
@@ -297,9 +208,7 @@
         left: calc(-100% + 217px);
         transition: left 0.5s ease-in-out;
         display: grid;
-        grid-template-columns: 1fr 1fr 18px;
-        grid-template-rows: repeat(12, 1fr);
-        grid-template-areas:
+        grid-template:
           'top-left top-right expand-btn'
           'top-left top-right expand-btn'
           'top-left top-right expand-btn'
@@ -311,7 +220,8 @@
           'bottom bottom expand-btn'
           'bottom bottom expand-btn'
           'bottom bottom expand-btn'
-          'bottom bottom expand-btn';
+          'bottom bottom expand-btn'
+          / 1fr 1fr 18px;
         gap: 0;
         grid-auto-rows: minmax(100px, auto);
         font-size: 0.9rem;
@@ -320,17 +230,15 @@
           overflow: hidden;
           grid-area: top-left;
           display: grid;
-          grid-template-columns: repeat(2, 1fr);
-          grid-template-rows: repeat(5, 26px);
+          grid-auto-rows: 26px;
           grid-template-areas:
             'g11 g12'
             'g21 g22'
             'g31 g32'
             'g41 g42'
             'g51 g52';
-          row-gap: 4px;
-          column-gap: 4px;
-          padding: 3px 3px 2px 3px;
+          gap: 4px;
+          padding: 3px 3px 2px;
         }
 
         > .top-right {
@@ -357,12 +265,10 @@
             grid-template-rows: repeat(4, 26px);
             height: calc(100% - 28px);
             padding: 3px 4px;
-            column-gap: 8px;
-            row-gap: 4px;
+            gap: 4px 8px;
 
             > .label {
-              justify-self: baseline;
-              align-self: center;
+              place-self: center baseline;
             }
           }
         }
@@ -374,8 +280,8 @@
           overflow: hidden;
           grid-area: bottom;
           display: grid;
-          grid-template-columns: repeat(6, 1fr);
-          grid-template-rows: repeat(7, 26px);
+          grid-auto-columns: 1fr;
+          grid-auto-rows: 26px;
           grid-template-areas:
             'g11 g12 g13 g14 g15 g16'
             'g21 g22 g23 g24 g25 g26'
@@ -384,8 +290,7 @@
             'g51 g52 g53 g54 g55 g56'
             'g61 g62 g63 g63 g63 g66'
             'g71 g72 g73 g73 g73 g76';
-          row-gap: 4px;
-          column-gap: 4px;
+          gap: 4px;
 
           .p-inputtext {
             width: 100%;
@@ -404,6 +309,7 @@
           transition: background-color 0.2s;
           justify-content: center;
 
+          /* stylelint-disable-next-line selector-class-pattern */
           > .svg-inline--fa {
             transition:
               transform 0.5s,
@@ -415,6 +321,7 @@
           left: 100px;
 
           > .expand-button {
+            /* stylelint-disable-next-line selector-class-pattern */
             > .svg-inline--fa {
               transform: rotate(180deg);
             }
@@ -424,41 +331,128 @@
         > .expand-button:hover {
           background-color: var(--surface-c);
 
+          /* stylelint-disable-next-line selector-class-pattern */
           .svg-inline--fa {
             color: var(--primary-color);
           }
         }
       }
-    }
 
-    > .footer {
-      flex-shrink: 1;
-      border-top: 1px solid var(--surface-border);
-      padding: 5px 0;
-      display: grid;
-      grid-template-columns: 30px 120px 120px 1fr 120px;
-      grid-template-rows: 26px;
+      > .right {
+        float: right;
+        position: relative;
+        width: calc(100% - 100px);
+        padding: 3px;
+        padding-left: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        border-right: 1px solid var(--surface-border);
+        z-index: 1;
 
-      > .title-dropdown {
-        text-align: center;
-        vertical-align: middle;
-        line-height: 26px;
-        cursor: pointer;
-      }
+        > .instrument {
+          > .body {
+            margin-top: 5px;
+            font-size: 0.9rem;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(3, 26px);
+            gap: 4px 8px;
 
-      > button {
-        margin-right: 0.25rem;
+            > input {
+              width: 100%;
+              text-align: center;
+              font-size: 1em;
+            }
+
+            > .label {
+              place-self: center baseline;
+            }
+
+            > .p-inputnumber > input {
+              width: 40px;
+            }
+          }
+        }
+
+        > .rotator {
+          > .body {
+            margin-top: 5px;
+            font-size: 0.9rem;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: 26px;
+            gap: 4px 8px;
+
+            > .label {
+              place-self: center baseline;
+            }
+
+            > .p-inputnumber > input {
+              width: 40px;
+            }
+          }
+        }
+
+        > .ao-gems {
+          > .body {
+            margin-top: 5px;
+            font-size: 0.9rem;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(3, 26px);
+            justify-items: center;
+            gap: 4px 8px;
+
+            > .label {
+              place-self: center baseline;
+            }
+
+            > .p-inputswitch {
+              height: 20px;
+              align-self: center;
+            }
+          }
+        }
+
+        > .ao-altair {
+          > .body {
+            margin-top: 5px;
+            font-size: 0.9rem;
+            display: grid;
+            grid-template-columns: repeat(4, 25%);
+            grid-template-rows: repeat(5, 22px);
+            justify-items: center;
+            gap: 4px 8px;
+
+            > .label {
+              place-self: center baseline;
+            }
+
+            > .p-inputswitch {
+              height: 20px;
+              align-self: center;
+            }
+
+            > .p-inputnumber {
+              > .p-inputtext {
+                width: 100%;
+              }
+            }
+          }
+        }
       }
     }
   }
 }
 
-@media only screen and (max-width: 768px) {
-  .Telescope > .telescope {
+@media only screen and (width <= 768px) {
+  .telescope {
     > .body {
       > .systems {
         > .left {
           grid-template-columns: 50px;
+
           .p-button-label {
             font-size: 0.7rem;
           }

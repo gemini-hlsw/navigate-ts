@@ -4,6 +4,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+
   .box {
     overflow: hidden;
     width: 50%;
@@ -16,12 +17,14 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+
     .title {
       overflow: hidden;
       width: 70%;
       margin: 20px auto;
       text-align: center;
     }
+
     .title::after {
       display: block;
       content: '';
@@ -33,6 +36,7 @@
       animation-delay: 1s;
       animation-fill-mode: forwards;
     }
+
     .text {
       color: var(--text-color);
       transform: translate(-100%);
@@ -44,6 +48,7 @@
       animation-delay: 0.2s;
       animation-fill-mode: forwards;
     }
+
     .user-login-buttons {
       display: flex;
       flex-direction: column;
@@ -58,22 +63,26 @@
     width: 1.5em;
     height: 1em;
   }
+
   .orcid-login-link {
     padding-right: 0.25em;
+
     .p-button {
       width: 100%;
     }
   }
 }
 
-@media only screen and (max-width: 1250px) {
+@media only screen and (width <= 1250px) {
   .login {
     .box {
       min-width: initial;
       width: 90%;
+
       .title {
         width: 100%;
       }
+
       .text {
         font-size: 1.5rem;
         letter-spacing: 5px;

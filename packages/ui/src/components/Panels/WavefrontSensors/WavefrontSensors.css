@@ -1,7 +1,6 @@
-.WavefrontSensors > .wavefront-sensors {
+.panel > .wavefront-sensors {
   font-size: 0.8rem;
   display: flex;
-  height: 100%;
   flex-direction: column;
   justify-content: space-between;
   height: 100%;
@@ -36,6 +35,7 @@
     max-height: calc(100% - 20px);
     display: flex;
     flex-direction: column;
+
     > .sensors {
       > .wfs {
         width: 33.3333%;
@@ -63,15 +63,14 @@
 
         > .controls {
           display: grid;
-          grid-template-columns: 35px 1fr 40px;
-          grid-template-rows: repeat(3, 26px);
           grid-template-areas:
             'g11 g12 g13'
             'g21 g22 g23'
             'g3 g3 g3';
+          grid-template-columns: 35px 1fr 40px;
+          grid-auto-rows: 26px;
           gap: 0 4px;
-          justify-items: center;
-          align-items: center;
+          place-items: center center;
           padding: 2px 4px;
         }
 
@@ -97,6 +96,7 @@
           display: flex;
           align-items: center;
           border-bottom: 1px solid var(--surface-border);
+
           > .ac-name {
             position: absolute;
             top: 2px;
@@ -105,6 +105,7 @@
             color: var(--primary-color-text);
             z-index: 10;
           }
+
           > img {
             width: 100%;
             scale: 1;
@@ -115,10 +116,8 @@
           display: grid;
           grid-template-columns: 35px 75px 1fr 35px 20px 40px 40px;
           grid-template-areas: 'g1 g2 g3 g4 g5 g6 g7';
-          grid-template-rows: 26px;
-          align-items: center;
-          justify-items: center;
-          gap: 0 4px;
+          place-items: center center;
+          gap: 0 6px;
           padding: 2px 4px;
         }
 
@@ -147,7 +146,7 @@
 
             grid-template-columns: 1fr 1fr;
             grid-template-rows: auto;
-            gap: 8px 0px;
+            gap: 8px 0;
           }
 
           .input-divider {
@@ -158,8 +157,8 @@
             justify-content: space-around;
 
             .p-divider {
-              margin-left: 0px;
-              margin-right: 0px;
+              margin-left: 0;
+              margin-right: 0;
             }
           }
 
@@ -185,8 +184,8 @@
 
             .coordinates-buttons {
               display: grid;
-              grid-template-columns: repeat(3, 26px);
-              grid-template-rows: repeat(3, 26px);
+              grid-auto-columns: 26px;
+              grid-auto-rows: 26px;
               grid-template-areas:
                 'gul gu gur'
                 'gl gm gr'
