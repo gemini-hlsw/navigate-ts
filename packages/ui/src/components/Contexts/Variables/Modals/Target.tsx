@@ -53,8 +53,8 @@ export function Target() {
 
   const footer = (
     <div className="modal-footer">
-      <Button label="Update" loading={loading} onClick={updateObservation} />
       <Button
+        text
         severity="danger"
         label="Cancel"
         onClick={() =>
@@ -65,6 +65,7 @@ export function Target() {
           })
         }
       />
+      <Button label="Update" loading={loading} onClick={updateObservation} />
     </div>
   );
 

@@ -446,6 +446,27 @@
   }
 }
 
+.save-instrument-popup {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 1rem;
+
+  .save-instrument-comment-group {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
+    font-size: 1rem;
+  }
+
+  .buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+}
+
 @media only screen and (width <= 768px) {
   .telescope {
     > .body {

@@ -3,9 +3,8 @@ import './AcquisitionAdjustmentToast.css';
 import offsetsReceivedMp3 from '@assets/sounds/offsets-received.mp3';
 import offsetsReceivedWebm from '@assets/sounds/offsets-received.webm';
 import { useAcquisitionAdjustment, useAcquisitionAdjustmentState } from '@gql/server/AcquisitionAdjustment';
-import type { AcquisitionAdjustmentInput } from '@gql/server/gen/graphql';
+import type { AcquistionAdjustmentCommand } from '@gql/server/gen/graphql';
 import { Button } from 'primereact/button';
-import { ButtonGroup } from 'primereact/buttongroup';
 import type { ToastMessage } from 'primereact/toast';
 import { useEffect } from 'react';
 
@@ -32,6 +31,7 @@ export function AcquisitionAdjustmentToast() {
         id: `acquisition-adjustment`,
         severity: 'info',
         summary: `Apply GACQ offsets?`,
+        closable: false,
         detail: <AcquisitionAdjustmentPrompt state={data.acquisitionAdjustmentState} />,
         sticky: true,
       };
@@ -52,25 +52,31 @@ export function AcquisitionAdjustmentToast() {
 function AcquisitionAdjustmentPrompt({ state }: { state: AcquisitionAdjustmentState }) {
   const [adjustAcquisition, { loading }] = useAcquisitionAdjustment();
 
-  const input: Omit<AcquisitionAdjustmentInput, 'command'> = {
-    offset: {
-      p: {
-        arcseconds: state.offset.p.arcseconds,
+  const adjustCommand = (command: AcquistionAdjustmentCommand) =>
+    adjustAcquisition({
+      variables: {
+        input: {
+          offset: {
+            p: {
+              arcseconds: state.offset.p.arcseconds,
+            },
+            q: {
+              arcseconds: state.offset.q.arcseconds,
+            },
+          },
+          iaa: {
+            degrees: state.iaa?.degrees,
+          },
+          ipa: {
+            degrees: state.ipa?.degrees,
+          },
+          command,
+        },
       },
-      q: {
-        arcseconds: state.offset.q.arcseconds,
-      },
-    },
-    iaa: {
-      degrees: state.iaa?.degrees,
-    },
-    ipa: {
-      degrees: state.ipa?.degrees,
-    },
-  };
+    });
 
   return (
-    <div>
+    <>
       <div className="acquisition-adjustment-prompt">
         <div>P:</div>
         <div>{formatToSignedArcseconds(state.offset.p.arcseconds)}</div>
@@ -81,42 +87,23 @@ function AcquisitionAdjustmentPrompt({ state }: { state: AcquisitionAdjustmentSt
         <div>IAA:</div>
         <div>{formatToSignedArcseconds(state.iaa?.degrees)}</div>
       </div>
-      <ButtonGroup>
-        <Button
-          loading={loading}
-          icon={<Check />}
-          size="small"
-          severity="success"
-          label="Accept"
-          onClick={() =>
-            adjustAcquisition({
-              variables: {
-                input: {
-                  ...input,
-                  command: 'USER_CONFIRMS',
-                },
-              },
-            })
-          }
-        />
+      <div className="acquisition-adjustment-buttons">
         <Button
           loading={loading}
           icon={<XMark />}
-          size="small"
           severity="secondary"
           label="Cancel"
-          onClick={() =>
-            adjustAcquisition({
-              variables: {
-                input: {
-                  ...input,
-                  command: 'USER_CANCELS',
-                },
-              },
-            })
-          }
+          size="small"
+          onClick={() => adjustCommand('USER_CANCELS')}
         />
-      </ButtonGroup>
-    </div>
+        <Button
+          loading={loading}
+          icon={<Check />}
+          label="Accept"
+          size="small"
+          onClick={() => adjustCommand('USER_CONFIRMS')}
+        />
+      </div>
+    </>
   );
 }

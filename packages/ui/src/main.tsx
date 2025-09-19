@@ -1,6 +1,7 @@
-import './styles/main.css';
 import './gql/dev-messages';
+import './styles/main.css';
 
+import { PrimeReactProvider } from 'primereact/api';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 
@@ -10,6 +11,8 @@ const root = createRoot(document.getElementById('root')!);
 
 root.render(
   <StrictMode>
-    <App />
+    <PrimeReactProvider>
+      <App />
+    </PrimeReactProvider>
   </StrictMode>,
 );

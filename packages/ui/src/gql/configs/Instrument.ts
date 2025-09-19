@@ -44,8 +44,8 @@ export function useDistinctPorts(options: OptionsOf<typeof GET_DISTINCT_PORTS>) 
 }
 
 export const GET_INSTRUMENTS = graphql(`
-  query getInstruments($name: Instrument!, $issPort: Int) {
-    instruments(name: $name, issPort: $issPort) {
+  query getInstruments($name: Instrument!, $issPort: Int, $wfs: WfsType) {
+    instruments(name: $name, issPort: $issPort, wfs: $wfs) {
       pk
       name
       iaa
@@ -119,7 +119,6 @@ export const SET_TEMPORARY_INSTRUMENT = graphql(`
     $originY: Float
     $ao: Boolean!
     $extraParams: JSON
-    $comment: String
   ) {
     setTemporaryInstrument(
       name: $name
@@ -131,7 +130,6 @@ export const SET_TEMPORARY_INSTRUMENT = graphql(`
       originY: $originY
       ao: $ao
       extraParams: $extraParams
-      comment: $comment
     ) {
       pk
       name
@@ -153,6 +151,8 @@ export const SET_TEMPORARY_INSTRUMENT = graphql(`
 export function useSetTemporaryInstrument() {
   return useMutation(SET_TEMPORARY_INSTRUMENT, {
     context: { clientName: 'navigateConfigs' },
+    refetchQueries: [GET_INSTRUMENT],
+    awaitRefetchQueries: true,
   });
 }
 
@@ -216,6 +216,20 @@ const RESET_INSTRUMENTS = graphql(`
 
 export function useResetInstruments() {
   return useMutation(RESET_INSTRUMENTS, {
+    context: { clientName: 'navigateConfigs' },
+  });
+}
+
+const DELETE_INSTRUMENT = graphql(`
+  mutation deleteInstrument($pk: PosInt!) {
+    deleteInstrument(pk: $pk)
+  }
+`);
+
+export function useDeleteInstrument() {
+  return useMutation(DELETE_INSTRUMENT, {
+    refetchQueries: [GET_INSTRUMENTS, GET_INSTRUMENT],
+    awaitRefetchQueries: true,
     context: { clientName: 'navigateConfigs' },
   });
 }

@@ -2,18 +2,26 @@ import { skipToken } from '@apollo/client/react';
 import { useConfiguration, useUpdateConfiguration } from '@gql/configs/Configuration';
 import {
   GET_INSTRUMENT,
+  useConfiguredInstrument,
+  useDeleteInstrument,
   useDistinctInstruments,
   useDistinctPorts,
   useInstruments,
   useSetTemporaryInstrument,
 } from '@gql/configs/Instrument';
 import type { Instrument as InstrumentName } from '@gql/odb/gen/graphql';
+import { formatDate } from 'date-fns';
+import { FilterMatchMode } from 'primereact/api';
 import { Button } from 'primereact/button';
+import { Column } from 'primereact/column';
+import { ConfirmPopup, confirmPopup } from 'primereact/confirmpopup';
+import { DataTable } from 'primereact/datatable';
 import { Dialog } from 'primereact/dialog';
 import { Dropdown } from 'primereact/dropdown';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 import { useImportInstrument } from '@/components/atoms/instrument';
+import { CircleCheck, CircleXMark, Trash } from '@/components/Icons';
 import { useToast } from '@/Helpers/toast';
 import type { InstrumentType } from '@/types';
 
@@ -23,6 +31,8 @@ export function Instrument() {
   const [instrument, setInstrument] = useState<InstrumentType | null>(null);
 
   const { data: configurationData, loading: configurationLoading } = useConfiguration();
+
+  const { data: configuredInstrument, loading: configuredInstrumentLoading } = useConfiguredInstrument();
 
   const [setTemporaryInstrument, { loading: setTemporaryInstrumentLoading }] = useSetTemporaryInstrument();
   const [updateConfiguration, { loading: updateConfigurationLoading }] = useUpdateConfiguration();
@@ -39,7 +49,6 @@ export function Instrument() {
       await setTemporaryInstrument({
         variables: {
           ...instrument,
-          comment: 'Imported instrument',
         },
       });
       await updateConfiguration({
@@ -67,12 +76,13 @@ export function Instrument() {
     }
   };
 
-  const loading = setTemporaryInstrumentLoading || updateConfigurationLoading || configurationLoading;
+  const loading =
+    setTemporaryInstrumentLoading || updateConfigurationLoading || configurationLoading || configuredInstrumentLoading;
 
   const footer = (
     <div className="modal-footer">
+      <Button text severity="danger" label="Cancel" onClick={closeModal} />
       <Button label="Import" disabled={!instrument} loading={loading} onClick={modifyInstrument} />
-      <Button severity="danger" label="Cancel" onClick={closeModal} />
     </div>
   );
 
@@ -82,6 +92,7 @@ export function Instrument() {
         instrument={instrument}
         setInstrument={setInstrument}
         importInstrument={importInstrument}
+        configuredInstrument={configuredInstrument}
       />
     </Dialog>
   );
@@ -91,58 +102,34 @@ function InstrumentModalContent({
   importInstrument,
   instrument,
   setInstrument,
+  configuredInstrument,
 }: {
   importInstrument: boolean;
   instrument: InstrumentType | null;
   setInstrument: (_: InstrumentType | null) => void;
+  configuredInstrument: InstrumentType | undefined;
 }) {
-  const [name, setName] = useState<InstrumentName | null>(null);
-  const [port, setPort] = useState<number | null>(null);
+  const [name, setName] = useState<InstrumentName | null>(configuredInstrument?.name ?? null);
+  const [port, setPort] = useState<number | null>(configuredInstrument?.issPort ?? null);
 
-  const { data: distinctInstrumentsData, loading: distinctInstrumentsLoading } = useDistinctInstruments(
-    !importInstrument ? skipToken : undefined,
-  );
+  const [deleteInstrument, { loading: deleteInstrumentLoading }] = useDeleteInstrument();
+
+  const { data: distinctInstrumentsData, loading: distinctInstrumentsLoading } = useDistinctInstruments({
+    skip: !importInstrument,
+  });
   const { data: distinctPortsData, loading: distinctPortsLoading } = useDistinctPorts(
-    !importInstrument || !name ? skipToken : { variables: { name } },
+    !name ? skipToken : { skip: !importInstrument, variables: { name } },
   );
   const { data: instrumentsData, loading: instrumentsLoading } = useInstruments(
-    !importInstrument || !name || !port
+    !name || !port
       ? skipToken
-      : {
-          variables: { name, issPort: port },
-        },
+      : { skip: !importInstrument, fetchPolicy: 'cache-and-network', variables: { name, issPort: port } },
   );
 
   const nameOptions = distinctInstrumentsData?.distinctInstruments ?? [];
   const portOptions = distinctPortsData?.distinctPorts ?? [];
 
-  const loading = distinctInstrumentsLoading || distinctPortsLoading || instrumentsLoading;
-
-  const tableData = instrumentsData?.instruments
-    .filter((i) => !i.isTemporary)
-    .map((i) => (
-      <InstrumentDetails instrument={i} selectedPk={instrument?.pk} setInstrument={setInstrument} key={i.pk} />
-    ));
-
-  let table: React.ReactNode | null = null;
-  if (port && name) {
-    table = (
-      <table className="table">
-        <thead>
-          <tr>
-            <th>ao</th>
-            <th>focusOffset</th>
-            <th>iaa</th>
-            <th>originX</th>
-            <th>originY</th>
-            <th>wfs</th>
-            <th>extraParams</th>
-          </tr>
-        </thead>
-        <tbody>{tableData}</tbody>
-      </table>
-    );
-  }
+  const loading = distinctInstrumentsLoading || distinctPortsLoading || instrumentsLoading || deleteInstrumentLoading;
 
   return (
     <div className="import-instrument">
@@ -174,29 +161,123 @@ function InstrumentModalContent({
           placeholder="Select port"
         />
       </div>
-      {table}
+      {port && name ? (
+        <InstrumentTable
+          instruments={instrumentsData?.instruments ?? []}
+          selectedInstrument={instrument}
+          setInstrument={setInstrument}
+          deleteInstrument={(pk) => deleteInstrument({ variables: { pk } })}
+          loading={loading}
+        />
+      ) : undefined}
     </div>
   );
 }
 
-function InstrumentDetails({
-  instrument,
+function InstrumentTable({
+  instruments,
+  selectedInstrument,
   setInstrument,
-  selectedPk,
+  deleteInstrument,
+  loading,
+}: {
+  instruments: InstrumentType[];
+  selectedInstrument: InstrumentType | null;
+  setInstrument: (_: InstrumentType) => void;
+  deleteInstrument: (pk: number) => void;
+  loading: boolean;
+}) {
+  const tableData = instruments
+    .filter((i) => !i.isTemporary)
+    .map((i) => ({ ...i, extraParams: JSON.stringify(i.extraParams, undefined, 2), createdAt: new Date(i.createdAt) }));
+
+  const makeDeleteInstrumentButton = (i: InstrumentType) => (
+    <DeleteInstrumentButton instrument={i} onDelete={deleteInstrument} />
+  );
+
+  return (
+    <>
+      <DataTable
+        value={tableData}
+        selection={selectedInstrument}
+        onSelectionChange={(e) => setInstrument(e.value as InstrumentType)}
+        selectionMode="single"
+        scrollable
+        scrollHeight="flex"
+        dataKey="pk"
+        showGridlines
+        loading={loading}
+        filterDisplay="row"
+        emptyMessage="No instruments found."
+      >
+        <Column
+          field="ao"
+          header="AO"
+          headerTooltip="Adaptive Optics"
+          dataType="boolean"
+          body={(i: InstrumentType) => (i.ao ? <CircleCheck /> : <CircleXMark />)}
+          style={{ minWidth: '3rem' }}
+        />
+        <Column field="originX" header="Origin X" dataType="numeric" style={{ minWidth: '4rem' }} />
+        <Column field="originY" header="Origin Y" dataType="numeric" style={{ minWidth: '4rem' }} />
+        <Column field="focusOffset" header="Focus Offset" dataType="numeric" style={{ minWidth: '6rem' }} />
+        <Column field="iaa" header="IAA" />
+        <Column
+          field="wfs"
+          header="WFS"
+          sortable
+          filter
+          filterPlaceholder="Filter WFS"
+          filterMatchMode={FilterMatchMode.CONTAINS}
+        />
+        <Column
+          field="extraParams"
+          header="Extra Params"
+          filter
+          filterPlaceholder="Filter extraParams"
+          filterMatchMode={FilterMatchMode.CONTAINS}
+        />
+        <Column field="comment" header="Comment" />
+        <Column
+          field="createdAt"
+          header="Created"
+          sortable
+          dataType="date"
+          body={(i: InstrumentType) => formatDate(new Date(i.createdAt), 'Pp')}
+        />
+        <Column
+          headerStyle={{ width: '5rem', textAlign: 'center' }}
+          bodyStyle={{ textAlign: 'center', overflow: 'visible' }}
+          body={makeDeleteInstrumentButton}
+        />
+      </DataTable>
+      <ConfirmPopup />
+    </>
+  );
+}
+
+function DeleteInstrumentButton({
+  onDelete,
+  instrument,
 }: {
   instrument: InstrumentType;
-  setInstrument: (_: InstrumentType) => void;
-  selectedPk: number | undefined;
+  onDelete: (pk: number) => void;
 }) {
+  const ref = useRef<Button>(null);
   return (
-    <tr onClick={() => setInstrument(instrument)} className={instrument.pk === selectedPk ? 'active' : ''}>
-      <td>{instrument.ao}</td>
-      <td>{instrument.focusOffset}</td>
-      <td>{instrument.iaa}</td>
-      <td>{instrument.originX}</td>
-      <td>{instrument.originY}</td>
-      <td>{instrument.wfs}</td>
-      <td>{JSON.stringify(instrument.extraParams, undefined, 2)}</td>
-    </tr>
+    <Button
+      ref={ref}
+      icon={<Trash />}
+      outlined
+      severity="danger"
+      tooltip="Delete instrument"
+      onClick={() =>
+        confirmPopup({
+          target: ref.current as unknown as HTMLElement,
+          message: 'Are you sure you want to delete this instrument?',
+          accept: () => onDelete(instrument.pk),
+        })
+      }
+    />
   );
 }

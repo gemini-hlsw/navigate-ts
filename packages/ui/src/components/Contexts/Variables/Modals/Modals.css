@@ -43,25 +43,14 @@
     flex-direction: row;
     column-gap: 8px;
     align-items: center;
+
+    .p-dropdown {
+      max-width: 8rem;
+    }
   }
 
-  > .table {
-    margin-top: 10px;
-    text-align: center;
-    border-spacing: 0;
-
-    td {
-      border-top: 1px solid var(--surface-border);
-      padding: 2px 6px;
-    }
-
-    th {
-      padding: 2px 6px;
-    }
-
-    tr.active > td {
-      background-color: var(--blue-900);
-    }
+  > .p-datatable {
+    margin-top: 16px;
   }
 }
 
@@ -135,19 +124,12 @@
   display: flex;
   flex-direction: row;
   justify-content: end;
+  gap: 8px;
 }
 
 @media only screen and (width <= 1250px) {
   .slew-flags {
     grid-template-columns: 80% 20%;
-  }
-
-  .import-instrument {
-    > .selectors {
-      flex-direction: column;
-      align-items: baseline;
-      gap: 4px;
-    }
   }
 
   .target-edit {

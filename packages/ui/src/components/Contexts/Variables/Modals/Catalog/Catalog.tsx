@@ -97,8 +97,8 @@ export function Catalog() {
 
   const footer = (
     <div className="modal-footer">
+      <Button text severity="danger" label="Cancel" onClick={() => setCatalogVisible(false)} />
       <Button disabled={!canEdit} label="Import to Navigate" loading={updateLoading} onClick={updateTarget} />
-      <Button disabled={!canEdit} severity="danger" label="Cancel" onClick={() => setCatalogVisible(false)} />
     </div>
   );
 

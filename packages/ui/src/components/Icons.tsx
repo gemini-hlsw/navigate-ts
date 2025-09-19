@@ -1,5 +1,4 @@
 import {
-  faCamera,
   faCaretDown,
   faCaretLeft,
   faCaretRight,
@@ -9,15 +8,17 @@ import {
   faChevronLeft,
   faChevronRight,
   faChevronUp,
+  faCircleCheck,
+  faCircleXmark,
   faFloppyDisk,
   faGear,
-  faKey,
   faList,
   faMagnifyingGlass,
   faMap,
   faPlay,
   faRotateRight,
   faStop,
+  faTrashXmark,
   faUser,
   faVolume,
   faVolumeSlash,
@@ -26,7 +27,6 @@ import {
 import type { IconDefinition } from '@fortawesome/pro-solid-svg-icons';
 import {
   faInfoCircle,
-  faKey as faKeySolid,
   faLocationCrosshairs,
   faLocationCrosshairsSlash,
   faMoon,
@@ -40,17 +40,22 @@ import {
 import type { FontAwesomeIconProps } from '@fortawesome/react-fontawesome';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+const kebabToPascalCase = (str: string) =>
+  str
+    .split('-')
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join('');
+
 const iconFactory = (icon: IconDefinition) =>
   Object.assign(
     (props: Omit<FontAwesomeIconProps, 'icon'>) => {
       'use memo';
       return <FontAwesomeIcon {...props} icon={icon} />;
     },
-    { displayName: icon.iconName },
+    { displayName: kebabToPascalCase(icon.iconName) + 'Icon' },
   );
 
 export const Astronaut = iconFactory(faUserAstronaut);
-export const Camera = iconFactory(faCamera);
 export const CaretDown = iconFactory(faCaretDown);
 export const CaretLeft = iconFactory(faCaretLeft);
 export const CaretRight = iconFactory(faCaretRight);
@@ -60,13 +65,13 @@ export const ChevronDown = iconFactory(faChevronDown);
 export const ChevronLeft = iconFactory(faChevronLeft);
 export const ChevronRight = iconFactory(faChevronRight);
 export const ChevronUp = iconFactory(faChevronUp);
+export const CircleCheck = iconFactory(faCircleCheck);
+export const CircleXMark = iconFactory(faCircleXmark);
 export const Crosshairs = iconFactory(faLocationCrosshairs);
 export const CrosshairsSlash = iconFactory(faLocationCrosshairsSlash);
 export const FloppyDisk = iconFactory(faFloppyDisk);
 export const Gear = iconFactory(faGear);
 export const Info = iconFactory(faInfoCircle);
-export const Key = iconFactory(faKey);
-export const KeySolid = iconFactory(faKeySolid);
 export const List = iconFactory(faList);
 export const Map = iconFactory(faMap);
 export const Moon = iconFactory(faMoon);
@@ -79,6 +84,7 @@ export const SignIn = iconFactory(faRightToBracket);
 export const SignOut = iconFactory(faRightFromBracket);
 export const Stop = iconFactory(faStop);
 export const Sun = iconFactory(faSun);
+export const Trash = iconFactory(faTrashXmark);
 export const User = iconFactory(faUser);
 export const Volume = iconFactory(faVolume);
 export const VolumeSlash = iconFactory(faVolumeSlash);

@@ -32,7 +32,7 @@ describe(Instrument.name, () => {
 
     await expect.element(originXInput).not.toBeDisabled();
     await expect.element(originXInput).toHaveValue('0.20');
-    await expect.element(sut.getByRole('button')).not.toBeDisabled();
+    await expect.element(sut.getByRole('button', { name: 'Save instrument' })).not.toBeDisabled();
     expect(setTempInstrumentMock.result).toHaveBeenCalledExactlyOnceWith({
       pk: 1,
       name: 'GMOS_NORTH',
@@ -52,20 +52,22 @@ describe(Instrument.name, () => {
 
   it('opens the instrument modal when the import button is clicked', async () => {
     expect(sut.store.get(importInstrumentAtom)).false;
-    const titleDropdown = sut.getByLabelText('Settings');
-    const importInstrumentButton = sut.getByText('Import instrument');
+    const importInstrumentButton = sut.getByLabelText('Import instrument');
 
-    await userEvent.click(titleDropdown);
     await userEvent.click(importInstrumentButton);
 
     expect(sut.store.get(importInstrumentAtom)).true;
   });
 
   it('should call updateInstrument when save button is clicked', async () => {
-    const saveButton = sut.getByRole('button');
+    const saveButton = sut.getByRole('button', { name: 'Save instrument' });
     await userEvent.click(saveButton, { timeout: 500 });
+    await userEvent.type(sut.getByLabelText('Comment:'), 'My comment');
+    await userEvent.click(sut.getByRole('button', { name: 'Yes' }));
 
-    await expect.poll(() => updateInstrumentMock.result).toHaveBeenCalledExactlyOnceWith({ pk: 1, isTemporary: false });
+    await expect
+      .poll(() => updateInstrumentMock.result)
+      .toHaveBeenCalledExactlyOnceWith({ pk: 1, comment: 'My comment', isTemporary: false });
   });
 
   it('should query instrument using oiWfs', async () => {
@@ -73,7 +75,7 @@ describe(Instrument.name, () => {
     await userEvent.clear(originXInput);
     await userEvent.type(originXInput, '0.2{Enter}');
 
-    const saveButton = sut.getByRole('button');
+    const saveButton = sut.getByRole('button', { name: 'Save instrument' });
     await expect.element(saveButton).toBeEnabled();
 
     expect(getInstrumentMock.request.variables).toHaveBeenCalledWith(expect.objectContaining({ wfs: 'OIWFS' }));
