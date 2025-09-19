@@ -115,7 +115,7 @@
             .achr {
               display: grid;
               font-size: 0.9rem;
-              grid-template-columns: 1fr 1fr 2fr 40px;
+              grid-template-columns: 1fr 1fr;
               grid-template-rows: repeat(4, auto);
               gap: 8px;
               align-items: center;
