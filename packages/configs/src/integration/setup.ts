@@ -11,6 +11,7 @@ import type { FormattedExecutionResult } from 'graphql';
 import type { Prisma } from '../prisma/db.ts';
 import { extendPrisma } from '../prisma/extend.ts';
 import { PrismaClient } from '../prisma/gen/client.ts';
+import { populateDb } from '../prisma/queries/main.ts';
 import type { ApolloContext } from '../server.ts';
 import { server } from '../server.ts';
 
@@ -40,9 +41,12 @@ export function initializeServerFixture() {
     container = await new PostgreSqlContainer('postgres:alpine').start();
 
     // Migrate and seed the database
-    const exec = execa<Options>({ env: { DATABASE_URL: container.getConnectionUri() }, cancelSignal: signal });
+    const databaseConnectionUri = container.getConnectionUri();
+    const exec = execa<Options>({ env: { DATABASE_URL: databaseConnectionUri }, cancelSignal: signal });
     await exec`prisma migrate deploy`;
-    await exec`prisma db seed`;
+    const client = extendPrisma(new PrismaClient({ datasourceUrl: databaseConnectionUri }));
+    await populateDb(client);
+    await client.$disconnect();
 
     // Save starting snapshot of the database
     await container.snapshot();
