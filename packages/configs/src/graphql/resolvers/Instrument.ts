@@ -64,5 +64,8 @@ export const InstrumentResolver: Resolvers = {
     resetInstruments: async (_parent, args, { prisma }) => {
       await prisma.instrument.deleteMany({ where: { ...args, isTemporary: true } });
     },
+    deleteInstrument: async (_parent, args, { prisma }) => {
+      await prisma.instrument.delete({ where: { pk: args.pk } });
+    },
   },
 };

@@ -217,6 +217,7 @@ export function OdbImport() {
 
   const footer = (
     <div className="modal-footer">
+      <Button text severity="danger" label="Cancel" onClick={() => setOdbVisible(false)} />
       <Button
         disabled={
           !(canEdit && selectedObservation?.targetEnvironment?.firstScienceTarget?.name) ||
@@ -226,7 +227,6 @@ export function OdbImport() {
         loading={updateLoading}
         onClick={updateObs}
       />
-      <Button disabled={!canEdit} severity="danger" label="Cancel" onClick={() => setOdbVisible(false)} />
     </div>
   );
 

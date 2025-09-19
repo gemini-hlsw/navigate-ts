@@ -4,3 +4,9 @@
   gap: 8px;
   margin-bottom: 1rem;
 }
+
+.acquisition-adjustment-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
