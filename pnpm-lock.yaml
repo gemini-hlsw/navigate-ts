@@ -20,8 +20,8 @@ catalogs:
       specifier: 16.11.0
       version: 16.11.0
     lucuma-core:
-      specifier: 0.143.3
-      version: 0.143.3
+      specifier: 0.145.0
+      version: 0.145.0
     lucuma-schemas:
       specifier: 0.163.2
       version: 0.163.2
@@ -116,7 +116,7 @@ importers:
         version: 1.24.2(graphql@16.11.0)
       lucuma-core:
         specifier: 'catalog:'
-        version: 0.143.3
+        version: 0.145.0
       navigate-schema:
         specifier: workspace:*
         version: link:../schema
@@ -237,7 +237,7 @@ importers:
         version: 2.14.0(@babel/core@7.28.4)(@babel/template@7.27.2)(@types/react@19.1.13)(react@19.1.1)
       lucuma-core:
         specifier: 'catalog:'
-        version: 0.143.3
+        version: 0.145.0
       lucuma-schemas:
         specifier: 'catalog:'
         version: 0.163.2
@@ -3453,8 +3453,8 @@ packages:
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
 
-  lucuma-core@0.143.3:
-    resolution: {integrity: sha512-XgLJlxcvndH3W6JSYGC0eJFDCs1Ki8Sv13kXcVewHrgKUxC/7SbAxCC3TabuQmNDjSvTu31hINhPZVwmqQ2+Jw==}
+  lucuma-core@0.145.0:
+    resolution: {integrity: sha512-5kSGuINnj5lI1ta0XekeUbFuU0xCsPfY+v1CZdGa73YOXo0q4781Gq8UctvIw6JAmRy/zIiaah8B3JbS+JuDQA==}
 
   lucuma-schemas@0.163.2:
     resolution: {integrity: sha512-1aorNi6FbM6JaszXP/GOmk+2Al+KaGrd/LKchnFiv4wCBs04uTzH+03+ygNYwmAAHj6eK5y263DLD8VTysW5yg==}
@@ -8294,7 +8294,7 @@ snapshots:
     dependencies:
       yallist: 3.1.1
 
-  lucuma-core@0.143.3: {}
+  lucuma-core@0.145.0: {}
 
   lucuma-schemas@0.163.2: {}
 
@@ -8397,7 +8397,7 @@ snapshots:
       '@prisma/client': 6.16.2(prisma@6.16.2(typescript@5.9.2))(typescript@5.9.2)
       graphql: 16.11.0
       graphql-scalars: 1.24.2(graphql@16.11.0)
-      lucuma-core: 0.143.3
+      lucuma-core: 0.145.0
       navigate-schema: file:packages/schema
       prisma: 6.16.2(magicast@0.3.5)(typescript@5.9.2)
     transitivePeerDependencies:
