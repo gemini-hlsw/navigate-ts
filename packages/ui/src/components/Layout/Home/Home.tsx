@@ -3,13 +3,14 @@ import './Home.css';
 import { Guider } from '@Guider/Guider';
 import { Telescope } from '@Telescope/Telescope';
 import { WavefrontSensors } from '@WavefrontSensors/WavefrontSensors';
+import { clsx } from 'clsx';
 import { useState } from 'react';
 
 import type { PanelType } from '@/types';
 
 export default function Home() {
   const TOUCH_THRESHOLD = 50;
-  const [panelDisplay, setPanelDisplay] = useState<PanelType>('Telescope');
+  const [panelDisplay, setPanelDisplay] = useState<PanelType>('telescope');
   const [touchPos, setTouchPos] = useState<number>(0);
 
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -18,14 +19,14 @@ export default function Home() {
 
   const nextPanel = () => {
     switch (panelDisplay) {
-      case 'Telescope':
-        setPanelDisplay('WavefrontSensors');
+      case 'telescope':
+        setPanelDisplay('wavefront-sensors');
         break;
-      case 'WavefrontSensors':
-        setPanelDisplay('Guider');
+      case 'wavefront-sensors':
+        setPanelDisplay('guider');
         break;
-      case 'Guider':
-        setPanelDisplay('Telescope');
+      case 'guider':
+        setPanelDisplay('telescope');
         break;
       default:
         break;
@@ -34,14 +35,14 @@ export default function Home() {
 
   const prevPanel = () => {
     switch (panelDisplay) {
-      case 'Telescope':
-        setPanelDisplay('Guider');
+      case 'telescope':
+        setPanelDisplay('guider');
         break;
-      case 'WavefrontSensors':
-        setPanelDisplay('Telescope');
+      case 'wavefront-sensors':
+        setPanelDisplay('telescope');
         break;
-      case 'Guider':
-        setPanelDisplay('WavefrontSensors');
+      case 'guider':
+        setPanelDisplay('wavefront-sensors');
         break;
       default:
         break;
@@ -58,7 +59,7 @@ export default function Home() {
   };
 
   return (
-    <div className={`main-body ${panelDisplay}`} onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
+    <div className={clsx('main-body', panelDisplay)} onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
       <div className="panel telescope">
         <Telescope prevPanel={prevPanel} nextPanel={nextPanel} />
       </div>

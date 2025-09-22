@@ -46,7 +46,7 @@ export type {
   UserType,
 };
 
-export type PanelType = 'Telescope' | 'WavefrontSensors' | 'Guider';
+export type PanelType = 'telescope' | 'wavefront-sensors' | 'guider';
 
 export interface TargetEditType {
   isVisible: boolean;
