@@ -1,6 +1,6 @@
 import { useSetWindowCenter, useWindowCenter } from '@gql/configs/WindowCenter';
-import { useAcFilter, useAcLens, useAcMechsState, useAcNdFilter, useAcWindowSize } from '@gql/server/AcquisitionCamera';
 import type { AcFilter, AcLens, AcNdFilter, AcWindowSize } from '@gql/server/gen/graphql';
+import { useAcFilter, useAcLens, useAcMechsState, useAcNdFilter, useAcWindowSize } from '@gql/server/MechState';
 import { Dropdown } from 'primereact/dropdown';
 import { InputNumber } from 'primereact/inputnumber';
 import { useState } from 'react';
@@ -45,14 +45,14 @@ const windowSizeOptions: { value: AcWindowSize; label: string }[] = [
 export function ACHR({ disabled }: { disabled: boolean }) {
   const { site } = useServerConfigValue();
 
-  const { data: mechsState, loading: mechsStateLoading, setStale } = useAcMechsState();
+  const { data: mechsState, loading: mechsStateLoading } = useAcMechsState();
   const { data: windowCenterData, loading: windowCenterLoading } = useWindowCenter(site);
   const windowCenter = windowCenterData?.windowCenter;
 
-  const [setLens, { loading: lensLoading }] = useAcLens(setStale);
-  const [setFilter, { loading: filterLoading }] = useAcFilter(setStale);
-  const [setNdFilter, { loading: ndFilterLoading }] = useAcNdFilter(setStale);
-  const [setWindowSize, { loading: windowSizeLoading }] = useAcWindowSize(setStale);
+  const [setLens, { loading: lensLoading }] = useAcLens();
+  const [setFilter, { loading: filterLoading }] = useAcFilter();
+  const [setNdFilter, { loading: ndFilterLoading }] = useAcNdFilter();
+  const [setWindowSize, { loading: windowSizeLoading }] = useAcWindowSize();
   const [setWindowCenter, { loading: setWindowCenterLoading }] = useSetWindowCenter();
 
   const loading =

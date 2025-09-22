@@ -4,7 +4,7 @@ import { TabPanel, TabView } from 'primereact/tabview';
 import { useCanEdit } from '@/components/atoms/auth';
 
 import { ACHR } from './ACHR';
-import { PWFS1 } from './PWFS1';
+import { PWFS1, PWFS2 } from './PWFS';
 
 export function WavefrontSensors() {
   const canEdit = useCanEdit();
@@ -13,11 +13,11 @@ export function WavefrontSensors() {
       <Title title="Wavefront Sensors" />
       <div className="body">
         <TabView>
-          <TabPanel header="PWFS1" className="under-construction">
+          <TabPanel header="PWFS1">
             <PWFS1 disabled={!canEdit} />
           </TabPanel>
-          <TabPanel header="PWFS2" className="under-construction">
-            <PWFS1 disabled={!canEdit} />
+          <TabPanel header="PWFS2">
+            <PWFS2 disabled={!canEdit} />
           </TabPanel>
           <TabPanel header="OIWFS" className="under-construction"></TabPanel>
           <TabPanel header="AC/HR">

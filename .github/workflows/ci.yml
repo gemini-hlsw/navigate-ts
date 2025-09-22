@@ -48,7 +48,7 @@ jobs:
       - run: pnpm ui exec playwright install chromium
       - run: pnpm -r codegen
       - run: pnpm -r generate
-      - run: pnpm -r test --watch false
+      - run: pnpm -r test
 
   e2e:
     timeout-minutes: 10
