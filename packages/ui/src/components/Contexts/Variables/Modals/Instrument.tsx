@@ -18,6 +18,7 @@ import { ConfirmPopup, confirmPopup } from 'primereact/confirmpopup';
 import { DataTable } from 'primereact/datatable';
 import { Dialog } from 'primereact/dialog';
 import { Dropdown } from 'primereact/dropdown';
+import { MultiSelect } from 'primereact/multiselect';
 import { useRef, useState } from 'react';
 
 import { useImportInstrument } from '@/components/atoms/instrument';
@@ -191,6 +192,8 @@ function InstrumentTable({
     .filter((i) => !i.isTemporary)
     .map((i) => ({ ...i, extraParams: JSON.stringify(i.extraParams, undefined, 2), createdAt: new Date(i.createdAt) }));
 
+  const uniqueWfs = Array.from(new Set(tableData.map((i) => i.wfs)));
+
   const makeDeleteInstrumentButton = (i: InstrumentType) => (
     <DeleteInstrumentButton instrument={i} onDelete={deleteInstrument} />
   );
@@ -205,11 +208,43 @@ function InstrumentTable({
         scrollable
         scrollHeight="flex"
         dataKey="pk"
-        showGridlines
         loading={loading}
         filterDisplay="row"
         emptyMessage="No instruments found."
       >
+        <Column
+          field="createdAt"
+          header="Created"
+          sortable
+          dataType="date"
+          body={(i: InstrumentType) => formatDate(new Date(i.createdAt), 'Pp')}
+        />
+        <Column
+          field="wfs"
+          header="WFS"
+          sortable
+          filter
+          filterMatchMode={FilterMatchMode.IN}
+          showFilterMenu={false}
+          // eslint-disable-next-line @typescript-eslint/unbound-method
+          filterElement={({ filterApplyCallback, value }) => (
+            <MultiSelect
+              placeholder="Filter WFS"
+              value={value as string[] | null}
+              options={uniqueWfs}
+              onChange={(e) => filterApplyCallback(e.value)}
+              style={{ maxWidth: '8rem' }}
+            />
+          )}
+        />
+        <Column
+          field="extraParams"
+          header="Extra Params"
+          filter
+          filterPlaceholder="Filter params"
+          filterMatchMode={FilterMatchMode.CONTAINS}
+          showFilterMenu={false}
+        />
         <Column
           field="ao"
           header="AO"
@@ -222,29 +257,7 @@ function InstrumentTable({
         <Column field="originY" header="Origin Y" dataType="numeric" style={{ minWidth: '4rem' }} />
         <Column field="focusOffset" header="Focus Offset" dataType="numeric" style={{ minWidth: '6rem' }} />
         <Column field="iaa" header="IAA" />
-        <Column
-          field="wfs"
-          header="WFS"
-          sortable
-          filter
-          filterPlaceholder="Filter WFS"
-          filterMatchMode={FilterMatchMode.CONTAINS}
-        />
-        <Column
-          field="extraParams"
-          header="Extra Params"
-          filter
-          filterPlaceholder="Filter extraParams"
-          filterMatchMode={FilterMatchMode.CONTAINS}
-        />
         <Column field="comment" header="Comment" />
-        <Column
-          field="createdAt"
-          header="Created"
-          sortable
-          dataType="date"
-          body={(i: InstrumentType) => formatDate(new Date(i.createdAt), 'Pp')}
-        />
         <Column
           headerStyle={{ width: '5rem', textAlign: 'center' }}
           bodyStyle={{ textAlign: 'center', overflow: 'visible' }}
@@ -270,11 +283,11 @@ function DeleteInstrumentButton({
       icon={<Trash />}
       outlined
       severity="danger"
-      tooltip="Delete instrument"
+      tooltip="Delete entry"
       onClick={() =>
         confirmPopup({
           target: ref.current as unknown as HTMLElement,
-          message: 'Are you sure you want to delete this instrument?',
+          message: 'Are you sure you want to delete this entry?',
           accept: () => onDelete(instrument.pk),
         })
       }
