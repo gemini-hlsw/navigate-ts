@@ -15,9 +15,9 @@ import {
 } from '@gql/server/TargetsHandset';
 import type { MockedResponseOf } from '@gql/util';
 import type { ResultOf } from '@graphql-typed-document-node/core';
-import { userEvent } from '@vitest/browser/context';
 import type { Mock } from 'vitest';
 
+import { selectDropdownOption } from '@/test/helpers';
 import { renderWithContext } from '@/test/render';
 
 import type { Alignment } from './Controls';
@@ -297,18 +297,11 @@ describe(TargetsHandset.name, () => {
   });
 
   async function selectAlignment(alignment: Alignment) {
-    // Bit ugly, but selecting with `selectOptions` does not work for primereact dropdowns
-    const alignmentWrapper = sut.getByLabelText('Alignment').element().parentElement!.parentElement!;
-    await userEvent.click(alignmentWrapper.lastElementChild!);
-    const al = sut.getByText(alignment);
-    await userEvent.click(al);
+    await selectDropdownOption(sut, 'Alignment', alignment);
   }
 
   async function selectTarget(target: AdjustTarget) {
-    const targetWrapper = sut.getByLabelText('Target').element().parentElement!.parentElement!;
-    await userEvent.click(targetWrapper.lastElementChild!);
-    const targetOption = sut.getByText(target);
-    await userEvent.click(targetOption);
+    await selectDropdownOption(sut, 'Target', target);
   }
 
   async function testDirectionButtonClick(

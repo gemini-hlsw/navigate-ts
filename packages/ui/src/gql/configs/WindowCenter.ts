@@ -2,7 +2,7 @@ import { useMutation, useQuery } from '@apollo/client/react';
 
 import { graphql } from './gen';
 
-const WINDOW_CENTER = graphql(`
+export const WINDOW_CENTER = graphql(`
   query windowCenter($site: Site!) {
     windowCenter(site: $site) {
       site
