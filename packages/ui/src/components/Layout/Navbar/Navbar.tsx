@@ -46,7 +46,7 @@ export default function Navbar() {
     {
       label: 'Switch theme',
       icon: <ThemeIcon className="p-menuitem-icon" />,
-      command: toggleTheme,
+      command: () => toggleTheme(),
     },
     {
       label: isLoggedIn ? 'Logout' : 'Login',
