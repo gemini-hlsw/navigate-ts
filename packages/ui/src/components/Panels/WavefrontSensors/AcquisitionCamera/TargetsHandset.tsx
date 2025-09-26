@@ -51,7 +51,7 @@ export default function TargetsHandset({ canEdit }: { canEdit: boolean }) {
       if (!loading) console.warn('Unknown target selected:', selectedTarget);
   }
 
-  const [openLoops, setOpenLoops] = useState(false);
+  const [openLoops, setOpenLoops] = useState(true);
 
   const handleApply = useCallback(
     (coords: Coords) =>
