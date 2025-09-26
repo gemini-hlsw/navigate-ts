@@ -257,7 +257,7 @@ export function OpenLoopsInput({
 }) {
   return (
     <div className="control-row open-loops">
-      <label htmlFor="open-loops">Open loops</label>
+      <label htmlFor="open-loops">Open loops while offsetting</label>
       <InputSwitch
         disabled={loading || !canEdit}
         inputId="open-loops"

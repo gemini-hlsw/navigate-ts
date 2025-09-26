@@ -47,25 +47,27 @@ export function Instrument() {
 
   const modifyInstrument = async () => {
     if (instrument && configurationData?.configuration) {
-      await setTemporaryInstrument({
-        variables: {
-          ...instrument,
-        },
-      });
-      await updateConfiguration({
-        variables: {
-          pk: configurationData.configuration.pk,
-          obsInstrument: instrument.name,
-        },
-        optimisticResponse: {
-          updateConfiguration: {
-            ...configurationData.configuration,
+      await Promise.all([
+        setTemporaryInstrument({
+          variables: {
+            ...instrument,
+          },
+        }),
+        updateConfiguration({
+          variables: {
+            pk: configurationData.configuration.pk,
             obsInstrument: instrument.name,
           },
-        },
-        refetchQueries: [GET_INSTRUMENT],
-        awaitRefetchQueries: true,
-      });
+          optimisticResponse: {
+            updateConfiguration: {
+              ...configurationData.configuration,
+              obsInstrument: instrument.name,
+            },
+          },
+          refetchQueries: [GET_INSTRUMENT],
+          awaitRefetchQueries: true,
+        }),
+      ]);
 
       closeModal();
     } else {

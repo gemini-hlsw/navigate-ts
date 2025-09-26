@@ -2,13 +2,16 @@ import { atom, useAtom, useAtomValue } from 'jotai';
 
 import type { ThemeType } from '@/types';
 
-const themeAtom = atom<ThemeType>('dark');
-export const useTheme = () => {
-  const [theme, setTheme] = useAtom(themeAtom);
-  function toggleTheme() {
-    setTheme(theme === 'dark' ? 'light' : 'dark');
-  }
+import { atomWithToggle } from './atomWithToggle';
 
-  return [theme, toggleTheme] as const;
-};
+const themeBoolAtom = atomWithToggle(false);
+
+export const themeAtom = atom(
+  (get) => (get(themeBoolAtom) ? 'light' : 'dark') as ThemeType,
+  (get, set, nextValue?: ThemeType) => {
+    set(themeBoolAtom, nextValue ? nextValue === 'light' : !get(themeBoolAtom));
+  },
+);
+
+export const useTheme = () => useAtom(themeAtom);
 export const useThemeValue = () => useAtomValue(themeAtom);

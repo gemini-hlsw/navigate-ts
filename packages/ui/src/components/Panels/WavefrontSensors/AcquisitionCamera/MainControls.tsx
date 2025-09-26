@@ -9,15 +9,15 @@ export default function MainControls({ canEdit }: { canEdit: boolean }) {
   return (
     <div className="main-controls">
       <Title title="Handset" className="main-controls-title" />
-      <TabView>
+      <TabView renderActiveOnly={false}>
         <TabPanel header="Targets">
           <TargetsHandset canEdit={canEdit} />
         </TabPanel>
-        <TabPanel header="Instrument">
-          <InstrumentHandset canEdit={canEdit} />
-        </TabPanel>
         <TabPanel header="Pointing">
           <PointingHandset canEdit={canEdit} />
+        </TabPanel>
+        <TabPanel header="Instrument">
+          <InstrumentHandset canEdit={canEdit} />
         </TabPanel>
       </TabView>
     </div>

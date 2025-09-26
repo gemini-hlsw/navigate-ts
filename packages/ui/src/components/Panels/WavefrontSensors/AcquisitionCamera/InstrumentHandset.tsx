@@ -24,7 +24,7 @@ export default function InstrumentHandset({ canEdit }: { canEdit: boolean }) {
   // State
   const defaultAlignment = 'AC';
   const [strategy, setStrategy] = useState<HandsetStrategy>(strategies[defaultAlignment]);
-  const [openLoops, setOpenLoops] = useState(false);
+  const [openLoops, setOpenLoops] = useState(true);
 
   const handleApply = useCallback(
     async (coords: Coords) =>
