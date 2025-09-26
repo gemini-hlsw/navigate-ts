@@ -1,5 +1,6 @@
 import type { PrismaClient } from '../db.ts';
 import type { TypeMap } from '../gen/internal/prismaNamespaceBrowser.ts';
+import { INITIAL_CAL_PARAMS } from './init/calParams.ts';
 import { INITIAL_CONFIGURATION } from './init/configuration.ts';
 import { INITIAL_ENGINEERING_TARGETS } from './init/engineeringTargets.ts';
 import { INITIAL_GUIDE_ALARMS } from './init/guideAlarm.ts';
@@ -91,6 +92,18 @@ async function createWindowCenters(prisma: PrismaClient, log: (msg: string) => v
   await createRecord(prisma, 'WindowCenter', INITIAL_WINDOW_CENTER, 'Window centers', log);
 }
 
+async function createCalParams(prisma: PrismaClient, log: (msg: string) => void) {
+  // Populate acqCamX and acqCamY from deprecated WindowCenter table
+  for (const param of INITIAL_CAL_PARAMS) {
+    const acqCam = await prisma.windowCenter.findFirst({ where: { site: param.site } });
+    if (acqCam) {
+      param.acqCamX = acqCam.x;
+      param.acqCamY = acqCam.y;
+    }
+  }
+  await createRecord(prisma, 'CalParams', INITIAL_CAL_PARAMS, 'CalParams', log);
+}
+
 export async function write(client: PrismaClient, log: (msg: string) => void) {
   await createInstruments(client, log);
   await createSlewFlags(client, log);
@@ -101,4 +114,5 @@ export async function write(client: PrismaClient, log: (msg: string) => void) {
   await createGuideAlarms(client, log);
   await createEngineeringTargets(client, log);
   await createWindowCenters(client, log);
+  await createCalParams(client, log);
 }

@@ -1,0 +1,64 @@
+#import PosInt, Site from "lucuma-schemas/odb"
+#import DateTime from "./Scalars.graphql"
+
+type CalParams {
+  pk: PosInt!
+  site: Site!
+
+  acqCamX: Float!
+  acqCamY: Float!
+  baffleVisible: Float!
+  baffleNearIR: Float!
+  topShutterCurrentLimit: Float!
+  bottomShutterCurrentLimit: Float!
+  pwfs1CenterX: Float!
+  pwfs1CenterY: Float!
+  pwfs1CenterZ: Float!
+  pwfs2CenterX: Float!
+  pwfs2CenterY: Float!
+  pwfs2CenterZ: Float!
+  "True for GN, False for GS"
+  defocusEnabled: Boolean!
+  gnirsSfoDefocus: Float
+  gmosSfoDefocus: Float
+  gnirsP1Defocus: Float
+  gmosP1Defocus: Float
+  gmosOiDefocus: Float
+
+  comment: String
+  createdAt: DateTime!
+}
+
+input CalParamsCreateInput {
+  site: Site!
+
+  acqCamX: Float!
+  acqCamY: Float!
+  baffleVisible: Float!
+  baffleNearIR: Float!
+  topShutterCurrentLimit: Float!
+  bottomShutterCurrentLimit: Float!
+  pwfs1CenterX: Float!
+  pwfs1CenterY: Float!
+  pwfs1CenterZ: Float!
+  pwfs2CenterX: Float!
+  pwfs2CenterY: Float!
+  pwfs2CenterZ: Float!
+  "True for GN, False for GS"
+  defocusEnabled: Boolean!
+  gnirsSfoDefocus: Float
+  gmosSfoDefocus: Float
+  gnirsP1Defocus: Float
+  gmosP1Defocus: Float
+  gmosOiDefocus: Float
+
+  comment: String
+}
+
+type Query {
+  calParams(site: Site!): CalParams!
+}
+
+type Mutation {
+  createCalParams(input: CalParamsCreateInput!): CalParams!
+}

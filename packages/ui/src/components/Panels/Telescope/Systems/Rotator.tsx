@@ -19,7 +19,7 @@ export function Rotator({ canEdit }: { canEdit: boolean }) {
         <span className="label">Mode</span>
         <Dropdown
           disabled={!canEdit}
-          value={rotator?.tracking}
+          value={rotator?.tracking ?? null}
           options={['TRACKING', 'FIXED']}
           loading={loading}
           onChange={async (e) => {
@@ -33,7 +33,7 @@ export function Rotator({ canEdit }: { canEdit: boolean }) {
         <span className="label">Position Angle</span>
         <InputNumber
           disabled={!canEdit || loading}
-          value={rotator?.angle}
+          value={rotator?.angle ?? null}
           minFractionDigits={2}
           maxFractionDigits={7}
           onValueChange={async (e) => {

@@ -1,16 +1,15 @@
 import type { SetTemporaryInstrumentMutationVariables } from '@gql/configs/gen/graphql';
 import { useConfiguredInstrument, useSetTemporaryInstrument, useUpdateInstrument } from '@gql/configs/Instrument';
+import { CommentConfirmButton } from '@Shared/CommentConfirmButton';
 import { Title } from '@Shared/Title/Title';
 import { Button } from 'primereact/button';
-import { ConfirmPopup, confirmPopup } from 'primereact/confirmpopup';
 import type { InputNumberProps } from 'primereact/inputnumber';
 import { InputNumber } from 'primereact/inputnumber';
 import { InputText } from 'primereact/inputtext';
-import type { ReactNode } from 'react';
-import { useId, useRef, useState } from 'react';
+import { useId } from 'react';
 
 import { useSetImportInstrument } from '@/components/atoms/instrument';
-import { FloppyDisk, List } from '@/components/Icons';
+import { List } from '@/components/Icons';
 
 export function Instrument({ canEdit }: { canEdit: boolean }) {
   const [updateInstrument, { loading: updateInstrumentLoading }] = useUpdateInstrument();
@@ -33,7 +32,7 @@ export function Instrument({ canEdit }: { canEdit: boolean }) {
     }
   };
 
-  const saveInstrument = async (comment: string) => {
+  const saveInstrument = async (comment: string | null) => {
     if (instrument) {
       await updateInstrument({
         variables: { pk: instrument.pk, comment, isTemporary: false },
@@ -44,41 +43,14 @@ export function Instrument({ canEdit }: { canEdit: boolean }) {
     }
   };
 
-  const saveButtonRef = useRef<Button>(null);
   const saveButton = (
-    <>
-      <Button
-        ref={saveButtonRef}
-        className="save-instrument"
-        aria-label="Save instrument"
-        disabled={!instrument?.isTemporary}
-        loading={loading}
-        icon={<FloppyDisk />}
-        onClick={() =>
-          confirmPopup({
-            // @ts-expect-error group is not typed in primereact types
-            group: 'instrument-save',
-            message: 'Save as a permanent configuration?',
-            target: saveButtonRef.current as unknown as HTMLElement,
-          })
-        }
-      />
-      <ConfirmPopup
-        // @ts-expect-error group is not typed in primereact types
-        group="instrument-save"
-        // eslint-disable-next-line @typescript-eslint/unbound-method
-        content={({ hide, acceptBtnRef, rejectBtnRef, message }) => (
-          <SaveButtonPopup
-            saveInstrument={saveInstrument}
-            hide={() => hide()}
-            message={message}
-            loading={loading}
-            acceptBtnRef={acceptBtnRef}
-            rejectBtnRef={rejectBtnRef}
-          />
-        )}
-      />
-    </>
+    <CommentConfirmButton
+      loading={loading}
+      disabled={!instrument?.isTemporary}
+      onConfirm={saveInstrument}
+      tooltip="Save instrument"
+      message="Save as a permanent configuration?"
+    />
   );
 
   return (
@@ -104,25 +76,25 @@ export function Instrument({ canEdit }: { canEdit: boolean }) {
 
         <InstrumentInputNumber
           label="Origin X"
-          value={instrument?.originX ?? 0}
+          value={instrument?.originX ?? null}
           disabled={!canEdit || loading}
           onValueChange={(e) => onUpdateInstrument({ originX: e.value! })}
         />
         <InstrumentInputNumber
           label="Origin Y"
-          value={instrument?.originY ?? 0}
+          value={instrument?.originY ?? null}
           disabled={!canEdit || loading}
           onValueChange={(e) => onUpdateInstrument({ originY: e.value! })}
         />
         <InstrumentInputNumber
           label="Focus Offset"
-          value={instrument?.focusOffset ?? 0}
+          value={instrument?.focusOffset ?? null}
           disabled={!canEdit || loading}
           onValueChange={(e) => onUpdateInstrument({ focusOffset: e.value! })}
         />
         <InstrumentInputNumber
           label="IAA"
-          value={instrument?.iaa ?? 0}
+          value={instrument?.iaa ?? null}
           disabled={!canEdit || loading}
           onValueChange={(e) => onUpdateInstrument({ iaa: e.value! })}
         />
@@ -140,46 +112,5 @@ function InstrumentInputNumber({ label, ...props }: { label: string } & InputNum
       </label>
       <InputNumber inputId={id} minFractionDigits={2} maxFractionDigits={5} mode="decimal" {...props} />
     </>
-  );
-}
-
-/**
- * Similar to ConfirmPopup but with a comment box
- */
-function SaveButtonPopup({
-  saveInstrument,
-  hide,
-  message,
-  loading,
-  acceptBtnRef,
-  rejectBtnRef,
-}: {
-  saveInstrument: (comment: string) => Promise<void>;
-  hide: () => void;
-  message: ReactNode;
-  loading: boolean;
-  acceptBtnRef: React.Ref<HTMLButtonElement>;
-  rejectBtnRef: React.Ref<HTMLButtonElement>;
-}) {
-  const [comment, setComment] = useState('');
-
-  return (
-    <div className="save-instrument-popup">
-      <span>{message}</span>
-      <div className="save-instrument-comment-group">
-        <label htmlFor="save-instrument-comment">Comment:</label>
-        <InputText id="save-instrument-comment" value={comment} onChange={(e) => setComment(e.target.value)} />
-      </div>
-      <div className="buttons">
-        <Button size="small" text label="No" onClick={hide} ref={rejectBtnRef as React.Ref<Button>} />
-        <Button
-          size="small"
-          label="Yes"
-          loading={loading}
-          onClick={() => saveInstrument(comment.trim()).then(() => hide())}
-          ref={acceptBtnRef as React.Ref<Button>}
-        />
-      </div>
-    </div>
   );
 }

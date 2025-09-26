@@ -7,9 +7,10 @@ type WindowCenter {
 }
 
 type Query {
-  windowCenter(site: Site!): WindowCenter!
+  windowCenter(site: Site!): WindowCenter! @deprecated(reason: "Use `calParams` query instead")
 }
 
 type Mutation {
   setWindowCenter(site: Site!, x: Float, y: Float): WindowCenter!
+    @deprecated(reason: "Use `createCalParams` mutation instead")
 }

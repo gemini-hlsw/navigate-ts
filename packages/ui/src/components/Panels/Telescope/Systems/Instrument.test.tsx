@@ -63,7 +63,7 @@ describe(Instrument.name, () => {
     const saveButton = sut.getByRole('button', { name: 'Save instrument' });
     await userEvent.click(saveButton, { timeout: 500 });
     await userEvent.type(sut.getByLabelText('Comment:'), 'My comment');
-    await userEvent.click(sut.getByRole('button', { name: 'Yes' }));
+    await userEvent.click(sut.getByRole('button', { name: 'Save', exact: true }));
 
     await expect
       .poll(() => updateInstrumentMock.result)

@@ -12,9 +12,10 @@ import { displayName } from '@/auth/user';
 import { useSetAboutVisible } from '@/components/atoms/about';
 import { useAlarmValue } from '@/components/atoms/alarm';
 import { useIsLoggedIn, useUser } from '@/components/atoms/auth';
+import { useSetCalParamsVisible } from '@/components/atoms/calparams';
 import { useServerConfigValue } from '@/components/atoms/config';
 import { useTheme } from '@/components/atoms/theme';
-import { ChevronDown, Info, Map, Moon, SignIn, SignOut, Sun, User } from '@/components/Icons';
+import { ChevronDown, Info, Map, Moon, SignIn, SignOut, Sliders, Sun, User } from '@/components/Icons';
 
 import { ConnectionLost } from './ConnectionLost';
 
@@ -28,6 +29,8 @@ export default function Navbar() {
   const signout = useSignout();
   const toggleAboutVisible = useSetAboutVisible();
   const navigateToSignIn = useNavigateToLogin();
+
+  const toggleCalParamsVisible = useSetCalParamsVisible();
 
   const alarm = useAlarmValue();
 
@@ -53,6 +56,11 @@ export default function Navbar() {
       icon: <SignInIcon className="p-menuitem-icon" />,
       // eslint-disable-next-line @typescript-eslint/no-misused-promises
       command: userSession,
+    },
+    {
+      label: 'Calibration Parameters',
+      icon: <Sliders className="p-menuitem-icon" />,
+      command: () => toggleCalParamsVisible(),
     },
     {
       label: 'About',
