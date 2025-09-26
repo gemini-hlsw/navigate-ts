@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "@apollo/server": "5.0.0",
-    "@graphql-tools/graphql-file-loader": "8.1.1",
+    "@graphql-tools/graphql-file-loader": "8.1.2",
     "@graphql-tools/load": "8.1.2",
     "@prisma/client": "6.16.2",
     "graphql": "catalog:",
