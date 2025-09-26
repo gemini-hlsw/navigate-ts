@@ -47,7 +47,7 @@ describe(TargetsHandset.name, () => {
             deltaY: { arcseconds: 0.0 },
           },
         },
-        openLoops: false,
+        openLoops: true,
       });
   });
 
@@ -58,7 +58,7 @@ describe(TargetsHandset.name, () => {
       .poll(() => resetTargetAdjustmentMutationMock.request.variables)
       .toHaveBeenCalledExactlyOnceWith({
         target: 'OIWFS',
-        openLoops: false,
+        openLoops: true,
       });
   });
 
@@ -128,7 +128,7 @@ describe(TargetsHandset.name, () => {
     await testDirectionButtonClick(testId, label, adjustTargetMutationMock.request.variables, {
       target: 'OIWFS',
       offset: { horizontalAdjustment: expectedInput },
-      openLoops: false,
+      openLoops: true,
     });
   });
 
@@ -169,7 +169,7 @@ describe(TargetsHandset.name, () => {
     await sut.getByLabelText('Open loops').click();
     await testDirectionButtonClick(testId, label, adjustTargetMutationMock.request.variables, {
       target: 'OIWFS',
-      openLoops: true,
+      openLoops: false,
       offset: { focalPlaneAdjustment: expectedInput },
     });
   });
@@ -212,7 +212,7 @@ describe(TargetsHandset.name, () => {
     await testDirectionButtonClick(testId, label, adjustTargetMutationMock.request.variables, {
       target: 'OIWFS',
       offset: { instrumentAdjustment: expectedInput },
-      openLoops: false,
+      openLoops: true,
     });
   });
 
@@ -254,7 +254,7 @@ describe(TargetsHandset.name, () => {
     await testDirectionButtonClick(testId, label, adjustTargetMutationMock.request.variables, {
       target: 'OIWFS',
       offset: { equatorialAdjustment: expectedInput },
-      openLoops: false,
+      openLoops: true,
     });
   });
 
@@ -291,7 +291,7 @@ describe(TargetsHandset.name, () => {
     await selectAlignment('PWFS2');
     await testDirectionButtonClick(testId, undefined, adjustTargetMutationMock.request.variables, {
       target: 'OIWFS',
-      openLoops: false,
+      openLoops: true,
       offset: { probeFrameAdjustment: { ...expectedInput, probeFrame: 'PWFS_2' } },
     });
   });
