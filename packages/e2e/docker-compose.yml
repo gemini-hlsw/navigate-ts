@@ -33,7 +33,7 @@ services:
       - database
 
   database:
-    image: postgres:17
+    image: postgres:18
     container_name: navigate-db
     environment:
       - POSTGRES_USER=jimmy
