@@ -1,6 +1,6 @@
 import { expect, test as base } from '@playwright/test';
 
-export interface Fixture {
+interface Fixture {
   auth: undefined;
 }
 

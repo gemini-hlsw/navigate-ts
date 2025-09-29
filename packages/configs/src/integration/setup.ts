@@ -15,7 +15,7 @@ import { populateDb } from '../prisma/queries/main.ts';
 import type { ApolloContext } from '../server.ts';
 import { server } from '../server.ts';
 
-export interface ServerFixture {
+interface ServerFixture {
   /**
    * Execute a graphql operation and return the result.
    */
