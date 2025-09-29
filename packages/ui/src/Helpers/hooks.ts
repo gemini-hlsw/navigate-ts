@@ -17,7 +17,6 @@ export function useStale() {
 
   return [stale, setStale] as const;
 }
-export type Stale = ReturnType<typeof useStale>[0];
 export type SetStale = ReturnType<typeof useStale>[1];
 
 /**

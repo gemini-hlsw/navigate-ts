@@ -13,9 +13,9 @@ import { formatToSignedArcseconds, instrumentToOiwfs } from '@/Helpers/functions
 import type { Coords, HandsetStrategy } from './strategy';
 import { strategies, wfsStrategy } from './strategy';
 
-export type CoordOnChange = (value: Coords) => void;
+type CoordOnChange = (value: Coords) => void;
 
-export const alignmentOptions = ['Az/El', 'AC', 'Instrument', 'RA/Dec', 'PWFS1', 'PWFS2', 'OIWFS'] as const;
+const alignmentOptions = ['Az/El', 'AC', 'Instrument', 'RA/Dec', 'PWFS1', 'PWFS2', 'OIWFS'] as const;
 export type Alignment = (typeof alignmentOptions)[number];
 
 export function AlignmentSelector({
@@ -63,7 +63,7 @@ export function AlignmentSelector({
 const steps = Object.freeze([0.1, 0.2, 0.5, 1, 2, 5, 10, 20, 60] as const);
 const nSteps = steps.length;
 
-export function CoordinatesInput({
+function CoordinatesInput({
   onChange,
   strategy,
   loading,
@@ -153,7 +153,7 @@ export function CoordinatesInput({
     </div>
   );
 }
-export function ManualInput({
+function ManualInput({
   onChange,
   strategy,
   loading,

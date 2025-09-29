@@ -7,21 +7,21 @@ export interface Coords {
   vertical: number;
 }
 
-export type CoordsMod = (step: number) => Coords;
+type CoordsMod = (step: number) => Coords;
 
-export const minusVertical: CoordsMod = (step) => ({
+const minusVertical: CoordsMod = (step) => ({
   horizontal: 0,
   vertical: -step,
 });
-export const plusHorizontal: CoordsMod = (step) => ({
+const plusHorizontal: CoordsMod = (step) => ({
   horizontal: step,
   vertical: 0,
 });
-export const minusHorizontal: CoordsMod = (step) => ({
+const minusHorizontal: CoordsMod = (step) => ({
   horizontal: -step,
   vertical: 0,
 });
-export const plusVertical: CoordsMod = (step) => ({
+const plusVertical: CoordsMod = (step) => ({
   horizontal: 0,
   vertical: step,
 });

@@ -1,6 +1,6 @@
-import type { BandBrightnessIntegrated, SourceProfile } from '@gql/odb/gen/graphql';
+import type { Band, BandBrightnessIntegrated, SourceProfile } from '@gql/odb/gen/graphql';
 
-export const BANDS = [
+const BANDS: { odbName: Band; name: string; start: number; center: number; end: number }[] = [
   { odbName: 'SLOAN_U', name: 'u', start: 333000, center: 356000, end: 379000 },
   { odbName: 'SLOAN_G', name: 'g', start: 433000, center: 483000, end: 533000 },
   { odbName: 'SLOAN_R', name: 'r', start: 578000, center: 626000, end: 674000 },
