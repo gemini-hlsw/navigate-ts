@@ -209,8 +209,8 @@ importers:
         specifier: 3.2.4
         version: 3.2.4(playwright@1.55.1)(vite@7.1.7(@types/node@24.5.2)(jiti@2.5.1)(sass@1.93.2)(yaml@2.8.1))(vitest@3.2.4)
       '@xyflow/react':
-        specifier: 12.8.5
-        version: 12.8.5(@types/react@19.1.15)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+        specifier: 12.8.6
+        version: 12.8.6(@types/react@19.1.15)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       babel-plugin-react-compiler:
         specifier: 19.1.0-rc.3
         version: 19.1.0-rc.3
@@ -1881,14 +1881,14 @@ packages:
     resolution: {integrity: sha512-FNoYzHawTMk/6KMQoEG5O4PuioX19UbwdQKF44yw0nLfOypfQdjtfZzo/UIJWAJ23sNIFbD1Ug9lbaDGMwbqQA==}
     engines: {node: '>=8'}
 
-  '@xyflow/react@12.8.5':
-    resolution: {integrity: sha512-NRwcE8QE7dh6BbaIT7GmNccP7/RMDZJOKtzK4HQw599TAfzC8e5E/zw/7MwtpnSbbkqBYc+jZyOisd57sp/hPQ==}
+  '@xyflow/react@12.8.6':
+    resolution: {integrity: sha512-SksAm2m4ySupjChphMmzvm55djtgMDPr+eovPDdTnyGvShf73cvydfoBfWDFllooIQ4IaiUL5yfxHRwU0c37EA==}
     peerDependencies:
       react: '>=17'
       react-dom: '>=17'
 
-  '@xyflow/system@0.0.69':
-    resolution: {integrity: sha512-+KYwHDnsapZQ1xSgsYwOKYN93fUR770LwfCT5qrvcmzoMaabO1rHa6twiEk7E5VUIceWciF8ukgfq9JC83B5jQ==}
+  '@xyflow/system@0.0.70':
+    resolution: {integrity: sha512-PpC//u9zxdjj0tfTSmZrg3+sRbTz6kop/Amky44U2Dl51sxzDTIUfXMwETOYpmr2dqICWXBIJwXL2a9QWtX2XA==}
 
   abort-controller@3.0.0:
     resolution: {integrity: sha512-h8lQ8tacZYnR3vNQTgibj+tODHI5/+l06Au2Pcriv/Gmet0eaj4TwWH41sO9wnHDiQsEj19q0drzdWdeAHtweg==}
@@ -6515,9 +6515,9 @@ snapshots:
     dependencies:
       tslib: 2.8.1
 
-  '@xyflow/react@12.8.5(@types/react@19.1.15)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)':
+  '@xyflow/react@12.8.6(@types/react@19.1.15)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)':
     dependencies:
-      '@xyflow/system': 0.0.69
+      '@xyflow/system': 0.0.70
       classcat: 5.0.5
       react: 19.1.1
       react-dom: 19.1.1(react@19.1.1)
@@ -6526,7 +6526,7 @@ snapshots:
       - '@types/react'
       - immer
 
-  '@xyflow/system@0.0.69':
+  '@xyflow/system@0.0.70':
     dependencies:
       '@types/d3-drag': 3.0.7
       '@types/d3-interpolate': 3.0.4

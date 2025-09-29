@@ -33,7 +33,7 @@
     "@types/react-dom": "19.1.9",
     "@vitejs/plugin-react": "5.0.4",
     "@vitest/browser": "3.2.4",
-    "@xyflow/react": "12.8.5",
+    "@xyflow/react": "12.8.6",
     "babel-plugin-react-compiler": "19.1.0-rc.3",
     "clsx": "2.1.1",
     "date-fns": "4.1.0",
