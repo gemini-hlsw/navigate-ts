@@ -1,3 +1,4 @@
+import type { PrismaClient } from '@prisma/client';
 import type { Prisma } from '../db.ts';
 import { INITIAL_CONFIGURATION } from './init/configuration.ts';
 import { INITIAL_ENGINEERING_TARGETS } from './init/engineeringTargets.ts';
@@ -10,69 +11,71 @@ import { INITIAL_SLEW_FLAGS } from './init/slewFlags.ts';
 import { INITIAL_USERS } from './init/users.ts';
 import { INITIAL_WINDOW_CENTER } from './init/windowCenter.ts';
 
-async function createUsers(prisma: Prisma) {
-  console.log('Creating user reader');
-  await prisma.user.createMany({
-    data: INITIAL_USERS,
+type INITIAL_RECORD =
+  | typeof INITIAL_USERS
+  | typeof INITIAL_INSTRUMENTS
+  | typeof INITIAL_ALTAIR_INSTRUMENT
+  | typeof INITIAL_GEMS_INSTRUMENT
+  | typeof INITIAL_ROTATOR
+  | typeof INITIAL_SLEW_FLAGS
+  | typeof INITIAL_CONFIGURATION
+  | typeof INITIAL_ALTAIR_GUIDE_LOOP
+  | typeof INITIAL_GEMS_GUIDE_LOOP
+  | typeof INITIAL_GUIDE_LOOP
+  | typeof INITIAL_MECHANISM
+  | typeof INITIAL_ENGINEERING_TARGETS
+  | typeof INITIAL_WINDOW_CENTER;
+
+async function createRecord(
+  prismaConnection: PrismaClient,
+  initialRecord: INITIAL_RECORD,
+  recordName: string,
+  query: { where: { name: string } } | {} = {},
+) {
+  if (await prismaConnection.findFirst(query)) {
+    console.log(`${recordName} already exist`);
+    return;
+  }
+
+  console.log(`Creating ${recordName}`);
+  await prismaConnection.createMany({
+    data: initialRecord,
   });
+}
+
+async function createUsers(prisma: Prisma) {
+  await createRecord(prisma.user, INITIAL_USERS, 'Users');
 }
 
 async function createInstruments(prisma: Prisma) {
-  console.log('Creating initial instruments');
-  await prisma.instrument.createMany({
-    data: INITIAL_INSTRUMENTS,
-  });
-  console.log('Creating initial altair instrument');
-  await prisma.altairInstrument.create({
-    data: INITIAL_ALTAIR_INSTRUMENT,
-  });
-  console.log('Creating initial gems instrument');
-  await prisma.gemsInstrument.create({
-    data: INITIAL_GEMS_INSTRUMENT,
-  });
+  const groupedInstruments = Object.groupBy(INITIAL_INSTRUMENTS, (inst) => inst.name);
+  for (const [name, configs] of Object.entries(groupedInstruments)) {
+    await createRecord(prisma.instrument, configs, `Instrument ${name} configurations`, { where: { name } });
+  }
+  await createRecord(prisma.altairInstrument, INITIAL_ALTAIR_INSTRUMENT, 'Altair instrument');
+  await createRecord(prisma.gemsInstrument, INITIAL_GEMS_INSTRUMENT, 'Gems instrument');
 }
 
 async function createRotator(prisma: Prisma) {
-  console.log('Creating initial rotator');
-  await prisma.rotator.create({
-    data: INITIAL_ROTATOR,
-  });
+  await createRecord(prisma.rotator, INITIAL_ROTATOR, 'Rotator');
 }
 
 async function createSlewFlags(prisma: Prisma) {
-  console.log('Creating initial slew flags');
-  await prisma.slewFlags.create({
-    data: INITIAL_SLEW_FLAGS,
-  });
+  await createRecord(prisma.slewFlags, INITIAL_SLEW_FLAGS, 'Slew flags');
 }
 
 async function createConfiguration(prisma: Prisma) {
-  console.log('Creating initial configuration');
-  await prisma.configuration.create({
-    data: INITIAL_CONFIGURATION,
-  });
+  await createRecord(prisma.configuration, INITIAL_CONFIGURATION, 'Configuration');
 }
 
 async function createGuideLoopInfo(prisma: Prisma) {
-  console.log('Creating altair guide loop info');
-  await prisma.altairGuideLoop.create({
-    data: INITIAL_ALTAIR_GUIDE_LOOP,
-  });
-  console.log('Creating gems guide loop info');
-  await prisma.gemsGuideLoop.create({
-    data: INITIAL_GEMS_GUIDE_LOOP,
-  });
-  console.log('Creating general guide loop info');
-  await prisma.guideLoop.create({
-    data: INITIAL_GUIDE_LOOP,
-  });
+  await createRecord(prisma.altairGuideLoop, INITIAL_ALTAIR_GUIDE_LOOP, 'Altair guide loop info');
+  await createRecord(prisma.gemsGuideLoop, INITIAL_GEMS_GUIDE_LOOP, 'Gems guide loop info');
+  await createRecord(prisma.guideLoop, INITIAL_GUIDE_LOOP, 'General guide loop info');
 }
 
 async function createMechanism(prisma: Prisma) {
-  console.log('Creating mechanism info');
-  await prisma.mechanism.create({
-    data: INITIAL_MECHANISM,
-  });
+  await createRecord(prisma.mechanism, INITIAL_MECHANISM, 'Mechanism');
 }
 
 async function createGuideAlarms(prisma: Prisma) {
@@ -87,17 +90,11 @@ async function createGuideAlarms(prisma: Prisma) {
 }
 
 async function createEngineeringTargets(prisma: Prisma) {
-  console.log('Creating initial engineering targets');
-  await prisma.engineeringTarget.createMany({
-    data: INITIAL_ENGINEERING_TARGETS,
-  });
+  await createRecord(prisma.engineeringTarget, INITIAL_ENGINEERING_TARGETS, 'Engineering targets');
 }
 
 async function createWindowCenters(prisma: Prisma) {
-  console.log('Creating initial window centers');
-  await prisma.windowCenter.createMany({
-    data: INITIAL_WINDOW_CENTER,
-  });
+  await createRecord(prisma.windowCenter, INITIAL_WINDOW_CENTER, 'Window centers');
 }
 
 export async function write(client: Prisma) {
