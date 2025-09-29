@@ -1,4 +1,5 @@
 import type { PrismaClient } from '@prisma/client';
+
 import type { Prisma } from '../db.ts';
 import { INITIAL_CONFIGURATION } from './init/configuration.ts';
 import { INITIAL_ENGINEERING_TARGETS } from './init/engineeringTargets.ts';
@@ -30,14 +31,16 @@ async function createRecord(
   prismaConnection: PrismaClient,
   initialRecord: INITIAL_RECORD,
   recordName: string,
-  query: { where: { name: string } } | {} = {},
+  query: object = {},
 ) {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
   if (await prismaConnection.findFirst(query)) {
     console.log(`${recordName} already exist`);
     return;
   }
 
   console.log(`Creating ${recordName}`);
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
   await prismaConnection.createMany({
     data: initialRecord,
   });
