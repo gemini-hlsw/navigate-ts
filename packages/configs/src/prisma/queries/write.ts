@@ -1,5 +1,3 @@
-import type { PrismaClient } from '@prisma/client';
-
 import type { Prisma } from '../db.ts';
 import { INITIAL_CONFIGURATION } from './init/configuration.ts';
 import { INITIAL_ENGINEERING_TARGETS } from './init/engineeringTargets.ts';
@@ -28,7 +26,8 @@ type INITIAL_RECORD =
   | typeof INITIAL_WINDOW_CENTER;
 
 async function createRecord(
-  prismaConnection: PrismaClient,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  prismaConnection: any,
   initialRecord: INITIAL_RECORD,
   recordName: string,
   query: object = {},
