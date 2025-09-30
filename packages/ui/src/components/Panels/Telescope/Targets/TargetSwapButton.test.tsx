@@ -77,6 +77,12 @@ const selectedTarget = {
     degrees: 80.07267194527778,
     dms: '+80:04:21.618990',
   },
+  properMotion: {
+    ra: 0,
+    dec: 0,
+  },
+  radialVelocity: 0,
+  parallax: 0,
   az: null,
   el: null,
   epoch: 'J2000.000',
@@ -97,6 +103,12 @@ const oiSelected = {
     degrees: 80.07267194527778,
     dms: '+80:04:21.618990',
   },
+  properMotion: {
+    ra: 0,
+    dec: 0,
+  },
+  radialVelocity: 0,
+  parallax: 0,
   az: null,
   el: null,
   epoch: 'J2000.000',
@@ -165,6 +177,20 @@ const mocks = [
               ra: { hms: oiSelected.ra.hms },
               dec: { dms: oiSelected.dec.dms },
               epoch: oiSelected.epoch,
+              properMotion: {
+                ra: {
+                  microarcsecondsPerYear: oiSelected.properMotion?.ra,
+                },
+                dec: {
+                  microarcsecondsPerYear: oiSelected.properMotion?.dec,
+                },
+              },
+              radialVelocity: {
+                centimetersPerSecond: oiSelected.radialVelocity,
+              },
+              parallax: {
+                microarcseconds: oiSelected.parallax,
+              },
             },
           },
         },
@@ -196,6 +222,20 @@ const mocks = [
               ra: { hms: selectedTarget.ra.hms },
               dec: { dms: selectedTarget.dec.dms },
               epoch: selectedTarget.epoch,
+              properMotion: {
+                ra: {
+                  microarcsecondsPerYear: selectedTarget.properMotion?.ra,
+                },
+                dec: {
+                  microarcsecondsPerYear: selectedTarget.properMotion?.dec,
+                },
+              },
+              radialVelocity: {
+                centimetersPerSecond: selectedTarget.radialVelocity,
+              },
+              parallax: {
+                microarcseconds: selectedTarget.parallax,
+              },
             },
             wavelength: { nanometers: selectedTarget.wavelength },
           },
@@ -212,6 +252,20 @@ const mocks = [
                 ra: { hms: oiSelected?.ra?.hms },
                 dec: { dms: oiSelected?.dec?.dms },
                 epoch: oiSelected.epoch,
+                properMotion: {
+                  ra: {
+                    microarcsecondsPerYear: oiSelected.properMotion?.ra,
+                  },
+                  dec: {
+                    microarcsecondsPerYear: oiSelected.properMotion?.dec,
+                  },
+                },
+                radialVelocity: {
+                  centimetersPerSecond: oiSelected.radialVelocity,
+                },
+                parallax: {
+                  microarcseconds: oiSelected.parallax,
+                },
               },
             },
           },

@@ -27,6 +27,20 @@ export function createTargetPropertiesInput(target: Target): TargetPropertiesInp
       ra: { hms: target?.ra?.hms },
       dec: { dms: target?.dec?.dms },
       epoch: target?.epoch,
+      properMotion: {
+        ra: {
+          microarcsecondsPerYear: target.properMotion?.ra,
+        },
+        dec: {
+          microarcsecondsPerYear: target.properMotion?.dec,
+        },
+      },
+      radialVelocity: {
+        centimetersPerSecond: target.radialVelocity,
+      },
+      parallax: {
+        microarcseconds: target.parallax,
+      },
     },
     // nonsidereal: // <- ???
     wavelength: target.wavelength ? { nanometers: target.wavelength } : undefined,
@@ -65,6 +79,20 @@ export function createTcsConfigInput(
               ra: { hms: oiTarget.ra?.hms },
               dec: { dms: oiTarget.dec?.dms },
               epoch: oiTarget.epoch,
+              properMotion: {
+                ra: {
+                  microarcsecondsPerYear: oiTarget.properMotion?.ra,
+                },
+                dec: {
+                  microarcsecondsPerYear: oiTarget.properMotion?.dec,
+                },
+              },
+              radialVelocity: {
+                centimetersPerSecond: oiTarget.radialVelocity,
+              },
+              parallax: {
+                microarcseconds: oiTarget.parallax,
+              },
             },
           },
         }
