@@ -24,14 +24,14 @@
     "prepare": "node .husky/install.js"
   },
   "devDependencies": {
-    "@eslint/js": "9.36.0",
+    "@eslint/js": "9.37.0",
     "@graphql-eslint/eslint-plugin": "4.4.0",
     "@tsconfig/node-ts": "23.6.1",
     "@tsconfig/node24": "24.0.1",
     "@tsconfig/strictest": "2.0.6",
     "@tsconfig/vite-react": "7.0.1",
     "@types/node": "catalog:",
-    "eslint": "9.36.0",
+    "eslint": "9.37.0",
     "eslint-import-resolver-typescript": "4.4.4",
     "eslint-plugin-import-x": "4.16.1",
     "eslint-plugin-simple-import-sort": "12.1.1",
@@ -39,10 +39,10 @@
     "husky": "9.1.7",
     "lint-staged": "16.2.3",
     "prettier": "3.6.2",
-    "stylelint": "16.24.0",
+    "stylelint": "16.25.0",
     "stylelint-config-standard": "39.0.0",
     "typescript": "catalog:",
-    "typescript-eslint": "8.44.1"
+    "typescript-eslint": "8.45.0"
   },
   "lint-staged": {
     "*.{js,mjs,ts,tsx,jsx,css,md,json,yml,yaml}": "prettier --write",
