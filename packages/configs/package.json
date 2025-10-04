@@ -27,7 +27,8 @@
     "dev": "node --env-file=.env --watch --enable-source-maps ./src/index.ts",
     "codegen": "graphql-codegen --config tasks/codegen.ts",
     "codegen:watch": "pnpm codegen --watch 'src/graphql/**/*.ts' --watch '../schema/src/*.graphql'",
-    "lint:eslint": "eslint ."
+    "lint:eslint": "eslint .",
+    "production": "pnpm prisma migrate deploy && pnpm prisma db seed && pnpm preview"
   },
   "dependencies": {
     "@apollo/server": "5.0.0",

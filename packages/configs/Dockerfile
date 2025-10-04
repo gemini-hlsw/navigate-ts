@@ -46,4 +46,4 @@ EXPOSE 4000
 HEALTHCHECK --start-period=2s CMD ["./tasks/healthcheck.js"]
 
 # Start command
-CMD ["./start-server.sh"]
+CMD ["pnpm", "production"]
