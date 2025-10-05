@@ -42,8 +42,8 @@
   },
   "devDependencies": {
     "@graphql-codegen/cli": "catalog:",
-    "@graphql-codegen/typescript": "5.0.1",
-    "@graphql-codegen/typescript-resolvers": "5.0.1",
+    "@graphql-codegen/typescript": "5.0.2",
+    "@graphql-codegen/typescript-resolvers": "5.1.0",
     "@parcel/watcher": "catalog:",
     "@testcontainers/postgresql": "11.7.1",
     "@types/node": "catalog:",
