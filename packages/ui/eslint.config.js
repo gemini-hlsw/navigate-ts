@@ -4,7 +4,8 @@ import graphqlPlugin from '@graphql-eslint/eslint-plugin';
 import { defineConfig } from 'eslint/config';
 import { importX } from 'eslint-plugin-import-x';
 import reactPlugin from 'eslint-plugin-react';
-import * as reactHooks from 'eslint-plugin-react-hooks';
+// eslint-disable-next-line import-x/default
+import reactHooks from 'eslint-plugin-react-hooks';
 
 import shared from '../../eslint.config.shared.js';
 
@@ -14,7 +15,13 @@ export default defineConfig(
   reactPlugin.configs.flat['jsx-runtime'],
   // @ts-expect-error - incorrect type
   importX.flatConfigs.react,
-  reactHooks.configs.recommended,
+  {
+    files: ['src/**/*.{js,jsx,ts,tsx}'],
+    plugins: {
+      'react-hooks': reactHooks,
+    },
+    extends: ['react-hooks/recommended-latest'],
+  },
   {
     settings: {
       react: { version: 'detect' },
