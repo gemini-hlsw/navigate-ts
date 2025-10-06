@@ -1,7 +1,12 @@
 import assert from 'node:assert';
 import { describe, it } from 'node:test';
 
-import type { MutationResetInstrumentsArgs, MutationUpdateInstrumentArgs } from '../graphql/gen/index.ts';
+import type {
+  InstrumentConfig,
+  MutationResetInstrumentsArgs,
+  MutationUpdateInstrumentArgs,
+  QueryInstrumentArgs,
+} from '../graphql/gen/index.ts';
 import { initializeServerFixture } from './setup.ts';
 
 await describe('Instrument', async () => {
@@ -55,6 +60,52 @@ await describe('Instrument', async () => {
       ]);
       assert.equal(countAfterReset, countWithTemporary - 1);
       assert.equal(temporaryCount, 0);
+    });
+  });
+
+  await describe('get unexistent instrument configuration', async () => {
+    await it('returns previous configuration as fallback', async () => {
+      const response = (await fixture.executeGraphql<QueryInstrumentArgs>({
+        query: `#graphql
+          query instrument($name: Instrument!, $issPort: Int!, $wfs: WfsType!) {
+            instrument(name: $name, issPort: $issPort, wfs: $wfs) {
+              pk
+              name
+              issPort
+              comment
+            }
+          }`,
+        variables: { name: 'FLAMINGOS2', issPort: 5, wfs: 'OIWFS' },
+      })) as { data: { instrument: InstrumentConfig } };
+
+      assert.equal(
+        response.data?.instrument?.comment?.includes(
+          'Default fallback configuration, using parameters from previous configuration',
+        ),
+        true,
+      );
+    });
+
+    await it('returns a default configuration if no previous config is found', async () => {
+      const response = (await fixture.executeGraphql<QueryInstrumentArgs>({
+        query: `#graphql
+          query instrument($name: Instrument!, $issPort: Int!, $wfs: WfsType!) {
+            instrument(name: $name, issPort: $issPort, wfs: $wfs) {
+              pk
+              name
+              issPort
+              comment
+            }
+          }`,
+        variables: { name: 'FLAMINGOS2', issPort: 1, wfs: 'OIWFS' },
+      })) as { data: { instrument: InstrumentConfig } };
+
+      assert.equal(
+        response.data?.instrument?.comment?.includes(
+          'Default fallback configuration, using empty configuration please modify manually',
+        ),
+        true,
+      );
     });
   });
 });
