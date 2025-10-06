@@ -21,7 +21,7 @@ import { TargetResolver } from './graphql/resolvers/Target.ts';
 import { UserResolver } from './graphql/resolvers/User.ts';
 import { VersionResolver } from './graphql/resolvers/Version.ts';
 import { WindowCenterResolver } from './graphql/resolvers/WindowCenter.ts';
-import type { Prisma } from './prisma/db.ts';
+import type { PrismaClient } from './prisma/db.ts';
 
 // Resolvers define how to fetch the types defined in your schema.
 const resolvers = {
@@ -65,7 +65,7 @@ const resolvers = {
 };
 
 export interface ApolloContext {
-  prisma: Prisma;
+  prisma: PrismaClient;
 }
 
 const schemaGlob = join(dirname(fileURLToPath(import.meta.resolve('navigate-schema'))), 'src/**/*.graphql');
