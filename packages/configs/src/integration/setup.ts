@@ -8,7 +8,7 @@ import type { Options } from 'execa';
 import { execa } from 'execa';
 import type { FormattedExecutionResult } from 'graphql';
 
-import type { Prisma } from '../prisma/db.ts';
+import type { PrismaClient as Prisma } from '../prisma/db.ts';
 import { extendPrisma } from '../prisma/extend.ts';
 import { PrismaClient } from '../prisma/gen/client.ts';
 import { populateDb } from '../prisma/queries/main.ts';

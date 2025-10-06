@@ -1,4 +1,5 @@
-import type { Prisma } from '../db.ts';
+import type { PrismaClient } from '../db.ts';
+import type { TypeMap } from '../gen/internal/prismaNamespaceBrowser.ts';
 import { INITIAL_CONFIGURATION } from './init/configuration.ts';
 import { INITIAL_ENGINEERING_TARGETS } from './init/engineeringTargets.ts';
 import { INITIAL_GUIDE_ALARMS } from './init/guideAlarm.ts';
@@ -10,77 +11,72 @@ import { INITIAL_SLEW_FLAGS } from './init/slewFlags.ts';
 import { INITIAL_USERS } from './init/users.ts';
 import { INITIAL_WINDOW_CENTER } from './init/windowCenter.ts';
 
-type INITIAL_RECORD =
-  | typeof INITIAL_USERS
-  | typeof INITIAL_INSTRUMENTS
-  | typeof INITIAL_ALTAIR_INSTRUMENT
-  | typeof INITIAL_GEMS_INSTRUMENT
-  | typeof INITIAL_ROTATOR
-  | typeof INITIAL_SLEW_FLAGS
-  | typeof INITIAL_CONFIGURATION
-  | typeof INITIAL_ALTAIR_GUIDE_LOOP
-  | typeof INITIAL_GEMS_GUIDE_LOOP
-  | typeof INITIAL_GUIDE_LOOP
-  | typeof INITIAL_MECHANISM
-  | typeof INITIAL_ENGINEERING_TARGETS
-  | typeof INITIAL_WINDOW_CENTER;
+type Models = TypeMap['model'];
+type FindInput<T extends keyof Models> = Models[T]['operations']['findFirst']['args'];
+type CreateManyInput<T extends keyof Models> = Models[T]['operations']['createMany']['args']['data'];
 
-async function createRecord(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  prismaConnection: any,
-  initialRecord: INITIAL_RECORD,
+async function createRecord<TModel extends keyof Models>(
+  prisma: PrismaClient,
+  subject: TModel,
+  initialRecord: CreateManyInput<TModel>,
   recordName: string,
-  query: object = {},
+  findInput: FindInput<TModel> = {},
 ) {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
-  if (await prismaConnection.findFirst(query)) {
+  // Transform 'EngineeringTarget' to 'engineeringTarget'
+  const lowercaseFirstLetter = (s: TModel) => (s.charAt(0).toLowerCase() + s.slice(1)) as TypeMap['meta']['modelProps'];
+
+  const client = prisma[lowercaseFirstLetter(subject)];
+  // @ts-expect-error Generic types are difficult with prisma
+  if (await client.findFirst(findInput)) {
     console.log(`${recordName} already exist`);
     return;
   }
 
   console.log(`Creating ${recordName}`);
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
-  await prismaConnection.createMany({
+  // @ts-expect-error Generic types are difficult with prisma
+  await client.createMany({
     data: initialRecord,
   });
 }
 
-async function createUsers(prisma: Prisma) {
-  await createRecord(prisma.user, INITIAL_USERS, 'Users');
+async function createUsers(prisma: PrismaClient) {
+  await createRecord(prisma, 'User', INITIAL_USERS, 'Users');
 }
 
-async function createInstruments(prisma: Prisma) {
+async function createInstruments(prisma: PrismaClient) {
   const groupedInstruments = Object.groupBy(INITIAL_INSTRUMENTS, (inst) => inst.name);
   for (const [name, configs] of Object.entries(groupedInstruments)) {
-    await createRecord(prisma.instrument, configs, `Instrument ${name} configurations`, { where: { name } });
+    await createRecord(prisma, 'Instrument', configs, `Instrument ${name} configurations`, {
+      where: { name },
+    });
   }
-  await createRecord(prisma.altairInstrument, INITIAL_ALTAIR_INSTRUMENT, 'Altair instrument');
-  await createRecord(prisma.gemsInstrument, INITIAL_GEMS_INSTRUMENT, 'Gems instrument');
+  await createRecord(prisma, 'AltairInstrument', INITIAL_ALTAIR_INSTRUMENT, 'Altair instrument');
+  await createRecord(prisma, 'GemsInstrument', INITIAL_GEMS_INSTRUMENT, 'Gems instrument');
 }
 
-async function createRotator(prisma: Prisma) {
-  await createRecord(prisma.rotator, INITIAL_ROTATOR, 'Rotator');
+async function createRotator(prisma: PrismaClient) {
+  await createRecord(prisma, 'Rotator', INITIAL_ROTATOR, 'Rotator');
 }
 
-async function createSlewFlags(prisma: Prisma) {
-  await createRecord(prisma.slewFlags, INITIAL_SLEW_FLAGS, 'Slew flags');
+async function createSlewFlags(prisma: PrismaClient) {
+  await createRecord(prisma, 'SlewFlags', INITIAL_SLEW_FLAGS, 'Slew flags');
 }
 
-async function createConfiguration(prisma: Prisma) {
-  await createRecord(prisma.configuration, INITIAL_CONFIGURATION, 'Configuration');
+async function createConfiguration(prisma: PrismaClient) {
+  await createRecord(prisma, 'Configuration', INITIAL_CONFIGURATION, 'Configuration');
 }
 
-async function createGuideLoopInfo(prisma: Prisma) {
-  await createRecord(prisma.altairGuideLoop, INITIAL_ALTAIR_GUIDE_LOOP, 'Altair guide loop info');
-  await createRecord(prisma.gemsGuideLoop, INITIAL_GEMS_GUIDE_LOOP, 'Gems guide loop info');
-  await createRecord(prisma.guideLoop, INITIAL_GUIDE_LOOP, 'General guide loop info');
+async function createGuideLoopInfo(prisma: PrismaClient) {
+  await createRecord(prisma, 'AltairGuideLoop', INITIAL_ALTAIR_GUIDE_LOOP, 'Altair guide loop info');
+  await createRecord(prisma, 'GemsGuideLoop', INITIAL_GEMS_GUIDE_LOOP, 'Gems guide loop info');
+  await createRecord(prisma, 'GuideLoop', INITIAL_GUIDE_LOOP, 'General guide loop info');
 }
 
-async function createMechanism(prisma: Prisma) {
-  await createRecord(prisma.mechanism, INITIAL_MECHANISM, 'Mechanism');
+async function createMechanism(prisma: PrismaClient) {
+  await createRecord(prisma, 'Mechanism', INITIAL_MECHANISM, 'Mechanism');
 }
 
-async function createGuideAlarms(prisma: Prisma) {
+async function createGuideAlarms(prisma: PrismaClient) {
   console.log('Creating guide alarms');
   for (const guideAlarm of INITIAL_GUIDE_ALARMS) {
     await prisma.guideAlarm.upsert({
@@ -91,15 +87,15 @@ async function createGuideAlarms(prisma: Prisma) {
   }
 }
 
-async function createEngineeringTargets(prisma: Prisma) {
-  await createRecord(prisma.engineeringTarget, INITIAL_ENGINEERING_TARGETS, 'Engineering targets');
+async function createEngineeringTargets(prisma: PrismaClient) {
+  await createRecord(prisma, 'EngineeringTarget', INITIAL_ENGINEERING_TARGETS, 'Engineering targets');
 }
 
-async function createWindowCenters(prisma: Prisma) {
-  await createRecord(prisma.windowCenter, INITIAL_WINDOW_CENTER, 'Window centers');
+async function createWindowCenters(prisma: PrismaClient) {
+  await createRecord(prisma, 'WindowCenter', INITIAL_WINDOW_CENTER, 'Window centers');
 }
 
-export async function write(client: Prisma) {
+export async function write(client: PrismaClient) {
   await createUsers(client);
   await createInstruments(client);
   await createSlewFlags(client);
