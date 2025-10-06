@@ -11,25 +11,15 @@ import { useId, useRef, useState } from 'react';
 
 import { useSetImportInstrument } from '@/components/atoms/instrument';
 import { FloppyDisk, List } from '@/components/Icons';
-import { useToast } from '@/Helpers/toast';
 
 export function Instrument({ canEdit }: { canEdit: boolean }) {
   const [updateInstrument, { loading: updateInstrumentLoading }] = useUpdateInstrument();
   const [setTemporaryInstrument, { loading: setTemporaryInstrumentLoading }] = useSetTemporaryInstrument();
   const setImportInstrument = useSetImportInstrument();
-  const toast = useToast();
 
   const { data: instrument, loading: instrumentLoading } = useConfiguredInstrument();
 
   const loading = instrumentLoading || updateInstrumentLoading || setTemporaryInstrumentLoading;
-
-  if (instrument?.comment?.includes('Default fallback configuration')) {
-    toast?.show({
-      severity: 'warn',
-      summary: 'Warning',
-      detail: instrument.comment,
-    });
-  }
 
   // When changing any field, update the instrument as a temporary instrument
   const onUpdateInstrument = async (variables: Partial<SetTemporaryInstrumentMutationVariables>) => {

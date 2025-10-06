@@ -69,6 +69,14 @@ export function Instrument() {
         }),
       ]);
 
+      if (instrument.comment?.includes('Default fallback configuration')) {
+        toast?.show({
+          severity: 'warn',
+          summary: 'Warning',
+          detail: instrument.comment,
+        });
+      }
+
       closeModal();
     } else {
       toast?.show({

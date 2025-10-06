@@ -6,33 +6,6 @@ const orderBy: Prisma.InstrumentOrderByWithRelationInput[] = [{ isTemporary: 'de
 
 export const InstrumentResolver: Resolvers = {
   Query: {
-    oldInstrument: async (_parent, args, { prisma }) => {
-      const instrument = await prisma.instrument.findFirst({ where: args, orderBy });
-      if (!instrument) {
-        throw new Error(`Instrument not found for args: ${JSON.stringify(args)}`);
-      }
-      return instrument as InstrumentConfig;
-    },
-    instruments: (_parent, args, { prisma }) => {
-      return prisma.instrument.findMany({ where: args, orderBy }) as Promise<InstrumentConfig[]>;
-    },
-    distinctInstruments: async (_parent, _args, { prisma }) => {
-      const results = await prisma.instrument.findMany({
-        distinct: ['name'],
-        select: { name: true },
-        orderBy: { name: 'asc' },
-      });
-      return results.map((r) => r.name);
-    },
-    distinctPorts: async (_parent, args, { prisma }) => {
-      const results = await prisma.instrument.findMany({
-        where: args,
-        distinct: ['issPort'],
-        select: { issPort: true },
-        orderBy: { issPort: 'asc' },
-      });
-      return results.map((r) => r.issPort);
-    },
     instrument: async (_parent, args, { prisma }) => {
       let instrument = await prisma.instrument.findFirst({ where: args, orderBy });
       if (instrument) {
@@ -75,6 +48,26 @@ export const InstrumentResolver: Resolvers = {
         });
       }
       return instrument as InstrumentConfig;
+    },
+    instruments: (_parent, args, { prisma }) => {
+      return prisma.instrument.findMany({ where: args, orderBy }) as Promise<InstrumentConfig[]>;
+    },
+    distinctInstruments: async (_parent, _args, { prisma }) => {
+      const results = await prisma.instrument.findMany({
+        distinct: ['name'],
+        select: { name: true },
+        orderBy: { name: 'asc' },
+      });
+      return results.map((r) => r.name);
+    },
+    distinctPorts: async (_parent, args, { prisma }) => {
+      const results = await prisma.instrument.findMany({
+        where: args,
+        distinct: ['issPort'],
+        select: { issPort: true },
+        orderBy: { issPort: 'asc' },
+      });
+      return results.map((r) => r.issPort);
     },
   },
   Mutation: {
