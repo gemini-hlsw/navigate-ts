@@ -6,7 +6,7 @@ import { Dialog } from 'primereact/dialog';
 import { Dropdown } from 'primereact/dropdown';
 import { InputNumber } from 'primereact/inputnumber';
 import { InputText } from 'primereact/inputtext';
-import { useEffect, useState } from 'react';
+import { startTransition, useEffect, useState } from 'react';
 
 import { useTargetEdit } from '@/components/atoms/target';
 import type { TargetType } from '@/types';
@@ -22,16 +22,18 @@ export function Target() {
 
   useEffect(() => {
     if (targetEdit !== undefined) {
-      setAuxTarget(targetEdit.target);
-      if (targetEdit.target?.type === 'FIXED') {
-        setc1String(targetEdit.target.az?.dms ?? '');
-        setc2String(targetEdit.target.el?.dms ?? '');
-        setCoordsType('horizontal');
-      } else {
-        setCoordsType('celestial');
-        setc1String(targetEdit.target?.ra?.hms ?? '');
-        setc2String(targetEdit.target?.dec?.dms ?? '');
-      }
+      startTransition(() => {
+        setAuxTarget(targetEdit.target);
+        if (targetEdit.target?.type === 'FIXED') {
+          setc1String(targetEdit.target.az?.dms ?? '');
+          setc2String(targetEdit.target.el?.dms ?? '');
+          setCoordsType('horizontal');
+        } else {
+          setCoordsType('celestial');
+          setc1String(targetEdit.target?.ra?.hms ?? '');
+          setc2String(targetEdit.target?.dec?.dms ?? '');
+        }
+      });
     }
   }, [targetEdit]);
 

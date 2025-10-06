@@ -38,7 +38,7 @@
     "clsx": "2.1.1",
     "date-fns": "4.1.0",
     "eslint-plugin-react": "7.37.5",
-    "eslint-plugin-react-hooks": "5.2.0",
+    "eslint-plugin-react-hooks": "6.1.1",
     "graphql": "catalog:",
     "graphql-ws": "6.0.6",
     "jotai": "2.15.0",

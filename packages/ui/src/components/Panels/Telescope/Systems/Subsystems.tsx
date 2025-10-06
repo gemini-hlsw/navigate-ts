@@ -6,7 +6,7 @@ import { Button } from 'primereact/button';
 import { Dropdown } from 'primereact/dropdown';
 import { InputNumber } from 'primereact/inputnumber';
 import { Slider } from 'primereact/slider';
-import { useEffect, useState } from 'react';
+import { startTransition, useEffect, useState } from 'react';
 
 import { BTN_CLASSES } from '@/Helpers/constants';
 import type { MechanismType } from '@/types';
@@ -51,13 +51,15 @@ export function BotSubsystems({ canEdit }: { canEdit: boolean }) {
 
   const { data, loading: mechanismLoading } = useMechanism();
   useEffect(() => {
-    if (data?.mechanism) {
-      setDomeMode(data.mechanism.domeMode);
-      setShutterMode(data.mechanism.shutterMode);
-      setAperture(data.mechanism.shutterAperture);
-      setWVGate(data.mechanism.wVGateValue);
-      setEVGate(data.mechanism.eVGateValue);
-    }
+    startTransition(() => {
+      if (data?.mechanism) {
+        setDomeMode(data.mechanism.domeMode);
+        setShutterMode(data.mechanism.shutterMode);
+        setAperture(data.mechanism.shutterAperture);
+        setWVGate(data.mechanism.wVGateValue);
+        setEVGate(data.mechanism.eVGateValue);
+      }
+    });
   }, [data]);
   const state = data?.mechanism ?? ({} as MechanismType);
 
