@@ -14,7 +14,7 @@ export default defineConfig(
   reactPlugin.configs.flat['jsx-runtime'],
   // @ts-expect-error - incorrect type
   importX.flatConfigs.react,
-  reactHooks.configs['recommended-latest'],
+  reactHooks.configs.recommended,
   {
     settings: {
       react: { version: 'detect' },
