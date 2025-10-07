@@ -7,7 +7,7 @@ describe(atomWithToggle.name, () => {
     const atom = atomWithToggle(true);
     const store = createStore();
 
-    expect(store.get(atom)).toBe(true);
+    expect(store.get(atom)).true;
   });
 
   it('should toggle the value', () => {
@@ -15,10 +15,10 @@ describe(atomWithToggle.name, () => {
     const store = createStore();
 
     store.set(atom);
-    expect(store.get(atom)).toBe(false);
+    expect(store.get(atom)).false;
 
     store.set(atom);
-    expect(store.get(atom)).toBe(true);
+    expect(store.get(atom)).true;
   });
 
   it('should set the value', () => {
@@ -26,6 +26,6 @@ describe(atomWithToggle.name, () => {
     const store = createStore();
 
     store.set(atom, true);
-    expect(store.get(atom)).toBe(true);
+    expect(store.get(atom)).true;
   });
 });
