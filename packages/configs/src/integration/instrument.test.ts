@@ -65,7 +65,7 @@ await describe('Instrument', async () => {
 
   await describe('get unexistent instrument configuration', async () => {
     await it('returns previous configuration as fallback', async () => {
-      const response = (await fixture.executeGraphql<QueryInstrumentArgs>({
+      const response = await fixture.executeGraphql<QueryInstrumentArgs, { instrument: InstrumentConfig }>({
         query: `#graphql
           query instrument($name: Instrument!, $issPort: Int!, $wfs: WfsType!) {
             instrument(name: $name, issPort: $issPort, wfs: $wfs) {
@@ -76,18 +76,17 @@ await describe('Instrument', async () => {
             }
           }`,
         variables: { name: 'FLAMINGOS2', issPort: 5, wfs: 'OIWFS' },
-      })) as { data: { instrument: InstrumentConfig } };
+      });
 
-      assert.equal(
+      assert.ok(
         response.data?.instrument?.comment?.includes(
           'Default fallback configuration, using parameters from previous configuration',
         ),
-        true,
       );
     });
 
     await it('returns a default configuration if no previous config is found', async () => {
-      const response = (await fixture.executeGraphql<QueryInstrumentArgs>({
+      const response = await fixture.executeGraphql<QueryInstrumentArgs, { instrument: InstrumentConfig }>({
         query: `#graphql
           query instrument($name: Instrument!, $issPort: Int!, $wfs: WfsType!) {
             instrument(name: $name, issPort: $issPort, wfs: $wfs) {
@@ -98,13 +97,12 @@ await describe('Instrument', async () => {
             }
           }`,
         variables: { name: 'FLAMINGOS2', issPort: 1, wfs: 'OIWFS' },
-      })) as { data: { instrument: InstrumentConfig } };
+      });
 
-      assert.equal(
+      assert.ok(
         response.data?.instrument?.comment?.includes(
           'Default fallback configuration, using empty configuration please modify manually',
         ),
-        true,
       );
     });
   });

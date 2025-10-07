@@ -19,7 +19,9 @@ interface ServerFixture {
   /**
    * Execute a graphql operation and return the result.
    */
-  executeGraphql: <T extends Record<string, unknown>>(options: GraphQLRequest<T>) => Promise<FormattedExecutionResult>;
+  executeGraphql: <TVariables extends Record<string, unknown>, TData = Record<string, unknown>>(
+    options: GraphQLRequest<TVariables>,
+  ) => Promise<FormattedExecutionResult<TData>>;
   prisma: Prisma;
 }
 
@@ -61,8 +63,8 @@ export function initializeServerFixture() {
 
     const contextValue: ApolloContext = { prisma };
 
-    async function executeGraphql(options: GraphQLRequest) {
-      const response = await server.executeOperation(options, { contextValue });
+    async function executeGraphql<TData>(options: GraphQLRequest) {
+      const response = await server.executeOperation<TData>(options, { contextValue });
 
       assert.strictEqual(response.body.kind, 'single');
       assert.ifError(response.body.singleResult.errors);

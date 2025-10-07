@@ -45,8 +45,6 @@ type Query {
   distinctInstruments: [String!]!
 
   distinctPorts(name: Instrument): [Int!]!
-
-  oldInstrument(name: Instrument, issPort: Int, wfs: WfsType, extraParams: JSON): InstrumentConfig!
 }
 
 type Mutation {
