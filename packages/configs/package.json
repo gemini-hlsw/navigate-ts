@@ -27,25 +27,26 @@
     "dev": "node --env-file=.env --watch --enable-source-maps ./src/index.ts",
     "codegen": "graphql-codegen --config tasks/codegen.ts",
     "codegen:watch": "pnpm codegen --watch 'src/graphql/**/*.ts' --watch '../schema/src/*.graphql'",
-    "lint:eslint": "eslint ."
+    "lint:eslint": "eslint .",
+    "production": "pnpm prisma migrate deploy && pnpm prisma db seed && pnpm preview"
   },
   "dependencies": {
     "@apollo/server": "5.0.0",
     "@graphql-tools/graphql-file-loader": "8.1.2",
     "@graphql-tools/load": "8.1.2",
-    "@prisma/client": "6.16.2",
+    "@prisma/client": "6.16.3",
     "graphql": "catalog:",
     "graphql-scalars": "1.24.2",
     "lucuma-core": "catalog:",
     "navigate-schema": "workspace:*",
-    "prisma": "6.16.2"
+    "prisma": "6.16.3"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "catalog:",
-    "@graphql-codegen/typescript": "5.0.0",
-    "@graphql-codegen/typescript-resolvers": "5.0.0",
+    "@graphql-codegen/typescript": "5.0.2",
+    "@graphql-codegen/typescript-resolvers": "5.1.0",
     "@parcel/watcher": "catalog:",
-    "@testcontainers/postgresql": "11.6.0",
+    "@testcontainers/postgresql": "11.7.1",
     "@types/node": "catalog:",
     "execa": "9.6.0",
     "typescript": "catalog:"

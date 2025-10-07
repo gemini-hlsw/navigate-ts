@@ -1,4 +1,5 @@
-import type { Prisma } from '../db.ts';
+import type { PrismaClient } from '../db.ts';
+import type { TypeMap } from '../gen/internal/prismaNamespaceBrowser.ts';
 import { INITIAL_CONFIGURATION } from './init/configuration.ts';
 import { INITIAL_ENGINEERING_TARGETS } from './init/engineeringTargets.ts';
 import { INITIAL_GUIDE_ALARMS } from './init/guideAlarm.ts';
@@ -10,72 +11,72 @@ import { INITIAL_SLEW_FLAGS } from './init/slewFlags.ts';
 import { INITIAL_USERS } from './init/users.ts';
 import { INITIAL_WINDOW_CENTER } from './init/windowCenter.ts';
 
-async function createUsers(prisma: Prisma) {
-  console.log('Creating user reader');
-  await prisma.user.createMany({
-    data: INITIAL_USERS,
+type Models = TypeMap['model'];
+type FindInput<T extends keyof Models> = Models[T]['operations']['findFirst']['args'];
+type CreateManyInput<T extends keyof Models> = Models[T]['operations']['createMany']['args']['data'];
+
+async function createRecord<TModel extends keyof Models>(
+  prisma: PrismaClient,
+  subject: TModel,
+  initialRecord: CreateManyInput<TModel>,
+  recordName: string,
+  findInput: FindInput<TModel> = {},
+) {
+  // Transform 'EngineeringTarget' to 'engineeringTarget'
+  const lowercaseFirstLetter = (s: TModel) => (s.charAt(0).toLowerCase() + s.slice(1)) as TypeMap['meta']['modelProps'];
+
+  const client = prisma[lowercaseFirstLetter(subject)];
+  // @ts-expect-error Generic types are difficult with prisma
+  if (await client.findFirst(findInput)) {
+    console.log(`${recordName} already exist`);
+    return;
+  }
+
+  console.log(`Creating ${recordName}`);
+  // @ts-expect-error Generic types are difficult with prisma
+  await client.createMany({
+    data: initialRecord,
   });
 }
 
-async function createInstruments(prisma: Prisma) {
-  console.log('Creating initial instruments');
-  await prisma.instrument.createMany({
-    data: INITIAL_INSTRUMENTS,
-  });
-  console.log('Creating initial altair instrument');
-  await prisma.altairInstrument.create({
-    data: INITIAL_ALTAIR_INSTRUMENT,
-  });
-  console.log('Creating initial gems instrument');
-  await prisma.gemsInstrument.create({
-    data: INITIAL_GEMS_INSTRUMENT,
-  });
+async function createUsers(prisma: PrismaClient) {
+  await createRecord(prisma, 'User', INITIAL_USERS, 'Users');
 }
 
-async function createRotator(prisma: Prisma) {
-  console.log('Creating initial rotator');
-  await prisma.rotator.create({
-    data: INITIAL_ROTATOR,
-  });
+async function createInstruments(prisma: PrismaClient) {
+  const groupedInstruments = Object.groupBy(INITIAL_INSTRUMENTS, (inst) => inst.name);
+  for (const [name, configs] of Object.entries(groupedInstruments)) {
+    await createRecord(prisma, 'Instrument', configs, `Instrument ${name} configurations`, {
+      where: { name },
+    });
+  }
+  await createRecord(prisma, 'AltairInstrument', INITIAL_ALTAIR_INSTRUMENT, 'Altair instrument');
+  await createRecord(prisma, 'GemsInstrument', INITIAL_GEMS_INSTRUMENT, 'Gems instrument');
 }
 
-async function createSlewFlags(prisma: Prisma) {
-  console.log('Creating initial slew flags');
-  await prisma.slewFlags.create({
-    data: INITIAL_SLEW_FLAGS,
-  });
+async function createRotator(prisma: PrismaClient) {
+  await createRecord(prisma, 'Rotator', INITIAL_ROTATOR, 'Rotator');
 }
 
-async function createConfiguration(prisma: Prisma) {
-  console.log('Creating initial configuration');
-  await prisma.configuration.create({
-    data: INITIAL_CONFIGURATION,
-  });
+async function createSlewFlags(prisma: PrismaClient) {
+  await createRecord(prisma, 'SlewFlags', INITIAL_SLEW_FLAGS, 'Slew flags');
 }
 
-async function createGuideLoopInfo(prisma: Prisma) {
-  console.log('Creating altair guide loop info');
-  await prisma.altairGuideLoop.create({
-    data: INITIAL_ALTAIR_GUIDE_LOOP,
-  });
-  console.log('Creating gems guide loop info');
-  await prisma.gemsGuideLoop.create({
-    data: INITIAL_GEMS_GUIDE_LOOP,
-  });
-  console.log('Creating general guide loop info');
-  await prisma.guideLoop.create({
-    data: INITIAL_GUIDE_LOOP,
-  });
+async function createConfiguration(prisma: PrismaClient) {
+  await createRecord(prisma, 'Configuration', INITIAL_CONFIGURATION, 'Configuration');
 }
 
-async function createMechanism(prisma: Prisma) {
-  console.log('Creating mechanism info');
-  await prisma.mechanism.create({
-    data: INITIAL_MECHANISM,
-  });
+async function createGuideLoopInfo(prisma: PrismaClient) {
+  await createRecord(prisma, 'AltairGuideLoop', INITIAL_ALTAIR_GUIDE_LOOP, 'Altair guide loop info');
+  await createRecord(prisma, 'GemsGuideLoop', INITIAL_GEMS_GUIDE_LOOP, 'Gems guide loop info');
+  await createRecord(prisma, 'GuideLoop', INITIAL_GUIDE_LOOP, 'General guide loop info');
 }
 
-async function createGuideAlarms(prisma: Prisma) {
+async function createMechanism(prisma: PrismaClient) {
+  await createRecord(prisma, 'Mechanism', INITIAL_MECHANISM, 'Mechanism');
+}
+
+async function createGuideAlarms(prisma: PrismaClient) {
   console.log('Creating guide alarms');
   for (const guideAlarm of INITIAL_GUIDE_ALARMS) {
     await prisma.guideAlarm.upsert({
@@ -86,21 +87,15 @@ async function createGuideAlarms(prisma: Prisma) {
   }
 }
 
-async function createEngineeringTargets(prisma: Prisma) {
-  console.log('Creating initial engineering targets');
-  await prisma.engineeringTarget.createMany({
-    data: INITIAL_ENGINEERING_TARGETS,
-  });
+async function createEngineeringTargets(prisma: PrismaClient) {
+  await createRecord(prisma, 'EngineeringTarget', INITIAL_ENGINEERING_TARGETS, 'Engineering targets');
 }
 
-async function createWindowCenters(prisma: Prisma) {
-  console.log('Creating initial window centers');
-  await prisma.windowCenter.createMany({
-    data: INITIAL_WINDOW_CENTER,
-  });
+async function createWindowCenters(prisma: PrismaClient) {
+  await createRecord(prisma, 'WindowCenter', INITIAL_WINDOW_CENTER, 'Window centers');
 }
 
-export async function write(client: Prisma) {
+export async function write(client: PrismaClient) {
   await createUsers(client);
   await createInstruments(client);
   await createSlewFlags(client);

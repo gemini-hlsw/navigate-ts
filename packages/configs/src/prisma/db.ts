@@ -1,6 +1,6 @@
 import { extendPrisma } from './extend.ts';
-import { PrismaClient } from './gen/client.ts';
+import { PrismaClient as GenPrismaClient } from './gen/client.ts';
 
-export const prisma = extendPrisma(new PrismaClient());
+export const prisma = extendPrisma(new GenPrismaClient());
 
-export type Prisma = typeof prisma;
+export type PrismaClient = typeof prisma;
