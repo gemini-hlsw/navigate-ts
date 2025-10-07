@@ -32,30 +32,30 @@ describe(formatToSignedArcseconds.name, () => {
 
 describe(isNullish.name, () => {
   it('should return true for null or undefined', () => {
-    expect(isNullish(null)).toBe(true);
-    expect(isNullish(undefined)).toBe(true);
+    expect(isNullish(null)).true;
+    expect(isNullish(undefined)).true;
   });
 
   it('should return false for non-nullish values', () => {
-    expect(isNullish(0)).toBe(false);
-    expect(isNullish('')).toBe(false);
-    expect(isNullish([])).toBe(false);
-    expect(isNullish({})).toBe(false);
-    expect(isNullish(1)).toBe(false);
+    expect(isNullish(0)).false;
+    expect(isNullish('')).false;
+    expect(isNullish([])).false;
+    expect(isNullish({})).false;
+    expect(isNullish(1)).false;
   });
 });
 
 describe(isNotNullish.name, () => {
   it('should return false for null or undefined', () => {
-    expect(isNotNullish(null)).toBe(false);
-    expect(isNotNullish(undefined)).toBe(false);
+    expect(isNotNullish(null)).false;
+    expect(isNotNullish(undefined)).false;
   });
 
   it('should return true for non-nullish values', () => {
-    expect(isNotNullish(0)).toBe(true);
-    expect(isNotNullish('')).toBe(true);
-    expect(isNotNullish([])).toBe(true);
-    expect(isNotNullish({})).toBe(true);
-    expect(isNotNullish(1)).toBe(true);
+    expect(isNotNullish(0)).true;
+    expect(isNotNullish('')).true;
+    expect(isNotNullish([])).true;
+    expect(isNotNullish({})).true;
+    expect(isNotNullish(1)).true;
   });
 });
