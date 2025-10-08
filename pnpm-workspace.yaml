@@ -7,7 +7,7 @@ catalog:
   '@types/node': 24.6.2
   graphql: 16.11.0
   lucuma-core: 0.147.1
-  lucuma-schemas: 0.174.0
+  lucuma-schemas: 0.174.1
   navigate-server-schema: 0.1.0-20250930-444ae729
   typescript: 5.9.3
 
