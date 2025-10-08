@@ -1,4 +1,4 @@
-import type { Instrument } from '../../../graphql/gen/index.ts';
+import type { Instrument } from '../../../graphql/gen/types.generated.ts';
 import type { Prisma } from '../../gen/client.ts';
 
 export const INITIAL_ENGINEERING_TARGETS: (Prisma.EngineeringTargetCreateInput & { instrument: Instrument })[] = [

@@ -8,7 +8,6 @@ import { INITIAL_ALTAIR_INSTRUMENT, INITIAL_GEMS_INSTRUMENT, INITIAL_INSTRUMENTS
 import { INITIAL_MECHANISM } from './init/mechanism.ts';
 import { INITIAL_ROTATOR } from './init/rotator.ts';
 import { INITIAL_SLEW_FLAGS } from './init/slewFlags.ts';
-import { INITIAL_USERS } from './init/users.ts';
 import { INITIAL_WINDOW_CENTER } from './init/windowCenter.ts';
 
 type Models = TypeMap['model'];
@@ -37,10 +36,6 @@ async function createRecord<TModel extends keyof Models>(
   await client.createMany({
     data: initialRecord,
   });
-}
-
-async function createUsers(prisma: PrismaClient) {
-  await createRecord(prisma, 'User', INITIAL_USERS, 'Users');
 }
 
 async function createInstruments(prisma: PrismaClient) {
@@ -96,7 +91,6 @@ async function createWindowCenters(prisma: PrismaClient) {
 }
 
 export async function write(client: PrismaClient) {
-  await createUsers(client);
   await createInstruments(client);
   await createSlewFlags(client);
   await createRotator(client);

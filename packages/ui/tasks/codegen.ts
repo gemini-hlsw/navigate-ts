@@ -1,5 +1,5 @@
 import type { CodegenConfig } from '@graphql-codegen/cli';
-import { dirname, join } from 'path';
+import { join } from 'path';
 
 // Simple mapping of scalar types to their TypeScript representation
 // Some of these might be wrong or incomplete, feel free to adjust as needed
@@ -89,7 +89,7 @@ export default {
       presetConfig,
     },
     './src/gql/configs/gen/': {
-      schema: join(dirname(require.resolve('navigate-schema')), 'src/**/*.graphql'),
+      schema: join('..', 'configs', 'src/**/*.graphql'),
       documents: './src/gql/configs/*.{ts,tsx}',
       config: sharedConfig,
       preset: 'client',

@@ -1,9 +1,8 @@
-import { startStandaloneServer } from '@apollo/server/standalone';
+import { createServer } from 'node:http';
 
 import { prisma } from './prisma/db.ts';
 import { populateDb } from './prisma/queries/main.ts';
-import type { ApolloContext } from './server.ts';
-import { server } from './server.ts';
+import { makeYogaServer } from './server.ts';
 
 if (process.argv.includes('populate')) {
   // Populate DB
@@ -14,9 +13,11 @@ if (process.argv.includes('populate')) {
   }
 } else {
   const port = parseInt(process.env.SERVER_PORT! || process.env.PORT!) || 4000;
-  const { url } = await startStandaloneServer<ApolloContext>(server, {
-    listen: { port },
-    context: () => Promise.resolve({ prisma }),
+  const yoga = makeYogaServer({ prisma });
+  // eslint-disable-next-line @typescript-eslint/no-misused-promises
+  const server = createServer(yoga);
+
+  server.listen(port, () => {
+    console.log(`🚀  Server ready at: http://localhost:${port}/`);
   });
-  console.log(`🚀  Server ready at: ${url}`);
 }

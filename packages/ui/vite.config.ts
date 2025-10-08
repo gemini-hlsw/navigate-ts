@@ -90,10 +90,6 @@ export default defineConfig(({ mode }) => ({
         target: 'http://navigate.lucuma.xyz:4000',
         changeOrigin: true,
       },
-      '^/odb': {
-        target: 'https://lucuma-postgres-odb-dev.herokuapp.com',
-        changeOrigin: true,
-      },
       '^/navigate/ws': {
         target: 'ws://localhost:9090',
         changeOrigin: true,

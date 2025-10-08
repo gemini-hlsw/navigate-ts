@@ -40,7 +40,7 @@ const errorLink = new ErrorLink(({ error, result, operation }) => {
 
   const combinedErrors = CombinedGraphQLErrors.is(error) ? new CombinedGraphQLErrors(result!, error.errors) : undefined;
 
-  const errorMessage = ctx.error?.detail ?? combinedErrors?.message ?? error.message;
+  const errorMessage = (ctx.error?.detail ?? combinedErrors?.message ?? error.message)?.trim();
 
   if (errorMessage) {
     store.get(toastAtom)?.show({
@@ -84,7 +84,7 @@ function createClient() {
     };
   });
 
-  const odbLink = new HttpLink({ uri: () => store.get(serverConfigAtom)?.odbUri ?? '/odb' });
+  const odbLink = new HttpLink({ uri: () => store.get(serverConfigAtom)?.odbUri });
 
   const subscriptionClient = createWsClient({
     url: navigateServerWsURI,

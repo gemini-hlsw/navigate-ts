@@ -3,17 +3,17 @@ import { describe, it } from 'node:test';
 
 import type {
   InstrumentConfig,
-  MutationResetInstrumentsArgs,
-  MutationUpdateInstrumentArgs,
-  QueryInstrumentArgs,
-} from '../graphql/gen/index.ts';
+  MutationresetInstrumentsArgs,
+  MutationupdateInstrumentArgs,
+  QueryinstrumentArgs,
+} from '../graphql/gen/types.generated.ts';
 import { initializeServerFixture } from './setup.ts';
 
 await describe('Instrument', async () => {
   const fixture = initializeServerFixture();
 
   await it('updateInstrument mutation updates the instrument', async () => {
-    await fixture.executeGraphql<MutationUpdateInstrumentArgs>({
+    await fixture.executeGraphql<MutationupdateInstrumentArgs>({
       query: `#graphql
         mutation updateInstrument($pk: PosInt!, $extraParams: JSON!) {
           updateInstrument(pk: $pk, extraParams: $extraParams) {
@@ -42,7 +42,7 @@ await describe('Instrument', async () => {
         where,
       });
 
-      await fixture.executeGraphql<MutationResetInstrumentsArgs>({
+      await fixture.executeGraphql<MutationresetInstrumentsArgs>({
         query: `#graphql
           mutation resetInstruments($name: Instrument!) {
             resetInstruments(name: $name)
@@ -65,7 +65,7 @@ await describe('Instrument', async () => {
 
   await describe('get unexistent instrument configuration', async () => {
     await it('returns previous configuration as fallback', async () => {
-      const response = await fixture.executeGraphql<QueryInstrumentArgs, { instrument: InstrumentConfig }>({
+      const response = await fixture.executeGraphql<QueryinstrumentArgs, { instrument: InstrumentConfig }>({
         query: `#graphql
           query instrument($name: Instrument!, $issPort: Int!, $wfs: WfsType!) {
             instrument(name: $name, issPort: $issPort, wfs: $wfs) {
@@ -86,7 +86,7 @@ await describe('Instrument', async () => {
     });
 
     await it('returns a default configuration if no previous config is found', async () => {
-      const response = await fixture.executeGraphql<QueryInstrumentArgs, { instrument: InstrumentConfig }>({
+      const response = await fixture.executeGraphql<QueryinstrumentArgs, { instrument: InstrumentConfig }>({
         query: `#graphql
           query instrument($name: Instrument!, $issPort: Int!, $wfs: WfsType!) {
             instrument(name: $name, issPort: $issPort, wfs: $wfs) {
