@@ -54,7 +54,7 @@
     "react-router": "7.9.3",
     "sass": "1.93.2",
     "vite": "7.1.9",
-    "vite-plugin-mkcert": "1.17.8",
+    "vite-plugin-mkcert": "1.17.9",
     "vitest": "3.2.4",
     "vitest-browser-react": "1.0.1"
   },
