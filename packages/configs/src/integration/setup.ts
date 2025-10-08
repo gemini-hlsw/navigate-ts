@@ -2,6 +2,7 @@ import assert from 'node:assert';
 import { after, afterEach, before, beforeEach } from 'node:test';
 
 import type { GraphQLRequest } from '@apollo/server';
+import { PrismaPg } from '@prisma/adapter-pg';
 import type { StartedPostgreSqlContainer } from '@testcontainers/postgresql';
 import { PostgreSqlContainer } from '@testcontainers/postgresql';
 import type { Options } from 'execa';
@@ -46,7 +47,9 @@ export function initializeServerFixture() {
     const databaseConnectionUri = container.getConnectionUri();
     const exec = execa<Options>({ env: { DATABASE_URL: databaseConnectionUri }, cancelSignal: signal });
     await exec`prisma migrate deploy`;
-    const client = extendPrisma(new PrismaClient({ datasourceUrl: databaseConnectionUri }));
+    const client = extendPrisma(
+      new PrismaClient({ adapter: new PrismaPg({ connectionString: databaseConnectionUri }) }),
+    );
     await populateDb(client);
     await client.$disconnect();
 
@@ -59,7 +62,9 @@ export function initializeServerFixture() {
     await container.restoreSnapshot();
 
     // Setup Prisma client with the test container connection
-    const prisma = extendPrisma(new PrismaClient({ datasourceUrl: container.getConnectionUri() }));
+    const prisma = extendPrisma(
+      new PrismaClient({ adapter: new PrismaPg({ connectionString: container.getConnectionUri() }) }),
+    );
 
     const contextValue: ApolloContext = { prisma };
 

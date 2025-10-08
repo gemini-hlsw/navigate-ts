@@ -24,45 +24,25 @@ import { WindowCenterResolver } from './graphql/resolvers/WindowCenter.ts';
 import type { PrismaClient } from './prisma/db.ts';
 
 // Resolvers define how to fetch the types defined in your schema.
-const resolvers = {
-  ...ScalarResolvers,
-  Query: {
-    ...AltairGuideLoopResolver.Query,
-    ...AltairInstrumentResolver.Query,
-    ...ConfigurationResolver.Query,
-    ...EngineeringTargetResolver.Query,
-    ...GemsGuideLoopResolver.Query,
-    ...GemsInstrumentResolver.Query,
-    ...GuideAlarmResolver.Query,
-    ...GuideLoopResolver.Query,
-    ...InstrumentResolver.Query,
-    ...MechanismResolver.Query,
-    ...RotatorResolver.Query,
-    ...SlewFlagsResolver.Query,
-    ...TargetResolver.Query,
-    ...UserResolver.Query,
-    ...VersionResolver.Query,
-    ...WindowCenterResolver.Query,
-  },
-  Mutation: {
-    ...AltairGuideLoopResolver.Mutation,
-    ...AltairInstrumentResolver.Mutation,
-    ...ConfigurationResolver.Mutation,
-    ...EngineeringTargetResolver.Mutation,
-    ...GemsGuideLoopResolver.Mutation,
-    ...GemsInstrumentResolver.Mutation,
-    ...GuideAlarmResolver.Mutation,
-    ...GuideLoopResolver.Mutation,
-    ...InstrumentResolver.Mutation,
-    ...MechanismResolver.Mutation,
-    ...RotatorResolver.Mutation,
-    ...SlewFlagsResolver.Mutation,
-    ...TargetResolver.Mutation,
-    ...UserResolver.Mutation,
-    ...VersionResolver.Mutation,
-    ...WindowCenterResolver.Mutation,
-  },
-};
+const resolvers = [
+  ScalarResolvers,
+  AltairGuideLoopResolver,
+  AltairInstrumentResolver,
+  ConfigurationResolver,
+  EngineeringTargetResolver,
+  GemsGuideLoopResolver,
+  GemsInstrumentResolver,
+  GuideAlarmResolver,
+  GuideLoopResolver,
+  InstrumentResolver,
+  MechanismResolver,
+  RotatorResolver,
+  SlewFlagsResolver,
+  TargetResolver,
+  UserResolver,
+  VersionResolver,
+  WindowCenterResolver,
+];
 
 export interface ApolloContext {
   prisma: PrismaClient;
@@ -71,7 +51,6 @@ export interface ApolloContext {
 const schemaGlob = join(dirname(fileURLToPath(import.meta.resolve('navigate-schema'))), 'src/**/*.graphql');
 const typeDefs = await loadSchema(schemaGlob, { loaders: [new GraphQLFileLoader()] });
 
-// Create and start ApolloServer
 export const server = new ApolloServer<ApolloContext>({
   typeDefs,
   resolvers,

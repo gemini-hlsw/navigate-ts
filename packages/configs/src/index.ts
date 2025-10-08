@@ -7,7 +7,11 @@ import { server } from './server.ts';
 
 if (process.argv.includes('populate')) {
   // Populate DB
-  await populateDb();
+  try {
+    await populateDb(prisma);
+  } finally {
+    await prisma.$disconnect();
+  }
 } else {
   const port = parseInt(process.env.SERVER_PORT! || process.env.PORT!) || 4000;
   const { url } = await startStandaloneServer<ApolloContext>(server, {
