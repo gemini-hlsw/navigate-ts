@@ -1,7 +1,7 @@
 import assert from 'node:assert';
 import { describe, it } from 'node:test';
 
-import type { MutationUpdateGuideAlarmArgs } from '../graphql/gen/index.ts';
+import type { MutationupdateGuideAlarmArgs } from '../graphql/gen/types.generated.ts';
 import { initializeServerFixture } from './setup.ts';
 
 await describe('GuideAlarm', async () => {
@@ -48,7 +48,7 @@ await describe('GuideAlarm', async () => {
   });
 
   await it('updateGuideAlarm mutation updates the guide alarm', async () => {
-    await fixture.executeGraphql<MutationUpdateGuideAlarmArgs>({
+    await fixture.executeGraphql<MutationupdateGuideAlarmArgs>({
       query: `#graphql
         mutation updateGuideAlarm($wfs: WfsType!, $enabled: Boolean, $limit: Int) {
           updateGuideAlarm(wfs: $wfs, enabled: $enabled, limit: $limit) {

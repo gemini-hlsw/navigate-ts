@@ -1,28 +1,31 @@
 import assert from 'node:assert';
 import { after, afterEach, before, beforeEach } from 'node:test';
 
-import type { GraphQLRequest } from '@apollo/server';
 import { PrismaPg } from '@prisma/adapter-pg';
 import type { StartedPostgreSqlContainer } from '@testcontainers/postgresql';
 import { PostgreSqlContainer } from '@testcontainers/postgresql';
 import type { Options } from 'execa';
 import { execa } from 'execa';
-import type { FormattedExecutionResult } from 'graphql';
+import type { ExecutionResult } from 'graphql';
 
 import type { PrismaClient as Prisma } from '../prisma/db.ts';
 import { extendPrisma } from '../prisma/extend.ts';
 import { PrismaClient } from '../prisma/gen/client.ts';
 import { populateDb } from '../prisma/queries/main.ts';
-import type { ApolloContext } from '../server.ts';
-import { server } from '../server.ts';
+import { makeYogaServer } from '../server.ts';
 
 interface ServerFixture {
   /**
    * Execute a graphql operation and return the result.
    */
-  executeGraphql: <TVariables extends Record<string, unknown>, TData = Record<string, unknown>>(
-    options: GraphQLRequest<TVariables>,
-  ) => Promise<FormattedExecutionResult<TData>>;
+  executeGraphql: <
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-parameters
+    TVariables extends Record<string, unknown>,
+    TData extends Record<string, unknown> = Record<string, unknown>,
+  >(options: {
+    query: string;
+    variables: TVariables;
+  }) => Promise<ExecutionResult<TData>>;
   prisma: Prisma;
 }
 
@@ -66,16 +69,35 @@ export function initializeServerFixture() {
       new PrismaClient({ adapter: new PrismaPg({ connectionString: container.getConnectionUri() }) }),
     );
 
-    const contextValue: ApolloContext = { prisma };
+    const yoga = makeYogaServer({ prisma });
 
-    async function executeGraphql<TData>(options: GraphQLRequest) {
-      const response = await server.executeOperation<TData>(options, { contextValue });
+    const executeGraphql: ServerFixture['executeGraphql'] = async <TData extends Record<string, unknown>>({
+      query,
+      variables,
+    }: {
+      query: string;
+      variables: Record<string, unknown>;
+    }) => {
+      const res = await yoga.fetch('http://yoga/graphql', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({
+          query: query,
+          variables: variables ?? undefined,
+        }),
+      });
 
-      assert.strictEqual(response.body.kind, 'single');
-      assert.ifError(response.body.singleResult.errors);
+      assert.ok(res.ok, `Graphql request failed: ${res.status} ${res.statusText} - ${await res.text()}`);
 
-      return response.body.singleResult;
-    }
+      const body = (await res.json()) as ExecutionResult<TData>;
+
+      assert.ifError(body.errors);
+
+      return body;
+    };
 
     fixture.executeGraphql = executeGraphql;
     fixture.prisma = prisma;

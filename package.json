@@ -12,7 +12,6 @@
   },
   "scripts": {
     "ui": "pnpm --filter navigate-ui",
-    "schema": "pnpm --filter navigate-schema",
     "configs": "pnpm --filter navigate-configs",
     "e2e": "pnpm --filter navigate-e2e",
     "all": "pnpm -r",

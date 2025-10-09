@@ -33,7 +33,7 @@ export default defineConfig(
   ),
   // @graphql-eslint tries to merge all schemas, even if defined separately. Because some same names are used but with different types we can't enable linting for both server/odb and configs at the same time
   // ...graphqlConfigForSchema(
-  //   join(dirname(import.meta.resolve('navigate-schema')), 'src/**/*.graphql'),
+  //   join(dirname(import.meta.resolve('navigate-configs')), '..', 'src/**/*.graphql'),
   //   './src/gql/configs',
   // ),
 );

@@ -17,3 +17,4 @@ Dockerfile
 packages/ui
 .npmrc
 gen
+packages/configs/src/{graphql,prisma}/gen

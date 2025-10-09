@@ -1,19 +1,37 @@
 import { GraphQLScalarType, Kind } from 'graphql';
-import { DateTimeResolver, JSONResolver, PositiveIntResolver, VoidResolver } from 'graphql-scalars';
-import { parseObservationId, parseTargetId } from 'lucuma-core';
-
-import type { Resolvers } from '../gen/index.ts';
+import { PositiveIntResolver } from 'graphql-scalars';
+import {
+  parseAttachmentId,
+  parseCallForProposalsId,
+  parseDatasetId,
+  parseExecutionEventId,
+  parseGroupId,
+  parseObservationId,
+  parseProgramId,
+  parseProgramNoteId,
+  parseProgramUserId,
+  parseStandardRoleId,
+  parseTargetId,
+  parseUserId,
+  parseVisitId,
+} from 'lucuma-core';
 
 PositiveIntResolver.name = 'PosInt';
+export const PosIntResolver = PositiveIntResolver;
 
-export const ScalarResolvers: Resolvers = {
-  DateTime: DateTimeResolver,
-  JSON: JSONResolver,
-  PosInt: PositiveIntResolver,
-  Void: VoidResolver,
-  ObservationId: newObdIdGraphQLScalarType('ObservationId', 'o', parseObservationId),
-  TargetId: newObdIdGraphQLScalarType('TargetId', 't', parseTargetId),
-};
+export const AttachmentIdResolver = newObdIdGraphQLScalarType('AttachmentId', 'a', parseAttachmentId);
+export const CallForProposalsIdResolver = newObdIdGraphQLScalarType('CallForProposalsId', 'c', parseCallForProposalsId);
+export const DatasetIdResolver = newObdIdGraphQLScalarType('DatasetId', 'd', parseDatasetId);
+export const ExecutionEventIdResolver = newObdIdGraphQLScalarType('ExecutionEventId', 'e', parseExecutionEventId);
+export const GroupIdResolver = newObdIdGraphQLScalarType('GroupId', 'g', parseGroupId);
+export const ObservationIdResolver = newObdIdGraphQLScalarType('ObservationId', 'o', parseObservationId);
+export const ProgramIdResolver = newObdIdGraphQLScalarType('ProgramId', 'p', parseProgramId);
+export const ProgramNoteIdResolver = newObdIdGraphQLScalarType('ProgramNoteId', 'n', parseProgramNoteId);
+export const ProgramUserIdResolver = newObdIdGraphQLScalarType('ProgramUserId', 'm', parseProgramUserId);
+export const StandardRoleIdResolver = newObdIdGraphQLScalarType('StandardRoleId', 'r', parseStandardRoleId);
+export const TargetIdResolver = newObdIdGraphQLScalarType('TargetId', 't', parseTargetId);
+export const UserIdResolver = newObdIdGraphQLScalarType('UserId', 'u', parseUserId);
+export const VisitIdResolver = newObdIdGraphQLScalarType('VisitId', 'v', parseVisitId);
 
 /**
  * Creates a new GraphQL scalar type for odb IDs.

@@ -4,7 +4,6 @@ This repository is a [monorepo](https://monorepo.tools/) for Navigate projects w
 
 - [navigate-ui](./packages/ui): Web UI used to configure the telescope and its subsystems Navigate UI, written in React.
 - [navigate-configs](./packages/configs): Backend api to manage configurations database using TypeScript, Graphql and Prisma.
-- [navigate-schema](./packages/schema): GraphQL schema for navigate-configs. Shared package between UI and Configs projects.
 
 # Running a docker Navigate instance (Production and Staging)
 
