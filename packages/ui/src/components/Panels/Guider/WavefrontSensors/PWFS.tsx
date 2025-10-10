@@ -10,6 +10,8 @@ import {
 } from '@gql/server/MechState';
 import { Dropdown } from 'primereact/dropdown';
 
+import { useMovingLabel } from './hooks';
+
 const filterOptions: { value: PwfsFilter; label: string }[] = [
   { value: 'NEUTRAL', label: 'neutral' },
   { value: 'BLUE', label: 'Blue' },
@@ -49,31 +51,46 @@ function PWFS({
 
   const loading = mechStateLoading || filterLoading || fieldStopLoading;
 
+  const [filterMovingLabel, setRequestedFilter] = useMovingLabel(mechStateLoading, data?.filter, filterOptions);
+  const [fieldStopMovingLabel, setRequestedFieldStop] = useMovingLabel(
+    mechStateLoading,
+    data?.fieldStop,
+    fieldStopOptions,
+  );
+
   return (
     <div className="pwfs">
       <label htmlFor="pwfs-filter" className="label">
         Filter
       </label>
+      <span className="moving-label">{filterMovingLabel}</span>
       <Dropdown
         inputId="pwfs-filter"
         disabled={disabled}
         loading={loading}
         value={data?.filter ?? null}
         options={filterOptions}
-        onChange={(e) => setFilter({ variables: { filter: e.value as PwfsFilter } })}
+        onChange={(e) => {
+          setRequestedFilter(e.value as PwfsFilter);
+          return setFilter({ variables: { filter: e.value as PwfsFilter } });
+        }}
         placeholder="Select filter"
       />
 
       <label htmlFor="pwfs-field-stop" className="label">
         Field stop
       </label>
+      <span className="moving-label">{fieldStopMovingLabel}</span>
       <Dropdown
         inputId="pwfs-field-stop"
         disabled={disabled}
         loading={loading}
         value={data?.fieldStop ?? null}
         options={fieldStopOptions}
-        onChange={(e) => setFieldStop({ variables: { fieldStop: e.value as PwfsFieldStop } })}
+        onChange={(e) => {
+          setRequestedFieldStop(e.value as PwfsFieldStop);
+          return setFieldStop({ variables: { fieldStop: e.value as PwfsFieldStop } });
+        }}
         placeholder="Select stop"
       />
     </div>

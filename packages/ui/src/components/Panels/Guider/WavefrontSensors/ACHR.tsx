@@ -7,6 +7,8 @@ import { useState } from 'react';
 
 import { useServerConfigValue } from '@/components/atoms/config';
 
+import { useMovingLabel } from './hooks';
+
 const lensOptions: { value: AcLens; label: string }[] = [
   { value: 'AC', label: 'AC' },
   { value: 'HRWFS', label: 'HRWFS' },
@@ -66,52 +68,73 @@ export function ACHR({ disabled }: { disabled: boolean }) {
 
   const ndFilterOptions = site === 'GN' ? gnNdFilterOptions : gsNdFilterOptions;
 
-  const [auxWindowSize, setAuxWindowSize] = useState<AcWindowSize>(windowSizeOptions[0]!.value);
+  const [auxWindowSize, setAuxWindowSize] = useState<AcWindowSize | null>(null);
+
+  const [lensMovingLabel, setRequestedLens] = useMovingLabel(mechsStateLoading, mechsState?.lens, lensOptions);
+  const [filterMovingLabel, setRequestedFilter] = useMovingLabel(mechsStateLoading, mechsState?.filter, filterOptions);
+  const [ndFilterMovingLabel, setRequestedNdFilter] = useMovingLabel(
+    mechsStateLoading,
+    mechsState?.ndFilter,
+    ndFilterOptions,
+  );
 
   return (
     <div className="achr">
       <label htmlFor="achr-lens" className="label">
         Lens
       </label>
+      <span className="moving-label">{lensMovingLabel}</span>
       <Dropdown
         loading={loading}
         inputId="achr-lens"
         disabled={disabled}
         value={mechsState?.lens ?? null}
         options={lensOptions}
-        onChange={(e) => setLens({ variables: { lens: e.value as AcLens } })}
+        onChange={(e) => {
+          setRequestedLens(e.value as AcLens);
+          return setLens({ variables: { lens: e.value as AcLens } });
+        }}
         placeholder="Select lens pos"
       />
 
       <label htmlFor="achr-filter" className="label">
         Filter
       </label>
+      <span className="moving-label">{filterMovingLabel}</span>
       <Dropdown
         loading={loading}
         inputId="achr-filter"
         disabled={disabled}
         value={mechsState?.filter ?? null}
         options={filterOptions}
-        onChange={(e) => setFilter({ variables: { filter: e.value as AcFilter } })}
+        onChange={(e) => {
+          setRequestedFilter(e.value as AcFilter);
+          return setFilter({ variables: { filter: e.value as AcFilter } });
+        }}
         placeholder="Select filter"
       />
 
       <label htmlFor="achr-nd" className="label">
         Neutral density
       </label>
+      <span className="moving-label">{ndFilterMovingLabel}</span>
       <Dropdown
         loading={loading}
         inputId="achr-nd"
         disabled={disabled}
         value={mechsState?.ndFilter ?? null}
         options={ndFilterOptions}
-        onChange={(e) => setNdFilter({ variables: { ndFilter: e.value as AcNdFilter } })}
+        onChange={(e) => {
+          setRequestedNdFilter(e.value as AcNdFilter);
+          return setNdFilter({ variables: { ndFilter: e.value as AcNdFilter } });
+        }}
         placeholder="Select state"
       />
 
       <label htmlFor="achr-window-size" className="label">
         ROI
       </label>
+      <span className="moving-label"></span>
       <div className="window-size">
         <Dropdown
           loading={loading}
@@ -120,9 +143,9 @@ export function ACHR({ disabled }: { disabled: boolean }) {
           disabled={disabled}
           value={auxWindowSize}
           options={windowSizeOptions}
-          onChange={async (e) => {
+          onChange={(e) => {
             setAuxWindowSize(e.value as AcWindowSize);
-            await setWindowSize({
+            return setWindowSize({
               variables: {
                 size: {
                   type: e.value as AcWindowSize,
@@ -146,7 +169,7 @@ export function ACHR({ disabled }: { disabled: boolean }) {
                 Promise.all([
                   setWindowCenter({ variables: { site, x: e.value } }),
                   setWindowSize({
-                    variables: { size: { type: auxWindowSize, center: { x: e.value, y: windowCenter?.y } } },
+                    variables: { size: { type: auxWindowSize!, center: { x: e.value, y: windowCenter?.y } } },
                   }),
                 ])
               }
@@ -163,7 +186,7 @@ export function ACHR({ disabled }: { disabled: boolean }) {
                 Promise.all([
                   setWindowCenter({ variables: { site, y: e.value } }),
                   setWindowSize({
-                    variables: { size: { type: auxWindowSize, center: { x: windowCenter?.x, y: e.value } } },
+                    variables: { size: { type: auxWindowSize!, center: { x: windowCenter?.x, y: e.value } } },
                   }),
                 ])
               }
