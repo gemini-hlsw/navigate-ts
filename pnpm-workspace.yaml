@@ -4,7 +4,7 @@ packages:
 catalog:
   '@graphql-codegen/cli': 6.0.0
   '@parcel/watcher': 2.5.1
-  '@types/node': 24.7.1
+  '@types/node': 24.7.2
   graphql: 16.11.0
   lucuma-core: 0.147.1
   lucuma-schemas: 0.175.0
