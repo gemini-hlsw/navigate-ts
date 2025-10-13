@@ -4,8 +4,7 @@ import { after, afterEach, before, beforeEach } from 'node:test';
 import { PrismaPg } from '@prisma/adapter-pg';
 import type { StartedPostgreSqlContainer } from '@testcontainers/postgresql';
 import { PostgreSqlContainer } from '@testcontainers/postgresql';
-import type { Options } from 'execa';
-import { execa } from 'execa';
+import fs from 'fs/promises';
 import type { ExecutionResult } from 'graphql';
 
 import type { PrismaClient as Prisma } from '../prisma/db.ts';
@@ -41,19 +40,18 @@ export function initializeServerFixture() {
 
   let container: StartedPostgreSqlContainer;
 
+  let isFirstRun = true;
+
   // Register setup to create the fixture
-  before(async ({ signal }) => {
+  before(async () => {
     // Create a postgres container for the tests
     container = await new PostgreSqlContainer('postgres:alpine').start();
 
     // Migrate and seed the database
-    const databaseConnectionUri = container.getConnectionUri();
-    const exec = execa<Options>({ env: { DATABASE_URL: databaseConnectionUri }, cancelSignal: signal });
-    await exec`prisma migrate deploy`;
     const client = extendPrisma(
-      new PrismaClient({ adapter: new PrismaPg({ connectionString: databaseConnectionUri }) }),
+      new PrismaClient({ adapter: new PrismaPg({ connectionString: container.getConnectionUri() }) }),
     );
-    await populateDb(client);
+    await migrateAndPopulateDb(client);
     await client.$disconnect();
 
     // Save starting snapshot of the database
@@ -61,8 +59,12 @@ export function initializeServerFixture() {
   });
 
   beforeEach(async () => {
-    // Restore the database to a clean state before each test
-    await container.restoreSnapshot();
+    if (!isFirstRun) {
+      // Restore the database to a clean state before each test (except the first)
+      await container.restoreSnapshot();
+    } else {
+      isFirstRun = false;
+    }
 
     // Setup Prisma client with the test container connection
     const prisma = extendPrisma(
@@ -113,4 +115,18 @@ export function initializeServerFixture() {
   });
 
   return fixture;
+}
+
+/**
+ * Apply all migrations, quicker than using prisma migrate deploy
+ */
+async function migrateAndPopulateDb(client: Prisma) {
+  const migrationDirs = (await fs.readdir('./prisma/migrations')).sort().filter((f) => !f.includes('.'));
+  for (const dir of migrationDirs) {
+    const migrationSqlContent = await fs.readFile(`./prisma/migrations/${dir}/migration.sql`, 'utf-8');
+    await client.$executeRawUnsafe(migrationSqlContent);
+  }
+  await populateDb(client, () => {
+    /* don't log db initialization */
+  });
 }
