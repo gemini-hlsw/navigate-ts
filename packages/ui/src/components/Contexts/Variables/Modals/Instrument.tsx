@@ -11,13 +11,14 @@ import {
 } from '@gql/configs/Instrument';
 import type { Instrument as InstrumentName } from '@gql/odb/gen/graphql';
 import { formatDate } from 'date-fns';
-import { FilterMatchMode } from 'primereact/api';
+import { FilterMatchMode, FilterService } from 'primereact/api';
 import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
 import { ConfirmPopup, confirmPopup } from 'primereact/confirmpopup';
 import { DataTable } from 'primereact/datatable';
 import { Dialog } from 'primereact/dialog';
 import { Dropdown } from 'primereact/dropdown';
+import { useMountEffect } from 'primereact/hooks';
 import { MultiSelect } from 'primereact/multiselect';
 import { useRef, useState } from 'react';
 
@@ -93,7 +94,13 @@ export function Instrument() {
   const footer = (
     <div className="modal-footer">
       <Button text severity="danger" label="Cancel" onClick={closeModal} />
-      <Button label="Import" disabled={!instrument} loading={loading} onClick={modifyInstrument} />
+      <Button
+        label="Import"
+        disabled={!instrument}
+        loading={loading}
+        onClick={modifyInstrument}
+        data-testid="import-button"
+      />
     </div>
   );
 
@@ -198,15 +205,19 @@ function InstrumentTable({
   deleteInstrument: (pk: number) => void;
   loading: boolean;
 }) {
-  const tableData = instruments
-    .filter((i) => !i.isTemporary)
-    .map((i) => ({ ...i, extraParams: JSON.stringify(i.extraParams, undefined, 2), createdAt: new Date(i.createdAt) }));
+  const tableData = instruments.filter((i) => !i.isTemporary).map((i) => ({ ...i, createdAt: new Date(i.createdAt) }));
 
   const uniqueWfs = Array.from(new Set(tableData.map((i) => i.wfs)));
 
   const makeDeleteInstrumentButton = (i: InstrumentType) => (
     <DeleteInstrumentButton instrument={i} onDelete={deleteInstrument} />
   );
+
+  useMountEffect(() => {
+    FilterService.register('custom_extraParams', (value, filter: string) =>
+      JSON.stringify(value, undefined, 2).includes(filter),
+    );
+  });
 
   return (
     <>
@@ -252,7 +263,8 @@ function InstrumentTable({
           header="Extra Params"
           filter
           filterPlaceholder="Filter params"
-          filterMatchMode={FilterMatchMode.CONTAINS}
+          filterMatchMode={FilterMatchMode.CUSTOM}
+          body={(i: InstrumentType) => JSON.stringify(i.extraParams, undefined, 2)}
           showFilterMenu={false}
         />
         <Column

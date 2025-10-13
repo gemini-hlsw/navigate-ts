@@ -7,7 +7,7 @@ import { getConfigWfs, isNullish } from '@/Helpers/functions';
 import { useConfiguration } from './Configuration';
 import { graphql } from './gen';
 
-const GET_DISTINCT_INSTRUMENTS = graphql(`
+export const GET_DISTINCT_INSTRUMENTS = graphql(`
   query getDistinctInstruments {
     distinctInstruments
   }
@@ -25,7 +25,7 @@ export function useDistinctInstruments(options: OptionsOf<typeof GET_DISTINCT_IN
   );
 }
 
-const GET_DISTINCT_PORTS = graphql(`
+export const GET_DISTINCT_PORTS = graphql(`
   query getDistinctPorts($name: Instrument!) {
     distinctPorts(name: $name)
   }

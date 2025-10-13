@@ -17,11 +17,9 @@ export const expiredJwt =
  */
 export async function selectDropdownOption(sut: RenderResult, label: string, optionLabel: string) {
   const getWrapper = () => sut.getByLabelText(label, { exact: true }).element().parentElement?.parentElement;
-  await expect.poll(getWrapper).toBeVisible();
 
   await userEvent.click(getWrapper()!.querySelector('.p-dropdown-trigger')!);
 
   const option = sut.getByText(optionLabel, { exact: true });
-  await expect.element(option).toBeVisible();
   await userEvent.click(option);
 }

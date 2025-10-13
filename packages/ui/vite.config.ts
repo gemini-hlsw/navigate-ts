@@ -96,6 +96,9 @@ export default defineConfig(({ mode }) => ({
         ws: true,
       },
     },
+    hmr: {
+      overlay: mode === 'development',
+    },
   },
   css: {
     postcss: {
@@ -126,6 +129,7 @@ export default defineConfig(({ mode }) => ({
           retry: process.env.CI ? 2 : 0,
           // Disable animations in tests to speed them up
           context: { reducedMotion: 'reduce' },
+          viewport: { width: 834, height: 1112 },
         },
       ],
     },
