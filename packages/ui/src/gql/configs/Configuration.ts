@@ -28,7 +28,7 @@ export function useConfiguration() {
   });
 }
 
-const UPDATE_CONFIGURATION = graphql(`
+export const UPDATE_CONFIGURATION = graphql(`
   mutation updateConfiguration(
     $pk: PosInt!
     $selectedTarget: Int

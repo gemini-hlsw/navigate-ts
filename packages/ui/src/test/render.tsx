@@ -51,7 +51,7 @@ export function renderWithContext<T extends AtomTuples>(
     options,
   );
 
-  return { ...renderResult, store };
+  return Object.assign(renderResult, { store });
 }
 
 const mocks: MockLink.MockedResponse[] = [
