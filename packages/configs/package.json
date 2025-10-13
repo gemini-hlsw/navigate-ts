@@ -43,7 +43,6 @@
     "@parcel/watcher": "catalog:",
     "@testcontainers/postgresql": "11.7.1",
     "@types/node": "catalog:",
-    "execa": "9.6.0",
     "lucuma-schemas": "catalog:",
     "navigate-server-schema": "catalog:",
     "typescript": "catalog:"
