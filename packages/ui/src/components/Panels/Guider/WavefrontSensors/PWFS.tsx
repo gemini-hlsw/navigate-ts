@@ -10,6 +10,8 @@ import {
 } from '@gql/server/MechState';
 import { Dropdown } from 'primereact/dropdown';
 
+import { isNotNullish } from '@/Helpers/functions';
+
 import { useMovingLabel } from './hooks';
 
 const filterOptions: { value: PwfsFilter; label: string }[] = [
@@ -63,13 +65,12 @@ function PWFS({
       <label htmlFor="pwfs-filter" className="label">
         Filter
       </label>
-      <span className="moving-label">{filterMovingLabel}</span>
       <Dropdown
         inputId="pwfs-filter"
-        disabled={disabled}
+        disabled={disabled || isNotNullish(filterMovingLabel)}
         loading={loading}
-        value={data?.filter ?? null}
-        options={filterOptions}
+        value={filterMovingLabel ?? data?.filter ?? null}
+        options={filterMovingLabel ? [filterMovingLabel] : filterOptions}
         onChange={(e) => {
           setRequestedFilter(e.value as PwfsFilter);
           return setFilter({ variables: { filter: e.value as PwfsFilter } });
@@ -80,13 +81,12 @@ function PWFS({
       <label htmlFor="pwfs-field-stop" className="label">
         Field stop
       </label>
-      <span className="moving-label">{fieldStopMovingLabel}</span>
       <Dropdown
         inputId="pwfs-field-stop"
-        disabled={disabled}
+        disabled={disabled || isNotNullish(fieldStopMovingLabel)}
         loading={loading}
-        value={data?.fieldStop ?? null}
-        options={fieldStopOptions}
+        value={fieldStopMovingLabel ?? data?.fieldStop ?? null}
+        options={fieldStopMovingLabel ? [fieldStopMovingLabel] : fieldStopOptions}
         onChange={(e) => {
           setRequestedFieldStop(e.value as PwfsFieldStop);
           return setFieldStop({ variables: { fieldStop: e.value as PwfsFieldStop } });

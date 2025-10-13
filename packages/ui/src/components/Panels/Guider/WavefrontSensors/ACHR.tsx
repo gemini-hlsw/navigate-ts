@@ -6,6 +6,7 @@ import { InputNumber } from 'primereact/inputnumber';
 import { useState } from 'react';
 
 import { useServerConfigValue } from '@/components/atoms/config';
+import { isNotNullish } from '@/Helpers/functions';
 
 import { useMovingLabel } from './hooks';
 
@@ -83,13 +84,12 @@ export function ACHR({ disabled }: { disabled: boolean }) {
       <label htmlFor="achr-lens" className="label">
         Lens
       </label>
-      <span className="moving-label">{lensMovingLabel}</span>
       <Dropdown
         loading={loading}
         inputId="achr-lens"
-        disabled={disabled}
-        value={mechsState?.lens ?? null}
-        options={lensOptions}
+        disabled={disabled || isNotNullish(lensMovingLabel)}
+        value={lensMovingLabel ?? mechsState?.lens ?? null}
+        options={lensMovingLabel ? [lensMovingLabel] : lensOptions}
         onChange={(e) => {
           setRequestedLens(e.value as AcLens);
           return setLens({ variables: { lens: e.value as AcLens } });
@@ -100,13 +100,12 @@ export function ACHR({ disabled }: { disabled: boolean }) {
       <label htmlFor="achr-filter" className="label">
         Filter
       </label>
-      <span className="moving-label">{filterMovingLabel}</span>
       <Dropdown
         loading={loading}
         inputId="achr-filter"
-        disabled={disabled}
-        value={mechsState?.filter ?? null}
-        options={filterOptions}
+        disabled={disabled || isNotNullish(filterMovingLabel)}
+        value={filterMovingLabel ?? mechsState?.filter ?? null}
+        options={filterMovingLabel ? [filterMovingLabel] : filterOptions}
         onChange={(e) => {
           setRequestedFilter(e.value as AcFilter);
           return setFilter({ variables: { filter: e.value as AcFilter } });
@@ -117,13 +116,12 @@ export function ACHR({ disabled }: { disabled: boolean }) {
       <label htmlFor="achr-nd" className="label">
         Neutral density
       </label>
-      <span className="moving-label">{ndFilterMovingLabel}</span>
       <Dropdown
         loading={loading}
         inputId="achr-nd"
-        disabled={disabled}
-        value={mechsState?.ndFilter ?? null}
-        options={ndFilterOptions}
+        disabled={disabled || isNotNullish(ndFilterMovingLabel)}
+        value={ndFilterMovingLabel ?? mechsState?.ndFilter ?? null}
+        options={ndFilterMovingLabel ? [ndFilterMovingLabel] : ndFilterOptions}
         onChange={(e) => {
           setRequestedNdFilter(e.value as AcNdFilter);
           return setNdFilter({ variables: { ndFilter: e.value as AcNdFilter } });
@@ -134,7 +132,6 @@ export function ACHR({ disabled }: { disabled: boolean }) {
       <label htmlFor="achr-window-size" className="label">
         ROI
       </label>
-      <span className="moving-label"></span>
       <div className="window-size">
         <Dropdown
           loading={loading}
