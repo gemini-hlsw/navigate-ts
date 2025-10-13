@@ -12,20 +12,15 @@ export function useMovingLabel<T>(loading: boolean, state: T | undefined, option
   // Moving if:
   // - query has loaded (after mounting component)
   // - state is nullish or different to requested state
-  const isMoving = <T,>(state: T | undefined, requestedState: T | null) =>
-    !loading && isNotNullish(requestedState) && (isNullish(state) || requestedState !== state);
+  const isMoving = !loading && isNotNullish(requestedState) && (isNullish(state) || requestedState !== state);
 
   const findLabel = <T,>(options: { value: T; label: string }[], value: T | undefined) =>
     options.find((o) => o.value === value)?.label;
 
   return [
-    isMoving(state, requestedState) ? (
-      <>
-        {findLabel(options, state) ?? 'moving'} ➡️ {findLabel(options, requestedState) ?? 'unknown'}
-      </>
-    ) : (
-      <></>
-    ),
+    isMoving
+      ? `${findLabel(options, state) ?? 'moving'} ➡️ ${findLabel(options, requestedState) ?? 'unknown'}`
+      : undefined,
     setRequestedState,
   ] as const;
 }

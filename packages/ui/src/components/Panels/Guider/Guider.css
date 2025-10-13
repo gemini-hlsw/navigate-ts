@@ -103,7 +103,7 @@
             .pwfs {
               display: grid;
               font-size: 0.9rem;
-              grid-template-columns: 0.5fr 0.5fr 1fr;
+              grid-template-columns: 1fr 1fr;
               grid-template-rows: repeat(2, auto);
               align-items: center;
               gap: 8px;
@@ -112,7 +112,7 @@
             .achr {
               display: grid;
               font-size: 0.9rem;
-              grid-template-columns: 0.5fr 0.5fr 1fr;
+              grid-template-columns: 1fr 1fr;
               grid-template-rows: repeat(4, auto);
               gap: 8px;
               align-items: center;
