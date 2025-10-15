@@ -7,8 +7,7 @@ catalog:
   '@types/node': 24.7.2
   graphql: 16.11.0
   lucuma-core: 0.147.1
-  lucuma-schemas: 0.175.0
-  navigate-server-schema: 0.1.0-20250930-444ae729
+  lucuma-schemas: 0.176.0-43-g6da577d
   typescript: 5.9.3
 
 injectWorkspacePackages: true
