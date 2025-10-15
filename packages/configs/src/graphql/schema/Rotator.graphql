@@ -1,4 +1,4 @@
-#import RotatorTrackingMode from 'navigate-server-schema/navigate.graphql'
+#import RotatorTrackingMode from 'lucuma-schemas/navigate'
 #import PosInt from "lucuma-schemas/odb"
 
 type Rotator {

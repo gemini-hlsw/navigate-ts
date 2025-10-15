@@ -44,7 +44,6 @@
     "@testcontainers/postgresql": "11.7.1",
     "@types/node": "catalog:",
     "lucuma-schemas": "catalog:",
-    "navigate-server-schema": "catalog:",
     "typescript": "catalog:"
   },
   "files": [

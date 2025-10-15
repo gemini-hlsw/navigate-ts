@@ -1,6 +1,6 @@
 #import DateTime from "./Scalars.graphql"
 #import RA, Az, El, Dec, TargetType, ProperMotion from "./Target.graphql"
-#import RotatorTrackingMode from 'navigate-server-schema/navigate.graphql'
+#import RotatorTrackingMode from 'lucuma-schemas/navigate'
 #import Instrument, PosInt from "lucuma-schemas/odb"
 
 type EngineeringTarget {

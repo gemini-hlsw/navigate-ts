@@ -82,7 +82,7 @@ export default {
       presetConfig,
     },
     './src/gql/server/gen/': {
-      schema: require.resolve('navigate-server-schema/navigate.graphql'),
+      schema: require.resolve('lucuma-schemas/navigate'),
       documents: './src/gql/server/*.{ts,tsx}',
       config: sharedConfig,
       preset: 'client',
