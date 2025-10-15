@@ -38,7 +38,7 @@
     "prisma": "6.17.1"
   },
   "devDependencies": {
-    "@eddeee888/gcg-typescript-resolver-files": "0.13.0",
+    "@eddeee888/gcg-typescript-resolver-files": "0.14.0",
     "@graphql-codegen/cli": "catalog:",
     "@parcel/watcher": "catalog:",
     "@testcontainers/postgresql": "11.7.1",
