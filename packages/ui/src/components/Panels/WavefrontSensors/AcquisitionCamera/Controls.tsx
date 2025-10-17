@@ -5,7 +5,7 @@ import { Dropdown } from 'primereact/dropdown';
 import { InputNumber } from 'primereact/inputnumber';
 import { InputSwitch } from 'primereact/inputswitch';
 import { Slider } from 'primereact/slider';
-import { useCallback, useEffect, useState } from 'react';
+import { startTransition, useState } from 'react';
 
 import { CaretDown, CaretLeft, CaretRight, CaretUp } from '@/components/Icons';
 import { formatToSignedArcseconds, instrumentToOiwfs } from '@/Helpers/functions';
@@ -36,15 +36,15 @@ export function AlignmentSelector({
   const { data: configData, loading: configLoading } = useConfiguration();
   const instrument = configData?.configuration?.obsInstrument;
 
-  const updateAlignment = useCallback(() => {
-    if (alignment === 'OIWFS') {
-      onChange(wfsStrategy(instrumentToOiwfs(instrument)!));
-    } else {
-      onChange(strategies[alignment]);
-    }
-  }, [alignment, instrument, onChange]);
-
-  useEffect(() => updateAlignment(), [instrument, updateAlignment, alignment]);
+  const updateAlignment = (alignment: Alignment) =>
+    startTransition(() => {
+      setAlignment(alignment);
+      if (alignment === 'OIWFS') {
+        onChange(wfsStrategy(instrumentToOiwfs(instrument)!));
+      } else {
+        onChange(strategies[alignment]);
+      }
+    });
 
   return (
     <>
@@ -54,7 +54,7 @@ export function AlignmentSelector({
         disabled={loading || !canEdit || configLoading}
         value={alignment}
         options={alignmentOptions.map((cs) => cs)}
-        onChange={(e) => setAlignment(e.value as Alignment)}
+        onChange={(e) => updateAlignment(e.value as Alignment)}
       />
     </>
   );

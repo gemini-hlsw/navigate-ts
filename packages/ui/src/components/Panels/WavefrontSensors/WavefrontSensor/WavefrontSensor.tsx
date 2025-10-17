@@ -7,7 +7,7 @@ import { clsx } from 'clsx';
 import { Button } from 'primereact/button';
 import { Checkbox } from 'primereact/checkbox';
 import { Dropdown } from 'primereact/dropdown';
-import { useCallback, useEffect, useId, useState } from 'react';
+import { useEffect, useId, useState } from 'react';
 
 import { Play, Stop } from '@/components/Icons';
 import { instrumentToOiwfs } from '@/Helpers/functions';
@@ -155,16 +155,13 @@ function TakeSkyButton({ freq, wfs, canEdit }: { freq: number; wfs: GuideProbe; 
   const { data: configData, loading: configLoading } = useConfiguration();
   const instrument = configData?.configuration?.obsInstrument;
 
-  const onClick = useCallback(
-    () =>
-      takeSky({
-        variables: {
-          wfs: wfs.includes('OIWFS') ? instrumentToOiwfs(instrument)! : wfs,
-          period: { milliseconds: (1 / freq) * 1000 },
-        },
-      }),
-    [freq, takeSky, wfs, instrument],
-  );
+  const onClick = () =>
+    takeSky({
+      variables: {
+        wfs: wfs.includes('OIWFS') ? instrumentToOiwfs(instrument)! : wfs,
+        period: { milliseconds: (1 / freq) * 1000 },
+      },
+    });
 
   return (
     <Button
