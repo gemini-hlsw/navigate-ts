@@ -6,7 +6,7 @@ import {
 } from '@gql/server/OriginHandset';
 import { Button } from 'primereact/button';
 import { ButtonGroup } from 'primereact/buttongroup';
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 
 import { AlignmentSelector, Autoadjust, CurrentCoordinates, InputControls, OpenLoopsInput } from './Controls';
 import type { Coords, HandsetStrategy } from './strategy';
@@ -26,16 +26,13 @@ export default function InstrumentHandset({ canEdit }: { canEdit: boolean }) {
   const [strategy, setStrategy] = useState<HandsetStrategy>(strategies[defaultAlignment]);
   const [openLoops, setOpenLoops] = useState(true);
 
-  const handleApply = useCallback(
-    async (coords: Coords) =>
-      adjustOrigin({
-        variables: {
-          offset: strategy.toInput(coords),
-          openLoops,
-        },
-      }),
-    [adjustOrigin, openLoops, strategy],
-  );
+  const handleApply = async (coords: Coords) =>
+    adjustOrigin({
+      variables: {
+        offset: strategy.toInput(coords),
+        openLoops,
+      },
+    });
 
   const loading = offsetLoading || adjustOriginLoading || resetAdjustmentLoading || absorbAdjustmentLoading;
 
