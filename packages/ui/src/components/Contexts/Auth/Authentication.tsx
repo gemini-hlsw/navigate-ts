@@ -43,7 +43,7 @@ export function Authentication() {
   useEffect(() => {
     let toastMessage: ToastMessage | null = null;
 
-    if (user && user.type === 'standard' && user.role.type !== 'staff') {
+    if (user?.type === 'standard' && user.role.type !== 'staff') {
       const staffRole = user.otherRoles.find((role) => role.type === 'staff');
       if (staffRole) {
         console.log('Switching to staff role');
