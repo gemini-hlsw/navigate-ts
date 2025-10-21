@@ -3,6 +3,82 @@ import type { OptionsOf } from '@gql/util';
 
 import { graphql } from './gen';
 
+const GET_OBSERVATION_BY_ID = graphql(`
+  query getObservationById($obsId: ObservationId!) {
+    observation(observationId: $obsId) {
+      id
+      existence
+      title
+      subtitle
+      instrument
+      reference {
+        label
+      }
+      program {
+        id
+        existence
+        name
+        pi {
+          id
+          user {
+            id
+            profile {
+              givenName
+              familyName
+            }
+          }
+        }
+      }
+      targetEnvironment {
+        firstScienceTarget {
+          id
+          existence
+          name
+          sidereal {
+            epoch
+            ra {
+              hms
+              degrees
+            }
+            dec {
+              dms
+              degrees
+            }
+            properMotion {
+              ra {
+                microarcsecondsPerYear
+              }
+              dec {
+                microarcsecondsPerYear
+              }
+            }
+            parallax {
+              microarcseconds
+            }
+            radialVelocity {
+              centimetersPerSecond
+            }
+          }
+          sourceProfile {
+            point {
+              bandNormalized {
+                brightnesses {
+                  band
+                  value
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`);
+
+export function useObservationById() {
+  return useLazyQuery(GET_OBSERVATION_BY_ID);
+}
+
 const GET_OBSERVATIONS_BY_STATE = graphql(`
   # eslint-disable @graphql-eslint/selection-set-depth
   query getObservationsByState($states: [ObservationWorkflowState!]!, $site: Site!, $date: Date!) {

@@ -58,3 +58,10 @@ export function instrumentToOiwfs(instrument: Instrument | null | undefined): Gu
       return undefined;
   }
 }
+
+/**
+ * Get the first element of an array if it has only one element
+ */
+export function firstIfOnlyOne<T>(arr: T[] | undefined): T | undefined {
+  return arr?.length === 1 ? arr[0] : undefined;
+}
