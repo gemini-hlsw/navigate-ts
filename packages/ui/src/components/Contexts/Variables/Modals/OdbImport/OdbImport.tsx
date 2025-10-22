@@ -32,7 +32,7 @@ export function OdbImport() {
         },
   );
 
-  const { importLoading, importObservation } = useImportObservation();
+  const [importObservation, { loading: importLoading }] = useImportObservation();
 
   async function updateObs() {
     await importObservation(selectedObservation, () => {

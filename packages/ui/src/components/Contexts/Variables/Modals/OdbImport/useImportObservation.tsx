@@ -176,5 +176,5 @@ export function useImportObservation() {
     }
   }
 
-  return { importLoading, importObservation };
+  return [importObservation, { loading: importLoading }] as const;
 }

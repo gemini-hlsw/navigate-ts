@@ -21,7 +21,7 @@ export function TelescopeTitle({ prevPanel, nextPanel }: ParamsInterface) {
   const setCatalogVisible = useSetCatalogVisible();
 
   const configuration = useConfiguration().data?.configuration;
-  const { importLoading, importObservation } = useImportObservation();
+  const [importObservation, { loading: importLoading }] = useImportObservation();
   const [getObservation, { loading: getObservationLoading }] = useObservationById();
 
   async function reimportObservation() {
