@@ -172,7 +172,7 @@ export function useImportObservation() {
         });
       }
     } finally {
-      if (callback) callback();
+      callback?.();
     }
   }
 
