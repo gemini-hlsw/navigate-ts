@@ -1,8 +1,7 @@
-import { useSetWindowCenter, useWindowCenter } from '@gql/configs/WindowCenter';
+import { useCalParams } from '@gql/configs/CalParams';
 import type { AcFilter, AcLens, AcNdFilter, AcWindowSize } from '@gql/server/gen/graphql';
 import { useAcFilter, useAcLens, useAcMechsState, useAcNdFilter, useAcWindowSize } from '@gql/server/MechState';
 import { Dropdown } from 'primereact/dropdown';
-import { InputNumber } from 'primereact/inputnumber';
 import { useState } from 'react';
 
 import { useServerConfigValue } from '@/components/atoms/config';
@@ -49,23 +48,16 @@ export function ACHR({ disabled }: { disabled: boolean }) {
   const { site } = useServerConfigValue();
 
   const { data: mechsState, loading: mechsStateLoading } = useAcMechsState();
-  const { data: windowCenterData, loading: windowCenterLoading } = useWindowCenter(site);
-  const windowCenter = windowCenterData?.windowCenter;
+  const { data: calParamsData, loading: calParamsLoading } = useCalParams(site);
+  const calParams = calParamsData?.calParams;
 
   const [setLens, { loading: lensLoading }] = useAcLens();
   const [setFilter, { loading: filterLoading }] = useAcFilter();
   const [setNdFilter, { loading: ndFilterLoading }] = useAcNdFilter();
   const [setWindowSize, { loading: windowSizeLoading }] = useAcWindowSize();
-  const [setWindowCenter, { loading: setWindowCenterLoading }] = useSetWindowCenter();
 
   const loading =
-    mechsStateLoading ||
-    windowCenterLoading ||
-    lensLoading ||
-    ndFilterLoading ||
-    filterLoading ||
-    windowSizeLoading ||
-    setWindowCenterLoading;
+    mechsStateLoading || calParamsLoading || lensLoading || ndFilterLoading || filterLoading || windowSizeLoading;
 
   const ndFilterOptions = site === 'GN' ? gnNdFilterOptions : gsNdFilterOptions;
 
@@ -146,51 +138,13 @@ export function ACHR({ disabled }: { disabled: boolean }) {
               variables: {
                 size: {
                   type: e.value as AcWindowSize,
-                  center: e.value !== 'FULL' ? { x: windowCenter?.x, y: windowCenter?.y } : undefined,
+                  center: e.value !== 'FULL' ? { x: calParams?.acqCamX, y: calParams?.acqCamY } : undefined,
                 },
               },
             });
           }}
           placeholder="Select ROI"
         />
-        {auxWindowSize !== 'FULL' && (
-          <div className="window-size-inputs">
-            <label htmlFor="achr-window-center-x" className="label">
-              X
-            </label>
-            <InputNumber
-              inputId="achr-window-center-x"
-              disabled={disabled || setWindowCenterLoading}
-              value={windowCenter?.x ?? null}
-              onValueChange={(e) =>
-                Promise.all([
-                  setWindowCenter({ variables: { site, x: e.value } }),
-                  setWindowSize({
-                    variables: { size: { type: auxWindowSize!, center: { x: e.value, y: windowCenter?.y } } },
-                  }),
-                ])
-              }
-              maxFractionDigits={0}
-            />
-            <label htmlFor="achr-window-center-y" className="label">
-              Y
-            </label>
-            <InputNumber
-              inputId="achr-window-center-y"
-              disabled={disabled || setWindowCenterLoading}
-              value={windowCenter?.y ?? null}
-              onValueChange={(e) =>
-                Promise.all([
-                  setWindowCenter({ variables: { site, y: e.value } }),
-                  setWindowSize({
-                    variables: { size: { type: auxWindowSize!, center: { x: windowCenter?.x, y: e.value } } },
-                  }),
-                ])
-              }
-              maxFractionDigits={0}
-            />
-          </div>
-        )}
       </div>
     </div>
   );

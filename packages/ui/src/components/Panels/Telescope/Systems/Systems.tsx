@@ -9,6 +9,7 @@ import { Altair, GeMS } from './AdaptiveOptics';
 import { AgMechanism } from './AgMechanism';
 import { Indicators } from './Indicators';
 import { Instrument } from './Instrument';
+import { M2Baffles } from './M2Baffles';
 import { Rotator } from './Rotator';
 import { BotSubsystems, TopSubsystems } from './Subsystems';
 
@@ -42,6 +43,7 @@ export function Systems() {
       <div className="right">
         <Instrument canEdit={canEdit} />
         <Rotator canEdit={canEdit} />
+        <M2Baffles canEdit={canEdit} />
         {aoSystem}
       </div>
     </div>

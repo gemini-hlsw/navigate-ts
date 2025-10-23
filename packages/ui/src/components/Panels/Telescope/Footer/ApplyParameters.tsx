@@ -8,6 +8,7 @@ import { useConfigureTcs } from '@gql/server/TcsConfiguration';
 import { createTcsConfigInput } from '@Telescope/Targets/inputs';
 import { Button } from 'primereact/button';
 
+import { useM2BaffleConfigValue } from '@/components/atoms/baffles';
 import { useServerConfigValue } from '@/components/atoms/config';
 import { useToast } from '@/Helpers/toast';
 
@@ -47,6 +48,7 @@ function useTcsConfigInput():
   | { data: TcsConfigInput; loading: boolean; detail: undefined }
   | { data: undefined; loading: boolean; detail: string } {
   const { site } = useServerConfigValue();
+  const baffleConfig = useM2BaffleConfigValue();
 
   const { data: configurationData, loading: configurationLoading } = useConfiguration();
   const configuration = configurationData?.configuration;
@@ -84,7 +86,7 @@ function useTcsConfigInput():
   const oiTarget = targetsData.oiTargets.find((t) => t.pk === configuration?.selectedOiTarget);
 
   return {
-    data: createTcsConfigInput(instrument, rotator, baseTarget, oiTarget, calParams),
+    data: createTcsConfigInput(instrument, rotator, baseTarget, oiTarget, calParams, baffleConfig),
     loading,
     detail: undefined,
   };

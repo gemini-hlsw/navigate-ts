@@ -1,10 +1,13 @@
 import type { CalParams, InstrumentConfig, Rotator, Target } from '@gql/configs/gen/graphql';
 import type {
+  BaffleConfigInput,
   InstrumentSpecificsInput,
   RotatorTrackingInput,
   TargetPropertiesInput,
   TcsConfigInput,
 } from '@gql/server/gen/graphql';
+
+import type { M2BaffleConfig } from '@/components/atoms/baffles';
 
 export function createRotatorTrackingInput(rotator: Rotator): RotatorTrackingInput {
   return { ipa: { degrees: rotator.angle }, mode: rotator.tracking };
@@ -47,12 +50,35 @@ export function createTargetPropertiesInput(target: Target): TargetPropertiesInp
   };
 }
 
+export function createBafflesInput(
+  calParams: Pick<CalParams, 'baffleVisible' | 'baffleNearIR'>,
+  config: M2BaffleConfig,
+): BaffleConfigInput {
+  return {
+    autoConfig:
+      config.mode === 'AUTO'
+        ? {
+            nearirLimit: { micrometers: calParams.baffleNearIR },
+            visibleLimit: { micrometers: calParams.baffleVisible },
+          }
+        : undefined,
+    manualConfig:
+      config.mode === 'MANUAL'
+        ? {
+            centralBaffle: config.input.centralBaffle!,
+            deployableBaffle: config.input.deployableBaffle!,
+          }
+        : undefined,
+  };
+}
+
 export function createTcsConfigInput(
   instrument: InstrumentConfig,
   rotator: Rotator,
   target: Target,
   oiTarget: Target | undefined,
   calParams: Pick<CalParams, 'baffleVisible' | 'baffleNearIR'>,
+  config: M2BaffleConfig,
 ): TcsConfigInput {
   const rotatorInput = createRotatorTrackingInput(rotator);
 
@@ -60,11 +86,14 @@ export function createTcsConfigInput(
 
   const targetInput = createTargetPropertiesInput(target);
 
+  const bafflesInput = createBafflesInput(calParams, config);
+
   return {
     instrument: instrument.name,
     instParams: instrumentInput,
     rotator: rotatorInput,
     sourceATarget: targetInput,
+    baffles: bafflesInput,
     oiwfs: oiTarget
       ? {
           tracking: {
@@ -98,12 +127,5 @@ export function createTcsConfigInput(
           },
         }
       : undefined,
-    // TODO: manual config
-    baffles: {
-      autoConfig: {
-        nearirLimit: { micrometers: calParams.baffleNearIR },
-        visibleLimit: { micrometers: calParams.baffleVisible },
-      },
-    },
   };
 }

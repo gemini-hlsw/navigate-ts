@@ -394,6 +394,18 @@
           }
         }
 
+        > .baffles {
+          > .body {
+            margin-top: 5px;
+            font-size: 0.9rem;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: 26px;
+            gap: 4px 8px;
+            align-items: center;
+          }
+        }
+
         > .ao-gems {
           > .body {
             margin-top: 5px;

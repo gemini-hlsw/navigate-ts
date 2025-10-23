@@ -7,6 +7,7 @@ import { useRestoreTarget, useSwapTarget } from '@gql/server/TargetSwap';
 import { Button } from 'primereact/button';
 
 import { useCanEdit } from '@/components/atoms/auth';
+import { useM2BaffleConfigValue } from '@/components/atoms/baffles';
 import { useServerConfigValue } from '@/components/atoms/config';
 import { useToast } from '@/Helpers/toast';
 
@@ -29,6 +30,7 @@ export function TargetSwapButton({
   // p2Selected: Target | undefined;
 }) {
   const { site } = useServerConfigValue();
+  const baffleConfig = useM2BaffleConfigValue();
 
   const canEdit = useCanEdit();
   const toast = useToast();
@@ -73,7 +75,7 @@ export function TargetSwapButton({
         // Use the science target
         await restoreTarget({
           variables: {
-            config: createTcsConfigInput(instrument, rotator, selectedTarget, oiSelected, calParams),
+            config: createTcsConfigInput(instrument, rotator, selectedTarget, oiSelected, calParams, baffleConfig),
           },
         });
       } else {

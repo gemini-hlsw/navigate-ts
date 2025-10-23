@@ -16,8 +16,11 @@ export function Rotator({ canEdit }: { canEdit: boolean }) {
     <div className="rotator">
       <Title title={'Rotator'} />
       <div className="body">
-        <span className="label">Mode</span>
+        <label htmlFor="rotator-mode" className="label">
+          Mode
+        </label>
         <Dropdown
+          inputId="rotator-mode"
           disabled={!canEdit}
           value={rotator?.tracking ?? null}
           options={['TRACKING', 'FIXED']}
@@ -30,8 +33,11 @@ export function Rotator({ canEdit }: { canEdit: boolean }) {
           }}
           placeholder="Select a tracking"
         />
-        <span className="label">Position Angle</span>
+        <label htmlFor="rotator-pa" className="label">
+          Position Angle
+        </label>
         <InputNumber
+          inputId="rotator-pa"
           disabled={!canEdit || loading}
           value={rotator?.angle ?? null}
           minFractionDigits={2}
