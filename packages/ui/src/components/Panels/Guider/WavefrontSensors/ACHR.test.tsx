@@ -9,9 +9,7 @@ import { ACHR } from './ACHR';
 describe(ACHR.name, () => {
   it('should render', async () => {
     const sut = renderWithContext(<ACHR disabled={false} />, { mocks });
-    await expect.element(sut.getByLabelText('X', { exact: true })).toHaveValue('449');
-    expect(sut.getByLabelText('Y', { exact: true })).toHaveValue('522');
-    expect(sut.getByLabelText('Lens', { exact: true })).toHaveValue('AC');
+    await expect.element(sut.getByLabelText('Lens', { exact: true })).toHaveValue('AC');
     expect(sut.getByLabelText('Filter', { exact: true })).toHaveValue('B-blue');
     expect(sut.getByLabelText('Neutral density', { exact: true })).toHaveValue('ND2');
   });

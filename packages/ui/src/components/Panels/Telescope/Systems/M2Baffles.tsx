@@ -3,6 +3,7 @@ import { Title } from '@Shared/Title/Title';
 import { Dropdown } from 'primereact/dropdown';
 
 import { type M2BaffleConfig, useM2BaffleConfig } from '@/components/atoms/baffles';
+import { isNullish } from '@/Helpers/functions';
 
 const modeOptions: M2BaffleConfig['mode'][] = ['AUTO', 'MANUAL'];
 const centralOptions: CentralBaffle[] = ['OPEN', 'CLOSED'];
@@ -32,7 +33,7 @@ export function M2Baffles({ canEdit }: { canEdit: boolean }) {
               inputId="m2baffles-central"
               options={centralOptions}
               value={baffleConfig.input.centralBaffle}
-              invalid={baffleConfig.input.centralBaffle === undefined}
+              invalid={isNullish(baffleConfig.input.centralBaffle)}
               onChange={(e) =>
                 setBaffleConfig((prev) => ({
                   ...prev,
@@ -47,7 +48,7 @@ export function M2Baffles({ canEdit }: { canEdit: boolean }) {
               inputId="m2baffles-deployable"
               options={deployableOptions}
               value={baffleConfig.input.deployableBaffle}
-              invalid={baffleConfig.input.deployableBaffle === undefined}
+              invalid={isNullish(baffleConfig.input.deployableBaffle)}
               onChange={(e) =>
                 setBaffleConfig((prev) => ({
                   ...prev,
