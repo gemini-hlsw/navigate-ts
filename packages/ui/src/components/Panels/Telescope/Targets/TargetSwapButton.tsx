@@ -1,3 +1,4 @@
+import { useCalParams } from '@gql/configs/CalParams';
 import type { Target } from '@gql/configs/gen/graphql';
 import { useConfiguredInstrument, useInstrument } from '@gql/configs/Instrument';
 import { useRotator } from '@gql/configs/Rotator';
@@ -6,6 +7,7 @@ import { useRestoreTarget, useSwapTarget } from '@gql/server/TargetSwap';
 import { Button } from 'primereact/button';
 
 import { useCanEdit } from '@/components/atoms/auth';
+import { useServerConfigValue } from '@/components/atoms/config';
 import { useToast } from '@/Helpers/toast';
 
 import {
@@ -26,6 +28,8 @@ export function TargetSwapButton({
   // p1Selected: Target | undefined;
   // p2Selected: Target | undefined;
 }) {
+  const { site } = useServerConfigValue();
+
   const canEdit = useCanEdit();
   const toast = useToast();
 
@@ -43,7 +47,17 @@ export function TargetSwapButton({
   const { data: rotatorData, loading: rotatorLoading } = useRotator();
   const rotator = rotatorData?.rotator;
 
-  const loading = stateLoading || swapLoading || restoreLoading || instrumentLoading || rotatorLoading || acLoading;
+  const { data: calParamsData, loading: calParamsLoading } = useCalParams(site);
+  const calParams = calParamsData?.calParams;
+
+  const loading =
+    stateLoading ||
+    swapLoading ||
+    restoreLoading ||
+    instrumentLoading ||
+    rotatorLoading ||
+    acLoading ||
+    calParamsLoading;
 
   const disabled = !canEdit;
 
@@ -51,7 +65,7 @@ export function TargetSwapButton({
   const severity = data?.onSwappedTarget ? 'danger' : undefined;
 
   const onClick = async () => {
-    if (selectedTarget?.id && instrument && rotator && oiSelected && acInst) {
+    if (selectedTarget?.id && instrument && rotator && oiSelected && acInst && calParams) {
       // TODO: other inputs for swap/nonswap
 
       if (data?.onSwappedTarget) {
@@ -59,7 +73,7 @@ export function TargetSwapButton({
         // Use the science target
         await restoreTarget({
           variables: {
-            config: createTcsConfigInput(instrument, rotator, selectedTarget, oiSelected),
+            config: createTcsConfigInput(instrument, rotator, selectedTarget, oiSelected, calParams),
           },
         });
       } else {
@@ -93,6 +107,8 @@ export function TargetSwapButton({
         detail = 'No instrument';
       } else if (!rotator) {
         detail = 'No rotator';
+      } else if (!calParams) {
+        detail = 'No cal params configuration';
       } else {
         detail = 'Unknown error';
       }

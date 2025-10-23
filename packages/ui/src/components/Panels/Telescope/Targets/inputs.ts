@@ -1,4 +1,4 @@
-import type { InstrumentConfig, Rotator, Target } from '@gql/configs/gen/graphql';
+import type { CalParams, InstrumentConfig, Rotator, Target } from '@gql/configs/gen/graphql';
 import type {
   InstrumentSpecificsInput,
   RotatorTrackingInput,
@@ -52,6 +52,7 @@ export function createTcsConfigInput(
   rotator: Rotator,
   target: Target,
   oiTarget: Target | undefined,
+  calParams: Pick<CalParams, 'baffleVisible' | 'baffleNearIR'>,
 ): TcsConfigInput {
   const rotatorInput = createRotatorTrackingInput(rotator);
 
@@ -97,5 +98,12 @@ export function createTcsConfigInput(
           },
         }
       : undefined,
+    // TODO: manual config
+    baffles: {
+      autoConfig: {
+        nearirLimit: { micrometers: calParams.baffleNearIR },
+        visibleLimit: { micrometers: calParams.baffleVisible },
+      },
+    },
   };
 }

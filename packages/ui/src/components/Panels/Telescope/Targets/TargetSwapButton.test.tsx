@@ -269,6 +269,12 @@ const mocks = [
               },
             },
           },
+          baffles: {
+            autoConfig: {
+              nearirLimit: { micrometers: 3 },
+              visibleLimit: { micrometers: 1.05 },
+            },
+          },
         },
       },
     },

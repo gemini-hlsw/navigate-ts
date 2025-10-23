@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 import type { DocumentNode, OperationVariables } from '@apollo/client';
 import { useMutation } from '@apollo/client/react';
+import { useCalParams } from '@gql/configs/CalParams';
 import { useConfiguration } from '@gql/configs/Configuration';
 import { useConfiguredInstrument } from '@gql/configs/Instrument';
 import { useRotator } from '@gql/configs/Rotator';
@@ -12,6 +13,7 @@ import type { ButtonProps } from 'primereact/button';
 import { Button } from 'primereact/button';
 import type { ReactNode } from 'react';
 
+import { useServerConfigValue } from '@/components/atoms/config';
 import { Crosshairs, CrosshairsSlash, Parking, ParkingSlash } from '@/components/Icons';
 import { BTN_CLASSES } from '@/Helpers/constants';
 import type { SetStale } from '@/Helpers/hooks';
@@ -162,6 +164,7 @@ export const SLEW_MUTATION = graphql(`
 `);
 
 export function Slew(props: ButtonProps) {
+  const { site } = useServerConfigValue();
   const { data: targetsData, loading: targetsLoading } = useTargets();
   const { oiTargets, baseTargets } = targetsData;
 
@@ -175,7 +178,10 @@ export function Slew(props: ButtonProps) {
 
   const { data: instrument, loading: instrumentLoading } = useConfiguredInstrument();
 
-  const loading = targetsLoading || slewLoading || rotatorLoading || configLoading || instrumentLoading;
+  const { data: calParamsData, loading: calParamsLoading } = useCalParams(site);
+
+  const loading =
+    targetsLoading || slewLoading || rotatorLoading || configLoading || instrumentLoading || calParamsLoading;
 
   const selectedTarget = baseTargets.find((t) => t.pk === configuration?.selectedTarget);
   const selectedOiTarget = oiTargets.find((t) => t.pk === configuration?.selectedOiTarget);
@@ -241,6 +247,12 @@ export function Slew(props: ButtonProps) {
       },
       instrument: instrument.name as Instrument,
       rotator: { ipa: { degrees: rotator.angle }, mode: rotator.tracking },
+      baffles: {
+        autoConfig: {
+          nearirLimit: { micrometers: calParamsData?.calParams.baffleNearIR },
+          visibleLimit: { micrometers: calParamsData?.calParams.baffleVisible },
+        },
+      },
       ...(selectedOiTarget && {
         oiwfs: {
           target: {
