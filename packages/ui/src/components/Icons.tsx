@@ -1,3 +1,4 @@
+import type { IconDefinition } from '@fortawesome/pro-regular-svg-icons';
 import {
   faCaretDown,
   faCaretLeft,
@@ -10,33 +11,33 @@ import {
   faChevronUp,
   faCircleCheck,
   faCircleXmark,
+  faClockRotateLeft,
   faFloppyDisk,
   faGear,
+  faInfoCircle,
   faList,
+  faLocationCrosshairs,
+  faLocationCrosshairsSlash,
   faMagnifyingGlass,
   faMap,
+  faMoon,
   faPlay,
+  faRightFromBracket,
+  faRightToBracket,
   faRotateRight,
+  faSliders,
+  faSquareParking,
+  faSquareParkingSlash,
   faStop,
+  faSun,
   faTrashXmark,
+  faTriangleExclamation,
   faUser,
+  faUserAstronaut,
   faVolume,
   faVolumeSlash,
   faXmark,
 } from '@fortawesome/pro-regular-svg-icons';
-import type { IconDefinition } from '@fortawesome/pro-solid-svg-icons';
-import {
-  faInfoCircle,
-  faLocationCrosshairs,
-  faLocationCrosshairsSlash,
-  faMoon,
-  faRightFromBracket,
-  faRightToBracket,
-  faSquareParking,
-  faSquareParkingSlash,
-  faSun,
-  faUserAstronaut,
-} from '@fortawesome/pro-solid-svg-icons';
 import type { FontAwesomeIconProps } from '@fortawesome/react-fontawesome';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -67,6 +68,7 @@ export const ChevronRight = iconFactory(faChevronRight);
 export const ChevronUp = iconFactory(faChevronUp);
 export const CircleCheck = iconFactory(faCircleCheck);
 export const CircleXMark = iconFactory(faCircleXmark);
+export const ClockRotateLeft = iconFactory(faClockRotateLeft);
 export const Crosshairs = iconFactory(faLocationCrosshairs);
 export const CrosshairsSlash = iconFactory(faLocationCrosshairsSlash);
 export const FloppyDisk = iconFactory(faFloppyDisk);
@@ -82,9 +84,11 @@ export const RotateRight = iconFactory(faRotateRight);
 export const Search = iconFactory(faMagnifyingGlass);
 export const SignIn = iconFactory(faRightToBracket);
 export const SignOut = iconFactory(faRightFromBracket);
+export const Sliders = iconFactory(faSliders);
 export const Stop = iconFactory(faStop);
 export const Sun = iconFactory(faSun);
 export const Trash = iconFactory(faTrashXmark);
+export const TriangleExclamation = iconFactory(faTriangleExclamation);
 export const User = iconFactory(faUser);
 export const Volume = iconFactory(faVolume);
 export const VolumeSlash = iconFactory(faVolumeSlash);

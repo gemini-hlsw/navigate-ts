@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from '@apollo/client/react';
 
 import { graphql } from './gen';
+import type { Site } from './gen/graphql';
 
 export const WINDOW_CENTER = graphql(`
   query windowCenter($site: Site!) {
@@ -12,7 +13,7 @@ export const WINDOW_CENTER = graphql(`
   }
 `);
 
-export function useWindowCenter(site: 'GN' | 'GS') {
+export function useWindowCenter(site: Site) {
   return useQuery(WINDOW_CENTER, {
     variables: { site },
     context: { clientName: 'navigateConfigs' },

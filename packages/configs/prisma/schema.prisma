@@ -252,8 +252,50 @@ enum Site {
   GS
 }
 
+// Deprecated: use CalParams model instead
+// TODO: remove in future release
 model WindowCenter {
   site Site  @id
   x    Float
   y    Float
+}
+
+model CalParams {
+  pk   Int  @id @default(autoincrement())
+  site Site
+
+  // Acquisition camera window center [pixels]
+  acqCamX Float
+  acqCamY Float
+
+  // M2 Deployable Baffle wavelength cutoffs [microns]
+  baffleVisible Float
+  baffleNearIR  Float
+
+  // Shutter current alarms [amps]
+  topShutterCurrentLimit    Float
+  bottomShutterCurrentLimit Float
+
+  // A&G PWFS probeSel center command positions
+  pwfs1CenterX Float
+  pwfs1CenterY Float
+  pwfs1CenterZ Float
+
+  pwfs2CenterX Float
+  pwfs2CenterY Float
+  pwfs2CenterZ Float
+
+  // True for GN, False for GS
+  defocusEnabled  Boolean
+  // SFO defocus offsets
+  gnirsSfoDefocus Float?
+  gmosSfoDefocus  Float?
+
+  // LGS + P1 defocus offsets
+  gnirsP1Defocus Float?
+  gmosP1Defocus  Float?
+  gmosOiDefocus  Float?
+
+  comment   String?
+  createdAt DateTime @default(now())
 }

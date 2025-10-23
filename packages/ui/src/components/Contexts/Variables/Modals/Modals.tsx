@@ -1,6 +1,7 @@
 import './Modals.css';
 
 import { About } from './About';
+import { CalParams } from './CalParams';
 import { Catalog } from './Catalog/Catalog';
 import { Instrument } from './Instrument';
 import { OdbImport } from './OdbImport/OdbImport';
@@ -16,6 +17,7 @@ export function Modals() {
       <Target />
       <Instrument />
       <About />
+      <CalParams />
     </>
   );
 }

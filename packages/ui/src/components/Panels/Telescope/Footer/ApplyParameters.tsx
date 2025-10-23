@@ -1,3 +1,4 @@
+import { useCalParams } from '@gql/configs/CalParams';
 import { useConfiguration } from '@gql/configs/Configuration';
 import { useConfiguredInstrument } from '@gql/configs/Instrument';
 import { useRotator } from '@gql/configs/Rotator';
@@ -7,6 +8,7 @@ import { useConfigureTcs } from '@gql/server/TcsConfiguration';
 import { createTcsConfigInput } from '@Telescope/Targets/inputs';
 import { Button } from 'primereact/button';
 
+import { useServerConfigValue } from '@/components/atoms/config';
 import { useToast } from '@/Helpers/toast';
 
 export function ApplyParameters({ canEdit }: { canEdit: boolean }) {
@@ -44,6 +46,8 @@ export function ApplyParameters({ canEdit }: { canEdit: boolean }) {
 function useTcsConfigInput():
   | { data: TcsConfigInput; loading: boolean; detail: undefined }
   | { data: undefined; loading: boolean; detail: string } {
+  const { site } = useServerConfigValue();
+
   const { data: configurationData, loading: configurationLoading } = useConfiguration();
   const configuration = configurationData?.configuration;
 
@@ -54,11 +58,14 @@ function useTcsConfigInput():
 
   const { data: targetsData, loading: targetsLoading } = useTargets();
 
-  const loading = configurationLoading || instrumentLoading || rotatorLoading || targetsLoading;
+  const { data: calParamsData, loading: calParamsLoading } = useCalParams(site);
+  const calParams = calParamsData?.calParams;
+
+  const loading = configurationLoading || instrumentLoading || rotatorLoading || targetsLoading || calParamsLoading;
 
   const baseTarget = targetsData.baseTargets.find((t) => t.pk === configuration?.selectedTarget);
 
-  if (!instrument || !rotator || !baseTarget) {
+  if (!instrument || !rotator || !baseTarget || !calParams) {
     let detail: string;
     if (!instrument) {
       detail = 'No instrument';
@@ -66,6 +73,8 @@ function useTcsConfigInput():
       detail = 'No rotator';
     } else if (!baseTarget) {
       detail = 'No target';
+    } else if (!calParams) {
+      detail = 'No cal params configuration';
     } else {
       detail = 'Missing configuration';
     }
@@ -74,5 +83,9 @@ function useTcsConfigInput():
 
   const oiTarget = targetsData.oiTargets.find((t) => t.pk === configuration?.selectedOiTarget);
 
-  return { data: createTcsConfigInput(instrument, rotator, baseTarget, oiTarget), loading, detail: undefined };
+  return {
+    data: createTcsConfigInput(instrument, rotator, baseTarget, oiTarget, calParams),
+    loading,
+    detail: undefined,
+  };
 }

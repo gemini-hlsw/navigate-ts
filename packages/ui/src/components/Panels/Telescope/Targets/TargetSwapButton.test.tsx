@@ -1,3 +1,4 @@
+import { CAL_PARAMS } from '@gql/configs/CalParams';
 import { GET_CONFIGURATION } from '@gql/configs/Configuration';
 import type { Target } from '@gql/configs/gen/graphql';
 import { GET_INSTRUMENT } from '@gql/configs/Instrument';
@@ -269,6 +270,12 @@ const mocks = [
               },
             },
           },
+          baffles: {
+            autoConfig: {
+              nearirLimit: { micrometers: 3 },
+              visibleLimit: { micrometers: 1.05 },
+            },
+          },
         },
       },
     },
@@ -315,6 +322,40 @@ const mocks = [
       } satisfies ResultOf<typeof GET_INSTRUMENT_PORT>,
     }),
   } satisfies MockedResponseOf<typeof GET_INSTRUMENT_PORT>,
+  {
+    request: {
+      query: CAL_PARAMS,
+      variables: () => true,
+    },
+    result: {
+      data: {
+        calParams: {
+          pk: 1,
+          site: 'GN',
+          acqCamX: 518,
+          acqCamY: 550,
+          baffleVisible: 1.05,
+          baffleNearIR: 3,
+          topShutterCurrentLimit: 27,
+          bottomShutterCurrentLimit: 32,
+          pwfs1CenterX: 2.324,
+          pwfs1CenterY: -12.213,
+          pwfs1CenterZ: 0,
+          pwfs2CenterX: -3.493,
+          pwfs2CenterY: -2.48,
+          pwfs2CenterZ: 0,
+          defocusEnabled: true,
+          gmosSfoDefocus: 90,
+          gnirsSfoDefocus: 30,
+          gnirsP1Defocus: 3.7,
+          gmosP1Defocus: -7,
+          gmosOiDefocus: 0,
+          comment: 'Initial CalParams for GN',
+          createdAt: new Date().toISOString(),
+        },
+      },
+    },
+  } satisfies MockedResponseOf<typeof CAL_PARAMS>,
 ];
 
 const navigateStatesMock = (onSwappedTarget: boolean) => [

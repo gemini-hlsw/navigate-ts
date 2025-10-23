@@ -43,10 +43,9 @@ function newObdIdGraphQLScalarType(name: string, idTag: string, parser: (value: 
       const parsed =
         typeof value === 'string' ? parser(value) : typeof value === 'number' ? parser(`${idTag}-${value}`) : undefined;
       if (!parsed) {
-        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-        throw new Error(`'${value}' is not a valid ${name}`);
+        throw new Error(`'${String(value)}' is not a valid ${name}`);
       }
-      // ...
+
       return parsed;
     },
     parseValue(value) {
@@ -59,8 +58,7 @@ function newObdIdGraphQLScalarType(name: string, idTag: string, parser: (value: 
         return this.serialize?.(`${idTag}-${ast.value}`);
       }
 
-      // ...
-      throw new Error(`not a valid ${name}`);
+      throw new Error(`'${ast.kind}' is not a valid kind for ${name}`);
     },
   });
 }

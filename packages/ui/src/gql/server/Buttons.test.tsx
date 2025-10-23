@@ -1,3 +1,4 @@
+import { CAL_PARAMS } from '@gql/configs/CalParams';
 import { GET_CONFIGURATION } from '@gql/configs/Configuration';
 import { GET_INSTRUMENT } from '@gql/configs/Instrument';
 import { GET_ROTATOR } from '@gql/configs/Rotator';
@@ -13,7 +14,15 @@ import { GET_INSTRUMENT_PORT } from './Instrument';
 describe(Slew.name, () => {
   it('should call slew mutation when pressed', async () => {
     const sut = renderWithContext(<Slew label="Slew Telescope" />, {
-      mocks: [configurationMock, instrumentPortMock, rotatorMock, instrumentMock, getTargetsMock, slewMutationMock],
+      mocks: [
+        configurationMock,
+        instrumentPortMock,
+        rotatorMock,
+        instrumentMock,
+        getTargetsMock,
+        slewMutationMock,
+        calParamsMock,
+      ],
     });
     await sut.getByRole('button').click();
 
@@ -22,6 +31,16 @@ describe(Slew.name, () => {
     expect(variables).toMatchInlineSnapshot(`
       {
         "config": {
+          "baffles": {
+            "autoConfig": {
+              "nearirLimit": {
+                "micrometers": 3,
+              },
+              "visibleLimit": {
+                "micrometers": 1.05,
+              },
+            },
+          },
           "instParams": {
             "agName": "ACQ_CAM",
             "focusOffset": {
@@ -236,3 +255,38 @@ const slewMutationMock = {
     } satisfies ResultOf<typeof SLEW_MUTATION>,
   }),
 } satisfies MockedResponseOf<typeof SLEW_MUTATION>;
+
+const calParamsMock = {
+  request: {
+    query: CAL_PARAMS,
+    variables: () => true,
+  },
+  result: {
+    data: {
+      calParams: {
+        pk: 1,
+        site: 'GN',
+        acqCamX: 518,
+        acqCamY: 550,
+        baffleVisible: 1.05,
+        baffleNearIR: 3,
+        topShutterCurrentLimit: 27,
+        bottomShutterCurrentLimit: 32,
+        pwfs1CenterX: 2.324,
+        pwfs1CenterY: -12.213,
+        pwfs1CenterZ: 0,
+        pwfs2CenterX: -3.493,
+        pwfs2CenterY: -2.48,
+        pwfs2CenterZ: 0,
+        defocusEnabled: true,
+        gmosSfoDefocus: 90,
+        gnirsSfoDefocus: 30,
+        gnirsP1Defocus: 3.7,
+        gmosP1Defocus: -7,
+        gmosOiDefocus: 0,
+        comment: 'Initial CalParams for GN',
+        createdAt: new Date().toISOString(),
+      },
+    },
+  },
+} satisfies MockedResponseOf<typeof CAL_PARAMS>;

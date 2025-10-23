@@ -24,7 +24,7 @@
     "preview": "node --enable-source-maps ./dist/index.js",
     "dev": "node --env-file=.env --watch --enable-source-maps ./src/index.ts",
     "codegen": "graphql-codegen --config tasks/codegen.ts",
-    "codegen:watch": "pnpm codegen --watch 'src/graphql/**/*.ts' --watch '../schema/src/*.graphql'",
+    "codegen:watch": "pnpm codegen --watch 'src/graphql/**/*.ts' --watch 'src/graphql/*.graphql'",
     "lint:eslint": "eslint .",
     "production": "pnpm prisma migrate deploy && pnpm prisma db seed && pnpm preview"
   },

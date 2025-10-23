@@ -12,7 +12,7 @@
   "scripts": {
     "dev": "vite",
     "tsc:watch": "tsc -w",
-    "codegen:watch": "graphql-codegen --config tasks/codegen.ts --watch 'src/gql/**/*.ts' --watch '../schema/src/*.graphql'",
+    "codegen:watch": "graphql-codegen --config tasks/codegen.ts --watch 'src/gql/**/*.ts' --watch '../configs/src/graphql/*.graphql'",
     "prebuild": "pnpm run codegen",
     "build": "tsc && vite build",
     "preview": "vite preview",
@@ -23,7 +23,6 @@
   "devDependencies": {
     "@apollo/client": "4.0.7",
     "@fortawesome/pro-regular-svg-icons": "7.1.0",
-    "@fortawesome/pro-solid-svg-icons": "7.1.0",
     "@fortawesome/react-fontawesome": "3.1.0",
     "@graphql-codegen/cli": "catalog:",
     "@graphql-codegen/client-preset": "5.1.0",

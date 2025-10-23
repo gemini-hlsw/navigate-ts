@@ -127,6 +127,45 @@
   gap: 8px;
 }
 
+.cal-params-header-buttons {
+  position: absolute;
+  right: 54px;
+  top: 28px;
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+}
+
+.cal-params-content {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  margin-bottom: 24px;
+
+  .cal-params-input-group {
+    --cal-params-input-cols: 4;
+
+    display: grid;
+    align-content: start;
+    grid-template-columns: repeat(var(--cal-params-input-cols), auto);
+    gap: 12px;
+
+    .title {
+      font-weight: bold;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 8px;
+      grid-column: span var(--cal-params-input-cols);
+    }
+  }
+}
+
+.cal-params-loading {
+  margin-top: 100px;
+  min-height: 150px;
+}
+
 @media only screen and (width <= 1250px) {
   .slew-flags {
     grid-template-columns: 80% 20%;
@@ -152,5 +191,9 @@
     .label {
       align-self: center;
     }
+  }
+
+  .cal-params-content {
+    grid-template-columns: 1fr;
   }
 }

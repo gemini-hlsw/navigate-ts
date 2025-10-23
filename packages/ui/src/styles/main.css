@@ -149,6 +149,10 @@ button.p-component.p-button {
 }
 
 .under-construction {
+  svg {
+    color: var(--yellow-400) !important;
+  }
+
   .p-inputnumber-input,
   .p-checkbox-box,
   .p-dropdown,
@@ -220,4 +224,17 @@ button.under-construction {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.confirm-button-popup {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 1rem;
+
+  .confirm-button-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+  }
 }
