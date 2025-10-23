@@ -3,7 +3,7 @@ import { useMutation, useQuery, useSuspenseQuery } from '@apollo/client/react';
 import { graphql } from './gen';
 import type { Site } from './gen/graphql';
 
-const CAL_PARAMS = graphql(`
+export const CAL_PARAMS = graphql(`
   query calParams($site: Site!) {
     calParams(site: $site) {
       pk
