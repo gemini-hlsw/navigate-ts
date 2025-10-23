@@ -208,7 +208,7 @@ export function useUpdateInstrument() {
   });
 }
 
-const RESET_INSTRUMENTS = graphql(`
+export const RESET_INSTRUMENTS = graphql(`
   mutation resetInstruments($name: Instrument!) {
     resetInstruments(name: $name)
   }

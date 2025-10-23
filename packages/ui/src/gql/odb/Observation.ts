@@ -233,7 +233,7 @@ export function useGetGuideEnvironment() {
   return useLazyQuery(GET_GUIDE_ENVIRONMENT);
 }
 
-const GET_CENTRAL_WAVELENGTH = graphql(`
+export const GET_CENTRAL_WAVELENGTH = graphql(`
   query getCentralWavelength($obsId: ObservationId!) {
     executionConfig(observationId: $obsId) {
       gmosNorth {

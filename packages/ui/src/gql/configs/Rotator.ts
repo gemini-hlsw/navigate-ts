@@ -18,7 +18,7 @@ export function useRotator() {
   });
 }
 
-const UPDATE_ROTATOR = graphql(`
+export const UPDATE_ROTATOR = graphql(`
   mutation updateRotator($pk: PosInt!, $angle: Float, $tracking: RotatorTrackingMode) {
     updateRotator(pk: $pk, angle: $angle, tracking: $tracking) {
       pk
