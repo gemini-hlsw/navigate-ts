@@ -138,7 +138,7 @@ export function useUpdateTarget() {
   });
 }
 
-const REMOVE_AND_CREATE_BASE_TARGETS = graphql(`
+export const REMOVE_AND_CREATE_BASE_TARGETS = graphql(`
   mutation removeAndCreateBaseTargets($targets: [TargetInput!]!) {
     removeAndCreateBaseTargets(targets: $targets) {
       pk
@@ -183,7 +183,7 @@ export function useRemoveAndCreateBaseTargets() {
   });
 }
 
-const REMOVE_AND_CREATE_WFS_TARGETS = graphql(`
+export const REMOVE_AND_CREATE_WFS_TARGETS = graphql(`
   mutation removeAndCreateWfsTargets($wfs: TargetType!, $targets: [TargetInput!]!) {
     removeAndCreateWfsTargets(wfs: $wfs, targets: $targets) {
       pk
