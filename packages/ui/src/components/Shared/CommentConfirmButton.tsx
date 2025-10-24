@@ -11,20 +11,22 @@ import { Title } from './Title/Title';
  * Button with confirmation popup including comment input. When clicked, shows a popup asking for confirmation to save along with an input field for a comment.
  */
 export function CommentConfirmButton({
-  loading,
   disabled,
-  tooltip,
-  message,
   icon,
+  initialComment,
+  loading,
+  message,
+  tooltip,
   confirmLabel = 'Save',
   rejectLabel = 'Cancel',
   onConfirm,
 }: {
-  loading?: boolean;
   disabled?: boolean;
-  tooltip: string;
-  message: string;
   icon?: IconType<ButtonProps>;
+  initialComment?: string;
+  loading?: boolean;
+  message: string;
+  tooltip: string;
   confirmLabel?: string;
   rejectLabel?: string;
   onConfirm: (comment: string | null) => void | Promise<void>;
@@ -60,6 +62,7 @@ export function CommentConfirmButton({
             message={message}
             loading={loading}
             confirmLabel={confirmLabel}
+            initialComment={initialComment}
             rejectLabel={rejectLabel}
             acceptBtnRef={acceptBtnRef}
             rejectBtnRef={rejectBtnRef}
@@ -76,6 +79,7 @@ function CommentConfirmPopup({
   message,
   loading,
   confirmLabel,
+  initialComment,
   rejectLabel,
   acceptBtnRef,
   rejectBtnRef,
@@ -83,15 +87,16 @@ function CommentConfirmPopup({
   onHide,
 }: {
   message: ReactNode;
-  confirmLabel: string;
-  rejectLabel: string;
   loading: boolean | undefined;
+  confirmLabel: string;
+  initialComment?: string;
+  rejectLabel: string;
   acceptBtnRef: React.Ref<HTMLButtonElement>;
   rejectBtnRef: React.Ref<HTMLButtonElement>;
   onConfirm: (comment: string | null) => void | Promise<void>;
   onHide: () => void;
 }) {
-  const [comment, setComment] = useState('');
+  const [comment, setComment] = useState(initialComment ?? '');
 
   return (
     <div className="confirm-button-popup">

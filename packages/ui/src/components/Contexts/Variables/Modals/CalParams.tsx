@@ -1,6 +1,7 @@
 import { useCreateCalParams, useSuspenseCalParams } from '@gql/configs/CalParams';
 import type { CalParamsCreateInput } from '@gql/configs/gen/graphql';
 import { CommentConfirmButton } from '@Shared/CommentConfirmButton';
+import { clsx } from 'clsx';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { InputNumber } from 'primereact/inputnumber';
@@ -43,7 +44,7 @@ function CalParamsContent() {
 
   const loading = createCalparamsLoading;
 
-  const [auxCalParams, setAuxCalParams] = useState<CalParamsCreateInput>({
+  const [auxCalParams, setAuxCalParams] = useState<Omit<CalParamsCreateInput, 'site'>>({
     acqCamX: calParams.acqCamX,
     acqCamY: calParams.acqCamY,
     baffleVisible: calParams.baffleVisible,
@@ -62,8 +63,11 @@ function CalParamsContent() {
     gmosOiDefocus: calParams.gmosOiDefocus,
     gmosP1Defocus: calParams.gmosP1Defocus,
     gnirsP1Defocus: calParams.gnirsP1Defocus,
-    site,
   });
+
+  const changedKeys = new Set(
+    (Object.keys(auxCalParams) as (keyof typeof auxCalParams)[]).filter((k) => auxCalParams[k] !== calParams[k]),
+  );
 
   const updateCalParam = (key: keyof CalParamsCreateInput, value: number) =>
     setAuxCalParams((prev) => ({
@@ -77,8 +81,9 @@ function CalParamsContent() {
       disabled={!canEdit}
       tooltip="Save params"
       message="Save parameters?"
+      initialComment={changedKeys.size > 0 ? `Changed parameters: ${[...changedKeys].join(', ')}` : ''}
       onConfirm={async (comment) => {
-        await createCalparams({ variables: { input: { ...auxCalParams, comment } } });
+        await createCalparams({ variables: { input: { ...auxCalParams, site, comment } } });
       }}
     />
   );
@@ -97,12 +102,14 @@ function CalParamsContent() {
             value={auxCalParams?.acqCamX}
             onChange={(value) => updateCalParam('acqCamX', value)}
             loading={loading}
+            filled={changedKeys.has('acqCamX')}
           />
           <CalParamInput
             label="Y"
             value={auxCalParams?.acqCamY}
             onChange={(value) => updateCalParam('acqCamY', value)}
             loading={loading}
+            filled={changedKeys.has('acqCamY')}
           />
         </CalParamInputGroup>
 
@@ -112,12 +119,14 @@ function CalParamsContent() {
             value={auxCalParams?.baffleVisible}
             onChange={(value) => updateCalParam('baffleVisible', value)}
             loading={loading}
+            filled={changedKeys.has('baffleVisible')}
           />
           <CalParamInput
             label="Near IR"
             value={auxCalParams?.baffleNearIR}
             onChange={(value) => updateCalParam('baffleNearIR', value)}
             loading={loading}
+            filled={changedKeys.has('baffleNearIR')}
           />
         </CalParamInputGroup>
 
@@ -127,12 +136,14 @@ function CalParamsContent() {
             value={auxCalParams?.topShutterCurrentLimit}
             onChange={(value) => updateCalParam('topShutterCurrentLimit', value)}
             loading={loading}
+            filled={changedKeys.has('topShutterCurrentLimit')}
           />
           <CalParamInput
             label="Bottom"
             value={auxCalParams?.bottomShutterCurrentLimit}
             onChange={(value) => updateCalParam('bottomShutterCurrentLimit', value)}
             loading={loading}
+            filled={changedKeys.has('bottomShutterCurrentLimit')}
           />
         </CalParamInputGroup>
 
@@ -142,18 +153,21 @@ function CalParamsContent() {
             value={auxCalParams?.pwfs1CenterX}
             onChange={(value) => updateCalParam('pwfs1CenterX', value)}
             loading={loading}
+            filled={changedKeys.has('pwfs1CenterX')}
           />
           <CalParamInput
             label="Y"
             value={auxCalParams?.pwfs1CenterY}
             onChange={(value) => updateCalParam('pwfs1CenterY', value)}
             loading={loading}
+            filled={changedKeys.has('pwfs1CenterY')}
           />
           <CalParamInput
             label="Z"
             value={auxCalParams?.pwfs1CenterZ}
             onChange={(value) => updateCalParam('pwfs1CenterZ', value)}
             loading={loading}
+            filled={changedKeys.has('pwfs1CenterZ')}
           />
         </CalParamInputGroup>
 
@@ -163,18 +177,21 @@ function CalParamsContent() {
             value={auxCalParams?.pwfs2CenterX}
             onChange={(value) => updateCalParam('pwfs2CenterX', value)}
             loading={loading}
+            filled={changedKeys.has('pwfs2CenterX')}
           />
           <CalParamInput
             label="Y"
             value={auxCalParams?.pwfs2CenterY}
             onChange={(value) => updateCalParam('pwfs2CenterY', value)}
             loading={loading}
+            filled={changedKeys.has('pwfs2CenterY')}
           />
           <CalParamInput
             label="Z"
             value={auxCalParams?.pwfs2CenterZ}
             onChange={(value) => updateCalParam('pwfs2CenterZ', value)}
             loading={loading}
+            filled={changedKeys.has('pwfs2CenterZ')}
           />
         </CalParamInputGroup>
 
@@ -186,12 +203,14 @@ function CalParamsContent() {
                 value={auxCalParams?.gnirsSfoDefocus}
                 onChange={(value) => updateCalParam('gnirsSfoDefocus', value)}
                 loading={loading}
+                filled={changedKeys.has('gnirsSfoDefocus')}
               />
               <CalParamInput
                 label="GMOS"
                 value={auxCalParams?.gmosSfoDefocus}
                 onChange={(value) => updateCalParam('gmosSfoDefocus', value)}
                 loading={loading}
+                filled={changedKeys.has('gmosSfoDefocus')}
               />
             </CalParamInputGroup>
 
@@ -201,18 +220,21 @@ function CalParamsContent() {
                 value={auxCalParams?.gnirsP1Defocus}
                 onChange={(value) => updateCalParam('gnirsP1Defocus', value)}
                 loading={loading}
+                filled={changedKeys.has('gnirsP1Defocus')}
               />
               <CalParamInput
                 label="GMOS P1"
                 value={auxCalParams?.gmosP1Defocus}
                 onChange={(value) => updateCalParam('gmosP1Defocus', value)}
                 loading={loading}
+                filled={changedKeys.has('gmosP1Defocus')}
               />
               <CalParamInput
                 label="GMOS OI"
                 value={auxCalParams?.gmosOiDefocus}
                 onChange={(value) => updateCalParam('gmosOiDefocus', value)}
                 loading={loading}
+                filled={changedKeys.has('gmosOiDefocus')}
               />
             </CalParamInputGroup>
           </>
@@ -226,11 +248,13 @@ function CalParamInput({
   label,
   value,
   loading,
+  filled,
   onChange,
 }: {
   label: string;
   value: number | undefined | null;
   loading: boolean;
+  filled: boolean;
   onChange: (value: number) => void;
 }) {
   const canEdit = useCanEdit();
@@ -239,6 +263,7 @@ function CalParamInput({
     <>
       <label htmlFor={id}>{label}</label>
       <InputNumber
+        className={clsx('cal-param-input', { 'cal-param-input-filled': filled })}
         inputId={id}
         value={value ?? null}
         minFractionDigits={2}

@@ -238,3 +238,7 @@ button.under-construction {
     gap: 8px;
   }
 }
+
+.cal-param-input-filled input {
+  border-color: var(--cyan-400);
+}
