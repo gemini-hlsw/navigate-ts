@@ -6,7 +6,7 @@ export interface M2BaffleConfig {
   input: Partial<BaffleManualInput>;
 }
 
-const m2BaffleConfig = atom<M2BaffleConfig>({
+export const m2BaffleConfig = atom<M2BaffleConfig>({
   mode: 'AUTO',
   input: { centralBaffle: undefined, deployableBaffle: undefined },
 });
