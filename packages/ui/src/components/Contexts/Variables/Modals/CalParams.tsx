@@ -106,7 +106,7 @@ function CalParamsContent() {
           />
         </CalParamInputGroup>
 
-        <CalParamInputGroup title="Baffle" underConstruction>
+        <CalParamInputGroup title="Baffle">
           <CalParamInput
             label="Visible"
             value={auxCalParams?.baffleVisible}

@@ -8,11 +8,13 @@ import { useRotator } from '@gql/configs/Rotator';
 import { useSlewFlags } from '@gql/configs/SlewFlags';
 import { useTargets } from '@gql/configs/Target';
 import type { VariablesOf } from '@graphql-typed-document-node/core';
+import { createBafflesInput } from '@Telescope/Targets/inputs';
 import { clsx } from 'clsx';
 import type { ButtonProps } from 'primereact/button';
 import { Button } from 'primereact/button';
 import type { ReactNode } from 'react';
 
+import { useM2BaffleConfigValue } from '@/components/atoms/baffles';
 import { useServerConfigValue } from '@/components/atoms/config';
 import { Crosshairs, CrosshairsSlash, Parking, ParkingSlash } from '@/components/Icons';
 import { BTN_CLASSES } from '@/Helpers/constants';
@@ -165,6 +167,8 @@ export const SLEW_MUTATION = graphql(`
 
 export function Slew(props: ButtonProps) {
   const { site } = useServerConfigValue();
+  const baffleConfig = useM2BaffleConfigValue();
+
   const { data: targetsData, loading: targetsLoading } = useTargets();
   const { oiTargets, baseTargets } = targetsData;
 
@@ -179,6 +183,7 @@ export function Slew(props: ButtonProps) {
   const { data: instrument, loading: instrumentLoading } = useConfiguredInstrument();
 
   const { data: calParamsData, loading: calParamsLoading } = useCalParams(site);
+  const calParams = calParamsData?.calParams;
 
   const loading =
     targetsLoading || slewLoading || rotatorLoading || configLoading || instrumentLoading || calParamsLoading;
@@ -186,8 +191,16 @@ export function Slew(props: ButtonProps) {
   const selectedTarget = baseTargets.find((t) => t.pk === configuration?.selectedTarget);
   const selectedOiTarget = oiTargets.find((t) => t.pk === configuration?.selectedOiTarget);
 
-  if (!selectedTarget?.id || !instrument || !rotator) {
-    const missing = !selectedTarget?.id ? 'target' : !instrument ? 'instrument' : !rotator ? 'rotator' : '';
+  if (!selectedTarget?.id || !instrument || !rotator || !calParams) {
+    const missing = !selectedTarget?.id
+      ? 'target'
+      : !instrument
+        ? 'instrument'
+        : !rotator
+          ? 'rotator'
+          : !calParams
+            ? 'cal params'
+            : '';
     return (
       <Button
         {...props}
@@ -247,12 +260,7 @@ export function Slew(props: ButtonProps) {
       },
       instrument: instrument.name as Instrument,
       rotator: { ipa: { degrees: rotator.angle }, mode: rotator.tracking },
-      baffles: {
-        autoConfig: {
-          nearirLimit: { micrometers: calParamsData?.calParams.baffleNearIR },
-          visibleLimit: { micrometers: calParamsData?.calParams.baffleVisible },
-        },
-      },
+      baffles: createBafflesInput(calParams, baffleConfig),
       ...(selectedOiTarget && {
         oiwfs: {
           target: {

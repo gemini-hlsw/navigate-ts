@@ -1,4 +1,4 @@
-import { WINDOW_CENTER } from '@gql/configs/WindowCenter';
+import { CAL_PARAMS } from '@gql/configs/CalParams';
 import { AC_MECHS_STATE, AC_MECHS_STATE_SUB } from '@gql/server/MechState';
 import type { MockedResponseOf } from '@gql/util';
 
@@ -9,9 +9,7 @@ import { ACHR } from './ACHR';
 describe(ACHR.name, () => {
   it('should render', async () => {
     const sut = renderWithContext(<ACHR disabled={false} />, { mocks });
-    await expect.element(sut.getByLabelText('X', { exact: true })).toHaveValue('449');
-    expect(sut.getByLabelText('Y', { exact: true })).toHaveValue('522');
-    expect(sut.getByLabelText('Lens', { exact: true })).toHaveValue('AC');
+    await expect.element(sut.getByLabelText('Lens', { exact: true })).toHaveValue('AC');
     expect(sut.getByLabelText('Filter', { exact: true })).toHaveValue('B-blue');
     expect(sut.getByLabelText('Neutral density', { exact: true })).toHaveValue('ND2');
   });
@@ -49,21 +47,39 @@ const mechsStateSubMock = {
   },
 } satisfies MockedResponseOf<typeof AC_MECHS_STATE_SUB>;
 
-const windowCenterMock = {
+const calParamsMock = {
   request: {
-    query: WINDOW_CENTER,
+    query: CAL_PARAMS,
     variables: () => true,
   },
-  maxUsageCount: Infinity,
   result: {
     data: {
-      windowCenter: {
-        site: 'GS',
-        x: 449,
-        y: 522,
+      calParams: {
+        pk: 1,
+        site: 'GN',
+        acqCamX: 518,
+        acqCamY: 550,
+        baffleVisible: 1.05,
+        baffleNearIR: 3,
+        topShutterCurrentLimit: 27,
+        bottomShutterCurrentLimit: 32,
+        pwfs1CenterX: 2.324,
+        pwfs1CenterY: -12.213,
+        pwfs1CenterZ: 0,
+        pwfs2CenterX: -3.493,
+        pwfs2CenterY: -2.48,
+        pwfs2CenterZ: 0,
+        defocusEnabled: true,
+        gmosSfoDefocus: 90,
+        gnirsSfoDefocus: 30,
+        gnirsP1Defocus: 3.7,
+        gmosP1Defocus: -7,
+        gmosOiDefocus: 0,
+        comment: 'Initial CalParams for GN',
+        createdAt: new Date().toISOString(),
       },
     },
   },
-} satisfies MockedResponseOf<typeof WINDOW_CENTER>;
+} satisfies MockedResponseOf<typeof CAL_PARAMS>;
 
-const mocks = [mechsStateMock, mechsStateSubMock, windowCenterMock];
+const mocks = [mechsStateMock, mechsStateSubMock, calParamsMock];
