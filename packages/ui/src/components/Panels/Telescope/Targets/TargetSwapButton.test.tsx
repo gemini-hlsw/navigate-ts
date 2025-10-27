@@ -19,7 +19,7 @@ describe(TargetSwapButton.name, () => {
 
   describe('onSwappedTarget is false', () => {
     beforeEach(async () => {
-      sut = renderWithContext(
+      sut = await renderWithContext(
         <TargetSwapButton selectedTarget={selectedTarget as Target} oiSelected={oiSelected as Target} />,
         {
           mocks: [...mocks, ...navigateStatesMock(false)],
@@ -44,7 +44,7 @@ describe(TargetSwapButton.name, () => {
 
   describe('onSwappedTarget is true', () => {
     beforeEach(async () => {
-      sut = renderWithContext(
+      sut = await renderWithContext(
         <TargetSwapButton selectedTarget={selectedTarget as Target} oiSelected={oiSelected as Target} />,
         {
           mocks: [...mocks, ...navigateStatesMock(true)],

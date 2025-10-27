@@ -16,18 +16,18 @@ import { renderWithContext } from '@/test/render';
 import { PWFS1, PWFS2 } from './PWFS';
 
 describe(PWFS1.name, () => {
-  it('should render', () => {
-    renderWithContext(<PWFS1 disabled={false} />, { mocks });
+  it('should render', async () => {
+    await renderWithContext(<PWFS1 disabled={false} />, { mocks });
   });
 
   it('should render disabled', async () => {
-    const sut = renderWithContext(<PWFS1 disabled={true} />, { mocks });
+    const sut = await renderWithContext(<PWFS1 disabled={true} />, { mocks });
     await expect.element(sut.getByLabelText('Filter', { exact: true })).toBeDisabled();
     await expect.element(sut.getByLabelText('Field Stop')).toBeDisabled();
   });
 
   it('should call pwfs1Filter when changing filter', async () => {
-    const sut = renderWithContext(<PWFS1 disabled={false} />, { mocks });
+    const sut = await renderWithContext(<PWFS1 disabled={false} />, { mocks });
 
     await selectDropdownOption(sut, 'Filter', 'Red');
 
@@ -35,7 +35,7 @@ describe(PWFS1.name, () => {
   });
 
   it('should call pwfs1FieldStop when changing field stop', async () => {
-    const sut = renderWithContext(<PWFS1 disabled={false} />, { mocks });
+    const sut = await renderWithContext(<PWFS1 disabled={false} />, { mocks });
 
     await selectDropdownOption(sut, 'Field stop', 'open1');
 
@@ -44,18 +44,18 @@ describe(PWFS1.name, () => {
 });
 
 describe(PWFS2.name, () => {
-  it('should render', () => {
-    renderWithContext(<PWFS2 disabled={false} />, { mocks });
+  it('should render', async () => {
+    await renderWithContext(<PWFS2 disabled={false} />, { mocks });
   });
 
   it('should render disabled', async () => {
-    const sut = renderWithContext(<PWFS2 disabled={true} />, { mocks });
+    const sut = await renderWithContext(<PWFS2 disabled={true} />, { mocks });
     await expect.element(sut.getByLabelText('Filter', { exact: true })).toBeDisabled();
     await expect.element(sut.getByLabelText('Field Stop')).toBeDisabled();
   });
 
   it('should call pwfs2Filter when changing filter', async () => {
-    const sut = renderWithContext(<PWFS2 disabled={false} />, { mocks });
+    const sut = await renderWithContext(<PWFS2 disabled={false} />, { mocks });
 
     await selectDropdownOption(sut, 'Filter', 'Red');
 
@@ -63,7 +63,7 @@ describe(PWFS2.name, () => {
   });
 
   it('should call pwfs2FieldStop when changing field stop', async () => {
-    const sut = renderWithContext(<PWFS2 disabled={false} />, { mocks });
+    const sut = await renderWithContext(<PWFS2 disabled={false} />, { mocks });
 
     await selectDropdownOption(sut, 'Field stop', 'open2');
 

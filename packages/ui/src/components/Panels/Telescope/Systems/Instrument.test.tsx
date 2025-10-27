@@ -4,7 +4,7 @@ import { GET_INSTRUMENT, SET_TEMPORARY_INSTRUMENT, UPDATE_INSTRUMENT } from '@gq
 import { GET_INSTRUMENT_PORT } from '@gql/server/Instrument';
 import type { MockedResponseOf } from '@gql/util';
 import type { ResultOf } from '@graphql-typed-document-node/core';
-import { userEvent } from '@vitest/browser/context';
+import { userEvent } from 'vitest/browser';
 
 import { importInstrumentAtom } from '@/components/atoms/instrument';
 import type { RenderResultWithStore } from '@/test/render';
@@ -14,8 +14,8 @@ import { Instrument } from './Instrument';
 
 describe(Instrument.name, () => {
   let sut: RenderResultWithStore;
-  beforeEach(() => {
-    sut = renderWithContext(<Instrument canEdit={true} />, {
+  beforeEach(async () => {
+    sut = await renderWithContext(<Instrument canEdit={true} />, {
       mocks: [...mocks, getInstrumentMock, updateInstrumentMock, setTempInstrumentMock],
     });
   });

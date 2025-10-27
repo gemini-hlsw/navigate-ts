@@ -6,7 +6,7 @@ import { M2Baffles } from './M2Baffles';
 
 describe(M2Baffles.name, () => {
   it('should render', async () => {
-    const sut = renderWithContext(<M2Baffles canEdit={true} />);
+    const sut = await renderWithContext(<M2Baffles canEdit={true} />);
     expect(sut.getByLabelText('Mode')).toBeVisible();
     expect(sut.store.get(m2BaffleConfig).mode).toEqual('AUTO');
     await expect.element(sut.getByLabelText('Central Baffle')).not.toBeInTheDocument();
@@ -14,7 +14,7 @@ describe(M2Baffles.name, () => {
   });
 
   it('should render manual options when mode is MANUAL', async () => {
-    const sut = renderWithContext(<M2Baffles canEdit={true} />);
+    const sut = await renderWithContext(<M2Baffles canEdit={true} />);
     await selectDropdownOption(sut, 'Mode', 'MANUAL');
 
     expect(sut.store.get(m2BaffleConfig).mode).toEqual('MANUAL');
@@ -25,7 +25,7 @@ describe(M2Baffles.name, () => {
   });
 
   it('should update central and deployable baffles', async () => {
-    const sut = renderWithContext(<M2Baffles canEdit={true} />);
+    const sut = await renderWithContext(<M2Baffles canEdit={true} />);
     await selectDropdownOption(sut, 'Mode', 'MANUAL');
 
     await selectDropdownOption(sut, 'Central Baffle', 'CLOSED');

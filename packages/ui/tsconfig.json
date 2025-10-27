@@ -11,7 +11,7 @@
       "@gql/*": ["./src/gql/*"],
       "@/*": ["./src/*"]
     },
-    "types": ["vitest/globals", "vitest", "@vitest/browser/providers/playwright"],
+    "types": ["vitest/globals", "vitest", "@vitest/browser-playwright"],
     "resolveJsonModule": true,
     "forceConsistentCasingInFileNames": true,
     "exactOptionalPropertyTypes": false,

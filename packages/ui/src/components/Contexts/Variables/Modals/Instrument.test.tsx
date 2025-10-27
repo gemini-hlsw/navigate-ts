@@ -9,7 +9,7 @@ import {
 } from '@gql/configs/Instrument';
 import { GET_INSTRUMENT_PORT } from '@gql/server/Instrument';
 import type { MockedResponseOf } from '@gql/util';
-import { page, userEvent } from '@vitest/browser/context';
+import { page, userEvent } from 'vitest/browser';
 
 import { importInstrumentAtom } from '@/components/atoms/instrument';
 import { selectDropdownOption } from '@/test/helpers';
@@ -30,19 +30,19 @@ describe(`${Instrument.name} modal`, () => {
   ];
 
   it('should hide with importInstrument false', async () => {
-    const sut = renderWithContext(<Instrument />, { mocks, initialValues: [[importInstrumentAtom, false]] });
+    const sut = await renderWithContext(<Instrument />, { mocks, initialValues: [[importInstrumentAtom, false]] });
 
-    await expect.element(sut.baseElement.querySelector('.import-instrument')).not.toBeInTheDocument();
+    await expect.element(sut.getByTestId('import-instrument-modal-content')).not.toBeInTheDocument();
   });
 
   it('should show with importInstrument true', async () => {
-    const sut = renderWithContext(<Instrument />, { mocks, initialValues: [[importInstrumentAtom, true]] });
+    const sut = await renderWithContext(<Instrument />, { mocks, initialValues: [[importInstrumentAtom, true]] });
 
-    await expect.element(sut.baseElement.querySelector('.import-instrument')).toBeInTheDocument();
+    await expect.element(sut.getByTestId('import-instrument-modal-content')).toBeInTheDocument();
   });
 
   it('should show instruments after selecting name and port', async () => {
-    const sut = renderWithContext(<Instrument />, { mocks, initialValues: [[importInstrumentAtom, true]] });
+    const sut = await renderWithContext(<Instrument />, { mocks, initialValues: [[importInstrumentAtom, true]] });
 
     // Select instrument options
     await selectDropdownOption(sut, 'Instrument', 'GMOS_SOUTH');

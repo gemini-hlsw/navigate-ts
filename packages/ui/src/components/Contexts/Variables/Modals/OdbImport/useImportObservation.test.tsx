@@ -13,8 +13,8 @@ import type { OdbObservationType } from '@/types';
 import { useImportObservation } from './useImportObservation';
 
 describe('useImportObservation', () => {
-  it('should not update configuration until a real observation is re-imported', () => {
-    const { result, act } = renderHook(() => useImportObservation(), {
+  it('should not update configuration until a real observation is re-imported', async () => {
+    const { result, act } = await renderHook(() => useImportObservation(), {
       wrapper: ({ children }) => <MockedProvider mocks={[...mocks, mockInstrumentUpdate]}>{children}</MockedProvider>,
     });
     const [importObservation, { loading: importLoading }] = result.current;
@@ -23,7 +23,7 @@ describe('useImportObservation', () => {
 
     const callback = vitest.fn();
 
-    act(() => {
+    await act(() => {
       importObservation(null, callback)
         .then(() => {
           expect(callback).toHaveBeenCalledOnce();
@@ -35,7 +35,7 @@ describe('useImportObservation', () => {
         });
     });
 
-    act(() => {
+    await act(() => {
       importObservation(selectedObservation, callback)
         .then(() => {
           expect(callback).toHaveBeenCalledOnce();

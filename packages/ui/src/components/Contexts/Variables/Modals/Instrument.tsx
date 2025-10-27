@@ -150,7 +150,7 @@ function InstrumentModalContent({
   const loading = distinctInstrumentsLoading || distinctPortsLoading || instrumentsLoading || deleteInstrumentLoading;
 
   return (
-    <div className="import-instrument">
+    <div className="import-instrument" data-testid="import-instrument-modal-content">
       <div className="selectors">
         <label htmlFor="instrument-import-name">Instrument</label>
         <Dropdown

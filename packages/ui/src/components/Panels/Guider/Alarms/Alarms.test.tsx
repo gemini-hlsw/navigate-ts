@@ -3,18 +3,18 @@ import { GET_GUIDE_ALARMS, UPDATE_GUIDE_ALARM } from '@gql/configs/GuideAlarm';
 import { GUIDE_QUALITY_QUERY, GUIDE_QUALITY_SUBSCRIPTION } from '@gql/server/GuideQuality';
 import { GUIDE_STATE_QUERY, GUIDE_STATE_SUBSCRIPTION } from '@gql/server/GuideState';
 import type { MockedResponseOf } from '@gql/util';
-import { page, userEvent } from '@vitest/browser/context';
+import type { Store } from 'jotai/vanilla/store';
+import { page, userEvent } from 'vitest/browser';
 
 import { guideAlarmSoundAtom } from '@/components/atoms/alarm';
-import type { RenderResultWithStore } from '@/test/render';
 import { renderWithContext } from '@/test/render';
 
 import { Alarms } from './Alarms';
 
 describe(Alarms.name, () => {
-  let store: RenderResultWithStore['store'];
+  let store: Store;
   beforeEach(async () => {
-    store = renderWithContext(<Alarms />, { mocks }).store;
+    store = (await renderWithContext(<Alarms />, { mocks })).store;
 
     // Wait for the alarms to be loaded
     await expect.element(page.getByText('PWFS1')).toBeEnabled();

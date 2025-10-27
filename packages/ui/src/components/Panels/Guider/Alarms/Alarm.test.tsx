@@ -1,9 +1,9 @@
 import type { GuideAlarm } from '@gql/configs/gen/graphql';
 import type { GuideQuality } from '@gql/server/gen/graphql';
-import type { Locator } from '@vitest/browser/context';
-import { page, userEvent } from '@vitest/browser/context';
 import type { ComponentProps } from 'react';
 import type { MockedFunction } from 'vitest';
+import type { Locator } from 'vitest/browser';
+import { page, userEvent } from 'vitest/browser';
 import type { RenderResult } from 'vitest-browser-react';
 import { render } from 'vitest-browser-react';
 
@@ -16,9 +16,9 @@ describe(Alarm.name, () => {
   const guideQuality: GuideQuality = { centroidDetected: true, flux: 1000 };
   const alarm: GuideAlarm = { wfs: 'PWFS1', enabled: true, limit: 900 };
 
-  beforeEach(() => {
+  beforeEach(async () => {
     onUpdateAlarm = vi.fn();
-    sut = render(
+    sut = await render(
       <Alarm
         wfs="PWFS1"
         guideQuality={guideQuality}
@@ -36,7 +36,7 @@ describe(Alarm.name, () => {
   });
 
   it('should show BAD for no centroid', async () => {
-    sut.rerender(
+    await sut.rerender(
       <Alarm
         wfs="PWFS1"
         guideQuality={{ ...guideQuality, centroidDetected: false }}
@@ -64,7 +64,7 @@ describe(Alarm.name, () => {
   });
 
   it('should not set has-alarm if hasAlarm is false', async () => {
-    sut.rerender(
+    await sut.rerender(
       <Alarm
         wfs="PWFS1"
         guideQuality={guideQuality}
@@ -79,7 +79,7 @@ describe(Alarm.name, () => {
   });
 
   it('should set has-alarm hasAlarm is true', async () => {
-    sut.rerender(
+    await sut.rerender(
       <Alarm
         wfs="PWFS1"
         guideQuality={{ ...guideQuality, flux: 799 }}
@@ -93,7 +93,7 @@ describe(Alarm.name, () => {
   });
 
   it('should set has-alarm if centroidDetected is false', async () => {
-    sut.rerender(
+    await sut.rerender(
       <Alarm
         wfs="PWFS1"
         guideQuality={{ ...guideQuality, centroidDetected: false }}
