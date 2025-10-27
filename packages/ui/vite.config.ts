@@ -1,5 +1,6 @@
 /// <reference types="vitest" />
 import react from '@vitejs/plugin-react';
+import { playwright } from '@vitest/browser-playwright';
 import { execSync } from 'child_process';
 import path from 'path';
 import type { Plugin } from 'vite';
@@ -121,14 +122,17 @@ export default defineConfig(({ mode }) => ({
     setupFiles: ['src/gql/dev-messages.ts', 'src/test/setup.ts', 'src/test/disable-animations.css'],
     browser: {
       enabled: true,
-      provider: 'playwright',
+      provider: playwright({
+        contextOptions: {
+          // Disable animations in tests to speed them up
+          reducedMotion: 'reduce',
+        },
+      }),
       instances: [
         {
           browser: 'chromium',
           name: 'chromium',
           retry: process.env.CI ? 2 : 0,
-          // Disable animations in tests to speed them up
-          context: { reducedMotion: 'reduce' },
           viewport: { width: 834, height: 1112 },
         },
       ],

@@ -1,5 +1,5 @@
-import { page, userEvent } from '@vitest/browser/context';
 import type { Mock } from 'vitest';
+import { page, userEvent } from 'vitest/browser';
 import { render } from 'vitest-browser-react';
 
 import { CommentConfirmButton } from './CommentConfirmButton';
@@ -10,22 +10,24 @@ describe(CommentConfirmButton.name, () => {
     onConfirm = vi.fn();
   });
 
-  it('should render', () => {
-    const sut = render(<CommentConfirmButton message="Message" tooltip="Tooltip" onConfirm={onConfirm} />);
+  it('should render', async () => {
+    const sut = await render(<CommentConfirmButton message="Message" tooltip="Tooltip" onConfirm={onConfirm} />);
 
     expect(sut.getByRole('button')).toBeVisible();
     expect(sut.getByRole('button')).not.toBeDisabled();
     expect(onConfirm).not.toHaveBeenCalled();
   });
 
-  it('renders disabled button', () => {
-    const sut = render(<CommentConfirmButton message="Message" tooltip="Tooltip" onConfirm={onConfirm} disabled />);
+  it('renders disabled button', async () => {
+    const sut = await render(
+      <CommentConfirmButton message="Message" tooltip="Tooltip" onConfirm={onConfirm} disabled />,
+    );
 
     expect(sut.getByRole('button')).toBeDisabled();
   });
 
   it('shows comment text area when clicked', async () => {
-    const sut = render(<CommentConfirmButton message="Message" tooltip="Tooltip" onConfirm={onConfirm} />);
+    const sut = await render(<CommentConfirmButton message="Message" tooltip="Tooltip" onConfirm={onConfirm} />);
 
     await userEvent.click(sut.getByRole('button'));
 
@@ -33,7 +35,7 @@ describe(CommentConfirmButton.name, () => {
   });
 
   it('calls onConfirm with comment when confirmed', async () => {
-    const sut = render(<CommentConfirmButton message="Message" tooltip="Tooltip" onConfirm={onConfirm} />);
+    const sut = await render(<CommentConfirmButton message="Message" tooltip="Tooltip" onConfirm={onConfirm} />);
 
     await userEvent.click(sut.getByRole('button', { name: 'Tooltip' }));
 
@@ -48,7 +50,7 @@ describe(CommentConfirmButton.name, () => {
   });
 
   it('calls onConfirm with null when confirmed without comment', async () => {
-    const sut = render(<CommentConfirmButton message="Message" tooltip="Tooltip" onConfirm={onConfirm} />);
+    const sut = await render(<CommentConfirmButton message="Message" tooltip="Tooltip" onConfirm={onConfirm} />);
 
     await userEvent.click(sut.getByRole('button', { name: 'Tooltip' }));
 
@@ -59,7 +61,7 @@ describe(CommentConfirmButton.name, () => {
   });
 
   it('closes when clicking cancel', async () => {
-    const sut = render(<CommentConfirmButton message="Message" tooltip="Tooltip" onConfirm={onConfirm} />);
+    const sut = await render(<CommentConfirmButton message="Message" tooltip="Tooltip" onConfirm={onConfirm} />);
 
     await userEvent.click(sut.getByRole('button', { name: 'Tooltip' }));
 

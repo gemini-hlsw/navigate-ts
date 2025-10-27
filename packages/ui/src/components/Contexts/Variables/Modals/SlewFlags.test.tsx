@@ -1,4 +1,4 @@
-import { page } from '@vitest/browser/context';
+import { page } from 'vitest/browser';
 
 import { odbTokenAtom } from '@/components/atoms/auth';
 import { slewVisibleAtom } from '@/components/atoms/slew';
@@ -9,14 +9,14 @@ import { SlewFlags } from './SlewFlags';
 
 describe(SlewFlags.name, () => {
   it('should render', async () => {
-    renderWithContext(<SlewFlags />, { initialValues: [[slewVisibleAtom, true]] });
+    await renderWithContext(<SlewFlags />, { initialValues: [[slewVisibleAtom, true]] });
 
     await expect.element(page.getByText('Zero Chop Throw')).toBeEnabled();
     expect(page.getByRole('checkbox').elements()).toHaveLength(16);
   });
 
   it('should disable when canEdit=false', async () => {
-    renderWithContext(<SlewFlags />, {
+    await renderWithContext(<SlewFlags />, {
       initialValues: [
         [slewVisibleAtom, true],
         [odbTokenAtom, expiredJwt],

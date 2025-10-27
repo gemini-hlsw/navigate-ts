@@ -13,7 +13,7 @@ import { GET_INSTRUMENT_PORT } from './Instrument';
 
 describe(Slew.name, () => {
   it('should call slew mutation when pressed', async () => {
-    const sut = renderWithContext(<Slew label="Slew Telescope" />, {
+    const sut = await renderWithContext(<Slew label="Slew Telescope" />, {
       mocks: [
         configurationMock,
         instrumentPortMock,

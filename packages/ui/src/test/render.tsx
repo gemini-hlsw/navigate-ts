@@ -25,12 +25,12 @@ function HydrateAtoms<T extends AtomTuples>({
   return children;
 }
 
-export type RenderResultWithStore = ReturnType<typeof renderWithContext>;
+export type RenderResultWithStore = Awaited<ReturnType<typeof renderWithContext>>;
 
 /**
  * Render the given UI with the given atoms hydrated, and sets up ApolloProvider with the given mocks
  */
-export function renderWithContext<T extends AtomTuples>(
+export async function renderWithContext<T extends AtomTuples>(
   ui: ReactElement,
   createOptions: CreateOptions<T> = {},
   options?: ComponentRenderOptions,
@@ -42,7 +42,7 @@ export function renderWithContext<T extends AtomTuples>(
     ? createOptions.initialValues
     : ([[odbTokenAtom, longExpirationJwt], ...(createOptions.initialValues ?? [])] as InferAtomTuples<T>);
 
-  const renderResult = render(
+  const renderResult = await render(
     <Provider store={store}>
       <HydrateAtoms initialValues={initialValues}>
         <MockedProvider mocks={[...mocks, ...(createOptions.mocks ?? [])]}>{ui}</MockedProvider>

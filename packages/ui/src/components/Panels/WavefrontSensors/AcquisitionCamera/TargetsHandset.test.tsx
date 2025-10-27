@@ -18,16 +18,16 @@ import type { ResultOf } from '@graphql-typed-document-node/core';
 import type { Mock } from 'vitest';
 
 import { selectDropdownOption } from '@/test/helpers';
-import { renderWithContext } from '@/test/render';
+import { type RenderResultWithStore, renderWithContext } from '@/test/render';
 
 import type { Alignment } from './Controls';
 import TargetsHandset from './TargetsHandset';
 
 describe(TargetsHandset.name, () => {
-  let sut: ReturnType<typeof renderWithContext>;
+  let sut: RenderResultWithStore;
 
-  beforeEach(() => {
-    sut = renderWithContext(<TargetsHandset canEdit={true} />, { mocks });
+  beforeEach(async () => {
+    sut = await renderWithContext(<TargetsHandset canEdit={true} />, { mocks });
   });
 
   it('should render', () => {
@@ -81,9 +81,9 @@ describe(TargetsHandset.name, () => {
     });
   });
 
-  it('should be disabled when canEdit is false', () => {
-    sut.unmount();
-    sut = renderWithContext(<TargetsHandset canEdit={false} />, { mocks });
+  it('should be disabled when canEdit is false', async () => {
+    await sut.unmount();
+    sut = await renderWithContext(<TargetsHandset canEdit={false} />, { mocks });
 
     expect(sut.getByRole('button', { name: 'Apply' })).toBeDisabled();
     expect(sut.getByRole('button', { name: 'Reset' })).toBeDisabled();
