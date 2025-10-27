@@ -33,6 +33,11 @@ export function CalParams() {
   );
 }
 
+/**
+ * Format numbers with at least 2 fraction digits.
+ */
+const numFormat = new Intl.NumberFormat(undefined, { minimumFractionDigits: 2 });
+
 function CalParamsContent() {
   const { site } = useServerConfigValue();
 
@@ -44,7 +49,7 @@ function CalParamsContent() {
 
   const loading = createCalparamsLoading;
 
-  const [auxCalParams, setAuxCalParams] = useState<Omit<CalParamsCreateInput, 'site'>>({
+  const [auxCalParams, setAuxCalParams] = useState<Omit<CalParamsCreateInput, 'site' | 'defocusEnabled'>>({
     acqCamX: calParams.acqCamX,
     acqCamY: calParams.acqCamY,
     baffleVisible: calParams.baffleVisible,
@@ -57,17 +62,28 @@ function CalParamsContent() {
     pwfs2CenterX: calParams.pwfs2CenterX,
     pwfs2CenterY: calParams.pwfs2CenterY,
     pwfs2CenterZ: calParams.pwfs2CenterZ,
-    defocusEnabled: calParams.defocusEnabled,
-    gnirsSfoDefocus: calParams.gnirsSfoDefocus,
     gmosSfoDefocus: calParams.gmosSfoDefocus,
-    gmosOiDefocus: calParams.gmosOiDefocus,
+    gnirsSfoDefocus: calParams.gnirsSfoDefocus,
     gmosP1Defocus: calParams.gmosP1Defocus,
+    gmosOiDefocus: calParams.gmosOiDefocus,
     gnirsP1Defocus: calParams.gnirsP1Defocus,
   });
 
-  const changedKeys = new Set(
-    (Object.keys(auxCalParams) as (keyof typeof auxCalParams)[]).filter((k) => auxCalParams[k] !== calParams[k]),
-  );
+  const changedValues = (Object.entries(auxCalParams) as [keyof typeof calParams, number][])
+    .filter(([key, value]) => value !== calParams[key])
+    .map(([key, value]) => ({
+      key,
+      value: numFormat.format(value),
+      original: numFormat.format(calParams[key] as number),
+    }));
+  const changedKeys = new Set(changedValues.map(({ key }) => key));
+
+  const maxChangedKeyLength = Math.max(...[...changedValues].map(({ key }) => key.length)) ?? 0;
+  const maxChangedOriginalLength = Math.max(...[...changedValues].map(({ original }) => original.length)) ?? 0;
+  // Format to `  key:    value   ➡️ original`
+  const initialComment = changedValues.length
+    ? `Changed parameters: \n${[...changedValues].map(({ key, value, original }) => `  ${(key + ':').padEnd(maxChangedKeyLength + 1, ' ')} ${original.padEnd(maxChangedOriginalLength, ' ')} ➡️ ${value}`).join('\n')}`
+    : '';
 
   const updateCalParam = (key: keyof CalParamsCreateInput, value: number) =>
     setAuxCalParams((prev) => ({
@@ -77,13 +93,24 @@ function CalParamsContent() {
 
   const saveButton = (
     <CommentConfirmButton
+      className="cal-params-save-button"
       loading={loading}
       disabled={!canEdit}
       tooltip="Save params"
       message="Save parameters?"
-      initialComment={changedKeys.size > 0 ? `Changed parameters: ${[...changedKeys].join(', ')}` : ''}
+      commentLabel="Comments:"
+      initialComment={initialComment}
       onConfirm={async (comment) => {
-        await createCalparams({ variables: { input: { ...auxCalParams, site, comment } } });
+        await createCalparams({
+          variables: {
+            input: {
+              ...auxCalParams,
+              defocusEnabled: calParams.defocusEnabled,
+              site,
+              comment,
+            },
+          },
+        });
       }}
     />
   );
@@ -199,29 +226,22 @@ function CalParamsContent() {
           <>
             <CalParamInputGroup title="SFO Defocus" underConstruction>
               <CalParamInput
-                label="GNIRS"
-                value={auxCalParams?.gnirsSfoDefocus}
-                onChange={(value) => updateCalParam('gnirsSfoDefocus', value)}
-                loading={loading}
-                filled={changedKeys.has('gnirsSfoDefocus')}
-              />
-              <CalParamInput
                 label="GMOS"
                 value={auxCalParams?.gmosSfoDefocus}
                 onChange={(value) => updateCalParam('gmosSfoDefocus', value)}
                 loading={loading}
                 filled={changedKeys.has('gmosSfoDefocus')}
               />
+              <CalParamInput
+                label="GNIRS"
+                value={auxCalParams?.gnirsSfoDefocus}
+                onChange={(value) => updateCalParam('gnirsSfoDefocus', value)}
+                loading={loading}
+                filled={changedKeys.has('gnirsSfoDefocus')}
+              />
             </CalParamInputGroup>
 
             <CalParamInputGroup title="LGS+P1 Defocus" underConstruction>
-              <CalParamInput
-                label="GNIRS"
-                value={auxCalParams?.gnirsP1Defocus}
-                onChange={(value) => updateCalParam('gnirsP1Defocus', value)}
-                loading={loading}
-                filled={changedKeys.has('gnirsP1Defocus')}
-              />
               <CalParamInput
                 label="GMOS P1"
                 value={auxCalParams?.gmosP1Defocus}
@@ -235,6 +255,13 @@ function CalParamsContent() {
                 onChange={(value) => updateCalParam('gmosOiDefocus', value)}
                 loading={loading}
                 filled={changedKeys.has('gmosOiDefocus')}
+              />
+              <CalParamInput
+                label="GNIRS"
+                value={auxCalParams?.gnirsP1Defocus}
+                onChange={(value) => updateCalParam('gnirsP1Defocus', value)}
+                loading={loading}
+                filled={changedKeys.has('gnirsP1Defocus')}
               />
             </CalParamInputGroup>
           </>
