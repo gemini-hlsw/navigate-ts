@@ -136,6 +136,10 @@
   gap: 8px;
 }
 
+.cal-params-save-button textarea {
+  font-family: monospace;
+}
+
 .cal-params-content {
   display: grid;
   grid-template-columns: repeat(2, 1fr);

@@ -1,3 +1,4 @@
+import { clsx } from 'clsx';
 import { Button, type ButtonProps } from 'primereact/button';
 import { ConfirmPopup, confirmPopup } from 'primereact/confirmpopup';
 import { InputTextarea } from 'primereact/inputtextarea';
@@ -11,8 +12,10 @@ import { Title } from './Title/Title';
  * Button with confirmation popup including comment input. When clicked, shows a popup asking for confirmation to save along with an input field for a comment.
  */
 export function CommentConfirmButton({
+  className,
   disabled,
   icon,
+  commentLabel,
   initialComment,
   loading,
   message,
@@ -21,8 +24,10 @@ export function CommentConfirmButton({
   rejectLabel = 'Cancel',
   onConfirm,
 }: {
+  className?: string;
   disabled?: boolean;
   icon?: IconType<ButtonProps>;
+  commentLabel?: string;
   initialComment?: string;
   loading?: boolean;
   message: string;
@@ -59,9 +64,11 @@ export function CommentConfirmButton({
         // eslint-disable-next-line @typescript-eslint/unbound-method
         content={({ hide, acceptBtnRef, rejectBtnRef, message }) => (
           <CommentConfirmPopup
+            className={className}
             message={message}
             loading={loading}
             confirmLabel={confirmLabel}
+            commentLabel={commentLabel}
             initialComment={initialComment}
             rejectLabel={rejectLabel}
             acceptBtnRef={acceptBtnRef}
@@ -76,9 +83,11 @@ export function CommentConfirmButton({
 }
 
 function CommentConfirmPopup({
+  className,
   message,
   loading,
   confirmLabel,
+  commentLabel,
   initialComment,
   rejectLabel,
   acceptBtnRef,
@@ -86,9 +95,11 @@ function CommentConfirmPopup({
   onConfirm,
   onHide,
 }: {
+  className?: string;
   message: ReactNode;
   loading: boolean | undefined;
   confirmLabel: string;
+  commentLabel?: string;
   initialComment?: string;
   rejectLabel: string;
   acceptBtnRef: React.Ref<HTMLButtonElement>;
@@ -98,14 +109,22 @@ function CommentConfirmPopup({
 }) {
   const [comment, setComment] = useState(initialComment ?? '');
 
+  const rows = Math.max((comment.match(/\n/g)?.length ?? 0) + 2, 6);
+
   return (
-    <div className="confirm-button-popup">
+    <div className={clsx(className, 'confirm-button-popup')}>
       <Title title={message} />
+      {commentLabel && (
+        <label className="confirm-button-comment-label" htmlFor="comment-confirm-textarea">
+          {commentLabel}
+        </label>
+      )}
       <InputTextarea
+        id="comment-confirm-textarea"
         placeholder="Enter a comment (optional)"
         value={comment}
-        cols={50}
-        rows={5}
+        cols={60}
+        rows={rows}
         onChange={(e) => setComment(e.target.value)}
       />
       <div className="confirm-button-buttons">

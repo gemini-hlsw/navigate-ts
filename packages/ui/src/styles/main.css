@@ -237,6 +237,19 @@ button.under-construction {
     justify-content: flex-end;
     gap: 8px;
   }
+
+  .title {
+    font-size: 1.1rem;
+    font-weight: bold;
+  }
+
+  .confirm-button-comment-label {
+    font-size: 0.9rem;
+  }
+
+  .cal-params-save-button textarea {
+    font-family: monospace;
+  }
 }
 
 .cal-param-input-filled input {
