@@ -9,7 +9,7 @@ import { InputText } from 'primereact/inputtext';
 import { useId } from 'react';
 
 import { useSetImportInstrument } from '@/components/atoms/instrument';
-import { List } from '@/components/Icons';
+import { FloppyDisk, List } from '@/components/Icons';
 
 export function Instrument({ canEdit }: { canEdit: boolean }) {
   const [updateInstrument, { loading: updateInstrumentLoading }] = useUpdateInstrument();
@@ -47,6 +47,7 @@ export function Instrument({ canEdit }: { canEdit: boolean }) {
     <CommentConfirmButton
       loading={loading}
       disabled={!instrument?.isTemporary}
+      icon={<FloppyDisk />}
       onConfirm={saveInstrument}
       tooltip="Save instrument"
       message="Save as a permanent configuration?"

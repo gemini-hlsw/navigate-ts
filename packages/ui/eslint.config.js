@@ -10,9 +10,9 @@ import shared from '../../eslint.config.shared.js';
 
 export default defineConfig(
   ...shared,
+  // @ts-expect-error - incorrect type
   reactPlugin.configs.flat.recommended,
   reactPlugin.configs.flat['jsx-runtime'],
-  // @ts-expect-error - incorrect type
   importX.flatConfigs.react,
   reactHooks.configs.flat['recommended-latest'],
   {
@@ -26,7 +26,7 @@ export default defineConfig(
   ),
   // @graphql-eslint tries to merge all schemas, even if defined separately. Because some same names are used but with different types we can't enable linting for both server/odb and configs at the same time
   // ...graphqlConfigForSchema(
-  //   join(dirname(import.meta.resolve('navigate-configs')), '..', 'src/**/*.graphql'),
+  //   join(dirname(fileURLToPath(import.meta.resolve('navigate-configs'))), '..', 'src/**/*.graphql'),
   //   './src/gql/configs',
   // ),
 );

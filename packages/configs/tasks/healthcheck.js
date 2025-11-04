@@ -14,6 +14,8 @@ const query = `#graphql
 `;
 const url = `http://localhost:${process.env.SERVER_PORT ?? 4000}/graphql`;
 
+const formatTime = new Intl.RelativeTimeFormat('en', { numeric: 'auto' });
+
 /**
  * Executes a GraphQL query against the server. Retries on failure, up to a maximum number of retries.
  */
@@ -40,8 +42,8 @@ async function executeGraphql(retries = 3, sleepTime = 1000) {
     if (retries <= 0) {
       throw error;
     }
-    console.error(error.message);
-    console.error(`Retrying in ${sleepTime}ms...`);
+    console.error(error instanceof Error ? error.message : String(error));
+    console.error(`Retrying ${formatTime.format(sleepTime / 1000, 'second')}...`);
 
     await setTimeout(sleepTime);
     return executeGraphql(retries - 1, sleepTime * 2);

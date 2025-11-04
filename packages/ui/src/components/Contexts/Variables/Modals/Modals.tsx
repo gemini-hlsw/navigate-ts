@@ -2,6 +2,7 @@ import './Modals.css';
 
 import { About } from './About';
 import { CalParams } from './CalParams';
+import { CalParamsHistory } from './CalParamsHistory';
 import { Catalog } from './Catalog/Catalog';
 import { Instrument } from './Instrument';
 import { OdbImport } from './OdbImport/OdbImport';
@@ -18,6 +19,7 @@ export function Modals() {
       <Instrument />
       <About />
       <CalParams />
+      <CalParamsHistory />
     </>
   );
 }
