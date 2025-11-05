@@ -13,7 +13,7 @@ export function useStale() {
       }
     }, 1500);
     return () => clearTimeout(timeout);
-  }, [stale, setStale]);
+  }, [stale]);
 
   return [stale, setStale] as const;
 }

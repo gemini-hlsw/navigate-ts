@@ -36,7 +36,7 @@ export function formatToSignedArcseconds(arcseconds: number | string | undefined
     return defaultValue;
   } else {
     const num = typeof arcseconds === 'number' ? arcseconds : parseFloat(arcseconds);
-    if (isNaN(num)) {
+    if (Number.isNaN(num)) {
       return defaultValue;
     }
     return signedArcSeconds(num).toFixed(2);

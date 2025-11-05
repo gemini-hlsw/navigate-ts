@@ -157,8 +157,11 @@ export function GeMS() {
           checked={!!state?.aoEnabled}
           onChange={() => modifyGemsGuideLoop('aoEnabled', !state?.aoEnabled)}
         />
-        <label className="label">Focus</label>
+        <label htmlFor="focus" className="label">
+          Focus
+        </label>
         <Checkbox
+          inputId="focus"
           disabled={disabled}
           checked={!!state?.focus}
           onChange={() => modifyGemsGuideLoop('focus', !state?.focus)}

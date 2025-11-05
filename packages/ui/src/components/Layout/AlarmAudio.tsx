@@ -6,7 +6,7 @@ import { useAudio } from '@/Helpers/hooks';
 
 import { useAlarmValue } from '../atoms/alarm';
 
-export function AlarmAudio() {
+export function useAlarmAudio() {
   const alarm = useAlarmValue();
 
   const alarmAudio = useAudio(alarmSoundMp3, alarmSoundWebm, { loop: true });
@@ -37,6 +37,4 @@ export function AlarmAudio() {
       alarmAudio.remove();
     };
   }, [alarm, alarmAudio]);
-
-  return <></>;
 }

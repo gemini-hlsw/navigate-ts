@@ -12,7 +12,7 @@ if (process.argv.includes('populate')) {
     await prisma.$disconnect();
   }
 } else {
-  const port = parseInt(process.env.SERVER_PORT! || process.env.PORT!) || 4000;
+  const port = parseInt(process.env.SERVER_PORT! || process.env.PORT!, 10) || 4000;
   const yoga = makeYogaServer({ prisma });
   // eslint-disable-next-line @typescript-eslint/no-misused-promises
   const server = createServer(yoga);

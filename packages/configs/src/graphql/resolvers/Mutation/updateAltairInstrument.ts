@@ -1,6 +1,6 @@
 import type { MutationResolvers } from './../../gen/types.generated.ts';
 
-export const updateAltairInstrument: NonNullable<MutationResolvers['updateAltairInstrument']> = async (
+export const updateAltairInstrument: NonNullable<MutationResolvers['updateAltairInstrument']> = (
   _parent,
   args,
   { prisma },

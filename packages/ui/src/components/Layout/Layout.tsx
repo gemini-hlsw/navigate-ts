@@ -2,15 +2,15 @@ import './Layout.css';
 
 import { Outlet } from 'react-router';
 
-import { AcquisitionAdjustmentToast } from './AcquisitionAdjustmentToast';
-import { AlarmAudio } from './AlarmAudio';
+import { useAcquisitionAdjustmentToast } from './AcquisitionAdjustmentToast';
+import { useAlarmAudio } from './AlarmAudio';
 import Navbar from './Navbar/Navbar';
 
 export default function Layout() {
+  useAlarmAudio();
+  useAcquisitionAdjustmentToast();
   return (
     <div className="layout">
-      <AlarmAudio />
-      <AcquisitionAdjustmentToast />
       <Navbar />
       <div className="body">
         <Outlet />

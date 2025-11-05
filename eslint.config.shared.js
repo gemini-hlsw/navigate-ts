@@ -3,9 +3,9 @@
 import eslint from '@eslint/js';
 import { importX } from 'eslint-plugin-import-x';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
+import { defineConfig } from 'eslint/config';
 import globals from 'globals';
 import { configs } from 'typescript-eslint';
-import { defineConfig } from 'eslint/config';
 
 export default defineConfig(
   eslint.configs.recommended,

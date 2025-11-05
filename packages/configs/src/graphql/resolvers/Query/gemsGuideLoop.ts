@@ -1,5 +1,5 @@
 import type { QueryResolvers } from './../../gen/types.generated.ts';
 
-export const gemsGuideLoop: NonNullable<QueryResolvers['gemsGuideLoop']> = async (_parent, args, { prisma }) => {
+export const gemsGuideLoop: NonNullable<QueryResolvers['gemsGuideLoop']> = (_parent, args, { prisma }) => {
   return prisma.gemsGuideLoop.findFirst({ where: args });
 };

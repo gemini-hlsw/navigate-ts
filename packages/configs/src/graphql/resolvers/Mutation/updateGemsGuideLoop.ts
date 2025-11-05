@@ -1,6 +1,6 @@
 import type { MutationResolvers } from './../../gen/types.generated.ts';
 
-export const updateGemsGuideLoop: NonNullable<MutationResolvers['updateGemsGuideLoop']> = async (
+export const updateGemsGuideLoop: NonNullable<MutationResolvers['updateGemsGuideLoop']> = (
   _parent,
   args,
   { prisma },

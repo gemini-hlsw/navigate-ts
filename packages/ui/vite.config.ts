@@ -1,15 +1,15 @@
-/// <reference types="vitest" />
+import { execSync } from 'node:child_process';
+import path from 'node:path';
+
 import react from '@vitejs/plugin-react';
 import { playwright } from '@vitest/browser-playwright';
-import { execSync } from 'child_process';
-import path from 'path';
 import type { Plugin } from 'vite';
 import { defineConfig } from 'vite';
 import mkcert from 'vite-plugin-mkcert';
 
-import pkgJson from './package.json';
+import pkgJson from './package.json' with { type: 'json' };
 
-const version = (process.env.GITHUB_REF_NAME || 'v' + pkgJson.version).trim();
+const version = (process.env.GITHUB_REF_NAME || `v${pkgJson.version}`).trim();
 const commitHash = (process.env.GITHUB_SHA || execSync('git rev-parse --short HEAD').toString()).trim().slice(0, 7);
 
 const buildTime = new Date();

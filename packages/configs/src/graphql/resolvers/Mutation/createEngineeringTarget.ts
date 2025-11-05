@@ -1,6 +1,6 @@
 import type { EngineeringTarget, MutationResolvers } from './../../gen/types.generated.ts';
 
-export const createEngineeringTarget: NonNullable<MutationResolvers['createEngineeringTarget']> = async (
+export const createEngineeringTarget: NonNullable<MutationResolvers['createEngineeringTarget']> = (
   _parent,
   args,
   { prisma },
