@@ -64,7 +64,7 @@ export function useTargets() {
   }, [result]);
 }
 
-const UPDATE_TARGET = graphql(`
+export const UPDATE_TARGET = graphql(`
   mutation updateTarget(
     $pk: PosInt!
     $id: TargetId

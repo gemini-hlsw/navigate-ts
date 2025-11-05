@@ -14,7 +14,7 @@ export function ToastProvider({ children }: React.PropsWithChildren) {
 
   useEffect(() => {
     setToast(ref.current);
-  }, [setToast, ref]);
+  }, [setToast]);
 
   return (
     <>

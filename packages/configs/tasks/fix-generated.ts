@@ -39,7 +39,7 @@ export function fixTypesContent(content: string) {
   // Step 2: Fix duplicate "type" keywords in imports
   typesContent = typesContent.replace(
     /import\s+type\s+{([^}]*)}\s+from\s+(['"].*['"])/g,
-    (match, importNames, source) => {
+    (_match, importNames, source) => {
       // Remove individual "type" keywords from imports
       const cleanedImports = importNames.replace(/\btype\s+/g, '');
 

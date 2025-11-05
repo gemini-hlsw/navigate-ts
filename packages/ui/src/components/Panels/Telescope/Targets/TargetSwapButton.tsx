@@ -98,7 +98,7 @@ export function TargetSwapButton({
         });
       }
     } else {
-      let detail;
+      let detail: string;
       if (!selectedTarget) {
         detail = 'No target';
       } else if (!oiSelected) {

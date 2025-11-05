@@ -50,7 +50,7 @@ export type PanelType = 'telescope' | 'wavefront-sensors' | 'guider';
 
 export interface TargetEditType {
   isVisible: boolean;
-  target: TargetType;
+  target: TargetType | null;
   targetIndex: number | undefined;
 }
 

@@ -18,7 +18,7 @@ type AcquisitionAdjustmentState = NonNullable<
   ReturnType<typeof useAcquisitionAdjustmentState>['data']
 >['acquisitionAdjustmentState'];
 
-export function AcquisitionAdjustmentToast() {
+export function useAcquisitionAdjustmentToast() {
   const toast = useToast();
 
   const { data } = useAcquisitionAdjustmentState();
@@ -45,8 +45,6 @@ export function AcquisitionAdjustmentToast() {
     }
     return;
   }, [data, toast, alarmAudio]);
-
-  return <></>;
 }
 
 function AcquisitionAdjustmentPrompt({ state }: { state: AcquisitionAdjustmentState }) {

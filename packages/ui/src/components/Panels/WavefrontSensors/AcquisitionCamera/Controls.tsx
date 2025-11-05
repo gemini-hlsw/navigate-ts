@@ -177,7 +177,7 @@ function ManualInput({
         disabled={loading || !canEdit}
         value={auxCoords.horizontal}
         maxFractionDigits={2}
-        onValueChange={(e) => setAuxCoords({ ...auxCoords, horizontal: e.value! })}
+        onValueChange={(e) => setAuxCoords((prev) => ({ ...prev, horizontal: e.value! }))}
       />
       <label htmlFor="manual-input-vertical">{strategy.vertical}</label>
       <InputNumber
@@ -185,7 +185,7 @@ function ManualInput({
         disabled={loading || !canEdit}
         value={auxCoords.vertical}
         maxFractionDigits={2}
-        onValueChange={(e) => setAuxCoords({ ...auxCoords, vertical: e.value! })}
+        onValueChange={(e) => setAuxCoords((prev) => ({ ...prev, vertical: e.value! }))}
       />
 
       <Button

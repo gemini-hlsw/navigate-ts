@@ -1,5 +1,6 @@
+import { join } from 'node:path';
+
 import type { CodegenConfig } from '@graphql-codegen/cli';
-import { join } from 'path';
 
 // Simple mapping of scalar types to their TypeScript representation
 // Some of these might be wrong or incomplete, feel free to adjust as needed

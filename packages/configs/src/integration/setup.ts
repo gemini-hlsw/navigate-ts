@@ -1,10 +1,10 @@
 import assert from 'node:assert';
+import fs from 'node:fs/promises';
 import { after, afterEach, before, beforeEach } from 'node:test';
 
 import { PrismaPg } from '@prisma/adapter-pg';
 import type { StartedPostgreSqlContainer } from '@testcontainers/postgresql';
 import { PostgreSqlContainer } from '@testcontainers/postgresql';
-import fs from 'fs/promises';
 import type { ExecutionResult } from 'graphql';
 
 import type { PrismaClient as Prisma } from '../prisma/db.ts';
