@@ -51,32 +51,15 @@ describe('useImportObservation', () => {
 
 const selectedObservation: OdbObservationType = {
   id: 'o-2e5',
-  existence: 'PRESENT',
   title: 'Mayall V',
   subtitle: null,
   instrument: 'GMOS_NORTH',
   reference: {
     label: 'G-2025B-0571-Q-0003',
   },
-  program: {
-    id: 10, //"p-11d",
-    existence: 'PRESENT',
-    name: 'Variable Sources in Nearby Galaxies',
-    pi: {
-      id: 'm-14f',
-      user: {
-        id: 'u-7ea',
-        profile: {
-          givenName: 'Bryan',
-          familyName: 'Miller',
-        },
-      },
-    },
-  },
   targetEnvironment: {
     firstScienceTarget: {
       id: 't-60d',
-      existence: 'PRESENT',
       name: 'Mayall V',
       sidereal: {
         epoch: 'J2000.000',

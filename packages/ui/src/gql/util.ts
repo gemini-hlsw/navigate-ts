@@ -3,6 +3,7 @@ import type { SkipToken, useQuery } from '@apollo/client/react';
 import type { MockLink } from '@apollo/client/testing';
 import type { ResultOf, VariablesOf } from '@graphql-typed-document-node/core';
 
+import { isNullish } from '@/Helpers/functions';
 import type { TargetType } from '@/types';
 
 /**
@@ -13,8 +14,9 @@ export type OptionsOf<T extends DocumentNode> =
     ? SkipToken | Omit<useQuery.Options<ResultOf<T>, VariablesOf<T>>, 'context'>
     : never;
 
-export function isBaseTarget(target: Pick<TargetType, 'type'>) {
-  return ['SCIENCE', 'BLINDOFFSET', 'FIXED'].includes(target.type);
+export function isBaseTarget(target: Pick<TargetType, 'type'> | undefined | null) {
+  if (isNullish(target)) return false;
+  else return ['SCIENCE', 'BLINDOFFSET', 'FIXED'].includes(target.type);
 }
 export function isOiTarget(target: Pick<TargetType, 'type'>) {
   return target.type === 'OIWFS';

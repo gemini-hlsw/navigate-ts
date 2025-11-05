@@ -7,32 +7,15 @@ const GET_OBSERVATION_BY_ID = graphql(`
   query getObservationById($obsId: ObservationId!) {
     observation(observationId: $obsId) {
       id
-      existence
       title
       subtitle
       instrument
       reference {
         label
       }
-      program {
-        id
-        existence
-        name
-        pi {
-          id
-          user {
-            id
-            profile {
-              givenName
-              familyName
-            }
-          }
-        }
-      }
       targetEnvironment {
         firstScienceTarget {
           id
-          existence
           name
           sidereal {
             epoch
@@ -92,32 +75,15 @@ const GET_OBSERVATIONS_BY_STATE = graphql(`
     ) {
       matches {
         id
-        existence
         title
         subtitle
         instrument
         reference {
           label
         }
-        program {
-          id
-          existence
-          name
-          pi {
-            id
-            user {
-              id
-              profile {
-                givenName
-                familyName
-              }
-            }
-          }
-        }
         targetEnvironment {
           firstScienceTarget {
             id
-            existence
             name
             sidereal {
               epoch

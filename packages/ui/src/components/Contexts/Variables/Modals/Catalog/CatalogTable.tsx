@@ -32,10 +32,10 @@ export function CatalogTable({
   function onGlobalFilterChange(e: React.ChangeEvent<HTMLInputElement>) {
     const value = e.target.value;
 
-    setFilters({
-      ...filters,
+    setFilters((prev) => ({
+      ...prev,
       global: { ...filters.global, value: value },
-    });
+    }));
     setGlobalFilterValue(value);
   }
 

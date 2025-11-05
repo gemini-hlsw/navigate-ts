@@ -1,12 +1,14 @@
-import { atom, useAtom, useSetAtom } from 'jotai';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
+import { atomWithReset } from 'jotai/utils';
 
-import type { TargetEditType, TargetType } from '@/types';
+import type { TargetEditType } from '@/types';
 
-const targetEditAtom = atom<TargetEditType>({
+export const targetEditAtom = atomWithReset<TargetEditType>({
   isVisible: false,
-  target: {} as TargetType,
+  target: null,
   targetIndex: undefined,
 });
+
 export const useTargetEdit = () => useAtom(targetEditAtom);
-export const useTargetEditValue = () => useSetAtom(targetEditAtom);
+export const useTargetEditValue = () => useAtomValue(targetEditAtom);
 export const useSetTargetEdit = () => useSetAtom(targetEditAtom);
