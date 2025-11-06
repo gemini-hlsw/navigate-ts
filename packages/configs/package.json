@@ -29,13 +29,13 @@
     "production": "pnpm prisma migrate deploy && pnpm prisma db seed && pnpm preview"
   },
   "dependencies": {
-    "@prisma/adapter-pg": "6.18.0",
-    "@prisma/client": "6.18.0",
+    "@prisma/adapter-pg": "6.19.0",
+    "@prisma/client": "6.19.0",
     "graphql": "catalog:",
     "graphql-scalars": "1.25.0",
     "graphql-yoga": "5.16.0",
     "lucuma-core": "catalog:",
-    "prisma": "6.18.0"
+    "prisma": "6.19.0"
   },
   "devDependencies": {
     "@eddeee888/gcg-typescript-resolver-files": "0.14.0",
