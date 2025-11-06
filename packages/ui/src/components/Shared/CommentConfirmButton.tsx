@@ -5,7 +5,6 @@ import { InputTextarea } from 'primereact/inputtextarea';
 import type { IconType } from 'primereact/utils';
 import { type ReactNode, useId, useRef, useState } from 'react';
 
-import { FloppyDisk } from '../Icons';
 import { Title } from './Title/Title';
 
 /**
@@ -15,6 +14,7 @@ export function CommentConfirmButton({
   className,
   disabled,
   icon,
+  label,
   commentLabel,
   initialComment,
   loading,
@@ -27,11 +27,12 @@ export function CommentConfirmButton({
   className?: string;
   disabled?: boolean;
   icon?: IconType<ButtonProps>;
+  label?: string;
   commentLabel?: string;
   initialComment?: string;
   loading?: boolean;
   message: string;
-  tooltip: string;
+  tooltip?: string;
   confirmLabel?: string;
   rejectLabel?: string;
   onConfirm: (comment: string | null) => void | Promise<void>;
@@ -48,7 +49,8 @@ export function CommentConfirmButton({
         aria-label={tooltip}
         disabled={disabled}
         loading={loading}
-        icon={icon ?? <FloppyDisk />}
+        label={label}
+        icon={icon}
         onClick={() =>
           confirmPopup({
             // @ts-expect-error group is not typed in primereact types
@@ -127,17 +129,9 @@ function CommentConfirmPopup({
         rows={rows}
         onChange={(e) => setComment(e.target.value)}
       />
-      <div className="confirm-button-buttons">
+      <div className="confirm-button-buttons modal-footer">
+        <Button severity="danger" text label={rejectLabel} onClick={onHide} ref={rejectBtnRef as React.Ref<Button>} />
         <Button
-          size="small"
-          severity="danger"
-          text
-          label={rejectLabel}
-          onClick={onHide}
-          ref={rejectBtnRef as React.Ref<Button>}
-        />
-        <Button
-          size="small"
           label={confirmLabel}
           loading={loading}
           onClick={async () => {

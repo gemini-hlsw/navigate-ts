@@ -140,6 +140,12 @@
   font-family: monospace;
 }
 
+.cal-params-delete-button-wrapper {
+  button.p-component.p-button {
+    padding: 6px 5px;
+  }
+}
+
 .cal-params-content {
   display: grid;
   grid-template-columns: repeat(2, 1fr);

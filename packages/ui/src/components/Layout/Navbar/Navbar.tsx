@@ -78,14 +78,9 @@ export default function Navbar() {
             iconPos="left"
             className="p-button-text nav-btn main-title"
           >
-            <span>N</span>
-            <span>A</span>
-            <span>V</span>
-            <span>I</span>
-            <span>G</span>
-            <span>A</span>
-            <span>T</span>
-            <span>E</span>
+            {'NAVIGATE'.split('').map((letter, index) => (
+              <span key={index}>{letter}</span>
+            ))}
           </Button>
         </Link>
         {site && <span className="site">{site}</span>}

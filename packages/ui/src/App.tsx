@@ -16,12 +16,15 @@ import Layout from './components/Layout/Layout';
 import Login from './components/Login/Login';
 import { SolarProgress } from './components/SolarProgress';
 import { VersionManager } from './components/VersionManager/VersionManager';
+import { isNotNullish } from './Helpers/functions';
 import { ToastProvider } from './Helpers/toast';
 
 const router = createBrowserRouter([
   { path: '/', element: <Layout />, children: [{ index: true, element: <Home /> }] },
   { path: '/login', element: <Login /> },
 ]);
+
+const formatTime = new Intl.RelativeTimeFormat('en', { numeric: 'auto' });
 
 export function App() {
   const theme = useThemeValue();
@@ -31,7 +34,7 @@ export function App() {
   }, [theme]);
 
   const [loading, setLoading] = useState(true);
-  const { data, error } = useServerConfiguration({ client });
+  const { data, error, refetch } = useServerConfiguration({ client });
 
   useEffect(() => {
     if (data?.serverConfiguration) {
@@ -41,6 +44,28 @@ export function App() {
       });
     }
   }, [data?.serverConfiguration]);
+
+  const [retryInSeconds, setRetryInSeconds] = useState<number | null>(null);
+
+  // On an error, retry after 10 seconds. And show a countdown.
+  useEffect(() => {
+    if (error) {
+      const startRetryInSeconds = 10;
+      startTransition(() => setRetryInSeconds(startRetryInSeconds));
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises
+      const timeout = setTimeout(() => refetch(), startRetryInSeconds * 1000);
+      const interval = setInterval(
+        () => setRetryInSeconds((prev) => (prev === null || prev <= 0 ? null : prev - 1)),
+        1000,
+      );
+
+      return () => {
+        clearTimeout(timeout);
+        clearInterval(interval);
+      };
+    }
+    return;
+  }, [error, refetch]);
 
   if (error) {
     return (
@@ -52,6 +77,7 @@ export function App() {
                 <b>Could not load server configuration.</b>
               </p>
               <p>{error.message}</p>
+              {isNotNullish(retryInSeconds) && <p>Retrying {formatTime.format(retryInSeconds, 'second')}...</p>}
             </>
           }
           severity="error"

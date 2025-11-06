@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useSuspenseQuery } from '@apollo/client/react';
+import { useMutation, useQuery } from '@apollo/client/react';
 
 import { graphql } from './gen';
 import type { Site } from './gen/graphql';
@@ -31,13 +31,6 @@ export const CAL_PARAMS = graphql(`
     }
   }
 `);
-
-export function useSuspenseCalParams(site: Site) {
-  return useSuspenseQuery(CAL_PARAMS, {
-    variables: { site },
-    context: { clientName: 'navigateConfigs' },
-  });
-}
 
 export function useCalParams(site: Site) {
   return useQuery(CAL_PARAMS, {
@@ -74,5 +67,76 @@ const CREATE_CAL_PARAMS = graphql(`
 `);
 
 export function useCreateCalParams() {
-  return useMutation(CREATE_CAL_PARAMS, { context: { clientName: 'navigateConfigs' }, refetchQueries: [CAL_PARAMS] });
+  return useMutation(CREATE_CAL_PARAMS, {
+    context: { clientName: 'navigateConfigs' },
+    refetchQueries: [CAL_PARAMS, CAL_PARAMS_HISTORY],
+  });
+}
+
+const CAL_PARAMS_HISTORY = graphql(`
+  query calParamsHistory($site: Site!) {
+    calParamsHistory(site: $site) {
+      pk
+      comment
+      createdAt
+    }
+  }
+`);
+
+export function useCalParamsHistory(site: Site) {
+  return useQuery(CAL_PARAMS_HISTORY, {
+    variables: { site },
+    context: { clientName: 'navigateConfigs' },
+  });
+}
+
+const REVERT_CAL_PARAMS = graphql(`
+  mutation revertCalParams($pk: PosInt!, $comment: String) {
+    revertCalParams(pk: $pk, comment: $comment) {
+      pk
+      site
+      acqCamX
+      acqCamY
+      baffleVisible
+      baffleNearIR
+      topShutterCurrentLimit
+      bottomShutterCurrentLimit
+      pwfs1CenterX
+      pwfs1CenterY
+      pwfs1CenterZ
+      pwfs2CenterX
+      pwfs2CenterY
+      pwfs2CenterZ
+      defocusEnabled
+      gnirsSfoDefocus
+      gmosSfoDefocus
+      gnirsP1Defocus
+      gmosP1Defocus
+      gmosOiDefocus
+      comment
+      createdAt
+    }
+  }
+`);
+
+export function useRevertCalParams() {
+  return useMutation(REVERT_CAL_PARAMS, {
+    context: { clientName: 'navigateConfigs' },
+    refetchQueries: [CAL_PARAMS, CAL_PARAMS_HISTORY],
+    awaitRefetchQueries: true,
+  });
+}
+
+const DELETE_CAL_PARAMS = graphql(`
+  mutation deleteCalParams($pk: PosInt!) {
+    deleteCalParams(pk: $pk)
+  }
+`);
+
+export function useDeleteCalParams() {
+  return useMutation(DELETE_CAL_PARAMS, {
+    context: { clientName: 'navigateConfigs' },
+    refetchQueries: [CAL_PARAMS, CAL_PARAMS_HISTORY],
+    awaitRefetchQueries: true,
+  });
 }
