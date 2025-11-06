@@ -33,7 +33,7 @@
     "@prisma/client": "6.18.0",
     "graphql": "catalog:",
     "graphql-scalars": "1.25.0",
-    "graphql-yoga": "5.16.0",
+    "graphql-yoga": "5.16.1",
     "lucuma-core": "catalog:",
     "prisma": "6.18.0"
   },
