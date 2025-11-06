@@ -6,7 +6,7 @@ export function useLongPress(
   { shouldPreventDefault = true, delay = 300 } = {},
 ) {
   const [longPressTriggered, setLongPressTriggered] = useState(false);
-  const timeout = useRef<ReturnType<typeof setTimeout>>(null);
+  const timeout = useRef<NodeJS.Timeout>(null);
   const target = useRef<EventTarget>(null);
 
   const start = useCallback(

@@ -2,26 +2,32 @@ import { useMutation, useQuery } from '@apollo/client/react';
 
 import { graphql } from './gen';
 
+export const SLEW_FLAGS_FRAGMENT = graphql(`
+  fragment SlewFlagsItem on SlewFlags {
+    pk
+    zeroChopThrow
+    zeroSourceOffset
+    zeroSourceDiffTrack
+    zeroMountOffset
+    zeroMountDiffTrack
+    shortcircuitTargetFilter
+    shortcircuitMountFilter
+    resetPointing
+    stopGuide
+    zeroGuideOffset
+    zeroInstrumentOffset
+    autoparkPwfs1
+    autoparkPwfs2
+    autoparkOiwfs
+    autoparkGems
+    autoparkAowfs
+  }
+`);
+
 export const GET_SLEW_FLAGS = graphql(`
   query getSlewFlags {
     slewFlags {
-      pk
-      zeroChopThrow
-      zeroSourceOffset
-      zeroSourceDiffTrack
-      zeroMountOffset
-      zeroMountDiffTrack
-      shortcircuitTargetFilter
-      shortcircuitMountFilter
-      resetPointing
-      stopGuide
-      zeroGuideOffset
-      zeroInstrumentOffset
-      autoparkPwfs1
-      autoparkPwfs2
-      autoparkOiwfs
-      autoparkGems
-      autoparkAowfs
+      ...SlewFlagsItem
     }
   }
 `);
@@ -71,23 +77,7 @@ const UPDATE_SLEW_FLAGS = graphql(`
       autoparkGems: $autoparkGems
       autoparkAowfs: $autoparkAowfs
     ) {
-      pk
-      zeroChopThrow
-      zeroSourceOffset
-      zeroSourceDiffTrack
-      zeroMountOffset
-      zeroMountDiffTrack
-      shortcircuitTargetFilter
-      shortcircuitMountFilter
-      resetPointing
-      stopGuide
-      zeroGuideOffset
-      zeroInstrumentOffset
-      autoparkPwfs1
-      autoparkPwfs2
-      autoparkOiwfs
-      autoparkGems
-      autoparkAowfs
+      ...SlewFlagsItem
     }
   }
 `);

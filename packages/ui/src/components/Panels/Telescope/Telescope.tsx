@@ -4,8 +4,6 @@ import { useConfiguration } from '@gql/configs/Configuration';
 import { useTargets } from '@gql/configs/Target';
 import { Title } from '@Shared/Title/Title';
 
-import type { TargetType } from '@/types';
-
 import { GuidersDetails } from './Details/GuidersDetails';
 import { TargetDetails } from './Details/TargetDetails';
 import { Footer } from './Footer/Footer';
@@ -30,7 +28,7 @@ export function Telescope({ prevPanel, nextPanel }: { prevPanel: () => void; nex
         </div>
         <GuiderTargets />
         <Systems />
-        <TargetDetails target={selectedTarget ?? ({} as TargetType)} />
+        <TargetDetails target={selectedTarget} />
         <GuidersDetails />
         <Footer />
       </div>

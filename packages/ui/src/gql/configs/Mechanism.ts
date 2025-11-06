@@ -3,46 +3,52 @@ import type { OptionsOf } from '@gql/util';
 
 import { graphql } from './gen';
 
+export const MECHANISM_FRAGMENT = graphql(`
+  fragment MechanismItem on Mechanism {
+    pk
+    mcs
+    mcsPark
+    mcsUnwrap
+    scs
+    crcs
+    crcsPark
+    crcsUnwrap
+    pwfs1
+    pwfs1Park
+    pwfs1Unwrap
+    pwfs2
+    pwfs2Park
+    pwfs2Unwrap
+    oiwfs
+    oiwfsPark
+    odgw
+    odgwPark
+    aowfs
+    aowfsPark
+    dome
+    domePark
+    domeMode
+    shutters
+    shuttersPark
+    shutterMode
+    shutterAperture
+    wVGate
+    wVGateClose
+    wVGateValue
+    eVGate
+    eVGateClose
+    eVGateValue
+    agScienceFoldPark
+    agAoFoldPark
+    agAcPickoffPark
+    agParkAll
+  }
+`);
+
 const GET_MECHANISM = graphql(`
   query getMechanism {
     mechanism {
-      pk
-      mcs
-      mcsPark
-      mcsUnwrap
-      scs
-      crcs
-      crcsPark
-      crcsUnwrap
-      pwfs1
-      pwfs1Park
-      pwfs1Unwrap
-      pwfs2
-      pwfs2Park
-      pwfs2Unwrap
-      oiwfs
-      oiwfsPark
-      odgw
-      odgwPark
-      aowfs
-      aowfsPark
-      dome
-      domePark
-      domeMode
-      shutters
-      shuttersPark
-      shutterMode
-      shutterAperture
-      wVGate
-      wVGateClose
-      wVGateValue
-      eVGate
-      eVGateClose
-      eVGateValue
-      agScienceFoldPark
-      agAoFoldPark
-      agAcPickoffPark
-      agParkAll
+      ...MechanismItem
     }
   }
 `);
@@ -138,43 +144,7 @@ const UPDATE_MECHANISM = graphql(`
       agAcPickoffPark: $agAcPickoffPark
       agParkAll: $agParkAll
     ) {
-      pk
-      mcs
-      mcsPark
-      mcsUnwrap
-      scs
-      crcs
-      crcsPark
-      crcsUnwrap
-      pwfs1
-      pwfs1Park
-      pwfs1Unwrap
-      pwfs2
-      pwfs2Park
-      pwfs2Unwrap
-      oiwfs
-      oiwfsPark
-      odgw
-      odgwPark
-      aowfs
-      aowfsPark
-      dome
-      domePark
-      domeMode
-      shutters
-      shuttersPark
-      shutterMode
-      shutterAperture
-      wVGate
-      wVGateClose
-      wVGateValue
-      eVGate
-      eVGateClose
-      eVGateValue
-      agScienceFoldPark
-      agAoFoldPark
-      agAcPickoffPark
-      agParkAll
+      ...MechanismItem
     }
   }
 `);

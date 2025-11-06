@@ -83,6 +83,7 @@ const selectedObservation: OdbObservationType = {
         point: null,
       },
     },
+    blindOffsetTarget: null,
   },
 };
 

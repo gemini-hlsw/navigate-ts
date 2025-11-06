@@ -87,7 +87,7 @@ input TargetInput {
   magnitude: Float
   band: String
   epoch: String
-  type: String
+  type: TargetType
   wavelength: Int
 }
 

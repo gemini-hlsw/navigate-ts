@@ -2,20 +2,26 @@ import { useMutation, useQuery } from '@apollo/client/react';
 
 import { graphql } from './gen';
 
+export const ALTAIR_INSTRUMENT_FRAGMENT = graphql(`
+  fragment AltairInstrumentItem on AltairInstrument {
+    pk
+    beamsplitter
+    startMagnitude
+    seeing
+    windSpeed
+    forceMode
+    ndFilter
+    fieldLens
+    deployAdc
+    adjustAdc
+    lgs
+  }
+`);
+
 const GET_ALTAIR_INSTRUMENT = graphql(`
   query getAltairInstrument {
     altairInstrument {
-      pk
-      beamsplitter
-      startMagnitude
-      seeing
-      windSpeed
-      forceMode
-      ndFilter
-      fieldLens
-      deployAdc
-      adjustAdc
-      lgs
+      ...AltairInstrumentItem
     }
   }
 `);
@@ -53,17 +59,7 @@ const UPDATE_ALTAIR_INSTRUMENT = graphql(`
       adjustAdc: $adjustAdc
       lgs: $lgs
     ) {
-      pk
-      beamsplitter
-      startMagnitude
-      seeing
-      windSpeed
-      forceMode
-      ndFilter
-      fieldLens
-      deployAdc
-      adjustAdc
-      lgs
+      ...AltairInstrumentItem
     }
   }
 `);

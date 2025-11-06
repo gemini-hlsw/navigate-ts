@@ -2,23 +2,25 @@ import { useMutation, useQuery } from '@apollo/client/react';
 
 import { graphql } from './gen';
 
+export const WFS_FRAGMENT = graphql(`
+  fragment WfsItem on GuideAlarm {
+    wfs
+    limit
+    enabled
+  }
+`);
+
 export const GET_GUIDE_ALARMS = graphql(`
   query guideAlarms {
     guideAlarms {
       OIWFS {
-        wfs
-        limit
-        enabled
+        ...WfsItem
       }
       PWFS1 {
-        wfs
-        limit
-        enabled
+        ...WfsItem
       }
       PWFS2 {
-        wfs
-        limit
-        enabled
+        ...WfsItem
       }
     }
   }
@@ -33,9 +35,7 @@ export function useGuideAlarms() {
 export const UPDATE_GUIDE_ALARM = graphql(`
   mutation updateGuideAlarm($wfs: WfsType!, $enabled: Boolean, $limit: Int) {
     updateGuideAlarm(wfs: $wfs, enabled: $enabled, limit: $limit) {
-      wfs
-      limit
-      enabled
+      ...WfsItem
     }
   }
 `);
