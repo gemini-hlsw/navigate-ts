@@ -252,14 +252,6 @@ enum Site {
   GS
 }
 
-// Deprecated: use CalParams model instead
-// TODO: remove in future release
-model WindowCenter {
-  site Site  @id
-  x    Float
-  y    Float
-}
-
 model CalParams {
   pk   Int  @id @default(autoincrement())
   site Site

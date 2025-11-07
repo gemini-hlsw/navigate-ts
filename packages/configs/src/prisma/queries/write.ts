@@ -9,7 +9,6 @@ import { INITIAL_ALTAIR_INSTRUMENT, INITIAL_GEMS_INSTRUMENT, INITIAL_INSTRUMENTS
 import { INITIAL_MECHANISM } from './init/mechanism.ts';
 import { INITIAL_ROTATOR } from './init/rotator.ts';
 import { INITIAL_SLEW_FLAGS } from './init/slewFlags.ts';
-import { INITIAL_WINDOW_CENTER } from './init/windowCenter.ts';
 
 type Models = TypeMap['model'];
 type FindInput<T extends keyof Models> = Models[T]['operations']['findFirst']['args'];
@@ -88,19 +87,7 @@ async function createEngineeringTargets(prisma: PrismaClient, log: (msg: string)
   await createRecord(prisma, 'EngineeringTarget', INITIAL_ENGINEERING_TARGETS, 'Engineering targets', log);
 }
 
-async function createWindowCenters(prisma: PrismaClient, log: (msg: string) => void) {
-  await createRecord(prisma, 'WindowCenter', INITIAL_WINDOW_CENTER, 'Window centers', log);
-}
-
 async function createCalParams(prisma: PrismaClient, log: (msg: string) => void) {
-  // Populate acqCamX and acqCamY from deprecated WindowCenter table
-  for (const param of INITIAL_CAL_PARAMS) {
-    const acqCam = await prisma.windowCenter.findFirst({ where: { site: param.site } });
-    if (acqCam) {
-      param.acqCamX = acqCam.x;
-      param.acqCamY = acqCam.y;
-    }
-  }
   await createRecord(prisma, 'CalParams', INITIAL_CAL_PARAMS, 'CalParams', log);
 }
 
@@ -113,6 +100,5 @@ export async function write(client: PrismaClient, log: (msg: string) => void) {
   await createMechanism(client, log);
   await createGuideAlarms(client, log);
   await createEngineeringTargets(client, log);
-  await createWindowCenters(client, log);
   await createCalParams(client, log);
 }
