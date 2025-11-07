@@ -125,7 +125,7 @@ export function useObservationsByState(options: OptionsOf<typeof GET_OBSERVATION
   );
 }
 
-const GET_GUIDE_ENVIRONMENT = graphql(`
+export const GET_GUIDE_ENVIRONMENT = graphql(`
   # eslint-disable @graphql-eslint/selection-set-depth
   query getGuideEnvironment($obsId: ObservationId!) {
     observation(observationId: $obsId) {

@@ -3,49 +3,70 @@ import { GET_CONFIGURATION, UPDATE_CONFIGURATION } from '@gql/configs/Configurat
 import { RESET_INSTRUMENTS } from '@gql/configs/Instrument';
 import { GET_ROTATOR, UPDATE_ROTATOR } from '@gql/configs/Rotator';
 import { REMOVE_AND_CREATE_BASE_TARGETS, REMOVE_AND_CREATE_WFS_TARGETS } from '@gql/configs/Target';
-import { GET_CENTRAL_WAVELENGTH } from '@gql/odb/Observation';
+import { GET_CENTRAL_WAVELENGTH, GET_GUIDE_ENVIRONMENT } from '@gql/odb/Observation';
 import type { MockedResponseOf } from '@gql/util';
-import { describe, expect, it } from 'vitest';
-import { renderHook } from 'vitest-browser-react';
+import { describe, expect, it, type Mock } from 'vitest';
+import { renderHook, type RenderHookResult } from 'vitest-browser-react';
 
 import type { OdbObservationType } from '@/types';
 
 import { useImportObservation } from './useImportObservation';
 
 describe('useImportObservation', () => {
-  it('should not update configuration until a real observation is re-imported', async () => {
-    const { result, act } = await renderHook(() => useImportObservation(), {
-      wrapper: ({ children }) => <MockedProvider mocks={[...mocks, mockInstrumentUpdate]}>{children}</MockedProvider>,
+  let sut: RenderHookResult<ReturnType<typeof useImportObservation>, unknown>;
+  let callback: Mock;
+  beforeEach(async () => {
+    callback = vi.fn();
+    sut = await renderHook(() => useImportObservation(), {
+      wrapper: ({ children }) => (
+        <MockedProvider mocks={[...mocks, updateConfigurationMock]}>{children}</MockedProvider>
+      ),
     });
-    const [importObservation, { loading: importLoading }] = result.current;
+    await expect.poll(() => sut.result.current[1].loading).toBe(false);
+  });
 
-    expect(importLoading).toBe(false);
+  it('should call callback even after not importing', async () => {
+    const { result, act } = sut;
+    const [importObservation] = result.current;
 
-    const callback = vitest.fn();
+    await act(async () => importObservation(null, callback));
 
-    await act(() => {
-      importObservation(null, callback)
-        .then(() => {
-          expect(callback).toHaveBeenCalledOnce();
-          expect(mockInstrumentUpdate.result).not.toHaveBeenCalled();
-        })
-        .catch(() => {
-          expect(callback).toHaveBeenCalledOnce();
-          expect(mockInstrumentUpdate.result).not.toHaveBeenCalled();
-        });
-    });
+    expect(callback).toHaveBeenCalledOnce();
+    expect(updateConfigurationMock.request.variables).not.toHaveBeenCalled();
+  });
 
-    await act(() => {
-      importObservation(selectedObservation, callback)
-        .then(() => {
-          expect(callback).toHaveBeenCalledOnce();
-          expect(mockInstrumentUpdate.result).toHaveBeenCalled();
-        })
-        .catch(() => {
-          expect(callback).toHaveBeenCalledOnce();
-          expect(mockInstrumentUpdate.result).toHaveBeenCalled();
-        });
-    });
+  it('should call update configuration when a real observation is re-imported', async () => {
+    const { result, act } = sut;
+    const [importObservation] = result.current;
+
+    await act(async () => importObservation(selectedObservation, callback));
+
+    expect(callback).toHaveBeenCalledOnce();
+    expect(updateConfigurationMock.request.variables).toHaveBeenCalledTimes(3);
+    expect(updateConfigurationMock.request.variables).toHaveBeenCalledWith(
+      expect.objectContaining({
+        selectedTarget: 34,
+      }),
+    );
+    expect(updateConfigurationMock.request.variables).toHaveBeenCalledWith(
+      expect.objectContaining({
+        selectedOiTarget: 35,
+        selectedP1Target: 35,
+        selectedP2Target: 35,
+      }),
+    );
+    expect(updateConfigurationMock.request.variables).toHaveBeenCalledWith(
+      expect.objectContaining({
+        baffleMode: 'AUTO',
+        centralBaffle: null,
+        deployableBaffle: null,
+        obsId: 'o-2e5',
+        obsInstrument: 'GMOS_NORTH',
+        obsReference: 'G-2025B-0571-Q-0003',
+        obsSubtitle: null,
+        obsTitle: 'Mayall V',
+      }),
+    );
   });
 });
 
@@ -208,6 +229,7 @@ const mocks = [
       query: REMOVE_AND_CREATE_BASE_TARGETS,
       variables: () => true,
     },
+    maxUsageCount: Infinity,
     result: {
       data: {
         removeAndCreateBaseTargets: [
@@ -267,6 +289,7 @@ const mocks = [
       query: REMOVE_AND_CREATE_WFS_TARGETS,
       variables: () => true,
     },
+    maxUsageCount: Infinity,
     result: {
       data: {
         removeAndCreateWfsTargets: [
@@ -316,14 +339,93 @@ const mocks = [
       },
     },
   } satisfies MockedResponseOf<typeof RESET_INSTRUMENTS>,
+  {
+    request: {
+      query: GET_GUIDE_ENVIRONMENT,
+      variables: () => true,
+    },
+    result: (arg) => ({
+      data: {
+        observation: {
+          __typename: 'Observation',
+          id: arg.obsId,
+          targetEnvironment: {
+            guideEnvironment: {
+              posAngle: {
+                hms: '00:00:00.000000',
+                degrees: 0.0,
+                __typename: 'Angle',
+              },
+              guideTargets: [
+                {
+                  probe: 'GMOS_OIWFS',
+                  name: 'Gaia DR3 375250953351514624',
+                  sidereal: {
+                    epoch: 'J2025.763',
+                    ra: {
+                      hms: '00:49:59.315742',
+                      degrees: 12.497148925,
+                      __typename: 'RightAscension',
+                    },
+                    dec: {
+                      dms: '+41:41:50.177420',
+                      degrees: 41.697271505555555,
+                      __typename: 'Declination',
+                    },
+                    properMotion: {
+                      ra: {
+                        microarcsecondsPerYear: 1121,
+                        __typename: 'ProperMotionRA',
+                      },
+                      dec: {
+                        microarcsecondsPerYear: -6810,
+                        __typename: 'ProperMotionDeclination',
+                      },
+                      __typename: 'ProperMotion',
+                    },
+                    parallax: null,
+                    radialVelocity: {
+                      centimetersPerSecond: 0,
+                      __typename: 'RadialVelocity',
+                    },
+                    __typename: 'Sidereal',
+                  },
+                  sourceProfile: {
+                    point: {
+                      bandNormalized: {
+                        brightnesses: [
+                          {
+                            band: 'GAIA_RP',
+                            value: '13.935516',
+                            __typename: 'BandBrightnessIntegrated',
+                          },
+                        ],
+                        __typename: 'BandNormalizedIntegrated',
+                      },
+                      __typename: 'SpectralDefinitionIntegrated',
+                    },
+                    __typename: 'SourceProfile',
+                  },
+                  __typename: 'GuideTarget',
+                },
+              ],
+              __typename: 'GuideEnvironment',
+            },
+            __typename: 'TargetEnvironment',
+          },
+        },
+      },
+    }),
+  } satisfies MockedResponseOf<typeof GET_GUIDE_ENVIRONMENT>,
 ];
 
-const mockInstrumentUpdate = {
+const updateConfigurationMock = {
   request: {
     query: UPDATE_CONFIGURATION,
-    variables: () => true,
+    variables: vi.fn().mockReturnValue(true),
   },
-  result: vi.fn().mockReturnValue({
+  maxUsageCount: Infinity,
+  result: {
     data: {
       updateConfiguration: {
         pk: 1,
@@ -342,7 +444,8 @@ const mockInstrumentUpdate = {
         baffleMode: 'AUTO',
         centralBaffle: null,
         deployableBaffle: null,
+        __typename: 'Configuration',
       },
     },
-  }),
+  },
 } satisfies MockedResponseOf<typeof UPDATE_CONFIGURATION>;
