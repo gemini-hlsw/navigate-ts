@@ -311,7 +311,7 @@ describe(TargetsHandset.name, () => {
     expectedInput: MutationAdjustOriginArgs | MutationAdjustPointingArgs | MutationAdjustTargetArgs,
   ) {
     const button = sut.getByTestId(testId);
-    if (label) expect(button).toHaveAttribute('aria-label', label);
+    if (label) await expect.element(button).toHaveAttribute('aria-label', label);
     await button.click();
 
     await expect.poll(() => mock).toHaveBeenCalledWith(expectedInput);
