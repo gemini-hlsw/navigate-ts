@@ -2,33 +2,40 @@ import type { QueryAndSubscriptionOptions } from '../use-query-and-subscription'
 import { useQueryAndSubscription } from '../use-query-and-subscription';
 import { graphql } from './gen';
 
+export const MECH_SYSTEM_STATE_FRAGMENT = graphql(`
+  fragment MechSystemStateItem on MechSystemState {
+    parked
+    follow
+  }
+`);
+
+export const TELESCOPE_STATE_FRAGMENT = graphql(`
+  fragment TelescopeStateItem on TelescopeState {
+    mount {
+      ...MechSystemStateItem
+    }
+    scs {
+      ...MechSystemStateItem
+    }
+    crcs {
+      ...MechSystemStateItem
+    }
+    pwfs1 {
+      ...MechSystemStateItem
+    }
+    pwfs2 {
+      ...MechSystemStateItem
+    }
+    oiwfs {
+      ...MechSystemStateItem
+    }
+  }
+`);
+
 const GET_TELESCOPE_STATE = graphql(`
   query getTelescopeState {
     telescopeState {
-      mount {
-        parked
-        follow
-      }
-      scs {
-        parked
-        follow
-      }
-      crcs {
-        parked
-        follow
-      }
-      pwfs1 {
-        parked
-        follow
-      }
-      pwfs2 {
-        parked
-        follow
-      }
-      oiwfs {
-        parked
-        follow
-      }
+      ...TelescopeStateItem
     }
   }
 `);
@@ -36,30 +43,7 @@ const GET_TELESCOPE_STATE = graphql(`
 const TELESCOPE_STATE_SUBSCRIPTION = graphql(`
   subscription telescopeStates {
     telescopeState {
-      mount {
-        parked
-        follow
-      }
-      scs {
-        parked
-        follow
-      }
-      crcs {
-        parked
-        follow
-      }
-      pwfs1 {
-        parked
-        follow
-      }
-      pwfs2 {
-        parked
-        follow
-      }
-      oiwfs {
-        parked
-        follow
-      }
+      ...TelescopeStateItem
     }
   }
 `);

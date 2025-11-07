@@ -4,25 +4,32 @@ import { useQueryAndSubscription } from '@gql/use-query-and-subscription';
 
 import { graphql } from './gen';
 
+export const POINTING_CORRECTIONS_FRAGMENT = graphql(`
+  fragment PointingCorrectionsItem on PointingCorrections {
+    local {
+      ...HorizontalOffsetItem
+    }
+    guide {
+      ...HorizontalOffsetItem
+    }
+  }
+`);
+
+export const HORIZONTAL_OFFSET_FRAGMENT = graphql(`
+  fragment HorizontalOffsetItem on HorizontalOffset {
+    azimuth {
+      arcseconds
+    }
+    elevation {
+      arcseconds
+    }
+  }
+`);
+
 const POINTING_ADJUSTMENT_OFFSET_QUERY = graphql(`
   query getPointingAdjustmentOffset {
     pointingAdjustmentOffset {
-      local {
-        azimuth {
-          arcseconds
-        }
-        elevation {
-          arcseconds
-        }
-      }
-      guide {
-        azimuth {
-          arcseconds
-        }
-        elevation {
-          arcseconds
-        }
-      }
+      ...PointingCorrectionsItem
     }
   }
 `);
@@ -30,22 +37,7 @@ const POINTING_ADJUSTMENT_OFFSET_QUERY = graphql(`
 const POINTING_ADJUSTMENT_OFFSET_SUBSCRIPTION = graphql(`
   subscription pointingAdjustmentOffset {
     pointingAdjustmentOffset {
-      local {
-        azimuth {
-          arcseconds
-        }
-        elevation {
-          arcseconds
-        }
-      }
-      guide {
-        azimuth {
-          arcseconds
-        }
-        elevation {
-          arcseconds
-        }
-      }
+      ...PointingCorrectionsItem
     }
   }
 `);
