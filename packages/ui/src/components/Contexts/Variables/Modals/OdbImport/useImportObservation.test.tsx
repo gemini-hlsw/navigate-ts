@@ -50,12 +50,14 @@ describe('useImportObservation', () => {
 });
 
 const selectedObservation: OdbObservationType = {
+  __typename: 'Observation',
   id: 'o-2e5',
   title: 'Mayall V',
   subtitle: null,
   instrument: 'GMOS_NORTH',
   reference: {
     label: 'G-2025B-0571-Q-0003',
+    __typename: 'ObservationReference',
   },
   targetEnvironment: {
     firstScienceTarget: {
@@ -66,24 +68,32 @@ const selectedObservation: OdbObservationType = {
         ra: {
           hms: '00:50:09.964808',
           degrees: 12.541520033333333,
+          __typename: 'RightAscension',
         },
         dec: {
           dms: '+41:41:01.034928',
           degrees: 41.683620813333334,
+          __typename: 'Declination',
         },
         properMotion: null,
         parallax: {
           microarcseconds: 0,
+          __typename: 'Parallax',
         },
         radialVelocity: {
           centimetersPerSecond: -33200000,
+          __typename: 'RadialVelocity',
         },
+        __typename: 'Sidereal',
       },
       sourceProfile: {
         point: null,
+        __typename: 'SourceProfile',
       },
+      __typename: 'Target',
     },
     blindOffsetTarget: null,
+    __typename: 'TargetEnvironment',
   },
 };
 
@@ -99,6 +109,7 @@ const mocks = [
           pk: 2,
           angle: 0,
           tracking: 'TRACKING',
+          __typename: 'Rotator',
         },
       },
     },
@@ -124,6 +135,7 @@ const mocks = [
           obsInstrument: 'GMOS_NORTH',
           obsSubtitle: null,
           obsReference: 'G-2025A-ENG-GMOSN-01-0004',
+          __typename: 'Configuration',
         },
       },
     },
@@ -146,31 +158,44 @@ const mocks = [
                     instrumentConfig: {
                       centralWavelength: {
                         nanometers: 630.0,
+                        __typename: 'Wavelength',
                       },
+                      __typename: 'GmosNorthDynamic',
                     },
+                    __typename: 'GmosNorthStep',
                   },
                   {
                     id: 's-b803cf26-55db-310d-b965-e01b5acb4621',
                     instrumentConfig: {
                       centralWavelength: {
                         nanometers: 630.0,
+                        __typename: 'Wavelength',
                       },
+                      __typename: 'GmosNorthDynamic',
                     },
+                    __typename: 'GmosNorthStep',
                   },
                   {
                     id: 's-0efe1e18-ca7a-3ae5-8395-007c99c446d6',
                     instrumentConfig: {
                       centralWavelength: {
                         nanometers: 630.0,
+                        __typename: 'Wavelength',
                       },
+                      __typename: 'GmosNorthDynamic',
                     },
+                    __typename: 'GmosNorthStep',
                   },
                 ],
+                __typename: 'GmosNorthAtom',
               },
+              __typename: 'GmosNorthExecutionSequence',
             },
+            __typename: 'GmosNorthExecutionConfig',
           },
           gmosSouth: null,
           flamingos2: null,
+          __typename: 'ExecutionConfig',
         },
       },
     },
@@ -190,16 +215,19 @@ const mocks = [
             ra: {
               degrees: 12.54152003333333,
               hms: '00:50:09.964807',
+              __typename: 'RA',
             },
             dec: {
               degrees: 41.68362081333333,
               dms: '+41:41:01.034925',
+              __typename: 'Dec',
             },
             az: null,
             el: null,
             properMotion: {
               ra: null,
               dec: null,
+              __typename: 'ProperMotion',
             },
             radialVelocity: -33200000,
             parallax: 0,
@@ -209,6 +237,7 @@ const mocks = [
             type: 'SCIENCE',
             wavelength: 630,
             createdAt: '2025-10-23T14:55:52.655Z',
+            __typename: 'Target',
           },
         ],
       },
@@ -225,6 +254,7 @@ const mocks = [
           pk: 1,
           angle: 0,
           tracking: 'TRACKING',
+          __typename: 'Rotator',
         },
       },
     },
@@ -244,16 +274,19 @@ const mocks = [
             ra: {
               degrees: 12.497148925,
               hms: '00:49:59.315741',
+              __typename: 'RA',
             },
             dec: {
               degrees: 41.69727150555556,
               dms: '+41:41:50.177415',
+              __typename: 'Dec',
             },
             az: null,
             el: null,
             properMotion: {
               ra: 1121,
               dec: -6810,
+              __typename: 'ProperMotion',
             },
             radialVelocity: 0,
             parallax: 712,
@@ -263,6 +296,7 @@ const mocks = [
             type: 'OIWFS',
             wavelength: null,
             createdAt: '2025-10-23T14:55:55.258Z',
+            __typename: 'Target',
           },
         ],
       },

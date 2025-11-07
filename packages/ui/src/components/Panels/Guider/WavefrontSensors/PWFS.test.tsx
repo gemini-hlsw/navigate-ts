@@ -81,6 +81,7 @@ const pwfs1MechsStateMock = {
       pwfs1MechsState: {
         filter: 'NEUTRAL',
         fieldStop: 'PRISM',
+        __typename: 'PwfsMechsState',
       },
     },
   },
@@ -96,6 +97,7 @@ const pwfs1MechStateSubMock = {
       pwfs1MechsState: {
         filter: 'NEUTRAL',
         fieldStop: 'PRISM',
+        __typename: 'PwfsMechsState',
       },
     },
   },
@@ -111,6 +113,7 @@ const pwfs2MechsStateMock = {
       pwfs2MechsState: {
         filter: 'NEUTRAL',
         fieldStop: 'PRISM',
+        __typename: 'PwfsMechsState',
       },
     },
   },
@@ -126,6 +129,7 @@ const pwfs2MechStateSubMock = {
       pwfs2MechsState: {
         filter: 'NEUTRAL',
         fieldStop: 'PRISM',
+        __typename: 'PwfsMechsState',
       },
     },
   },
@@ -139,6 +143,7 @@ const pwfs1FilterMock = {
   result: {
     data: {
       pwfs1Filter: {
+        __typename: 'OperationOutcome',
         result: 'SUCCESS',
         msg: '',
       },
@@ -154,6 +159,7 @@ const pwfs2FilterMock = {
   result: {
     data: {
       pwfs2Filter: {
+        __typename: 'OperationOutcome',
         result: 'SUCCESS',
         msg: '',
       },
@@ -169,6 +175,7 @@ const pwfs1FieldStopMock = {
   result: {
     data: {
       pwfs1FieldStop: {
+        __typename: 'OperationOutcome',
         result: 'SUCCESS',
         msg: '',
       },
@@ -184,6 +191,7 @@ const pwfs2FieldStopMock = {
   result: {
     data: {
       pwfs2FieldStop: {
+        __typename: 'OperationOutcome',
         result: 'SUCCESS',
         msg: '',
       },

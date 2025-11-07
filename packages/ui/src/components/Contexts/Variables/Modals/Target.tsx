@@ -128,10 +128,12 @@ export function TargetContent({
             setAuxTarget((prev) => ({
               ...prev!,
               ra: prev!.az && {
+                ...prev!.ra!,
                 degrees: prev!.az.degrees,
                 hms: stringC1,
               },
               dec: prev!.el && {
+                ...prev!.dec!,
                 degrees: prev!.el.degrees,
                 dms: stringC2,
               },
@@ -145,10 +147,12 @@ export function TargetContent({
             setAuxTarget((prev) => ({
               ...prev!,
               az: prev!.ra && {
+                ...prev!.az!,
                 degrees: prev!.ra.degrees,
                 dms: deg2dms(prev?.ra?.degrees ?? 0),
               },
               el: prev!.dec && {
+                ...prev!.el!,
                 degrees: prev!.dec.degrees,
                 dms: deg2dms(prev?.dec?.degrees ?? 0),
               },
@@ -178,6 +182,7 @@ export function TargetContent({
             setAuxTarget((prev) => ({
               ...prev!,
               ra: {
+                ...prev!.ra!,
                 degrees: e.target.value!,
                 hms: stringC1,
               },
@@ -187,6 +192,7 @@ export function TargetContent({
             setAuxTarget((prev) => ({
               ...prev!,
               az: {
+                ...prev!.az!,
                 degrees: e.target.value!,
                 dms: stringC1,
               },
@@ -213,12 +219,12 @@ export function TargetContent({
           if (coordsType === 'celestial') {
             setAuxTarget((prev) => ({
               ...prev!,
-              ra: { degrees: hms2deg(e.target.value), hms: e.target.value },
+              ra: { ...prev!.ra!, degrees: hms2deg(e.target.value), hms: e.target.value },
             }));
           } else {
             setAuxTarget((prev) => ({
               ...prev!,
-              az: { degrees: dms2deg(e.target.value), dms: e.target.value },
+              az: { ...prev!.az!, degrees: dms2deg(e.target.value), dms: e.target.value },
             }));
           }
           setc1String(e.target.value);
@@ -241,6 +247,7 @@ export function TargetContent({
             setAuxTarget((prev) => ({
               ...prev!,
               dec: {
+                ...prev!.dec!,
                 degrees: e.target.value!,
                 dms: stringC2,
               },
@@ -249,6 +256,7 @@ export function TargetContent({
             setAuxTarget((prev) => ({
               ...prev!,
               el: {
+                ...prev!.el!,
                 degrees: e.target.value!,
                 dms: stringC2,
               },
@@ -275,12 +283,20 @@ export function TargetContent({
           if (coordsType === 'celestial') {
             setAuxTarget((prev) => ({
               ...prev!,
-              dec: { degrees: dms2deg(e.target.value), dms: e.target.value },
+              dec: {
+                ...prev!.dec!,
+                degrees: dms2deg(e.target.value),
+                dms: e.target.value,
+              },
             }));
           } else {
             setAuxTarget((prev) => ({
               ...prev!,
-              el: { degrees: dms2deg(e.target.value), dms: e.target.value },
+              el: {
+                ...prev!.el!,
+                degrees: dms2deg(e.target.value),
+                dms: e.target.value,
+              },
             }));
           }
           setc2String(e.target.value);

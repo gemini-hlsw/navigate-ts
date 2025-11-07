@@ -34,6 +34,7 @@ describe(Instrument.name, () => {
     await expect.element(originXInput).toHaveValue('0.20');
     await expect.element(sut.getByRole('button', { name: 'Save instrument' })).not.toBeDisabled();
     expect(setTempInstrumentMock.result).toHaveBeenCalledExactlyOnceWith({
+      __typename: 'InstrumentConfig',
       pk: 1,
       name: 'GMOS_NORTH',
       iaa: 359.877,
@@ -104,6 +105,7 @@ const mocks: MockLink.MockedResponse[] = [
           obsInstrument: 'GMOS_NORTH',
           obsSubtitle: null,
           obsReference: 'G-2025A-ENG-GMOSN-01-0004',
+          __typename: 'Configuration',
         },
       },
     },
@@ -146,6 +148,7 @@ const getInstrumentMock = {
         isTemporary: true,
         comment: null,
         createdAt,
+        __typename: 'InstrumentConfig',
       },
     },
   },
@@ -173,6 +176,7 @@ const updateInstrumentMock = {
         comment: null,
         isTemporary: true,
         createdAt,
+        __typename: 'InstrumentConfig',
       },
     } satisfies ResultOf<typeof UPDATE_INSTRUMENT>,
   }),
@@ -200,6 +204,7 @@ const setTempInstrumentMock = {
         comment: null,
         isTemporary: true,
         createdAt,
+        __typename: 'InstrumentConfig',
       },
     } satisfies ResultOf<typeof SET_TEMPORARY_INSTRUMENT>,
   }),

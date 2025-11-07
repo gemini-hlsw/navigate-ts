@@ -66,6 +66,8 @@ const sharedConfig = {
     inputValue: false,
   },
   skipTypeNameForRoot: true,
+  // Required for fragments to work in tests
+  nonOptionalTypename: true,
 };
 
 const presetConfig = {

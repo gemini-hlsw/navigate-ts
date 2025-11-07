@@ -143,6 +143,7 @@ const configurationMock = {
         obsInstrument: 'GMOS_SOUTH',
         obsSubtitle: null,
         obsReference: 'G-2025A-0159-D-0433',
+        __typename: 'Configuration',
       },
     },
   },
@@ -172,6 +173,7 @@ const rotatorMock = {
         pk: 1,
         angle: 0,
         tracking: 'TRACKING',
+        __typename: 'Rotator',
       },
     },
   },
@@ -199,6 +201,7 @@ const instrumentMock = {
         isTemporary: false,
         comment: null,
         createdAt: new Date().toISOString(),
+        __typename: 'InstrumentConfig',
       },
     },
   },
@@ -218,16 +221,19 @@ const getTargetsMock = {
           ra: {
             degrees: 189.7074213416667,
             hms: '12:38:49.781122',
+            __typename: 'RA',
           },
           dec: {
             degrees: 310.1999390236111,
             dms: '-49:48:00.219525',
+            __typename: 'Dec',
           },
           az: null,
           el: null,
           properMotion: {
             ra: 123456,
             dec: 654321,
+            __typename: 'ProperMotion',
           },
           parallax: 789.123,
           radialVelocity: 321.654,
@@ -237,6 +243,7 @@ const getTargetsMock = {
           type: 'SCIENCE',
           wavelength: 630,
           createdAt: '2025-07-22T14:13:04.094Z',
+          __typename: 'Target',
         },
       ],
     },
@@ -251,6 +258,7 @@ const slewMutationMock = {
   result: vi.fn().mockReturnValue({
     data: {
       slew: {
+        __typename: 'OperationOutcome',
         result: 'SUCCESS',
       },
     } satisfies ResultOf<typeof SLEW_MUTATION>,
@@ -287,6 +295,7 @@ const calParamsMock = {
         gmosOiDefocus: 0,
         comment: 'Initial CalParams for GN',
         createdAt: new Date().toISOString(),
+        __typename: 'CalParams',
       },
     },
   },
