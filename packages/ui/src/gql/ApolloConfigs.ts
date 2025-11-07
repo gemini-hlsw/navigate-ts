@@ -129,28 +129,32 @@ function createClient() {
         ),
       ),
     ]),
-    cache: new InMemoryCache({
-      dataIdFromObject(responseObject) {
-        // Configure primary-key fields for cache normalization to use 'pk' field
-        if (
-          !('id' in responseObject && responseObject.id !== null) &&
-          'pk' in responseObject &&
-          (typeof responseObject.pk === 'string' || typeof responseObject.pk === 'number') &&
-          responseObject.__typename
-        ) {
-          return `${responseObject.__typename}:pk:${responseObject.pk}`;
-        } else {
-          return defaultDataIdFromObject(responseObject);
-        }
-      },
-      // Configure primary-key fields for cache normalization
-      typePolicies: {
-        GuideAlarm: {
-          keyFields: ['wfs'],
-        },
-      },
-    }),
+    cache: makeCache(),
   });
 }
 
 export const client = createClient();
+
+export function makeCache() {
+  return new InMemoryCache({
+    dataIdFromObject(responseObject) {
+      // Configure primary-key fields for cache normalization to use 'pk' field
+      if (
+        !('id' in responseObject && responseObject.id !== null) &&
+        'pk' in responseObject &&
+        (typeof responseObject.pk === 'string' || typeof responseObject.pk === 'number') &&
+        responseObject.__typename
+      ) {
+        return `${responseObject.__typename}:pk:${responseObject.pk}`;
+      } else {
+        return defaultDataIdFromObject(responseObject);
+      }
+    },
+    // Configure primary-key fields for cache normalization
+    typePolicies: {
+      GuideAlarm: {
+        keyFields: ['wfs'],
+      },
+    },
+  });
+}

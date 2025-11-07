@@ -13,8 +13,17 @@ describe(Alarm.name, () => {
   let sut: RenderResult;
   let onUpdateAlarm: MockedFunction<ComponentProps<typeof Alarm>['onUpdateAlarm']>;
 
-  const guideQuality: GuideQuality = { centroidDetected: true, flux: 1000 };
-  const alarm: GuideAlarm = { wfs: 'PWFS1', enabled: true, limit: 900 };
+  const guideQuality: GuideQuality = {
+    centroidDetected: true,
+    flux: 1000,
+    __typename: 'GuideQuality',
+  };
+  const alarm: GuideAlarm = {
+    wfs: 'PWFS1',
+    enabled: true,
+    limit: 900,
+    __typename: 'GuideAlarm',
+  };
 
   beforeEach(async () => {
     onUpdateAlarm = vi.fn();

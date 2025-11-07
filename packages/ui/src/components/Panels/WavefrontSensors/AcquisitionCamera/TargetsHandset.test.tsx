@@ -311,7 +311,7 @@ describe(TargetsHandset.name, () => {
     expectedInput: MutationAdjustOriginArgs | MutationAdjustPointingArgs | MutationAdjustTargetArgs,
   ) {
     const button = sut.getByTestId(testId);
-    if (label) expect(button).toHaveAttribute('aria-label', label);
+    if (label) await expect.element(button).toHaveAttribute('aria-label', label);
     await button.click();
 
     await expect.poll(() => mock).toHaveBeenCalledWith(expectedInput);
@@ -323,35 +323,48 @@ const targetAdjustmentOffsetsData: ResultOf<typeof TARGET_ADJUSTMENT_OFFSETS_QUE
     sourceA: {
       deltaX: {
         arcseconds: 0.0,
+        __typename: 'Angle',
       },
       deltaY: {
         arcseconds: 0.0,
+        __typename: 'Angle',
       },
+      __typename: 'FocalPlaneOffset',
     },
     pwfs1: {
       deltaX: {
         arcseconds: 0.0,
+        __typename: 'Angle',
       },
       deltaY: {
         arcseconds: 0.0,
+        __typename: 'Angle',
       },
+      __typename: 'FocalPlaneOffset',
     },
     pwfs2: {
       deltaX: {
         arcseconds: 0.0,
+        __typename: 'Angle',
       },
       deltaY: {
         arcseconds: 0.0,
+        __typename: 'Angle',
       },
+      __typename: 'FocalPlaneOffset',
     },
     oiwfs: {
       deltaX: {
         arcseconds: 0.0,
+        __typename: 'Angle',
       },
       deltaY: {
         arcseconds: 0.0,
+        __typename: 'Angle',
       },
+      __typename: 'FocalPlaneOffset',
     },
+    __typename: 'TargetOffsets',
   },
 };
 
@@ -363,6 +376,7 @@ const resetTargetAdjustmentMutationMock = {
   result: vi.fn().mockReturnValue({
     data: {
       resetTargetAdjustment: {
+        __typename: 'OperationOutcome',
         result: 'SUCCESS',
         msg: null,
       },
@@ -379,6 +393,7 @@ const adjustTargetMutationMock = {
   result: vi.fn().mockReturnValue({
     data: {
       adjustTarget: {
+        __typename: 'OperationOutcome',
         result: 'SUCCESS',
         msg: null,
       },
@@ -394,6 +409,7 @@ const absorbTargetAdjustmentMutationMock = {
   result: vi.fn().mockReturnValue({
     data: {
       absorbTargetAdjustment: {
+        __typename: 'OperationOutcome',
         result: 'SUCCESS',
         msg: null,
       },
@@ -423,6 +439,7 @@ const mocks: MockLink.MockedResponse[] = [
           obsInstrument: 'GMOS_NORTH',
           obsSubtitle: null,
           obsReference: 'G-2025A-ENG-GMOSN-01-0004',
+          __typename: 'Configuration',
         },
       },
     },

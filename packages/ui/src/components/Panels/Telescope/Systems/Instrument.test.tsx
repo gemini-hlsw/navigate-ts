@@ -3,8 +3,7 @@ import { GET_CONFIGURATION } from '@gql/configs/Configuration';
 import { GET_INSTRUMENT, SET_TEMPORARY_INSTRUMENT, UPDATE_INSTRUMENT } from '@gql/configs/Instrument';
 import { GET_INSTRUMENT_PORT } from '@gql/server/Instrument';
 import type { MockedResponseOf } from '@gql/util';
-import type { ResultOf } from '@graphql-typed-document-node/core';
-import { userEvent } from 'vitest/browser';
+import { page, userEvent } from 'vitest/browser';
 
 import { importInstrumentAtom } from '@/components/atoms/instrument';
 import type { RenderResultWithStore } from '@/test/render';
@@ -33,7 +32,8 @@ describe(Instrument.name, () => {
     await expect.element(originXInput).not.toBeDisabled();
     await expect.element(originXInput).toHaveValue('0.20');
     await expect.element(sut.getByRole('button', { name: 'Save instrument' })).not.toBeDisabled();
-    expect(setTempInstrumentMock.result).toHaveBeenCalledExactlyOnceWith({
+    expect(setTempInstrumentMock.request.variables).toHaveBeenCalledExactlyOnceWith({
+      __typename: 'InstrumentConfig',
       pk: 1,
       name: 'GMOS_NORTH',
       iaa: 359.877,
@@ -61,13 +61,15 @@ describe(Instrument.name, () => {
 
   it('should call updateInstrument when save button is clicked', async () => {
     const saveButton = sut.getByRole('button', { name: 'Save instrument' });
-    await userEvent.click(saveButton, { timeout: 500 });
-    await userEvent.fill(sut.getByRole('textbox', { name: 'Enter a comment (optional)' }), 'My comment');
-    await userEvent.click(sut.getByRole('button', { name: 'Save', exact: true }));
+    await userEvent.click(saveButton);
+    await userEvent.fill(page.getByRole('textbox', { name: 'Enter a comment (optional)' }), 'My comment');
+    await userEvent.click(page.getByRole('button', { name: 'Save', exact: true }));
 
-    await expect
-      .poll(() => updateInstrumentMock.result)
-      .toHaveBeenCalledExactlyOnceWith({ pk: 1, comment: 'My comment', isTemporary: false });
+    expect(updateInstrumentMock.request.variables).toHaveBeenCalledExactlyOnceWith({
+      pk: 1,
+      comment: 'My comment',
+      isTemporary: false,
+    });
   });
 
   it('should query instrument using oiWfs', async () => {
@@ -104,6 +106,7 @@ const mocks: MockLink.MockedResponse[] = [
           obsInstrument: 'GMOS_NORTH',
           obsSubtitle: null,
           obsReference: 'G-2025A-ENG-GMOSN-01-0004',
+          __typename: 'Configuration',
         },
       },
     },
@@ -146,6 +149,7 @@ const getInstrumentMock = {
         isTemporary: true,
         comment: null,
         createdAt,
+        __typename: 'InstrumentConfig',
       },
     },
   },
@@ -154,10 +158,10 @@ const getInstrumentMock = {
 const updateInstrumentMock = {
   request: {
     query: UPDATE_INSTRUMENT,
-    variables: () => true,
+    variables: vi.fn().mockReturnValue(true),
   },
   maxUsageCount: Infinity,
-  result: vi.fn().mockReturnValue({
+  result: {
     data: {
       updateInstrument: {
         pk: 1,
@@ -173,18 +177,19 @@ const updateInstrumentMock = {
         comment: null,
         isTemporary: true,
         createdAt,
+        __typename: 'InstrumentConfig',
       },
-    } satisfies ResultOf<typeof UPDATE_INSTRUMENT>,
-  }),
+    },
+  },
 } satisfies MockedResponseOf<typeof UPDATE_INSTRUMENT>;
 
 const setTempInstrumentMock = {
   request: {
     query: SET_TEMPORARY_INSTRUMENT,
-    variables: () => true,
+    variables: vi.fn().mockReturnValue(true),
   },
   maxUsageCount: Infinity,
-  result: vi.fn().mockReturnValue({
+  result: {
     data: {
       setTemporaryInstrument: {
         pk: 1,
@@ -200,7 +205,8 @@ const setTempInstrumentMock = {
         comment: null,
         isTemporary: true,
         createdAt,
+        __typename: 'InstrumentConfig',
       },
-    } satisfies ResultOf<typeof SET_TEMPORARY_INSTRUMENT>,
-  }),
+    },
+  },
 } satisfies MockedResponseOf<typeof SET_TEMPORARY_INSTRUMENT>;

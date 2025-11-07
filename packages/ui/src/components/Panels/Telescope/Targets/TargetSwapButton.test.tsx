@@ -126,6 +126,7 @@ const mocks = [
     result: {
       data: {
         rotator: {
+          __typename: 'Rotator',
           pk: 2,
           angle: 0,
           tracking: 'TRACKING',
@@ -142,6 +143,7 @@ const mocks = [
     result: {
       data: {
         instrument: {
+          __typename: 'InstrumentConfig',
           pk: 1,
           wfs: 'OIWFS',
           iaa: 359.877,
@@ -199,7 +201,7 @@ const mocks = [
     },
     result: vi.fn().mockReturnValue({
       data: {
-        swapTarget: { result: 'SUCCESS', msg: '' },
+        swapTarget: { __typename: 'OperationOutcome', result: 'SUCCESS', msg: '' },
       } satisfies ResultOf<typeof SWAP_TARGET_MUTATION>,
     }),
   } satisfies MockedResponseOf<typeof SWAP_TARGET_MUTATION>,
@@ -281,7 +283,7 @@ const mocks = [
     },
     result: vi.fn().mockReturnValue({
       data: {
-        restoreTarget: { result: 'SUCCESS', msg: '' },
+        restoreTarget: { __typename: 'OperationOutcome', result: 'SUCCESS', msg: '' },
       } satisfies ResultOf<typeof RESTORE_TARGET_MUTATION>,
     }),
   } satisfies MockedResponseOf<typeof RESTORE_TARGET_MUTATION>,
@@ -293,6 +295,7 @@ const mocks = [
     result: {
       data: {
         configuration: {
+          __typename: 'Configuration',
           pk: 1,
           selectedTarget: 3,
           selectedOiTarget: 8,
@@ -330,6 +333,7 @@ const mocks = [
     result: {
       data: {
         calParams: {
+          __typename: 'CalParams',
           pk: 1,
           site: 'GN',
           acqCamX: 518,
@@ -367,6 +371,7 @@ const navigateStatesMock = (onSwappedTarget: boolean) => [
     result: {
       data: {
         navigateState: {
+          __typename: 'NavigateState',
           onSwappedTarget,
         },
       },
@@ -382,6 +387,7 @@ const navigateStatesMock = (onSwappedTarget: boolean) => [
     result: {
       data: {
         navigateState: {
+          __typename: 'NavigateState',
           onSwappedTarget,
         },
       },

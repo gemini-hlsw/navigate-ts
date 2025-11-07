@@ -2,16 +2,22 @@ import { useMutation, useQuery } from '@apollo/client/react';
 
 import { graphql } from './gen';
 
+export const GEMS_GUIDE_LOOP_FRAGMENT = graphql(`
+  fragment GemsGuideLoopItem on GemsGuideLoop {
+    pk
+    aoEnabled
+    focus
+    rotation
+    tipTilt
+    anisopl
+    flexure
+  }
+`);
+
 const GET_GEMS_GUIDE_LOOP = graphql(`
   query getGemsGuideLoop {
     gemsGuideLoop {
-      pk
-      aoEnabled
-      focus
-      rotation
-      tipTilt
-      anisopl
-      flexure
+      ...GemsGuideLoopItem
     }
   }
 `);
@@ -41,13 +47,7 @@ const UPDATE_GEMS_GUIDE_LOOP = graphql(`
       anisopl: $anisopl
       flexure: $flexure
     ) {
-      pk
-      aoEnabled
-      focus
-      rotation
-      tipTilt
-      anisopl
-      flexure
+      ...GemsGuideLoopItem
     }
   }
 `);

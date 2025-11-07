@@ -17,23 +17,24 @@ import type {
   TargetType as TypeOfTarget,
   User as UserType,
 } from '@gql/configs/gen/graphql';
-import type { GetObservationsByStateQuery, Scalars as OdbScalars } from '@gql/odb/gen/graphql';
+import type {
+  BrightnessItemFragment,
+  ObservationItemFragment,
+  Scalars as OdbScalars,
+  SourceProfileItemFragment,
+  TargetItemFragment,
+} from '@gql/odb/gen/graphql';
 import type { RotatorTrackingMode as TrackingType } from '@gql/server/gen/graphql';
 
 export type ThemeType = 'light' | 'dark';
 
-export type OdbObservationType = NonNullable<GetObservationsByStateQuery['observations']['matches'][number]>;
+export type OdbObservationType = ObservationItemFragment;
 
-export type OdbTargetType = NonNullable<
-  OdbObservationType['targetEnvironment']['blindOffsetTarget'] &
-    OdbObservationType['targetEnvironment']['firstScienceTarget']
->;
+export type OdbTargetType = TargetItemFragment;
 
-export type OdbBandBrightnessType = NonNullable<
-  NonNullable<OdbTargetType['sourceProfile']['point']>['bandNormalized']
->['brightnesses'][number];
+export type OdbBandBrightnessType = BrightnessItemFragment;
 
-export type OdbSourceProfileType = NonNullable<OdbTargetType['sourceProfile']>;
+export type OdbSourceProfileType = SourceProfileItemFragment;
 
 export type {
   AltairGuideLoopType,

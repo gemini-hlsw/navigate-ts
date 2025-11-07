@@ -63,6 +63,7 @@ describe(`${Instrument.name} modal`, () => {
       pk: 1,
     });
     expect(setTemporaryInstrumentMock.request.variables).toHaveBeenCalledExactlyOnceWith({
+      __typename: 'InstrumentConfig',
       pk: 1,
       name: 'GMOS_SOUTH',
       iaa: 359.856,
@@ -101,6 +102,7 @@ const getConfigurationMock = {
         obsInstrument: 'GMOS_NORTH',
         obsSubtitle: null,
         obsReference: 'G-2025A-ENG-GMOSN-01-0004',
+        __typename: 'Configuration',
       },
     },
   },
@@ -144,6 +146,7 @@ const getInstrumentMock = {
         isTemporary: true,
         comment: null,
         createdAt,
+        __typename: 'InstrumentConfig',
       },
     },
   },
@@ -196,6 +199,7 @@ const getInstrumentsMock = {
           isTemporary: false,
           comment: 'Initial configuration',
           createdAt,
+          __typename: 'InstrumentConfig',
         },
         {
           pk: 2,
@@ -211,6 +215,7 @@ const getInstrumentsMock = {
           isTemporary: false,
           comment: 'Initial configuration',
           createdAt: '2025-10-13T09:44:57.930Z',
+          __typename: 'InstrumentConfig',
         },
       ],
     },

@@ -3,12 +3,18 @@ import { useQueryAndSubscription } from '@gql/use-query-and-subscription';
 
 import { graphql } from './gen';
 
+export const AC_MECHS_FRAGMENT = graphql(`
+  fragment AcMechsItem on AcMechs {
+    lens
+    filter
+    ndFilter
+  }
+`);
+
 export const AC_MECHS_STATE = graphql(`
   query acMechsState {
     acMechsState {
-      lens
-      filter
-      ndFilter
+      ...AcMechsItem
     }
   }
 `);
@@ -16,9 +22,7 @@ export const AC_MECHS_STATE = graphql(`
 export const AC_MECHS_STATE_SUB = graphql(`
   subscription acMechsStateSub {
     acMechsState {
-      lens
-      filter
-      ndFilter
+      ...AcMechsItem
     }
   }
 `);
@@ -79,11 +83,17 @@ export function useAcWindowSize() {
   return useMutation(AC_WINDOW_SIZE);
 }
 
+export const PWFS_MECHS_FRAGMENT = graphql(`
+  fragment PwfsMechsItem on PwfsMechsState {
+    filter
+    fieldStop
+  }
+`);
+
 export const PWFS1_MECHS_STATE = graphql(`
   query pwfs1MechsState {
     pwfs1MechsState {
-      filter
-      fieldStop
+      ...PwfsMechsItem
     }
   }
 `);
@@ -91,8 +101,7 @@ export const PWFS1_MECHS_STATE = graphql(`
 export const PWFS1_MECHS_STATE_SUB = graphql(`
   subscription pwfs1MechsStateSub {
     pwfs1MechsState {
-      filter
-      fieldStop
+      ...PwfsMechsItem
     }
   }
 `);
@@ -104,8 +113,7 @@ export function usePwfs1MechsState() {
 export const PWFS2_MECHS_STATE = graphql(`
   query pwfs2MechsState {
     pwfs2MechsState {
-      filter
-      fieldStop
+      ...PwfsMechsItem
     }
   }
 `);
@@ -113,8 +121,7 @@ export const PWFS2_MECHS_STATE = graphql(`
 export const PWFS2_MECHS_STATE_SUB = graphql(`
   subscription pwfs2MechsStateSub {
     pwfs2MechsState {
-      filter
-      fieldStop
+      ...PwfsMechsItem
     }
   }
 `);

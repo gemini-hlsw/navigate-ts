@@ -2,18 +2,24 @@ import { useMutation, useQuery } from '@apollo/client/react';
 
 import { graphql } from './gen';
 
+export const ALTAIR_GUIDE_LOOP_FRAGMENT = graphql(`
+  fragment AltairGuideLoopItem on AltairGuideLoop {
+    pk
+    aoEnabled
+    oiBlend
+    focus
+    p1Ttf
+    strap
+    oiTtf
+    ttgs
+    sfo
+  }
+`);
+
 const GET_ALTAIR_GUIDE_LOOP = graphql(`
   query getAltairGuideLoop {
     altairGuideLoop {
-      pk
-      aoEnabled
-      oiBlend
-      focus
-      p1Ttf
-      strap
-      oiTtf
-      ttgs
-      sfo
+      ...AltairGuideLoopItem
     }
   }
 `);
@@ -47,15 +53,7 @@ const UPDATE_ALTAIR_GUIDE_LOOP = graphql(`
       ttgs: $ttgs
       sfo: $sfo
     ) {
-      pk
-      aoEnabled
-      oiBlend
-      focus
-      p1Ttf
-      strap
-      oiTtf
-      ttgs
-      sfo
+      ...AltairGuideLoopItem
     }
   }
 `);

@@ -2,22 +2,28 @@ import { useMutation, useQuery } from '@apollo/client/react';
 
 import { graphql } from './gen';
 
+export const CONFIGURATION_FRAGMENT = graphql(`
+  fragment ConfigurationItem on Configuration {
+    pk
+    selectedTarget
+    selectedOiTarget
+    selectedP1Target
+    selectedP2Target
+    oiGuidingType
+    p1GuidingType
+    p2GuidingType
+    obsTitle
+    obsId
+    obsInstrument
+    obsSubtitle
+    obsReference
+  }
+`);
+
 export const GET_CONFIGURATION = graphql(`
   query getConfiguration {
     configuration {
-      pk
-      selectedTarget
-      selectedOiTarget
-      selectedP1Target
-      selectedP2Target
-      oiGuidingType
-      p1GuidingType
-      p2GuidingType
-      obsTitle
-      obsId
-      obsInstrument
-      obsSubtitle
-      obsReference
+      ...ConfigurationItem
     }
   }
 `);
@@ -59,19 +65,7 @@ export const UPDATE_CONFIGURATION = graphql(`
       obsSubtitle: $obsSubtitle
       obsReference: $obsReference
     ) {
-      pk
-      selectedTarget
-      selectedOiTarget
-      selectedP1Target
-      selectedP2Target
-      oiGuidingType
-      p1GuidingType
-      p2GuidingType
-      obsTitle
-      obsId
-      obsInstrument
-      obsSubtitle
-      obsReference
+      ...ConfigurationItem
     }
   }
 `);

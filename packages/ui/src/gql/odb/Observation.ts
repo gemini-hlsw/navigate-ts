@@ -3,96 +3,90 @@ import type { OptionsOf } from '@gql/util';
 
 import { graphql } from './gen';
 
+export const OBSERVATION_FRAGMENT = graphql(`
+  fragment ObservationItem on Observation {
+    id
+    title
+    subtitle
+    instrument
+    reference {
+      label
+    }
+    targetEnvironment {
+      firstScienceTarget {
+        ...TargetItem
+      }
+      blindOffsetTarget {
+        ...TargetItem
+      }
+    }
+  }
+`);
+
+export const TARGET_FRAGMENT = graphql(`
+  fragment TargetItem on Target {
+    id
+    name
+    sidereal {
+      ...SiderealItem
+    }
+    sourceProfile {
+      ...SourceProfileItem
+    }
+  }
+`);
+
+export const SIDEREAL_FRAGMENT = graphql(`
+  fragment SiderealItem on Sidereal {
+    epoch
+    ra {
+      hms
+      degrees
+    }
+    dec {
+      dms
+      degrees
+    }
+    properMotion {
+      ra {
+        microarcsecondsPerYear
+      }
+      dec {
+        microarcsecondsPerYear
+      }
+    }
+    parallax {
+      microarcseconds
+    }
+    radialVelocity {
+      centimetersPerSecond
+    }
+  }
+`);
+
+export const BRIGHTNESS_FRAGMENT = graphql(`
+  fragment BrightnessItem on BandBrightnessIntegrated {
+    band
+    value
+  }
+`);
+
+export const SOURCE_PROFILE_FRAGMENT = graphql(`
+  fragment SourceProfileItem on SourceProfile {
+    point {
+      bandNormalized {
+        brightnesses {
+          ...BrightnessItem
+        }
+      }
+    }
+  }
+`);
+
 const GET_OBSERVATION_BY_ID = graphql(`
   query getObservationById($obsId: ObservationId!) {
     observation(observationId: $obsId) {
-      id
-      title
-      subtitle
-      instrument
-      reference {
-        label
-      }
-      targetEnvironment {
-        firstScienceTarget {
-          id
-          name
-          sidereal {
-            epoch
-            ra {
-              hms
-              degrees
-            }
-            dec {
-              dms
-              degrees
-            }
-            properMotion {
-              ra {
-                microarcsecondsPerYear
-              }
-              dec {
-                microarcsecondsPerYear
-              }
-            }
-            parallax {
-              microarcseconds
-            }
-            radialVelocity {
-              centimetersPerSecond
-            }
-          }
-          sourceProfile {
-            point {
-              bandNormalized {
-                brightnesses {
-                  band
-                  value
-                }
-              }
-            }
-          }
-        }
-        blindOffsetTarget {
-          id
-          name
-          sidereal {
-            epoch
-            ra {
-              hms
-              degrees
-            }
-            dec {
-              dms
-              degrees
-            }
-            properMotion {
-              ra {
-                microarcsecondsPerYear
-              }
-              dec {
-                microarcsecondsPerYear
-              }
-            }
-            parallax {
-              microarcseconds
-            }
-            radialVelocity {
-              centimetersPerSecond
-            }
-          }
-          sourceProfile {
-            point {
-              bandNormalized {
-                brightnesses {
-                  band
-                  value
-                }
-              }
-            }
-          }
-        }
-      }
+      ...ObservationItem
     }
   }
 `);
@@ -113,93 +107,7 @@ const GET_OBSERVATIONS_BY_STATE = graphql(`
       }
     ) {
       matches {
-        id
-        title
-        subtitle
-        instrument
-        reference {
-          label
-        }
-        targetEnvironment {
-          firstScienceTarget {
-            id
-            name
-            sidereal {
-              epoch
-              ra {
-                hms
-                degrees
-              }
-              dec {
-                dms
-                degrees
-              }
-              properMotion {
-                ra {
-                  microarcsecondsPerYear
-                }
-                dec {
-                  microarcsecondsPerYear
-                }
-              }
-              parallax {
-                microarcseconds
-              }
-              radialVelocity {
-                centimetersPerSecond
-              }
-            }
-            sourceProfile {
-              point {
-                bandNormalized {
-                  brightnesses {
-                    band
-                    value
-                  }
-                }
-              }
-            }
-          }
-          blindOffsetTarget {
-            id
-            name
-            sidereal {
-              epoch
-              ra {
-                hms
-                degrees
-              }
-              dec {
-                dms
-                degrees
-              }
-              properMotion {
-                ra {
-                  microarcsecondsPerYear
-                }
-                dec {
-                  microarcsecondsPerYear
-                }
-              }
-              parallax {
-                microarcseconds
-              }
-              radialVelocity {
-                centimetersPerSecond
-              }
-            }
-            sourceProfile {
-              point {
-                bandNormalized {
-                  brightnesses {
-                    band
-                    value
-                  }
-                }
-              }
-            }
-          }
-        }
+        ...ObservationItem
       }
     }
   }
@@ -232,39 +140,10 @@ const GET_GUIDE_ENVIRONMENT = graphql(`
             probe
             name
             sidereal {
-              epoch
-              ra {
-                hms
-                degrees
-              }
-              dec {
-                dms
-                degrees
-              }
-              properMotion {
-                ra {
-                  microarcsecondsPerYear
-                }
-                dec {
-                  microarcsecondsPerYear
-                }
-              }
-              parallax {
-                microarcseconds
-              }
-              radialVelocity {
-                centimetersPerSecond
-              }
+              ...SiderealItem
             }
             sourceProfile {
-              point {
-                bandNormalized {
-                  brightnesses {
-                    band
-                    value
-                  }
-                }
-              }
+              ...SourceProfileItem
             }
           }
         }

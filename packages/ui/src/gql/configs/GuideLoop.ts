@@ -2,22 +2,28 @@ import { useMutation, useQuery } from '@apollo/client/react';
 
 import { graphql } from './gen';
 
+export const GUIDE_LOOP_FRAGMENT = graphql(`
+  fragment GuideLoopItem on GuideLoop {
+    pk
+    m2TipTiltEnable
+    m2TipTiltSource
+    m2FocusEnable
+    m2FocusSource
+    m2TipTiltFocusLink
+    m2ComaEnable
+    m1CorrectionsEnable
+    m2ComaM1CorrectionsSource
+    mountOffload
+    daytimeMode
+    probeTracking
+    lightPath
+  }
+`);
+
 const GET_GUIDE_LOOP = graphql(`
   query getGuideLoop {
     guideLoop {
-      pk
-      m2TipTiltEnable
-      m2TipTiltSource
-      m2FocusEnable
-      m2FocusSource
-      m2TipTiltFocusLink
-      m2ComaEnable
-      m1CorrectionsEnable
-      m2ComaM1CorrectionsSource
-      mountOffload
-      daytimeMode
-      probeTracking
-      lightPath
+      ...GuideLoopItem
     }
   }
 `);
@@ -59,19 +65,7 @@ const UPDATE_GUIDE_LOOP = graphql(`
       probeTracking: $probeTracking
       lightPath: $lightPath
     ) {
-      pk
-      m2TipTiltEnable
-      m2TipTiltSource
-      m2FocusEnable
-      m2FocusSource
-      m2TipTiltFocusLink
-      m2ComaEnable
-      m1CorrectionsEnable
-      m2ComaM1CorrectionsSource
-      mountOffload
-      daytimeMode
-      probeTracking
-      lightPath
+      ...GuideLoopItem
     }
   }
 `);

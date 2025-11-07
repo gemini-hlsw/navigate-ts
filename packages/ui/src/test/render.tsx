@@ -1,5 +1,6 @@
 import type { MockLink } from '@apollo/client/testing';
 import { MockedProvider } from '@apollo/client/testing/react';
+import { makeCache } from '@gql/ApolloConfigs';
 import { GET_SLEW_FLAGS } from '@gql/configs/SlewFlags';
 import type { MockedResponseOf } from '@gql/util';
 import type { WritableAtom } from 'jotai';
@@ -45,7 +46,15 @@ export async function renderWithContext<T extends AtomTuples>(
   const renderResult = await render(
     <Provider store={store}>
       <HydrateAtoms initialValues={initialValues}>
-        <MockedProvider mocks={[...mocks, ...(createOptions.mocks ?? [])]}>{ui}</MockedProvider>
+        <MockedProvider
+          cache={makeCache()}
+          mocks={[...mocks, ...(createOptions.mocks ?? [])]?.map((m) => ({
+            ...m,
+            maxUsageCount: m.maxUsageCount ?? Infinity,
+          }))}
+        >
+          {ui}
+        </MockedProvider>
       </HydrateAtoms>
     </Provider>,
     options,
@@ -63,6 +72,7 @@ const mocks: MockLink.MockedResponse[] = [
     result: {
       data: {
         slewFlags: {
+          __typename: 'SlewFlags',
           pk: 1,
           zeroChopThrow: true,
           zeroSourceOffset: true,

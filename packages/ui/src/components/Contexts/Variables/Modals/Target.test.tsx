@@ -64,22 +64,26 @@ describe(Target.name, () => {
 });
 
 const target: TargetType = {
+  __typename: 'Target',
   pk: 35,
   id: 't-1',
   name: 'Gaia DR3 375250953351514624',
   ra: {
     degrees: 12.497148925,
     hms: '00:49:59.315741',
+    __typename: 'RA',
   },
   dec: {
     degrees: 41.69727150555556,
     dms: '+41:41:50.177415',
+    __typename: 'Dec',
   },
   az: null,
   el: null,
   properMotion: {
     ra: 1121,
     dec: -6810,
+    __typename: 'ProperMotion',
   },
   radialVelocity: 0,
   parallax: 712,
@@ -98,7 +102,7 @@ const updateTargetMock = {
   },
   result: (arg) => ({
     data: {
-      updateTarget: arg as TargetType,
+      updateTarget: { ...(arg as TargetType), __typename: 'Target' },
     },
   }),
 } satisfies MockedResponseOf<typeof UPDATE_TARGET>;
