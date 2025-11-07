@@ -15,7 +15,6 @@ import type { ButtonProps } from 'primereact/button';
 import { Button } from 'primereact/button';
 import type { ReactNode } from 'react';
 
-import { useM2BaffleConfigValue } from '@/components/atoms/baffles';
 import { useServerConfigValue } from '@/components/atoms/config';
 import { Crosshairs, CrosshairsSlash, Parking, ParkingSlash } from '@/components/Icons';
 import { BTN_CLASSES } from '@/Helpers/constants';
@@ -168,7 +167,6 @@ export const SLEW_MUTATION = graphql(`
 
 export function Slew(props: ButtonProps) {
   const { site } = useServerConfigValue();
-  const baffleConfig = useM2BaffleConfigValue();
 
   const { data: targetsData, loading: targetsLoading } = useTargets();
   const { oiTargets, baseTargets } = targetsData;
@@ -192,7 +190,7 @@ export function Slew(props: ButtonProps) {
   const selectedTarget = baseTargets.find((t) => t.pk === configuration?.selectedTarget);
   const selectedOiTarget = oiTargets.find((t) => t.pk === configuration?.selectedOiTarget);
 
-  if (!selectedTarget?.id || !instrument || !rotator || !calParams) {
+  if (!selectedTarget?.id || !instrument || !rotator || !calParams || !configuration) {
     const missing = !selectedTarget?.id
       ? 'target'
       : !instrument
@@ -201,7 +199,9 @@ export function Slew(props: ButtonProps) {
           ? 'rotator'
           : !calParams
             ? 'cal params'
-            : '';
+            : !configuration
+              ? 'configuration'
+              : '';
     return (
       <Button
         {...props}
@@ -261,7 +261,7 @@ export function Slew(props: ButtonProps) {
       },
       instrument: instrument.name as Instrument,
       rotator: { ipa: { degrees: rotator.angle }, mode: rotator.tracking },
-      baffles: createBafflesInput(calParams, baffleConfig),
+      baffles: createBafflesInput(calParams, configuration),
       ...(selectedOiTarget && {
         oiwfs: {
           target: {

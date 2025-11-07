@@ -14,7 +14,12 @@ import type { ConfigurationType, OdbObservationType, OdbTargetType, TargetInput 
 
 export function useImportObservation() {
   const toast = useToast();
-  const configuration = useConfiguration().data?.configuration;
+
+  const { data: configurationData, loading: configurationLoading } = useConfiguration();
+  const configuration = configurationData?.configuration;
+  const { data: rotatorData, loading: rotatorLoading } = useRotator();
+  const rotator = rotatorData?.rotator;
+
   const [getGuideEnvironment, { loading: getGuideEnvironmentLoading }] = useGetGuideEnvironment();
   const [getCentralWavelength, { loading: getCentralWavelengthLoading }] = useGetCentralWavelength();
   const [removeAndCreateBaseTargets, { loading: removeCreateLoading }] = useRemoveAndCreateBaseTargets();
@@ -23,9 +28,9 @@ export function useImportObservation() {
   const [removeAndCreateWfsTargets, { loading: wfsTargetsLoading }] = useRemoveAndCreateWfsTargets();
   const [resetInstruments, { loading: resetInstrumentsLoading }] = useResetInstruments();
 
-  const rotator = useRotator().data?.rotator;
-
-  const importLoading =
+  const loading =
+    configurationLoading ||
+    rotatorLoading ||
     updateConfigLoading ||
     removeCreateLoading ||
     updateRotatorLoading ||
@@ -52,6 +57,9 @@ export function useImportObservation() {
           obsSubtitle: selectedObservation.subtitle,
           obsInstrument: selectedObservation.instrument,
           obsReference: selectedObservation.reference?.label,
+          baffleMode: 'AUTO',
+          centralBaffle: null,
+          deployableBaffle: null,
         },
       });
 
@@ -147,7 +155,7 @@ export function useImportObservation() {
     }
   }
 
-  return [importObservation, { loading: importLoading }] as const;
+  return [importObservation, { loading }] as const;
 }
 
 function createBaseTarget(target: OdbTargetType, type: TargetType, wavelength: number | undefined): TargetInput {

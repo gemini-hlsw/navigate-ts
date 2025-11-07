@@ -38,6 +38,9 @@ const GET_ENGINEERING_TARGETS = graphql(`
       createdAt
       rotatorAngle
       rotatorMode
+      baffleMode
+      centralBaffle
+      deployableBaffle
     }
   }
 `);

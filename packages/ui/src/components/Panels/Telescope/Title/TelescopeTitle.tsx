@@ -9,6 +9,7 @@ import { useCanEdit } from '@/components/atoms/auth';
 import { useSetCatalogVisible } from '@/components/atoms/catalog';
 import { useSetOdbVisible } from '@/components/atoms/odb';
 import { List } from '@/components/Icons';
+import { isNullish } from '@/Helpers/functions';
 
 interface ParamsInterface {
   prevPanel: () => void;
@@ -20,7 +21,8 @@ export function TelescopeTitle({ prevPanel, nextPanel }: ParamsInterface) {
   const setOdbVisible = useSetOdbVisible();
   const setCatalogVisible = useSetCatalogVisible();
 
-  const configuration = useConfiguration().data?.configuration;
+  const { data: configurationData, loading: configurationLoading } = useConfiguration();
+  const configuration = configurationData?.configuration;
   const [importObservation, { loading: importLoading }] = useImportObservation();
   const [getObservation, { loading: getObservationLoading }] = useObservationById();
 
@@ -36,27 +38,19 @@ export function TelescopeTitle({ prevPanel, nextPanel }: ParamsInterface) {
     await importObservation(data?.observation ?? null);
   }
 
+  const loading = importLoading || getObservationLoading || configurationLoading;
+
   return (
     <Title title="TELESCOPE SETUP" prevPanel={prevPanel} nextPanel={nextPanel}>
       <TitleDropdown icon={<List />}>
+        <Button disabled={!canEdit} text label="Import new observation from ODB" onClick={() => setOdbVisible(true)} />
         <Button
-          disabled={!canEdit}
-          className="p-button-text"
-          label="Import new observation from ODB"
-          onClick={() => setOdbVisible(true)}
-        />
-        <Button
-          disabled={!canEdit || importLoading || getObservationLoading || !configuration?.obsId}
-          className="p-button-text"
+          disabled={!canEdit || loading || isNullish(configuration?.obsId)}
+          text
           label="Reimport current observation from ODB"
           onClick={reimportObservation}
         />
-        <Button
-          disabled={!canEdit}
-          className="p-button-text"
-          label="Import from catalog"
-          onClick={() => setCatalogVisible(true)}
-        />
+        <Button disabled={!canEdit} text label="Import from catalog" onClick={() => setCatalogVisible(true)} />
         <Divider />
         <Button disabled={!canEdit} className="p-button-text under-construction" label="Edit targets" />
       </TitleDropdown>

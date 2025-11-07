@@ -17,6 +17,9 @@ export const CONFIGURATION_FRAGMENT = graphql(`
     obsInstrument
     obsSubtitle
     obsReference
+    baffleMode
+    centralBaffle
+    deployableBaffle
   }
 `);
 
@@ -49,6 +52,9 @@ export const UPDATE_CONFIGURATION = graphql(`
     $obsInstrument: Instrument
     $obsSubtitle: String
     $obsReference: String
+    $baffleMode: BaffleMode
+    $centralBaffle: CentralBaffle
+    $deployableBaffle: DeployableBaffle
   ) {
     updateConfiguration(
       pk: $pk
@@ -64,6 +70,9 @@ export const UPDATE_CONFIGURATION = graphql(`
       obsInstrument: $obsInstrument
       obsSubtitle: $obsSubtitle
       obsReference: $obsReference
+      baffleMode: $baffleMode
+      centralBaffle: $centralBaffle
+      deployableBaffle: $deployableBaffle
     ) {
       ...ConfigurationItem
     }

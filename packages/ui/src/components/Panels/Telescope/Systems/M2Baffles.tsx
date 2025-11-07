@@ -1,16 +1,33 @@
+import { useConfiguration, useUpdateConfiguration } from '@gql/configs/Configuration';
+import type { BaffleMode, UpdateConfigurationMutationVariables } from '@gql/configs/gen/graphql';
 import type { CentralBaffle, DeployableBaffle } from '@gql/server/gen/graphql';
 import { Title } from '@Shared/Title/Title';
 import { Dropdown } from 'primereact/dropdown';
 
-import { type M2BaffleConfig, useM2BaffleConfig } from '@/components/atoms/baffles';
 import { isNullish } from '@/Helpers/functions';
 
-const modeOptions: M2BaffleConfig['mode'][] = ['AUTO', 'MANUAL'];
+const modeOptions: BaffleMode[] = ['AUTO', 'MANUAL', 'IGNORED'];
 const centralOptions: CentralBaffle[] = ['OPEN', 'CLOSED'];
 const deployableOptions: DeployableBaffle[] = ['EXTENDED', 'NEAR_IR', 'THERMAL_IR', 'VISIBLE'];
 
 export function M2Baffles({ canEdit }: { canEdit: boolean }) {
-  const [baffleConfig, setBaffleConfig] = useM2BaffleConfig();
+  const { data: configurationData, loading: configurationLoading } = useConfiguration();
+  const configuration = configurationData?.configuration;
+  const [updateConfiguration, { loading: updateLoading }] = useUpdateConfiguration();
+
+  const loading = configurationLoading || updateLoading;
+
+  const updateBaffle = (
+    vars: Pick<UpdateConfigurationMutationVariables, 'baffleMode' | 'centralBaffle' | 'deployableBaffle'>,
+  ) => {
+    if (isNullish(configuration?.pk)) return;
+    return updateConfiguration({
+      variables: {
+        pk: configuration.pk,
+        ...vars,
+      },
+    });
+  };
 
   return (
     <div className="baffles">
@@ -19,45 +36,35 @@ export function M2Baffles({ canEdit }: { canEdit: boolean }) {
         <label htmlFor="m2baffles-config">Mode</label>
         <Dropdown
           disabled={!canEdit}
+          loading={loading}
           inputId="m2baffles-config"
           options={modeOptions}
-          value={baffleConfig.mode}
-          onChange={(e) => setBaffleConfig((prev) => ({ ...prev, mode: e.value as M2BaffleConfig['mode'] }))}
+          value={configuration?.baffleMode ?? null}
+          onChange={(e) => updateBaffle({ baffleMode: e.value as BaffleMode })}
         />
 
-        {baffleConfig.mode === 'MANUAL' && (
+        {configuration?.baffleMode === 'MANUAL' && (
           <>
             <label htmlFor="m2baffles-central">Central Baffle</label>
             <Dropdown
               disabled={!canEdit}
+              loading={loading}
               inputId="m2baffles-central"
               options={centralOptions}
-              value={baffleConfig.input.centralBaffle}
-              invalid={isNullish(baffleConfig.input.centralBaffle)}
-              onChange={(e) =>
-                setBaffleConfig((prev) => ({
-                  ...prev,
-                  input: { ...prev.input, centralBaffle: e.value as CentralBaffle },
-                }))
-              }
+              value={configuration.centralBaffle ?? null}
+              invalid={isNullish(configuration.centralBaffle)}
+              onChange={(e) => updateBaffle({ centralBaffle: e.value as CentralBaffle })}
             />
 
             <label htmlFor="m2baffles-deployable">Deployable Baffle</label>
             <Dropdown
               disabled={!canEdit}
+              loading={loading}
               inputId="m2baffles-deployable"
               options={deployableOptions}
-              value={baffleConfig.input.deployableBaffle}
-              invalid={isNullish(baffleConfig.input.deployableBaffle)}
-              onChange={(e) =>
-                setBaffleConfig((prev) => ({
-                  ...prev,
-                  input: {
-                    ...prev.input,
-                    deployableBaffle: e.value as DeployableBaffle,
-                  },
-                }))
-              }
+              value={configuration.deployableBaffle ?? null}
+              invalid={isNullish(configuration.deployableBaffle)}
+              onChange={(e) => updateBaffle({ deployableBaffle: e.value as DeployableBaffle })}
             />
           </>
         )}

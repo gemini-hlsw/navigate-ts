@@ -1,4 +1,4 @@
-import type { CalParams, InstrumentConfig, Rotator, Target } from '@gql/configs/gen/graphql';
+import type { CalParams, Configuration, InstrumentConfig, Rotator, Target } from '@gql/configs/gen/graphql';
 import type {
   BaffleConfigInput,
   InstrumentSpecificsInput,
@@ -6,8 +6,6 @@ import type {
   TargetPropertiesInput,
   TcsConfigInput,
 } from '@gql/server/gen/graphql';
-
-import type { M2BaffleConfig } from '@/components/atoms/baffles';
 
 export function createRotatorTrackingInput(rotator: Rotator): RotatorTrackingInput {
   return { ipa: { degrees: rotator.angle }, mode: rotator.tracking };
@@ -52,21 +50,21 @@ export function createTargetPropertiesInput(target: Target): TargetPropertiesInp
 
 export function createBafflesInput(
   calParams: Pick<CalParams, 'baffleVisible' | 'baffleNearIR'>,
-  config: M2BaffleConfig,
+  configuration: Pick<Configuration, 'baffleMode' | 'centralBaffle' | 'deployableBaffle'>,
 ): BaffleConfigInput {
   return {
     autoConfig:
-      config.mode === 'AUTO'
+      configuration.baffleMode === 'AUTO'
         ? {
             nearirLimit: { micrometers: calParams.baffleNearIR },
             visibleLimit: { micrometers: calParams.baffleVisible },
           }
         : undefined,
     manualConfig:
-      config.mode === 'MANUAL'
+      configuration.baffleMode === 'MANUAL'
         ? {
-            centralBaffle: config.input.centralBaffle!,
-            deployableBaffle: config.input.deployableBaffle!,
+            centralBaffle: configuration.centralBaffle!,
+            deployableBaffle: configuration.deployableBaffle!,
           }
         : undefined,
   };
@@ -78,7 +76,7 @@ export function createTcsConfigInput(
   target: Target,
   oiTarget: Target | undefined,
   calParams: Pick<CalParams, 'baffleVisible' | 'baffleNearIR'>,
-  config: M2BaffleConfig,
+  configuration: Pick<Configuration, 'baffleMode' | 'centralBaffle' | 'deployableBaffle'>,
 ): TcsConfigInput {
   const rotatorInput = createRotatorTrackingInput(rotator);
 
@@ -86,7 +84,7 @@ export function createTcsConfigInput(
 
   const targetInput = createTargetPropertiesInput(target);
 
-  const bafflesInput = createBafflesInput(calParams, config);
+  const bafflesInput = createBafflesInput(calParams, configuration);
 
   return {
     instrument: instrument.name,
