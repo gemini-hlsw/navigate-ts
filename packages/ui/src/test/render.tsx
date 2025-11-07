@@ -45,7 +45,14 @@ export async function renderWithContext<T extends AtomTuples>(
   const renderResult = await render(
     <Provider store={store}>
       <HydrateAtoms initialValues={initialValues}>
-        <MockedProvider mocks={[...mocks, ...(createOptions.mocks ?? [])]}>{ui}</MockedProvider>
+        <MockedProvider
+          mocks={[...mocks, ...(createOptions.mocks ?? [])]?.map((m) => ({
+            ...m,
+            maxUsageCount: m.maxUsageCount ?? Infinity,
+          }))}
+        >
+          {ui}
+        </MockedProvider>
       </HydrateAtoms>
     </Provider>,
     options,
