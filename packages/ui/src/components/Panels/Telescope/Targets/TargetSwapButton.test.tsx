@@ -38,7 +38,42 @@ describe(TargetSwapButton.name, () => {
       await sut.getByRole('button').click();
 
       const swapTargetMock = mocks.find((m) => m.request.query === SWAP_TARGET_MUTATION)!;
-      await expect.poll(() => swapTargetMock.result).toHaveBeenCalledOnce();
+      await expect
+        .poll(() => swapTargetMock.request.variables)
+        .toHaveBeenCalledExactlyOnceWith({
+          swapConfig: {
+            acParams: {
+              iaa: { degrees: 359.877 },
+              focusOffset: { micrometers: 0 },
+              agName: 'GMOS_SOUTH',
+              origin: { x: { arcseconds: 0 }, y: { arcseconds: 0 } },
+            },
+            rotator: { ipa: { degrees: 0 }, mode: 'TRACKING' },
+            guideTarget: {
+              id: oiSelected.id,
+              name: oiSelected.name,
+              sidereal: {
+                ra: { hms: oiSelected.ra.hms },
+                dec: { dms: oiSelected.dec.dms },
+                epoch: oiSelected.epoch,
+                properMotion: {
+                  ra: {
+                    microarcsecondsPerYear: oiSelected.properMotion?.ra,
+                  },
+                  dec: {
+                    microarcsecondsPerYear: oiSelected.properMotion?.dec,
+                  },
+                },
+                radialVelocity: {
+                  centimetersPerSecond: oiSelected.radialVelocity,
+                },
+                parallax: {
+                  microarcseconds: oiSelected.parallax,
+                },
+              },
+            },
+          },
+        });
     });
   });
 
@@ -61,7 +96,67 @@ describe(TargetSwapButton.name, () => {
       await sut.getByRole('button').click();
 
       const restoreTargetMock = mocks.find((m) => m.request.query === RESTORE_TARGET_MUTATION)!;
-      await expect.poll(() => restoreTargetMock.result).toHaveBeenCalled();
+      await expect
+        .poll(() => restoreTargetMock.request.variables)
+        .toHaveBeenCalledExactlyOnceWith({
+          config: {
+            instrument: 'GMOS_SOUTH',
+            instParams: {
+              iaa: { degrees: 359.877 },
+              focusOffset: { micrometers: 0 },
+              agName: 'GMOS_SOUTH',
+              origin: { x: { arcseconds: 0 }, y: { arcseconds: 0 } },
+            },
+            rotator: { ipa: { degrees: 0 }, mode: 'TRACKING' },
+            sourceATarget: {
+              id: 't-19e',
+              name: 'TYC 4517-185-1',
+              sidereal: {
+                ra: { hms: '03:46:46.901006' },
+                dec: { dms: '+80:04:21.618990' },
+                epoch: 'J2000.000',
+                properMotion: {
+                  ra: {
+                    microarcsecondsPerYear: 0,
+                  },
+                  dec: { microarcsecondsPerYear: 0 },
+                },
+                radialVelocity: {
+                  centimetersPerSecond: 0,
+                },
+                parallax: {
+                  microarcseconds: 0,
+                },
+              },
+              wavelength: { nanometers: 100 },
+            },
+            oiwfs: {
+              tracking: {
+                nodAchopA: true,
+                nodAchopB: false,
+                nodBchopA: false,
+                nodBchopB: true,
+              },
+              target: {
+                name: 'OI Target',
+                sidereal: {
+                  ra: { hms: '03:46:46.901006' },
+                  dec: { dms: '+80:04:21.618990' },
+                  epoch: 'J2000.000',
+                  properMotion: { ra: { microarcsecondsPerYear: 0 }, dec: { microarcsecondsPerYear: 0 } },
+                  radialVelocity: { centimetersPerSecond: 0 },
+                  parallax: { microarcseconds: 0 },
+                },
+              },
+            },
+            baffles: {
+              autoConfig: {
+                nearirLimit: { micrometers: 3 },
+                visibleLimit: { micrometers: 1.05 },
+              },
+            },
+          },
+        });
     });
   });
 });
@@ -162,40 +257,7 @@ const mocks = [
   {
     request: {
       query: SWAP_TARGET_MUTATION,
-      variables: {
-        swapConfig: {
-          acParams: {
-            iaa: { degrees: 359.877 },
-            focusOffset: { micrometers: 0 },
-            agName: 'GMOS_SOUTH',
-            origin: { x: { arcseconds: 0 }, y: { arcseconds: 0 } },
-          },
-          rotator: { ipa: { degrees: 0 }, mode: 'TRACKING' },
-          guideTarget: {
-            id: oiSelected.id,
-            name: oiSelected.name,
-            sidereal: {
-              ra: { hms: oiSelected.ra.hms },
-              dec: { dms: oiSelected.dec.dms },
-              epoch: oiSelected.epoch,
-              properMotion: {
-                ra: {
-                  microarcsecondsPerYear: oiSelected.properMotion?.ra,
-                },
-                dec: {
-                  microarcsecondsPerYear: oiSelected.properMotion?.dec,
-                },
-              },
-              radialVelocity: {
-                centimetersPerSecond: oiSelected.radialVelocity,
-              },
-              parallax: {
-                microarcseconds: oiSelected.parallax,
-              },
-            },
-          },
-        },
-      },
+      variables: vi.fn().mockReturnValue(true),
     },
     result: vi.fn().mockReturnValue({
       data: {
@@ -206,78 +268,7 @@ const mocks = [
   {
     request: {
       query: RESTORE_TARGET_MUTATION,
-      variables: {
-        config: {
-          instrument: 'GMOS_SOUTH',
-          instParams: {
-            iaa: { degrees: 359.877 },
-            focusOffset: { micrometers: 0 },
-            agName: 'GMOS_SOUTH',
-            origin: { x: { arcseconds: 0 }, y: { arcseconds: 0 } },
-          },
-          rotator: { ipa: { degrees: 0 }, mode: 'TRACKING' },
-          sourceATarget: {
-            id: selectedTarget.id,
-            name: selectedTarget.name,
-            sidereal: {
-              ra: { hms: selectedTarget.ra.hms },
-              dec: { dms: selectedTarget.dec.dms },
-              epoch: selectedTarget.epoch,
-              properMotion: {
-                ra: {
-                  microarcsecondsPerYear: selectedTarget.properMotion?.ra,
-                },
-                dec: {
-                  microarcsecondsPerYear: selectedTarget.properMotion?.dec,
-                },
-              },
-              radialVelocity: {
-                centimetersPerSecond: selectedTarget.radialVelocity,
-              },
-              parallax: {
-                microarcseconds: selectedTarget.parallax,
-              },
-            },
-            wavelength: { nanometers: selectedTarget.wavelength },
-          },
-          oiwfs: {
-            tracking: {
-              nodAchopA: true,
-              nodAchopB: false,
-              nodBchopA: false,
-              nodBchopB: true,
-            },
-            target: {
-              name: oiSelected.name,
-              sidereal: {
-                ra: { hms: oiSelected?.ra?.hms },
-                dec: { dms: oiSelected?.dec?.dms },
-                epoch: oiSelected.epoch,
-                properMotion: {
-                  ra: {
-                    microarcsecondsPerYear: oiSelected.properMotion?.ra,
-                  },
-                  dec: {
-                    microarcsecondsPerYear: oiSelected.properMotion?.dec,
-                  },
-                },
-                radialVelocity: {
-                  centimetersPerSecond: oiSelected.radialVelocity,
-                },
-                parallax: {
-                  microarcseconds: oiSelected.parallax,
-                },
-              },
-            },
-          },
-          baffles: {
-            autoConfig: {
-              nearirLimit: { micrometers: 3 },
-              visibleLimit: { micrometers: 1.05 },
-            },
-          },
-        },
-      },
+      variables: vi.fn().mockReturnValue(true),
     },
     result: vi.fn().mockReturnValue({
       data: {

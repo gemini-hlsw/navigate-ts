@@ -1,6 +1,7 @@
 import { execSync } from 'node:child_process';
 import path from 'node:path';
 
+import { babelOptimizerPlugin } from '@graphql-codegen/client-preset';
 import react from '@vitejs/plugin-react';
 import { playwright } from '@vitest/browser-playwright';
 import type { Plugin } from 'vite';
@@ -108,8 +109,25 @@ export default defineConfig(({ mode }) => ({
   },
   plugins: [
     react({
-      babel: {
-        plugins: ['babel-plugin-react-compiler'],
+      babel: (file) => {
+        const gqlEnabled = file.includes(path.resolve(__dirname, 'src/gql/'));
+
+        return {
+          plugins: [
+            ...(gqlEnabled && mode !== 'test'
+              ? [
+                  [
+                    babelOptimizerPlugin,
+                    {
+                      artifactDirectory: './src/gql/' + path.relative('src/gql', path.dirname(file)) + '/gen',
+                      gqlTagName: 'graphql',
+                    },
+                  ],
+                ]
+              : []),
+            'babel-plugin-react-compiler',
+          ],
+        };
       },
     }),
     mode === 'development' &&
