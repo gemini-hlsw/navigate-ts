@@ -7,7 +7,12 @@ import { graphql } from './gen';
 const ORIGIN_ADJUSTMENT_OFFSET_QUERY = graphql(`
   query getOriginAdjustmentOffset {
     originAdjustmentOffset {
-      ...FocalPlaneOffsetItem
+      deltaX {
+        arcseconds
+      }
+      deltaY {
+        arcseconds
+      }
     }
   }
 `);
@@ -15,7 +20,12 @@ const ORIGIN_ADJUSTMENT_OFFSET_QUERY = graphql(`
 const ORIGIN_ADJUSTMENT_OFFSET_SUBSCRIPTION = graphql(`
   subscription originAdjustmentOffset {
     originAdjustmentOffset {
-      ...FocalPlaneOffsetItem
+      deltaX {
+        arcseconds
+      }
+      deltaY {
+        arcseconds
+      }
     }
   }
 `);

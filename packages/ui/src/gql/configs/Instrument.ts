@@ -43,28 +43,22 @@ export function useDistinctPorts(options: OptionsOf<typeof GET_DISTINCT_PORTS>) 
   );
 }
 
-export const INSTRUMENT_FRAGMENT = graphql(`
-  fragment InstrumentItem on InstrumentConfig {
-    pk
-    name
-    iaa
-    issPort
-    focusOffset
-    wfs
-    originX
-    originY
-    ao
-    extraParams
-    isTemporary
-    comment
-    createdAt
-  }
-`);
-
 export const GET_INSTRUMENTS = graphql(`
   query getInstruments($name: Instrument!, $issPort: Int, $wfs: WfsType) {
     instruments(name: $name, issPort: $issPort, wfs: $wfs) {
-      ...InstrumentItem
+      pk
+      name
+      iaa
+      issPort
+      focusOffset
+      wfs
+      originX
+      originY
+      ao
+      extraParams
+      isTemporary
+      comment
+      createdAt
     }
   }
 `);
@@ -84,7 +78,19 @@ export function useInstruments(options: OptionsOf<typeof GET_INSTRUMENTS>) {
 export const GET_INSTRUMENT = graphql(`
   query getInstrument($name: Instrument!, $issPort: Int, $wfs: WfsType) {
     instrument(name: $name, issPort: $issPort, wfs: $wfs) {
-      ...InstrumentItem
+      pk
+      name
+      iaa
+      issPort
+      focusOffset
+      wfs
+      originX
+      originY
+      ao
+      extraParams
+      isTemporary
+      comment
+      createdAt
     }
   }
 `);
@@ -125,7 +131,19 @@ export const SET_TEMPORARY_INSTRUMENT = graphql(`
       ao: $ao
       extraParams: $extraParams
     ) {
-      ...InstrumentItem
+      pk
+      name
+      iaa
+      issPort
+      focusOffset
+      wfs
+      originX
+      originY
+      ao
+      extraParams
+      isTemporary
+      comment
+      createdAt
     }
   }
 `);
@@ -167,7 +185,19 @@ export const UPDATE_INSTRUMENT = graphql(`
       isTemporary: $isTemporary
       comment: $comment
     ) {
-      ...InstrumentItem
+      pk
+      name
+      iaa
+      issPort
+      focusOffset
+      wfs
+      originX
+      originY
+      ao
+      extraParams
+      isTemporary
+      comment
+      createdAt
     }
   }
 `);

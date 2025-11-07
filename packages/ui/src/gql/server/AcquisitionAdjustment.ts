@@ -2,30 +2,24 @@ import { useMutation, useSubscription } from '@apollo/client/react';
 
 import { graphql } from './gen';
 
-export const ACQUISITION_ADJUSTMENT_STATE_FRAGMENT = graphql(`
-  fragment AcquisitionAdjustmentStateItem on AcquisitionAdjustmentState {
-    offset {
-      p {
-        arcseconds
-      }
-      q {
-        arcseconds
-      }
-    }
-    ipa {
-      degrees
-    }
-    iaa {
-      degrees
-    }
-    command
-  }
-`);
-
 const ACQUISITION_ADJUSTMENT_STATE_SUBSCRIPTION = graphql(`
   subscription acquisitionAdjustmentState {
     acquisitionAdjustmentState {
-      ...AcquisitionAdjustmentStateItem
+      offset {
+        p {
+          arcseconds
+        }
+        q {
+          arcseconds
+        }
+      }
+      ipa {
+        degrees
+      }
+      iaa {
+        degrees
+      }
+      command
     }
   }
 `);

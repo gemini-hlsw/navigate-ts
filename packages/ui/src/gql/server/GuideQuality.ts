@@ -2,31 +2,21 @@ import { useQueryAndSubscription } from '@gql/use-query-and-subscription';
 
 import { graphql } from './gen';
 
-export const GUIDERS_QUALITY_VALUES_FRAGMENT = graphql(`
-  fragment GuidersQualityValuesItem on GuidersQualityValues {
-    pwfs1 {
-      ...GuideQualityItem
-    }
-    pwfs2 {
-      ...GuideQualityItem
-    }
-    oiwfs {
-      ...GuideQualityItem
-    }
-  }
-`);
-
-export const GUIDE_QUALITY_FRAGMENT = graphql(`
-  fragment GuideQualityItem on GuideQuality {
-    flux
-    centroidDetected
-  }
-`);
-
 export const GUIDE_QUALITY_QUERY = graphql(`
   query getGuidersQualityValues {
     guidersQualityValues {
-      ...GuidersQualityValuesItem
+      pwfs1 {
+        flux
+        centroidDetected
+      }
+      pwfs2 {
+        flux
+        centroidDetected
+      }
+      oiwfs {
+        flux
+        centroidDetected
+      }
     }
   }
 `);
@@ -34,7 +24,18 @@ export const GUIDE_QUALITY_QUERY = graphql(`
 export const GUIDE_QUALITY_SUBSCRIPTION = graphql(`
   subscription guidersQualityValues {
     guidersQualityValues {
-      ...GuidersQualityValuesItem
+      pwfs1 {
+        flux
+        centroidDetected
+      }
+      pwfs2 {
+        flux
+        centroidDetected
+      }
+      oiwfs {
+        flux
+        centroidDetected
+      }
     }
   }
 `);

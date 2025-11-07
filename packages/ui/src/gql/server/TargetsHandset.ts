@@ -4,38 +4,41 @@ import { useQueryAndSubscription } from '@gql/use-query-and-subscription';
 
 import { graphql } from './gen';
 
-export const TARGET_OFFSETS_FRAGMENT = graphql(`
-  fragment TargetAdjustmentOffsetItem on TargetOffsets {
-    sourceA {
-      ...FocalPlaneOffsetItem
-    }
-    pwfs1 {
-      ...FocalPlaneOffsetItem
-    }
-    pwfs2 {
-      ...FocalPlaneOffsetItem
-    }
-    oiwfs {
-      ...FocalPlaneOffsetItem
-    }
-  }
-`);
-
-export const FOCAL_PLANE_OFFSET_FRAGMENT = graphql(`
-  fragment FocalPlaneOffsetItem on FocalPlaneOffset {
-    deltaX {
-      arcseconds
-    }
-    deltaY {
-      arcseconds
-    }
-  }
-`);
-
 export const TARGET_ADJUSTMENT_OFFSETS_QUERY = graphql(`
   query getTargetAdjustmentOffsets {
     targetAdjustmentOffsets {
-      ...TargetAdjustmentOffsetItem
+      sourceA {
+        deltaX {
+          arcseconds
+        }
+        deltaY {
+          arcseconds
+        }
+      }
+      pwfs1 {
+        deltaX {
+          arcseconds
+        }
+        deltaY {
+          arcseconds
+        }
+      }
+      pwfs2 {
+        deltaX {
+          arcseconds
+        }
+        deltaY {
+          arcseconds
+        }
+      }
+      oiwfs {
+        deltaX {
+          arcseconds
+        }
+        deltaY {
+          arcseconds
+        }
+      }
     }
   }
 `);
@@ -43,7 +46,38 @@ export const TARGET_ADJUSTMENT_OFFSETS_QUERY = graphql(`
 export const TARGET_ADJUSTMENT_OFFSETS_SUBSCRIPTION = graphql(`
   subscription targetAdjustmentOffsets {
     targetAdjustmentOffsets {
-      ...TargetAdjustmentOffsetItem
+      sourceA {
+        deltaX {
+          arcseconds
+        }
+        deltaY {
+          arcseconds
+        }
+      }
+      pwfs1 {
+        deltaX {
+          arcseconds
+        }
+        deltaY {
+          arcseconds
+        }
+      }
+      pwfs2 {
+        deltaX {
+          arcseconds
+        }
+        deltaY {
+          arcseconds
+        }
+      }
+      oiwfs {
+        deltaX {
+          arcseconds
+        }
+        deltaY {
+          arcseconds
+        }
+      }
     }
   }
 `);

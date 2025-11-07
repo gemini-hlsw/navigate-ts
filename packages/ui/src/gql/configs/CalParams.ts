@@ -3,37 +3,31 @@ import { useMutation, useQuery } from '@apollo/client/react';
 import { graphql } from './gen';
 import type { Site } from './gen/graphql';
 
-export const CAL_PARAMS_FRAGMENT = graphql(`
-  fragment CalParamsItem on CalParams {
-    pk
-    site
-    acqCamX
-    acqCamY
-    baffleVisible
-    baffleNearIR
-    topShutterCurrentLimit
-    bottomShutterCurrentLimit
-    pwfs1CenterX
-    pwfs1CenterY
-    pwfs1CenterZ
-    pwfs2CenterX
-    pwfs2CenterY
-    pwfs2CenterZ
-    defocusEnabled
-    gnirsSfoDefocus
-    gmosSfoDefocus
-    gnirsP1Defocus
-    gmosP1Defocus
-    gmosOiDefocus
-    comment
-    createdAt
-  }
-`);
-
 export const CAL_PARAMS = graphql(`
   query calParams($site: Site!) {
     calParams(site: $site) {
-      ...CalParamsItem
+      pk
+      site
+      acqCamX
+      acqCamY
+      baffleVisible
+      baffleNearIR
+      topShutterCurrentLimit
+      bottomShutterCurrentLimit
+      pwfs1CenterX
+      pwfs1CenterY
+      pwfs1CenterZ
+      pwfs2CenterX
+      pwfs2CenterY
+      pwfs2CenterZ
+      defocusEnabled
+      gnirsSfoDefocus
+      gmosSfoDefocus
+      gnirsP1Defocus
+      gmosP1Defocus
+      gmosOiDefocus
+      comment
+      createdAt
     }
   }
 `);
@@ -47,7 +41,27 @@ export function useCalParams(site: Site) {
 const CREATE_CAL_PARAMS = graphql(`
   mutation createCalParams($input: CalParamsCreateInput!) {
     createCalParams(input: $input) {
-      ...CalParamsItem
+      pk
+      acqCamX
+      acqCamY
+      baffleVisible
+      baffleNearIR
+      topShutterCurrentLimit
+      bottomShutterCurrentLimit
+      pwfs1CenterX
+      pwfs1CenterY
+      pwfs1CenterZ
+      pwfs2CenterX
+      pwfs2CenterY
+      pwfs2CenterZ
+      defocusEnabled
+      gnirsSfoDefocus
+      gmosSfoDefocus
+      gnirsP1Defocus
+      gmosP1Defocus
+      gmosOiDefocus
+      comment
+      createdAt
     }
   }
 `);
@@ -79,7 +93,28 @@ export function useCalParamsHistory(site: Site) {
 const REVERT_CAL_PARAMS = graphql(`
   mutation revertCalParams($pk: PosInt!, $comment: String) {
     revertCalParams(pk: $pk, comment: $comment) {
-      ...CalParamsItem
+      pk
+      site
+      acqCamX
+      acqCamY
+      baffleVisible
+      baffleNearIR
+      topShutterCurrentLimit
+      bottomShutterCurrentLimit
+      pwfs1CenterX
+      pwfs1CenterY
+      pwfs1CenterZ
+      pwfs2CenterX
+      pwfs2CenterY
+      pwfs2CenterZ
+      defocusEnabled
+      gnirsSfoDefocus
+      gmosSfoDefocus
+      gnirsP1Defocus
+      gmosP1Defocus
+      gmosOiDefocus
+      comment
+      createdAt
     }
   }
 `);

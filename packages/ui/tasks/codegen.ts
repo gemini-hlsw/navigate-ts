@@ -61,7 +61,6 @@ const sharedConfig = {
   enumsAsTypes: true,
   useTypeImports: true,
   defaultScalarType: 'unknown',
-  arrayInputCoercion: false,
   avoidOptionals: {
     field: true,
     inputValue: false,

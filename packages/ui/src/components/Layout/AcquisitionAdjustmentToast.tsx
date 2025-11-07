@@ -3,7 +3,7 @@ import './AcquisitionAdjustmentToast.css';
 import offsetsReceivedMp3 from '@assets/sounds/offsets-received.mp3';
 import offsetsReceivedWebm from '@assets/sounds/offsets-received.webm';
 import { useAcquisitionAdjustment, useAcquisitionAdjustmentState } from '@gql/server/AcquisitionAdjustment';
-import type { AcquisitionAdjustmentStateItemFragment, AcquistionAdjustmentCommand } from '@gql/server/gen/graphql';
+import type { AcquistionAdjustmentCommand } from '@gql/server/gen/graphql';
 import { Button } from 'primereact/button';
 import type { ToastMessage } from 'primereact/toast';
 import { useEffect } from 'react';
@@ -14,7 +14,9 @@ import { useToast } from '@/Helpers/toast';
 
 import { Check, XMark } from '../Icons';
 
-export type AcquisitionAdjustmentState = AcquisitionAdjustmentStateItemFragment;
+type AcquisitionAdjustmentState = NonNullable<
+  ReturnType<typeof useAcquisitionAdjustmentState>['data']
+>['acquisitionAdjustmentState'];
 
 export function useAcquisitionAdjustmentToast() {
   const toast = useToast();

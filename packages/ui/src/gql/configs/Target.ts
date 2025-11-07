@@ -5,46 +5,40 @@ import { useMemo } from 'react';
 import { graphql } from './gen';
 import type { Target } from './gen/graphql';
 
-export const TARGET_FRAGMENT = graphql(`
-  fragment ConfigsTargetItem on Target {
-    pk
-    id
-    name
-    ra {
-      degrees
-      hms
-    }
-    dec {
-      degrees
-      dms
-    }
-    az {
-      degrees
-      dms
-    }
-    el {
-      degrees
-      dms
-    }
-    properMotion {
-      ra
-      dec
-    }
-    radialVelocity
-    parallax
-    magnitude
-    band
-    epoch
-    type
-    wavelength
-    createdAt
-  }
-`);
-
 export const GET_TARGETS = graphql(`
   query getTargets {
     targets {
-      ...ConfigsTargetItem
+      pk
+      id
+      name
+      ra {
+        degrees
+        hms
+      }
+      dec {
+        degrees
+        dms
+      }
+      az {
+        degrees
+        dms
+      }
+      el {
+        degrees
+        dms
+      }
+      properMotion {
+        ra
+        dec
+      }
+      radialVelocity
+      parallax
+      magnitude
+      band
+      epoch
+      type
+      wavelength
+      createdAt
     }
   }
 `);
@@ -103,7 +97,37 @@ export const UPDATE_TARGET = graphql(`
       type: $type
       wavelength: $wavelength
     ) {
-      ...ConfigsTargetItem
+      pk
+      id
+      name
+      ra {
+        degrees
+        hms
+      }
+      dec {
+        degrees
+        dms
+      }
+      az {
+        degrees
+        dms
+      }
+      el {
+        degrees
+        dms
+      }
+      properMotion {
+        ra
+        dec
+      }
+      radialVelocity
+      parallax
+      magnitude
+      band
+      epoch
+      type
+      wavelength
+      createdAt
     }
   }
 `);
@@ -117,7 +141,37 @@ export function useUpdateTarget() {
 export const REMOVE_AND_CREATE_BASE_TARGETS = graphql(`
   mutation removeAndCreateBaseTargets($targets: [TargetInput!]!) {
     removeAndCreateBaseTargets(targets: $targets) {
-      ...ConfigsTargetItem
+      pk
+      id
+      name
+      ra {
+        degrees
+        hms
+      }
+      dec {
+        degrees
+        dms
+      }
+      az {
+        degrees
+        dms
+      }
+      el {
+        degrees
+        dms
+      }
+      properMotion {
+        ra
+        dec
+      }
+      radialVelocity
+      parallax
+      magnitude
+      band
+      epoch
+      type
+      wavelength
+      createdAt
     }
   }
 `);
@@ -132,7 +186,37 @@ export function useRemoveAndCreateBaseTargets() {
 export const REMOVE_AND_CREATE_WFS_TARGETS = graphql(`
   mutation removeAndCreateWfsTargets($wfs: TargetType!, $targets: [TargetInput!]!) {
     removeAndCreateWfsTargets(wfs: $wfs, targets: $targets) {
-      ...ConfigsTargetItem
+      pk
+      id
+      name
+      ra {
+        degrees
+        hms
+      }
+      dec {
+        degrees
+        dms
+      }
+      az {
+        degrees
+        dms
+      }
+      el {
+        degrees
+        dms
+      }
+      properMotion {
+        ra
+        dec
+      }
+      radialVelocity
+      parallax
+      magnitude
+      band
+      epoch
+      type
+      wavelength
+      createdAt
     }
   }
 `);

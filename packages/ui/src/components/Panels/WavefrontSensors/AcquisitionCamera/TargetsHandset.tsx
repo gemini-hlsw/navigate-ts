@@ -1,4 +1,4 @@
-import type { AdjustTarget, FocalPlaneOffsetItemFragment } from '@gql/server/gen/graphql';
+import type { AdjustTarget, GetTargetAdjustmentOffsetsQuery } from '@gql/server/gen/graphql';
 import {
   useAbsorbTargetAdjustment,
   useAdjustTarget,
@@ -14,7 +14,7 @@ import { AlignmentSelector, Autoadjust, CurrentCoordinates, InputControls, OpenL
 import type { Coords, HandsetStrategy } from './strategy';
 import { strategies } from './strategy';
 
-type FocalPlaneOffset = FocalPlaneOffsetItemFragment;
+type FocalPlaneOffset = NonNullable<GetTargetAdjustmentOffsetsQuery['targetAdjustmentOffsets']['oiwfs']>;
 
 export default function TargetsHandset({ canEdit }: { canEdit: boolean }) {
   // GraphQL Queries
