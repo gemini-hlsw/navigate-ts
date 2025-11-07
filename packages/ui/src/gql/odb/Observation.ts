@@ -53,6 +53,45 @@ const GET_OBSERVATION_BY_ID = graphql(`
             }
           }
         }
+        blindOffsetTarget {
+          id
+          name
+          sidereal {
+            epoch
+            ra {
+              hms
+              degrees
+            }
+            dec {
+              dms
+              degrees
+            }
+            properMotion {
+              ra {
+                microarcsecondsPerYear
+              }
+              dec {
+                microarcsecondsPerYear
+              }
+            }
+            parallax {
+              microarcseconds
+            }
+            radialVelocity {
+              centimetersPerSecond
+            }
+          }
+          sourceProfile {
+            point {
+              bandNormalized {
+                brightnesses {
+                  band
+                  value
+                }
+              }
+            }
+          }
+        }
       }
     }
   }
@@ -83,6 +122,45 @@ const GET_OBSERVATIONS_BY_STATE = graphql(`
         }
         targetEnvironment {
           firstScienceTarget {
+            id
+            name
+            sidereal {
+              epoch
+              ra {
+                hms
+                degrees
+              }
+              dec {
+                dms
+                degrees
+              }
+              properMotion {
+                ra {
+                  microarcsecondsPerYear
+                }
+                dec {
+                  microarcsecondsPerYear
+                }
+              }
+              parallax {
+                microarcseconds
+              }
+              radialVelocity {
+                centimetersPerSecond
+              }
+            }
+            sourceProfile {
+              point {
+                bandNormalized {
+                  brightnesses {
+                    band
+                    value
+                  }
+                }
+              }
+            }
+          }
+          blindOffsetTarget {
             id
             name
             sidereal {

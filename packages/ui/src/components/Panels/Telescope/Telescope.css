@@ -115,7 +115,7 @@
 
       > .selected-target {
         display: grid;
-        grid-template-columns: 1fr 1fr 1fr 30px 1fr 30px;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
         grid-template-rows: 20px;
         gap: 4px;
         background-color: var(--primary-color);
@@ -138,7 +138,7 @@
 
           > .target-item {
             display: grid;
-            grid-template-columns: 1fr 1fr 30px 1fr 30px 1fr;
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
             grid-template-rows: 20px;
             gap: 4px;
             padding: 2px 4px;
@@ -151,7 +151,7 @@
 
           > .target-item-fixed {
             display: grid;
-            grid-template-columns: 1fr 1fr 30px 1fr 30px;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
             grid-template-rows: 20px;
             gap: 4px;
             padding: 2px 4px;
@@ -163,11 +163,11 @@
           }
 
           &:hover {
-            background-color: var(--surface-c);
+            background-color: var(--blue-800);
           }
 
           &.selected-target {
-            background-color: var(--blue-900);
+            background-color: var(--blue-700);
           }
         }
       }

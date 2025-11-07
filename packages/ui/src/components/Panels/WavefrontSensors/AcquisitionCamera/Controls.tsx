@@ -5,7 +5,7 @@ import { Dropdown } from 'primereact/dropdown';
 import { InputNumber } from 'primereact/inputnumber';
 import { InputSwitch } from 'primereact/inputswitch';
 import { Slider } from 'primereact/slider';
-import { startTransition, useState } from 'react';
+import { startTransition, useId, useState } from 'react';
 
 import { CaretDown, CaretLeft, CaretRight, CaretUp } from '@/components/Icons';
 import { formatToSignedArcseconds, instrumentToOiwfs } from '@/Helpers/functions';
@@ -29,6 +29,7 @@ export function AlignmentSelector({
   loading: boolean;
   canEdit: boolean;
 }) {
+  const id = useId();
   // Local State
   const [alignment, setAlignment] = useState<Alignment>(defaultAlignment);
 
@@ -48,9 +49,9 @@ export function AlignmentSelector({
 
   return (
     <>
-      <label htmlFor="coord-system">Alignment</label>
+      <label htmlFor={`coord-system-${id}`}>Alignment</label>
       <Dropdown
-        inputId="coord-system"
+        inputId={`coord-system-${id}`}
         disabled={loading || !canEdit || configLoading}
         value={alignment}
         options={alignmentOptions.map((cs) => cs)}
@@ -74,6 +75,7 @@ function CoordinatesInput({
   loading: boolean;
   canEdit: boolean;
 }) {
+  const id = useId();
   const { up, down, right, left } = strategy;
 
   // Start at 0.5
@@ -126,10 +128,10 @@ function CoordinatesInput({
       </div>
       <div className="coordinates-stepsize">
         <div className="control-row">
-          <label htmlFor="step-stepsize">Step</label>
+          <label htmlFor={`step-stepsize-${id}`}>Step</label>
           <InputNumber
             disabled={loading || !canEdit}
-            inputId="step-stepsize"
+            inputId={`step-stepsize-${id}`}
             min={0}
             maxFractionDigits={1}
             value={offset}
@@ -164,6 +166,7 @@ function ManualInput({
   loading: boolean;
   canEdit: boolean;
 }) {
+  const id = useId();
   const [auxCoords, setAuxCoords] = useState({
     horizontal: 0,
     vertical: 0,
@@ -171,17 +174,17 @@ function ManualInput({
 
   return (
     <div className="manual-input">
-      <label htmlFor="manual-input-horizontal">{strategy.horizontal}</label>
+      <label htmlFor={`manual-input-horizontal-${id}`}>{strategy.horizontal}</label>
       <InputNumber
-        inputId="manual-input-horizontal"
+        inputId={`manual-input-horizontal-${id}`}
         disabled={loading || !canEdit}
         value={auxCoords.horizontal}
         maxFractionDigits={2}
         onValueChange={(e) => setAuxCoords((prev) => ({ ...prev, horizontal: e.value! }))}
       />
-      <label htmlFor="manual-input-vertical">{strategy.vertical}</label>
+      <label htmlFor={`manual-input-vertical-${id}`}>{strategy.vertical}</label>
       <InputNumber
-        inputId="manual-input-vertical"
+        inputId={`manual-input-vertical-${id}`}
         disabled={loading || !canEdit}
         value={auxCoords.vertical}
         maxFractionDigits={2}
@@ -255,12 +258,13 @@ export function OpenLoopsInput({
   loading: boolean;
   canEdit: boolean;
 }) {
+  const id = useId();
   return (
     <div className="control-row open-loops">
-      <label htmlFor="open-loops">Open loops while offsetting</label>
+      <label htmlFor={`open-loops-${id}`}>Open loops while offsetting</label>
       <InputSwitch
         disabled={loading || !canEdit}
-        inputId="open-loops"
+        inputId={`open-loops-${id}`}
         checked={openLoops}
         onChange={(e) => onChange(e.value)}
       />

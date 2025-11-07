@@ -24,6 +24,17 @@ export type ThemeType = 'light' | 'dark';
 
 export type OdbObservationType = NonNullable<GetObservationsByStateQuery['observations']['matches'][number]>;
 
+export type OdbTargetType = NonNullable<
+  OdbObservationType['targetEnvironment']['blindOffsetTarget'] &
+    OdbObservationType['targetEnvironment']['firstScienceTarget']
+>;
+
+export type OdbBandBrightnessType = NonNullable<
+  NonNullable<OdbTargetType['sourceProfile']['point']>['bandNormalized']
+>['brightnesses'][number];
+
+export type OdbSourceProfileType = NonNullable<OdbTargetType['sourceProfile']>;
+
 export type {
   AltairGuideLoopType,
   AltairInstrumentType,

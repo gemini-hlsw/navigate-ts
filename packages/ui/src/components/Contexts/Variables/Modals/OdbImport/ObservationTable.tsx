@@ -53,6 +53,12 @@ const defaultColumns: ColumnProps[] = [
     filterPlaceholder: 'Filter Target Name',
     visible: false,
   },
+  {
+    field: 'targetEnvironment.blindOffsetTarget.name',
+    header: 'Blind Offset Target Name',
+    filterPlaceholder: 'Filter Blind Offset Target Name',
+    visible: false,
+  },
   { field: 'instrument', header: 'Instrument', filterPlaceholder: 'Filter Instrument', visible: false },
 ];
 

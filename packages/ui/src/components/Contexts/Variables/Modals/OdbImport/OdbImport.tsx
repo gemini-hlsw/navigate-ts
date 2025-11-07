@@ -27,7 +27,7 @@ export function OdbImport() {
           variables: {
             date: observingNight,
             site,
-            states: ['READY', 'ONGOING'],
+            states: ['READY', 'ONGOING', 'COMPLETED'],
           },
         },
   );
@@ -48,14 +48,13 @@ export function OdbImport() {
     </div>
   );
 
+  const { firstScienceTarget, blindOffsetTarget } = selectedObservation?.targetEnvironment ?? {};
+
   const footer = (
     <div className="modal-footer">
       <Button text severity="danger" label="Cancel" onClick={() => setOdbVisible(false)} />
       <Button
-        disabled={
-          !(canEdit && selectedObservation?.targetEnvironment?.firstScienceTarget?.name) ||
-          !selectedObservation?.targetEnvironment?.firstScienceTarget?.name
-        }
+        disabled={!canEdit || !(firstScienceTarget?.name ?? blindOffsetTarget?.name)}
         label="Import to Navigate"
         loading={importLoading}
         onClick={updateObs}

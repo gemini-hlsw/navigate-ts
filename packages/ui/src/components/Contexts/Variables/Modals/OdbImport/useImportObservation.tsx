@@ -1,16 +1,16 @@
 import { useConfiguration, useUpdateConfiguration } from '@gql/configs/Configuration';
+import type { TargetType } from '@gql/configs/gen/graphql';
 import { GET_INSTRUMENT, useResetInstruments } from '@gql/configs/Instrument';
 import { useRotator, useUpdateRotator } from '@gql/configs/Rotator';
 import { useRemoveAndCreateBaseTargets, useRemoveAndCreateWfsTargets } from '@gql/configs/Target';
-import type { SourceProfile } from '@gql/odb/gen/graphql';
 import { useGetCentralWavelength, useGetGuideEnvironment } from '@gql/odb/Observation';
 
 import { extractMagnitude } from '@/Helpers/bands';
-import { firstIfOnlyOne } from '@/Helpers/functions';
+import { firstIfOnlyOne, isNotNullish } from '@/Helpers/functions';
 import { extractGuideTargets } from '@/Helpers/guideTargets';
 import { useToast } from '@/Helpers/toast';
 import { extractCentralWavelength } from '@/Helpers/wavelength';
-import type { ConfigurationType, OdbObservationType } from '@/types';
+import type { ConfigurationType, OdbObservationType, OdbTargetType, TargetInput } from '@/types';
 
 export function useImportObservation() {
   const toast = useToast();
@@ -64,51 +64,22 @@ export function useImportObservation() {
 
       const wavelength = extractCentralWavelength(selectedObservation.instrument, obsWithWavelength.data);
 
-      const { name: band, value: magnitude } = extractMagnitude(
-        selectedObservation.targetEnvironment?.firstScienceTarget?.sourceProfile as SourceProfile,
-      );
+      const { blindOffsetTarget, firstScienceTarget } = selectedObservation.targetEnvironment ?? {};
 
-      // Second create the observation base target (SCIENCE)
-      const { data: t } = await removeAndCreateBaseTargets({
-        variables: {
-          targets: selectedObservation.targetEnvironment.firstScienceTarget
-            ? [
-                {
-                  id: selectedObservation.targetEnvironment.firstScienceTarget.id,
-                  name: selectedObservation.targetEnvironment.firstScienceTarget.name,
-                  coord1:
-                    typeof selectedObservation.targetEnvironment.firstScienceTarget.sidereal?.ra.degrees === 'string'
-                      ? parseFloat(selectedObservation.targetEnvironment.firstScienceTarget.sidereal?.ra.degrees)
-                      : selectedObservation.targetEnvironment.firstScienceTarget.sidereal?.ra.degrees,
-                  coord2:
-                    typeof selectedObservation.targetEnvironment.firstScienceTarget.sidereal?.dec.degrees === 'string'
-                      ? parseFloat(selectedObservation.targetEnvironment.firstScienceTarget.sidereal?.dec.degrees)
-                      : selectedObservation.targetEnvironment.firstScienceTarget.sidereal?.dec.degrees,
-                  pmRa: selectedObservation.targetEnvironment.firstScienceTarget.sidereal?.properMotion?.ra
-                    .microarcsecondsPerYear,
-                  pmDec:
-                    selectedObservation.targetEnvironment.firstScienceTarget.sidereal?.properMotion?.dec
-                      .microarcsecondsPerYear,
-                  radialVelocity:
-                    selectedObservation.targetEnvironment.firstScienceTarget.sidereal?.radialVelocity
-                      ?.centimetersPerSecond,
-                  parallax:
-                    selectedObservation.targetEnvironment.firstScienceTarget.sidereal?.parallax?.microarcseconds,
-                  epoch: selectedObservation.targetEnvironment.firstScienceTarget.sidereal?.epoch,
-                  magnitude: magnitude,
-                  band: band,
-                  type: 'SCIENCE',
-                  wavelength: wavelength,
-                },
-              ]
-            : [],
-        },
-      });
+      const baseTargets = [
+        blindOffsetTarget && { target: blindOffsetTarget, type: 'BLINDOFFSET' as const satisfies TargetType },
+        firstScienceTarget && { target: firstScienceTarget, type: 'SCIENCE' as const satisfies TargetType },
+      ]
+        .filter(isNotNullish)
+        .map(({ target, type }) => createBaseTarget(target, type, wavelength));
+
+      // Second create the observation base targets (SCIENCE and BLINDOFFSET)
+      const { data: baseTargetsData } = await removeAndCreateBaseTargets({ variables: { targets: baseTargets } });
 
       await updateConfiguration({
         variables: {
           pk: configuration?.pk ?? 1,
-          selectedTarget: t?.removeAndCreateBaseTargets[0]?.pk,
+          selectedTarget: baseTargetsData?.removeAndCreateBaseTargets[0]?.pk,
         },
       });
 
@@ -177,4 +148,29 @@ export function useImportObservation() {
   }
 
   return [importObservation, { loading: importLoading }] as const;
+}
+
+function createBaseTarget(target: OdbTargetType, type: TargetType, wavelength: number | undefined): TargetInput {
+  const { name: band, value: magnitude } = extractMagnitude(target.sourceProfile);
+  return {
+    id: target.id,
+    name: target.name,
+    coord1:
+      typeof target.sidereal?.ra.degrees === 'string'
+        ? parseFloat(target.sidereal?.ra.degrees)
+        : target.sidereal?.ra.degrees,
+    coord2:
+      typeof target.sidereal?.dec.degrees === 'string'
+        ? parseFloat(target.sidereal?.dec.degrees)
+        : target.sidereal?.dec.degrees,
+    pmRa: target.sidereal?.properMotion?.ra.microarcsecondsPerYear,
+    pmDec: target.sidereal?.properMotion?.dec.microarcsecondsPerYear,
+    radialVelocity: target.sidereal?.radialVelocity?.centimetersPerSecond,
+    parallax: target.sidereal?.parallax?.microarcseconds,
+    epoch: target.sidereal?.epoch,
+    magnitude,
+    band,
+    type,
+    wavelength,
+  };
 }

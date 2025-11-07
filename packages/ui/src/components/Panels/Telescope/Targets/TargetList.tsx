@@ -5,8 +5,12 @@ import type { TargetType, TypeOfTarget } from '@/types';
 import { Target } from './Target';
 
 export function TargetList({ targets, type }: { targets: TargetType[]; type?: TypeOfTarget }) {
-  const configuration = useConfiguration().data?.configuration;
-  const [updateConfiguration] = useUpdateConfiguration();
+  const { data: configurationData, loading: configurationLoading } = useConfiguration();
+  const configuration = configurationData?.configuration;
+
+  const [updateConfiguration, { loading: updateLoading }] = useUpdateConfiguration();
+
+  const loading = configurationLoading || updateLoading;
 
   let selectedTarget: number | null | undefined = null;
   switch (type) {
@@ -68,13 +72,20 @@ export function TargetList({ targets, type }: { targets: TargetType[]; type?: Ty
       updateSelectedTarget={updateSelectedTarget}
       selectedTarget={selectedTarget}
       targetIndex={index}
+      disabled={loading}
     />
   ));
 
   if (!displayTargets.length) {
     // Return an empty target as placeholder
     displayTargets.push(
-      <Target key="obsTarget-0" target={{} as TargetType} updateSelectedTarget={() => undefined} selectedTarget={0} />,
+      <Target
+        key="obsTarget-0"
+        target={{} as TargetType}
+        updateSelectedTarget={() => undefined}
+        selectedTarget={0}
+        disabled={loading}
+      />,
     );
   }
   return (

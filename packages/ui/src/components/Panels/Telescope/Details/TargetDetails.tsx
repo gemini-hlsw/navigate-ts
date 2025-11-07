@@ -2,10 +2,10 @@ import { Title } from '@Shared/Title/Title';
 
 import type { TargetType } from '@/types';
 
-export function TargetDetails({ target }: { target: TargetType }) {
+export function TargetDetails({ target }: { target: TargetType | undefined }) {
   return (
     <div>
-      <Title title={`Selected target ${target.name ?? ''}`} />
+      <Title title={`Selected target ${target?.name ?? ''}`} />
       <div className="target-details">
         <span>HA:</span>
         <span>{0}</span>
