@@ -106,8 +106,8 @@ importers:
         specifier: 1.25.0
         version: 1.25.0(graphql@16.12.0)
       graphql-yoga:
-        specifier: 5.16.1
-        version: 5.16.1(graphql@16.12.0)
+        specifier: 5.16.2
+        version: 5.16.2(graphql@16.12.0)
       lucuma-core:
         specifier: 'catalog:'
         version: 0.153.0
@@ -2839,8 +2839,8 @@ packages:
       ws:
         optional: true
 
-  graphql-yoga@5.16.1:
-    resolution: {integrity: sha512-5NIrqJjqUaqP7OtxmCgYCFSj0HDBEdBjkeGQw+Jc5v3N9aQ1ZTFkQ8VusAwYiH1ueRpi5wlrT63LqoSE+Ty54Q==}
+  graphql-yoga@5.16.2:
+    resolution: {integrity: sha512-heaD8ejapeEZ8+8CxB6DbYzkvMfC4gHEXr1Gc2CQCXEb5PVaDcEnQfiThBNic1KLPpuZixqQdJJ0pjcEVc9H7g==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       graphql: ^15.2.0 || ^16.0.0
@@ -7515,7 +7515,7 @@ snapshots:
     optionalDependencies:
       ws: 8.18.3
 
-  graphql-yoga@5.16.1(graphql@16.12.0):
+  graphql-yoga@5.16.2(graphql@16.12.0):
     dependencies:
       '@envelop/core': 5.3.2
       '@envelop/instrumentation': 1.0.0
@@ -7524,7 +7524,7 @@ snapshots:
       '@graphql-tools/utils': 10.10.0(graphql@16.12.0)
       '@graphql-yoga/logger': 2.0.1
       '@graphql-yoga/subscription': 5.0.5
-      '@whatwg-node/fetch': 0.10.11
+      '@whatwg-node/fetch': 0.10.12
       '@whatwg-node/promise-helpers': 1.3.2
       '@whatwg-node/server': 0.10.15
       graphql: 16.12.0
