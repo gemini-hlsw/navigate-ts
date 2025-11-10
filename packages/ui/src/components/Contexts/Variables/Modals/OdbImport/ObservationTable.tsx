@@ -70,7 +70,10 @@ export function ObservationTable({ selectedObservation, setSelectedObservation }
   const visibleColumns = columns.filter((c) => c.visible);
   const [globalFilterValue, setGlobalFilterValue] = useState('');
   const filters = visibleColumns.reduce<DataTableFilterMeta>(
-    (acc, c) => ((acc[c.field] = { value: '', matchMode: FilterMatchMode.CONTAINS }), acc),
+    (acc, c) => {
+      acc[c.field] = { value: '', matchMode: FilterMatchMode.CONTAINS };
+      return acc;
+    },
     { global: { value: globalFilterValue, matchMode: FilterMatchMode.CONTAINS } },
   );
 
