@@ -1,4 +1,5 @@
 import { useConfiguration, useUpdateConfiguration } from '@gql/configs/Configuration';
+import type { UpdateConfigurationMutationVariables } from '@gql/configs/gen/graphql';
 
 import type { TargetType, TypeOfTarget } from '@/types';
 
@@ -33,35 +34,38 @@ export function TargetList({ targets, type }: { targets: TargetType[]; type?: Ty
   }
 
   async function updateSelectedTarget(targetPk: number) {
-    if (configuration?.pk) {
+    if (configuration) {
+      const variables: Pick<
+        UpdateConfigurationMutationVariables,
+        'pk' | 'selectedOiTarget' | 'selectedP1Target' | 'selectedP2Target' | 'selectedTarget'
+      > = { pk: configuration.pk };
+
       switch (type) {
         case 'OIWFS':
-          await updateConfiguration({
-            variables: { pk: configuration.pk, selectedOiTarget: targetPk },
-          });
+          variables.selectedOiTarget = targetPk;
           break;
-
         case 'PWFS1':
-          await updateConfiguration({
-            variables: { pk: configuration.pk, selectedP1Target: targetPk },
-          });
+          variables.selectedP1Target = targetPk;
           break;
-
         case 'PWFS2':
-          await updateConfiguration({
-            variables: { pk: configuration.pk, selectedP2Target: targetPk },
-          });
+          variables.selectedP2Target = targetPk;
           break;
-
         default:
         case 'SCIENCE':
         case 'BLINDOFFSET':
         case 'FIXED':
-          await updateConfiguration({
-            variables: { pk: configuration.pk, selectedTarget: targetPk },
-          });
+          variables.selectedTarget = targetPk;
           break;
       }
+      await updateConfiguration({
+        variables,
+        optimisticResponse: {
+          updateConfiguration: {
+            ...configuration,
+            ...variables,
+          },
+        },
+      });
     }
   }
 

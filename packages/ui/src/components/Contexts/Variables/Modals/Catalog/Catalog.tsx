@@ -5,31 +5,44 @@ import { useRotator, useUpdateRotator } from '@gql/configs/Rotator';
 import { useRemoveAndCreateBaseTargets } from '@gql/configs/Target';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
-import { useState } from 'react';
+import { startTransition, useState } from 'react';
 
 import { useCanEdit } from '@/components/atoms/auth';
 import { useCatalogVisible } from '@/components/atoms/catalog';
 import { useToast } from '@/Helpers/toast';
-import type { ConfigurationType } from '@/types';
 
 import { CatalogTable } from './CatalogTable';
 
 export function Catalog() {
   const [catalogVisible, setCatalogVisible] = useCatalogVisible();
-  const configuration = useConfiguration().data?.configuration;
+  const { data: configurationData, loading: configurationLoading } = useConfiguration();
+  const configuration = configurationData?.configuration;
   const [removeAndCreateBaseTargets, { loading: removeCreateLoading }] = useRemoveAndCreateBaseTargets();
   const [updateConfiguration, { loading: updateConfigLoading }] = useUpdateConfiguration();
   const canEdit = useCanEdit();
   const { data: targetsData, loading: targetsLoading } = useEngineeringTargets();
   const [selectedTarget, setSelectedTarget] = useState<EngineeringTarget | null>(null);
   const toast = useToast();
-  const rotator = useRotator().data?.rotator;
+  const { data: rotatorData, loading: rotatorLoading } = useRotator();
+  const rotator = rotatorData?.rotator;
   const [updateRotator, { loading: updateRotatorLoading }] = useUpdateRotator();
 
-  const updateLoading = updateConfigLoading || removeCreateLoading || targetsLoading || updateRotatorLoading;
+  const loading =
+    updateConfigLoading ||
+    removeCreateLoading ||
+    targetsLoading ||
+    updateRotatorLoading ||
+    configurationLoading ||
+    rotatorLoading;
+
+  const close = () =>
+    startTransition(() => {
+      setCatalogVisible(false);
+      setSelectedTarget(null);
+    });
 
   async function updateTarget() {
-    if (!selectedTarget) {
+    if (!selectedTarget || !configuration) {
       toast?.show({
         severity: 'warn',
         summary: 'No target selected',
@@ -40,7 +53,7 @@ export function Catalog() {
 
     await updateConfiguration({
       variables: {
-        ...(configuration as ConfigurationType),
+        pk: configuration?.pk,
         obsId: 'o-100',
         obsTitle: selectedTarget.name,
         obsSubtitle: '',
@@ -49,6 +62,9 @@ export function Catalog() {
         selectedOiTarget: null,
         selectedP1Target: null,
         selectedP2Target: null,
+        baffleMode: selectedTarget.baffleMode,
+        centralBaffle: selectedTarget.centralBaffle,
+        deployableBaffle: selectedTarget.deployableBaffle,
       },
     });
 
@@ -97,19 +113,13 @@ export function Catalog() {
 
   const footer = (
     <div className="modal-footer">
-      <Button text severity="danger" label="Cancel" onClick={() => setCatalogVisible(false)} />
-      <Button disabled={!canEdit} label="Import to Navigate" loading={updateLoading} onClick={updateTarget} />
+      <Button text severity="danger" label="Cancel" onClick={close} />
+      <Button disabled={!canEdit} label="Import to Navigate" loading={loading} onClick={updateTarget} />
     </div>
   );
 
   return (
-    <Dialog
-      header="Import from catalog"
-      footer={footer}
-      visible={catalogVisible}
-      modal
-      onHide={() => setCatalogVisible(false)}
-    >
+    <Dialog header="Import from catalog" footer={footer} visible={catalogVisible} modal onHide={close}>
       {
         <CatalogTable
           loading={targetsLoading}

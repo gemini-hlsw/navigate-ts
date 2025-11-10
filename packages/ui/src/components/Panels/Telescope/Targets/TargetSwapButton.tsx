@@ -1,4 +1,5 @@
 import { useCalParams } from '@gql/configs/CalParams';
+import { useConfiguration } from '@gql/configs/Configuration';
 import type { Target } from '@gql/configs/gen/graphql';
 import { useConfiguredInstrument, useInstrument } from '@gql/configs/Instrument';
 import { useRotator } from '@gql/configs/Rotator';
@@ -7,7 +8,6 @@ import { useRestoreTarget, useSwapTarget } from '@gql/server/TargetSwap';
 import { Button } from 'primereact/button';
 
 import { useCanEdit } from '@/components/atoms/auth';
-import { useM2BaffleConfigValue } from '@/components/atoms/baffles';
 import { useServerConfigValue } from '@/components/atoms/config';
 import { useToast } from '@/Helpers/toast';
 
@@ -30,7 +30,6 @@ export function TargetSwapButton({
   // p2Selected: Target | undefined;
 }) {
   const { site } = useServerConfigValue();
-  const baffleConfig = useM2BaffleConfigValue();
 
   const canEdit = useCanEdit();
   const toast = useToast();
@@ -38,6 +37,9 @@ export function TargetSwapButton({
   const { data, loading: stateLoading, setStale } = useNavigateState();
   const [swapTarget, { loading: swapLoading }] = useSwapTarget(setStale);
   const [restoreTarget, { loading: restoreLoading }] = useRestoreTarget(setStale);
+
+  const { data: configurationData, loading: configurationLoading } = useConfiguration();
+  const configuration = configurationData?.configuration;
 
   const { data: instrument, loading: instrumentLoading } = useConfiguredInstrument();
 
@@ -59,7 +61,8 @@ export function TargetSwapButton({
     instrumentLoading ||
     rotatorLoading ||
     acLoading ||
-    calParamsLoading;
+    calParamsLoading ||
+    configurationLoading;
 
   const disabled = !canEdit;
 
@@ -67,7 +70,7 @@ export function TargetSwapButton({
   const severity = data?.onSwappedTarget ? 'danger' : undefined;
 
   const onClick = async () => {
-    if (selectedTarget?.id && instrument && rotator && oiSelected && acInst && calParams) {
+    if (selectedTarget?.id && instrument && rotator && oiSelected && acInst && calParams && configuration) {
       // TODO: other inputs for swap/nonswap
 
       if (data?.onSwappedTarget) {
@@ -75,7 +78,7 @@ export function TargetSwapButton({
         // Use the science target
         await restoreTarget({
           variables: {
-            config: createTcsConfigInput(instrument, rotator, selectedTarget, oiSelected, calParams, baffleConfig),
+            config: createTcsConfigInput(instrument, rotator, selectedTarget, oiSelected, calParams, configuration),
           },
         });
       } else {
@@ -111,6 +114,8 @@ export function TargetSwapButton({
         detail = 'No rotator';
       } else if (!calParams) {
         detail = 'No cal params configuration';
+      } else if (!configuration) {
+        detail = 'No configuration';
       } else {
         detail = 'Unknown error';
       }

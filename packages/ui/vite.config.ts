@@ -4,8 +4,8 @@ import path from 'node:path';
 import react from '@vitejs/plugin-react';
 import { playwright } from '@vitest/browser-playwright';
 import type { Plugin } from 'vite';
-import { defineConfig } from 'vite';
 import mkcert from 'vite-plugin-mkcert';
+import { defineConfig } from 'vitest/config';
 
 import pkgJson from './package.json' with { type: 'json' };
 
@@ -120,6 +120,11 @@ export default defineConfig(({ mode }) => ({
     clearMocks: true,
     globals: true,
     setupFiles: ['src/gql/dev-messages.ts', 'src/test/setup.ts', 'src/test/disable-animations.css'],
+    onConsoleLog(log) {
+      // ignore the dev mode warning in test logs
+      if (log.includes('Unknown query named "%s" requested in refetchQueries options.include array')) return false;
+      return;
+    },
     browser: {
       enabled: true,
       provider: playwright({

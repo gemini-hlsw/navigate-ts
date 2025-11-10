@@ -4,6 +4,24 @@ enum GuidingType {
   NORMAL
 }
 
+enum BaffleMode {
+  AUTO
+  MANUAL
+  IGNORED
+}
+
+enum CentralBaffle {
+  CLOSED
+  OPEN
+}
+
+enum DeployableBaffle {
+  EXTENDED
+  NEAR_IR
+  THERMAL_IR
+  VISIBLE
+}
+
 type Configuration {
   pk: PosInt!
   selectedTarget: Int
@@ -18,6 +36,11 @@ type Configuration {
   obsInstrument: Instrument
   obsSubtitle: String
   obsReference: String
+  baffleMode: BaffleMode!
+  "Only when baffleMode is MANUAL"
+  centralBaffle: CentralBaffle
+  "Only when baffleMode is MANUAL"
+  deployableBaffle: DeployableBaffle
 }
 
 type Query {
@@ -38,6 +61,9 @@ type Mutation {
     obsInstrument: Instrument
     obsSubtitle: String
     obsReference: String
+    baffleMode: BaffleMode!
+    centralBaffle: CentralBaffle
+    deployableBaffle: DeployableBaffle
   ): Configuration!
 
   updateConfiguration(
@@ -54,5 +80,8 @@ type Mutation {
     obsInstrument: Instrument
     obsSubtitle: String
     obsReference: String
+    baffleMode: BaffleMode
+    centralBaffle: CentralBaffle
+    deployableBaffle: DeployableBaffle
   ): Configuration!
 }

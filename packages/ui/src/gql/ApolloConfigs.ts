@@ -155,6 +155,13 @@ export function makeCache() {
       GuideAlarm: {
         keyFields: ['wfs'],
       },
+      Observation: {
+        fields: {
+          targetEnvironment: {
+            merge: true,
+          },
+        },
+      },
     },
   });
 }

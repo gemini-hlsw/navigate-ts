@@ -16,7 +16,7 @@ datasource db {
 }
 
 model Configuration {
-  pk               Int         @id @default(autoincrement())
+  pk               Int               @id @default(autoincrement())
   selectedTarget   Int?
   selectedOiTarget Int?
   selectedP1Target Int?
@@ -29,29 +29,53 @@ model Configuration {
   obsInstrument    String?
   obsSubtitle      String?
   obsReference     String?
+  baffleMode       BaffleMode        @default(AUTO)
+  centralBaffle    CentralBaffle?
+  deployableBaffle DeployableBaffle?
 }
 
 enum GuidingType {
   NORMAL
 }
 
+enum BaffleMode {
+  AUTO
+  MANUAL
+  IGNORED
+}
+
+enum CentralBaffle {
+  CLOSED
+  OPEN
+}
+
+enum DeployableBaffle {
+  EXTENDED
+  NEAR_IR
+  THERMAL_IR
+  VISIBLE
+}
+
 model EngineeringTarget {
-  pk             Int           @id @default(autoincrement())
-  id             String
-  name           String        @default("Test")
-  coord1         Float // RA or Az
-  coord2         Float // Dec or El
-  pmRa           Float? // Proper Motion RA microArcsec/Year
-  pmDec          Float? // Proper Motion Dec microArcsec/Year
-  radialVelocity Float? // cm/s
-  parallax       Float? // microArcsec
-  epoch          String?
-  type           TargetType    @default(FIXED)
-  wavelength     Int?
-  createdAt      DateTime      @default(now())
-  instrument     String
-  rotatorMode    TrackingType?
-  rotatorAngle   Float?
+  pk               Int               @id @default(autoincrement())
+  id               String
+  name             String            @default("Test")
+  coord1           Float // RA or Az
+  coord2           Float // Dec or El
+  pmRa             Float? // Proper Motion RA microArcsec/Year
+  pmDec            Float? // Proper Motion Dec microArcsec/Year
+  radialVelocity   Float? // cm/s
+  parallax         Float? // microArcsec
+  epoch            String?
+  type             TargetType        @default(FIXED)
+  wavelength       Int?
+  createdAt        DateTime          @default(now())
+  instrument       String
+  rotatorMode      TrackingType?
+  rotatorAngle     Float?
+  baffleMode       BaffleMode        @default(AUTO)
+  centralBaffle    CentralBaffle?
+  deployableBaffle DeployableBaffle?
 }
 
 model Target {

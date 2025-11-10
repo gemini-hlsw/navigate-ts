@@ -2,6 +2,7 @@
 #import RA, Az, El, Dec, TargetType, ProperMotion from "./Target.graphql"
 #import RotatorTrackingMode from 'lucuma-schemas/navigate'
 #import Instrument, PosInt from "lucuma-schemas/odb"
+#import BaffleMode, CentralBaffle, DeployableBaffle from './Configuration.graphql'
 
 type EngineeringTarget {
   "Primary Key"
@@ -36,6 +37,12 @@ type EngineeringTarget {
   rotatorMode: RotatorTrackingMode
   "Rotator angle"
   rotatorAngle: Float
+  "Baffle mode"
+  baffleMode: BaffleMode!
+  "Only when baffleMode is MANUAL"
+  centralBaffle: CentralBaffle
+  "Only when baffleMode is MANUAL"
+  deployableBaffle: DeployableBaffle
   "Datetime when it was created"
   createdAt: DateTime!
 }
@@ -63,6 +70,9 @@ type Mutation {
     wavelength: Int
     rotatorMode: RotatorTrackingMode
     rotatorAngle: Float
+    baffleMode: BaffleMode!
+    centralBaffle: CentralBaffle
+    deployableBaffle: DeployableBaffle
   ): EngineeringTarget!
 
   updateEngineeringTarget(
@@ -81,5 +91,8 @@ type Mutation {
     wavelength: Int
     rotatorMode: RotatorTrackingMode
     rotatorAngle: Float
+    baffleMode: BaffleMode
+    centralBaffle: CentralBaffle
+    deployableBaffle: DeployableBaffle
   ): EngineeringTarget!
 }
