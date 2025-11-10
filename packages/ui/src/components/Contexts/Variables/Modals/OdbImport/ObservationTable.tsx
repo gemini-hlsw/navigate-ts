@@ -1,22 +1,22 @@
+import { useObservationsByState } from '@gql/odb/Observation';
+import { dateToLocalObservingNight } from 'lucuma-core';
 import { FilterMatchMode } from 'primereact/api';
 import type { ColumnProps as PColumnProps } from 'primereact/column';
 import { Column } from 'primereact/column';
-import { DataTable } from 'primereact/datatable';
+import { DataTable, type DataTableFilterMeta } from 'primereact/datatable';
 import { IconField } from 'primereact/iconfield';
 import { InputIcon } from 'primereact/inputicon';
 import { InputText } from 'primereact/inputtext';
 import { MultiSelect } from 'primereact/multiselect';
 import { useState } from 'react';
 
+import { useServerConfigValue } from '@/components/atoms/config';
 import { Search } from '@/components/Icons';
 import type { OdbObservationType } from '@/types';
 
 interface ParamsInterface {
-  loading: boolean;
-  observations_list: OdbObservationType[] | undefined;
   selectedObservation: OdbObservationType | null;
   setSelectedObservation: (_: OdbObservationType | null) => void;
-  headerItems?: React.ReactNode;
 }
 
 interface ColumnProps extends PColumnProps {
@@ -62,22 +62,26 @@ const defaultColumns: ColumnProps[] = [
   { field: 'instrument', header: 'Instrument', filterPlaceholder: 'Filter Instrument', visible: false },
 ];
 
-export function ObservationTable({
-  loading,
-  observations_list,
-  selectedObservation,
-  setSelectedObservation,
-  headerItems,
-}: ParamsInterface) {
+export function ObservationTable({ selectedObservation, setSelectedObservation }: ParamsInterface) {
+  const { site } = useServerConfigValue();
+  const observingNight = dateToLocalObservingNight(new Date());
+
   const [columns, setColumns] = useState(defaultColumns);
   const visibleColumns = columns.filter((c) => c.visible);
   const [globalFilterValue, setGlobalFilterValue] = useState('');
-  const filters = visibleColumns.reduce(
-    (acc, c) => ({ ...acc, [c.field]: { value: '', matchMode: FilterMatchMode.CONTAINS } }),
-    {
-      global: { value: globalFilterValue, matchMode: FilterMatchMode.CONTAINS },
-    },
+  const filters = visibleColumns.reduce<DataTableFilterMeta>(
+    (acc, c) => ((acc[c.field] = { value: '', matchMode: FilterMatchMode.CONTAINS }), acc),
+    { global: { value: globalFilterValue, matchMode: FilterMatchMode.CONTAINS } },
   );
+
+  const { data, loading } = useObservationsByState({
+    variables: {
+      date: observingNight,
+      site,
+      states: ['READY', 'ONGOING', 'COMPLETED'],
+    },
+  });
+  const observations = data?.observations.matches;
 
   const onGlobalFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -91,7 +95,11 @@ export function ObservationTable({
   const header = (
     <div className="header-table">
       {selectedObservation?.title && <span>Selected Observation: {selectedObservation.title}</span>}
-      {headerItems}
+      <div className="header-item">
+        <span>
+          Observing Night {observingNight} @ {site}
+        </span>
+      </div>
       <IconField iconPosition="left">
         <InputIcon>
           <Search />
@@ -113,7 +121,7 @@ export function ObservationTable({
   return (
     <div className="target-table">
       <DataTable
-        value={observations_list}
+        value={observations}
         paginator
         selectionMode="single"
         selection={selectedObservation}

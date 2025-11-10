@@ -1,4 +1,4 @@
-import { skipToken, useQuery } from '@apollo/client/react';
+import { skipToken, useQuery, useSuspenseQuery } from '@apollo/client/react';
 import type { OptionsOf } from '@gql/util';
 
 import { graphql } from './gen';
@@ -22,4 +22,8 @@ export function useVersion(options?: OptionsOf<typeof GET_VERSION>) {
           context: { clientName: 'navigateConfigs' },
         },
   );
+}
+
+export function useSuspenseVersion() {
+  return useSuspenseQuery(GET_VERSION, { context: { clientName: 'navigateConfigs' } });
 }

@@ -133,6 +133,7 @@ function TargetSelector({
         value={target}
         onChange={(e) => onChange(e.value as AdjustTarget)}
         options={targetOptions}
+        placeholder="Select target"
       />
     </>
   );

@@ -12,7 +12,7 @@ import type { OdbObservationType } from '@/types';
 
 import { useImportObservation } from './useImportObservation';
 
-describe('useImportObservation', () => {
+describe(useImportObservation.name, () => {
   let sut: RenderHookResult<ReturnType<typeof useImportObservation>, unknown>;
   let callback: Mock;
   beforeEach(async () => {
@@ -25,48 +25,36 @@ describe('useImportObservation', () => {
     await expect.poll(() => sut.result.current[1].loading).toBe(false);
   });
 
-  it('should call callback even after not importing', async () => {
-    const { result, act } = sut;
-    const [importObservation] = result.current;
-
-    await act(async () => importObservation(null, callback));
-
-    expect(callback).toHaveBeenCalledOnce();
-    expect(updateConfigurationMock.request.variables).not.toHaveBeenCalled();
-  });
-
   it('should call update configuration when a real observation is re-imported', async () => {
     const { result, act } = sut;
     const [importObservation] = result.current;
 
-    await act(async () => importObservation(selectedObservation, callback));
+    await act(async () => {
+      // test that import is awaited
+      await importObservation(selectedObservation);
+      callback();
+    });
 
     expect(callback).toHaveBeenCalledOnce();
-    expect(updateConfigurationMock.request.variables).toHaveBeenCalledTimes(3);
-    expect(updateConfigurationMock.request.variables).toHaveBeenCalledWith(
-      expect.objectContaining({
-        selectedTarget: 34,
-      }),
-    );
-    expect(updateConfigurationMock.request.variables).toHaveBeenCalledWith(
-      expect.objectContaining({
-        selectedOiTarget: 35,
-        selectedP1Target: 35,
-        selectedP2Target: 35,
-      }),
-    );
-    expect(updateConfigurationMock.request.variables).toHaveBeenCalledWith(
-      expect.objectContaining({
-        baffleMode: 'AUTO',
-        centralBaffle: null,
-        deployableBaffle: null,
-        obsId: 'o-2e5',
-        obsInstrument: 'GMOS_NORTH',
-        obsReference: 'G-2025B-0571-Q-0003',
-        obsSubtitle: null,
-        obsTitle: 'Mayall V',
-      }),
-    );
+    expect(updateConfigurationMock.request.variables).toHaveBeenCalledTimes(2);
+    expect(updateConfigurationMock.request.variables).toHaveBeenCalledWith({
+      pk: 1,
+      baffleMode: 'AUTO',
+      centralBaffle: null,
+      deployableBaffle: null,
+      obsId: 'o-2e5',
+      obsInstrument: 'GMOS_NORTH',
+      obsReference: 'G-2025B-0571-Q-0003',
+      obsSubtitle: null,
+      obsTitle: 'Mayall V',
+      selectedTarget: 34,
+    });
+    expect(updateConfigurationMock.request.variables).toHaveBeenCalledWith({
+      pk: 1,
+      selectedOiTarget: 35,
+      selectedP1Target: 35,
+      selectedP2Target: 35,
+    });
   });
 });
 

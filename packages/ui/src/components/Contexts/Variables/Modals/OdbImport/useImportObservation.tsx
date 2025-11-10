@@ -1,5 +1,9 @@
 import { useConfiguration, useUpdateConfiguration } from '@gql/configs/Configuration';
-import type { TargetType } from '@gql/configs/gen/graphql';
+import type {
+  TargetType,
+  UpdateConfigurationMutationVariables,
+  UpdateRotatorMutationVariables,
+} from '@gql/configs/gen/graphql';
 import { GET_INSTRUMENT, useResetInstruments } from '@gql/configs/Instrument';
 import { useRotator, useUpdateRotator } from '@gql/configs/Rotator';
 import { useRemoveAndCreateBaseTargets, useRemoveAndCreateWfsTargets } from '@gql/configs/Target';
@@ -8,13 +12,11 @@ import { useGetCentralWavelength, useGetGuideEnvironment } from '@gql/odb/Observ
 import { extractMagnitude } from '@/Helpers/bands';
 import { firstIfOnlyOne, isNotNullish } from '@/Helpers/functions';
 import { extractGuideTargets } from '@/Helpers/guideTargets';
-import { useToast } from '@/Helpers/toast';
+import { useTransitionPromise } from '@/Helpers/hooks';
 import { extractCentralWavelength } from '@/Helpers/wavelength';
-import type { ConfigurationType, OdbObservationType, OdbTargetType, TargetInput } from '@/types';
+import type { OdbObservationType, OdbTargetType, TargetInput } from '@/types';
 
 export function useImportObservation() {
-  const toast = useToast();
-
   const { data: configurationData, loading: configurationLoading } = useConfiguration();
   const configuration = configurationData?.configuration;
   const { data: rotatorData, loading: rotatorLoading } = useRotator();
@@ -28,6 +30,8 @@ export function useImportObservation() {
   const [removeAndCreateWfsTargets, { loading: wfsTargetsLoading }] = useRemoveAndCreateWfsTargets();
   const [resetInstruments, { loading: resetInstrumentsLoading }] = useResetInstruments();
 
+  const [isPending, startTransition] = useTransitionPromise();
+
   const loading =
     configurationLoading ||
     rotatorLoading ||
@@ -37,32 +41,13 @@ export function useImportObservation() {
     getGuideEnvironmentLoading ||
     getCentralWavelengthLoading ||
     wfsTargetsLoading ||
-    resetInstrumentsLoading;
+    resetInstrumentsLoading ||
+    isPending;
 
-  async function importObservation(selectedObservation: OdbObservationType | null, callback?: () => void) {
-    try {
-      if (!selectedObservation) {
-        toast?.show({
-          severity: 'warn',
-          summary: 'No observation selected',
-          detail: 'Please select an observation to import',
-        });
-        return;
-      }
-      await updateConfiguration({
-        variables: {
-          ...(configuration as ConfigurationType),
-          obsId: selectedObservation.id,
-          obsTitle: selectedObservation.title,
-          obsSubtitle: selectedObservation.subtitle,
-          obsInstrument: selectedObservation.instrument,
-          obsReference: selectedObservation.reference?.label,
-          baffleMode: 'AUTO',
-          centralBaffle: null,
-          deployableBaffle: null,
-        },
-      });
+  function importObservation(selectedObservation: OdbObservationType): Promise<void> {
+    if (!configuration) return Promise.resolve();
 
+    return startTransition(async () => {
       // Observation selected
       // First try to get a central wavelength associated to the observation
       const obsWithWavelength = await getCentralWavelength({
@@ -84,10 +69,27 @@ export function useImportObservation() {
       // Second create the observation base targets (SCIENCE and BLINDOFFSET)
       const { data: baseTargetsData } = await removeAndCreateBaseTargets({ variables: { targets: baseTargets } });
 
+      const configurationVariables = {
+        pk: configuration.pk,
+        obsId: selectedObservation.id,
+        obsTitle: selectedObservation.title,
+        obsSubtitle: selectedObservation.subtitle,
+        obsInstrument: selectedObservation.instrument,
+        // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
+        obsReference: selectedObservation.reference?.label!,
+        baffleMode: 'AUTO',
+        centralBaffle: null,
+        deployableBaffle: null,
+        // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
+        selectedTarget: baseTargetsData?.removeAndCreateBaseTargets[0]?.pk!,
+      } satisfies UpdateConfigurationMutationVariables;
       await updateConfiguration({
-        variables: {
-          pk: configuration?.pk ?? 1,
-          selectedTarget: baseTargetsData?.removeAndCreateBaseTargets[0]?.pk,
+        variables: configurationVariables,
+        optimisticResponse: {
+          updateConfiguration: {
+            ...configuration,
+            ...configurationVariables,
+          },
         },
       });
 
@@ -101,6 +103,14 @@ export function useImportObservation() {
 
         const { oiwfs, pwfs1, pwfs2 } = extractGuideTargets(guideEnv.data);
 
+        const rotatorVariables = {
+          pk: rotator.pk,
+          angle:
+            typeof guideEnv.data?.observation?.targetEnvironment.guideEnvironment.posAngle.degrees === 'string'
+              ? parseFloat(guideEnv.data?.observation?.targetEnvironment.guideEnvironment.posAngle.degrees)
+              : (guideEnv.data?.observation?.targetEnvironment.guideEnvironment.posAngle.degrees ?? 0),
+          tracking: 'TRACKING',
+        } satisfies UpdateRotatorMutationVariables;
         const [oi, p1, p2] = await Promise.all([
           removeAndCreateWfsTargets({
             variables: {
@@ -121,13 +131,12 @@ export function useImportObservation() {
             },
           }),
           updateRotator({
-            variables: {
-              pk: rotator?.pk,
-              angle:
-                typeof guideEnv.data?.observation?.targetEnvironment.guideEnvironment.posAngle.degrees === 'string'
-                  ? parseFloat(guideEnv.data?.observation?.targetEnvironment.guideEnvironment.posAngle.degrees)
-                  : (guideEnv.data?.observation?.targetEnvironment.guideEnvironment.posAngle.degrees ?? 0),
-              tracking: 'TRACKING',
+            variables: rotatorVariables,
+            optimisticResponse: {
+              updateRotator: {
+                ...rotator,
+                ...rotatorVariables,
+              },
             },
           }),
         ]);
@@ -140,6 +149,14 @@ export function useImportObservation() {
         if (configuration?.pk) {
           await updateConfiguration({
             variables: { pk: configuration.pk, selectedOiTarget, selectedP1Target, selectedP2Target },
+            optimisticResponse: {
+              updateConfiguration: {
+                ...configuration,
+                selectedOiTarget,
+                selectedP1Target,
+                selectedP2Target,
+              },
+            },
           });
         }
       }
@@ -150,9 +167,7 @@ export function useImportObservation() {
           refetchQueries: [GET_INSTRUMENT],
         });
       }
-    } finally {
-      callback?.();
-    }
+    });
   }
 
   return [importObservation, { loading }] as const;

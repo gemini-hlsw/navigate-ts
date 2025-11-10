@@ -1,0 +1,73 @@
+import { useUpdateTarget } from '@gql/configs/Target';
+import { RESET } from 'jotai/utils';
+import { Button } from 'primereact/button';
+import { Dialog } from 'primereact/dialog';
+import { lazy, startTransition, Suspense, useState } from 'react';
+
+import { useCanEdit } from '@/components/atoms/auth';
+import { useTargetEdit } from '@/components/atoms/target';
+import { isNullish } from '@/Helpers/functions';
+import type { TargetType } from '@/types';
+
+import { ModalSolarProgress } from '../ModalSolarProgress';
+
+const TargetContent = lazy(() => import('../ModalContent').then((module) => ({ default: module.TargetContent })));
+
+export function Target() {
+  const canEdit = useCanEdit();
+
+  const [targetEdit, setTargetEdit] = useTargetEdit();
+  const [auxTarget, setAuxTarget] = useState<TargetType | null>(null);
+
+  const [updateObservation, { loading }] = useUpdateObservation();
+
+  const disabled = isNullish(targetEdit.target) || !canEdit;
+
+  const close = () =>
+    startTransition(() => {
+      setTargetEdit(RESET);
+      setAuxTarget(null);
+    });
+
+  const footer = (
+    <div className="modal-footer">
+      <Button text severity="danger" label="Cancel" onClick={close} />
+      <Button
+        label="Update"
+        loading={loading}
+        disabled={disabled}
+        onClick={() => updateObservation(auxTarget!).then(close)}
+      />
+    </div>
+  );
+
+  return (
+    <Dialog
+      header={`Edit target ${targetEdit.target?.name ?? ''}`}
+      visible={targetEdit.isVisible}
+      footer={footer}
+      modal
+      onHide={close}
+    >
+      <Suspense fallback={<ModalSolarProgress />}>
+        <TargetContent auxTarget={auxTarget} setAuxTarget={setAuxTarget} loading={loading} disabled={disabled} />
+      </Suspense>
+    </Dialog>
+  );
+}
+
+function useUpdateObservation() {
+  const [updateTarget, result] = useUpdateTarget();
+
+  async function updateObservation(target: TargetType) {
+    await updateTarget({
+      variables: {
+        ...target,
+        coord1: target.ra?.degrees ?? target.az?.degrees,
+        coord2: target.dec?.degrees ?? target.el?.degrees,
+      },
+    });
+  }
+
+  return [updateObservation, result] as const;
+}

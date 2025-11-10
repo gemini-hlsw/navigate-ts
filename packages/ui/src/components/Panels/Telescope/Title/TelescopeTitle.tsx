@@ -10,6 +10,7 @@ import { useSetCatalogVisible } from '@/components/atoms/catalog';
 import { useSetOdbVisible } from '@/components/atoms/odb';
 import { List } from '@/components/Icons';
 import { isNullish } from '@/Helpers/functions';
+import { useToast } from '@/Helpers/toast';
 
 interface ParamsInterface {
   prevPanel: () => void;
@@ -25,6 +26,7 @@ export function TelescopeTitle({ prevPanel, nextPanel }: ParamsInterface) {
   const configuration = configurationData?.configuration;
   const [importObservation, { loading: importLoading }] = useImportObservation();
   const [getObservation, { loading: getObservationLoading }] = useObservationById();
+  const toast = useToast();
 
   async function reimportObservation() {
     if (!configuration?.obsId) return;
@@ -35,7 +37,20 @@ export function TelescopeTitle({ prevPanel, nextPanel }: ParamsInterface) {
       },
     });
 
-    await importObservation(data?.observation ?? null);
+    if (data?.observation) {
+      await importObservation(data.observation);
+      toast?.show({
+        severity: 'success',
+        summary: 'Observation reimported',
+        detail: `Observation ${data.observation.id} (ref ${configuration.obsReference}) has been reimported successfully.`,
+      });
+    } else {
+      toast?.show({
+        severity: 'error',
+        summary: 'Reimport failed',
+        detail: `Observation ${configuration?.obsId} (ref ${configuration.obsReference}) could not be found in the ODB.`,
+      });
+    }
   }
 
   const loading = importLoading || getObservationLoading || configurationLoading;

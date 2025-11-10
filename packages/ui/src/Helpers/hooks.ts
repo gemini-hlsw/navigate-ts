@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { startTransition, useEffect, useMemo, useState, useTransition } from 'react';
 
 /**
  * State hook that returns a boolean value that is true for 1 second after being set to true.
@@ -52,4 +52,19 @@ function selectPlayableAudio(mp3S: string, webmS: string) {
     // If neither can play, at least we'll try mp3
     else return mp3;
   }
+}
+
+/**
+ * Wraps a startTransition in a promise to be able to await it
+ */
+export const startTransitionPromise = <T>(fn: () => Promise<T>) =>
+  new Promise<T>((res) => startTransition(async () => res(await fn())));
+
+/**
+ * Like `useTransition` but returns a promise that resolves when the transition is done.
+ */
+export function useTransitionPromise<T = void>(): readonly [boolean, (fn: () => Promise<T>) => Promise<T>] {
+  const [isPending, startTransition] = useTransition();
+
+  return [isPending, (fn) => new Promise<T>((res) => startTransition(async () => res(await fn())))];
 }

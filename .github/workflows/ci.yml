@@ -45,7 +45,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - uses: ./.github/setup
-      - run: pnpm ui exec playwright install chromium
+      - run: pnpm ui exec playwright install chromium --only-shell
       - run: pnpm -r codegen
       - run: pnpm -r generate
       - run: pnpm -r test
