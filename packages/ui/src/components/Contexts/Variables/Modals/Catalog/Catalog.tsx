@@ -73,7 +73,7 @@ function useUpdateTarget() {
     if (!configuration) return Promise.resolve();
 
     return startTransition(async () => {
-      // Second create the observation base target
+      // Create the observation base target
       const { data: t } = await removeAndCreateBaseTargets({
         variables: {
           targets: [
