@@ -1,5 +1,4 @@
-import { userEvent } from 'vitest/browser';
-import type { RenderResult } from 'vitest-browser-react';
+import { type LocatorSelectors, page, userEvent } from 'vitest/browser';
 
 /**
  * A long expiration JWT token for testing purposes. This JWT is not actually valid and should not be used for anything other than running unit tests.
@@ -15,11 +14,16 @@ export const expiredJwt =
 /**
  * Select an option from a primereact dropdown
  */
-export async function selectDropdownOption(sut: RenderResult, label: string, optionLabel: string) {
-  const getWrapper = () => sut.getByLabelText(label, { exact: true }).element().parentElement?.parentElement;
+export async function selectDropdownOption(sut: LocatorSelectors, dropdownPlaceholder: string, optionLabel: string) {
+  const dropdownElement = sut.getByRole('button', { name: dropdownPlaceholder, exact: true });
+  await expect.element(dropdownElement).toBeEnabled();
+  // Wait for loading state to finish
+  await expect
+    .poll(() => dropdownElement.element().querySelector<HTMLElement>('.p-dropdown-trigger-icon'))
+    .toBeVisible();
+  await userEvent.click(dropdownElement);
 
-  await userEvent.click(getWrapper()!.querySelector('.p-dropdown-trigger')!);
-
-  const option = sut.getByText(optionLabel, { exact: true });
+  const option = page.getByRole('listbox').getByRole('option', { name: optionLabel, exact: true });
+  await expect.element(option).toBeVisible();
   await userEvent.click(option);
 }

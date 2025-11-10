@@ -84,6 +84,6 @@ export default defineConfig(
     },
   },
   {
-    ignores: ['node_modules', 'dist', 'public', 'reports', 'src/gql/*/gen', 'src/*/gen', 'target'],
+    ignores: ['node_modules', 'dist', 'public', 'reports', 'src/gql/*/gen', 'src/*/gen'],
   },
 );

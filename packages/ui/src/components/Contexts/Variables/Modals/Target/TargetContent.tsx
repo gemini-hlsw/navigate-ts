@@ -1,67 +1,13 @@
-import { useUpdateTarget } from '@gql/configs/Target';
 import { isBaseTarget } from '@gql/util';
-import { RESET } from 'jotai/utils';
 import { deg2dms, deg2hms, dms2deg, hms2deg } from 'lucuma-core';
-import { Button } from 'primereact/button';
-import { Dialog } from 'primereact/dialog';
 import { Dropdown } from 'primereact/dropdown';
 import { InputNumber } from 'primereact/inputnumber';
 import { InputText } from 'primereact/inputtext';
 import type { Dispatch, SetStateAction } from 'react';
 import { startTransition, useEffect, useState } from 'react';
 
-import { useCanEdit } from '@/components/atoms/auth';
-import { useTargetEdit, useTargetEditValue } from '@/components/atoms/target';
-import { isNullish } from '@/Helpers/functions';
+import { useTargetEditValue } from '@/components/atoms/target';
 import type { TargetType } from '@/types';
-
-export function Target() {
-  const canEdit = useCanEdit();
-
-  const [targetEdit, setTargetEdit] = useTargetEdit();
-  const [auxTarget, setAuxTarget] = useState<TargetType | null>(null);
-
-  const [updateTarget, { loading }] = useUpdateTarget();
-
-  const disabled = isNullish(targetEdit.target) || !canEdit;
-
-  const close = () =>
-    startTransition(() => {
-      setTargetEdit(RESET);
-      setAuxTarget(null);
-    });
-
-  async function updateObservation() {
-    await updateTarget({
-      variables: {
-        ...auxTarget!,
-        coord1: auxTarget!.ra ? auxTarget!.ra.degrees : auxTarget!.az?.degrees,
-        coord2: auxTarget!.dec ? auxTarget!.dec.degrees : auxTarget!.el?.degrees,
-      },
-    });
-
-    close();
-  }
-
-  const footer = (
-    <div className="modal-footer">
-      <Button text severity="danger" label="Cancel" onClick={close} />
-      <Button label="Update" loading={loading} disabled={disabled} onClick={updateObservation} />
-    </div>
-  );
-
-  return (
-    <Dialog
-      header={`Edit target ${targetEdit.target?.name ?? ''}`}
-      visible={targetEdit.isVisible}
-      footer={footer}
-      modal
-      onHide={close}
-    >
-      <TargetContent auxTarget={auxTarget} setAuxTarget={setAuxTarget} loading={loading} disabled={disabled} />
-    </Dialog>
-  );
-}
 
 export function TargetContent({
   auxTarget,

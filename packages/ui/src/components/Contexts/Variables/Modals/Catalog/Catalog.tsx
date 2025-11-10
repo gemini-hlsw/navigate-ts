@@ -1,39 +1,26 @@
 import { useConfiguration, useUpdateConfiguration } from '@gql/configs/Configuration';
-import { useEngineeringTargets } from '@gql/configs/EngineeringTarget';
-import type { EngineeringTarget } from '@gql/configs/gen/graphql';
+import type { EngineeringTarget, UpdateConfigurationMutationVariables } from '@gql/configs/gen/graphql';
 import { useRotator, useUpdateRotator } from '@gql/configs/Rotator';
 import { useRemoveAndCreateBaseTargets } from '@gql/configs/Target';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
-import { startTransition, useState } from 'react';
+import { lazy, startTransition, Suspense, useState } from 'react';
 
 import { useCanEdit } from '@/components/atoms/auth';
 import { useCatalogVisible } from '@/components/atoms/catalog';
-import { useToast } from '@/Helpers/toast';
+import { useTransitionPromise } from '@/Helpers/hooks';
 
-import { CatalogTable } from './CatalogTable';
+import { ModalSolarProgress } from '../ModalSolarProgress';
+
+const CatalogTable = lazy(() => import('../ModalContent').then((module) => ({ default: module.CatalogTable })));
 
 export function Catalog() {
   const [catalogVisible, setCatalogVisible] = useCatalogVisible();
-  const { data: configurationData, loading: configurationLoading } = useConfiguration();
-  const configuration = configurationData?.configuration;
-  const [removeAndCreateBaseTargets, { loading: removeCreateLoading }] = useRemoveAndCreateBaseTargets();
-  const [updateConfiguration, { loading: updateConfigLoading }] = useUpdateConfiguration();
   const canEdit = useCanEdit();
-  const { data: targetsData, loading: targetsLoading } = useEngineeringTargets();
-  const [selectedTarget, setSelectedTarget] = useState<EngineeringTarget | null>(null);
-  const toast = useToast();
-  const { data: rotatorData, loading: rotatorLoading } = useRotator();
-  const rotator = rotatorData?.rotator;
-  const [updateRotator, { loading: updateRotatorLoading }] = useUpdateRotator();
 
-  const loading =
-    updateConfigLoading ||
-    removeCreateLoading ||
-    targetsLoading ||
-    updateRotatorLoading ||
-    configurationLoading ||
-    rotatorLoading;
+  const [selectedTarget, setSelectedTarget] = useState<EngineeringTarget | null>(null);
+
+  const [updateTarget, { loading }] = useUpdateTarget();
 
   const close = () =>
     startTransition(() => {
@@ -41,19 +28,76 @@ export function Catalog() {
       setSelectedTarget(null);
     });
 
-  async function updateTarget() {
-    if (!selectedTarget || !configuration) {
-      toast?.show({
-        severity: 'warn',
-        summary: 'No target selected',
-        detail: 'Please select a target to import',
-      });
-      return;
-    }
+  const footer = (
+    <div className="modal-footer">
+      <Button text severity="danger" label="Cancel" onClick={close} />
+      <Button
+        disabled={!canEdit || !selectedTarget}
+        label="Import to Navigate"
+        loading={loading}
+        onClick={async () => updateTarget(selectedTarget!).then(close)}
+      />
+    </div>
+  );
 
-    await updateConfiguration({
-      variables: {
-        pk: configuration?.pk,
+  return (
+    <Dialog header="Import from catalog" footer={footer} visible={catalogVisible} modal onHide={close}>
+      <Suspense fallback={<ModalSolarProgress />}>
+        <CatalogTable selectedTarget={selectedTarget} setSelectedTarget={setSelectedTarget} />
+      </Suspense>
+    </Dialog>
+  );
+}
+
+function useUpdateTarget() {
+  const { data: configurationData, loading: configurationLoading } = useConfiguration();
+  const configuration = configurationData?.configuration;
+  const [removeAndCreateBaseTargets, { loading: removeCreateLoading }] = useRemoveAndCreateBaseTargets();
+  const [updateConfiguration, { loading: updateConfigLoading }] = useUpdateConfiguration();
+
+  const [isPending, startTransition] = useTransitionPromise();
+
+  const { data: rotatorData, loading: rotatorLoading } = useRotator();
+  const rotator = rotatorData?.rotator;
+  const [updateRotator, { loading: updateRotatorLoading }] = useUpdateRotator();
+
+  const loading =
+    updateConfigLoading ||
+    removeCreateLoading ||
+    updateRotatorLoading ||
+    configurationLoading ||
+    rotatorLoading ||
+    isPending;
+
+  function updateTarget(selectedTarget: EngineeringTarget) {
+    if (!configuration) return Promise.resolve();
+
+    return startTransition(async () => {
+      // Create the observation base target
+      const { data: t } = await removeAndCreateBaseTargets({
+        variables: {
+          targets: [
+            {
+              id: 't-100',
+              name: selectedTarget.name,
+              coord1: selectedTarget.type === 'FIXED' ? selectedTarget.az?.degrees : selectedTarget.ra?.degrees,
+              coord2: selectedTarget.type === 'FIXED' ? selectedTarget.el?.degrees : selectedTarget.dec?.degrees,
+              epoch: selectedTarget.epoch,
+              magnitude: undefined,
+              pmRa: null,
+              pmDec: null,
+              radialVelocity: null,
+              parallax: null,
+              band: undefined,
+              type: selectedTarget.type,
+              wavelength: selectedTarget.wavelength,
+            },
+          ],
+        },
+      });
+
+      const configurationVariables = {
+        pk: configuration.pk,
         obsId: 'o-100',
         obsTitle: selectedTarget.name,
         obsSubtitle: '',
@@ -65,69 +109,38 @@ export function Catalog() {
         baffleMode: selectedTarget.baffleMode,
         centralBaffle: selectedTarget.centralBaffle,
         deployableBaffle: selectedTarget.deployableBaffle,
-      },
-    });
+        // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
+        selectedTarget: t?.removeAndCreateBaseTargets[0]?.pk!,
+      } satisfies UpdateConfigurationMutationVariables;
 
-    setCatalogVisible(false);
-
-    // Second create the observation base target
-    const { data: t } = await removeAndCreateBaseTargets({
-      variables: {
-        targets: [
-          {
-            id: 't-100',
-            name: selectedTarget.name,
-            coord1: selectedTarget.type === 'FIXED' ? selectedTarget.az?.degrees : selectedTarget.ra?.degrees,
-            coord2: selectedTarget.type === 'FIXED' ? selectedTarget.el?.degrees : selectedTarget.dec?.degrees,
-            epoch: selectedTarget.epoch,
-            magnitude: undefined,
-            pmRa: null,
-            pmDec: null,
-            radialVelocity: null,
-            parallax: null,
-            band: undefined,
-            type: selectedTarget.type,
-            wavelength: selectedTarget.wavelength,
+      await updateConfiguration({
+        variables: configurationVariables,
+        optimisticResponse: {
+          updateConfiguration: {
+            ...configuration,
+            ...configurationVariables,
           },
-        ],
-      },
-    });
+        },
+      });
 
-    await updateConfiguration({
-      variables: {
-        pk: configuration?.pk ?? 1,
-        selectedTarget: t?.removeAndCreateBaseTargets[0]?.pk,
-      },
-    });
-
-    if (rotator && selectedTarget.rotatorMode && selectedTarget.rotatorAngle !== null) {
-      await updateRotator({
-        variables: {
+      if (rotator && selectedTarget.rotatorMode && selectedTarget.rotatorAngle !== null) {
+        const rotatorVariables = {
           pk: rotator.pk,
           angle: selectedTarget.rotatorAngle,
           tracking: selectedTarget.rotatorMode,
-        },
-      });
-    }
+        };
+        await updateRotator({
+          variables: rotatorVariables,
+          optimisticResponse: {
+            updateRotator: {
+              ...rotator,
+              ...rotatorVariables,
+            },
+          },
+        });
+      }
+    });
   }
 
-  const footer = (
-    <div className="modal-footer">
-      <Button text severity="danger" label="Cancel" onClick={close} />
-      <Button disabled={!canEdit} label="Import to Navigate" loading={loading} onClick={updateTarget} />
-    </div>
-  );
-
-  return (
-    <Dialog header="Import from catalog" footer={footer} visible={catalogVisible} modal onHide={close}>
-      {
-        <CatalogTable
-          loading={targetsLoading}
-          engineeringTargets={targetsData}
-          selectedTarget={selectedTarget}
-          setSelectedTarget={setSelectedTarget}
-        />
-      }
-    </Dialog>
-  );
+  return [updateTarget, { loading }] as const;
 }

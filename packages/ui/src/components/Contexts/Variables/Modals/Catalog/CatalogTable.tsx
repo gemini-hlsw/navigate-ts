@@ -1,3 +1,4 @@
+import { useEngineeringTargets } from '@gql/configs/EngineeringTarget';
 import type { EngineeringTarget } from '@gql/configs/gen/graphql';
 import { FilterMatchMode } from 'primereact/api';
 import { Column } from 'primereact/column';
@@ -8,20 +9,12 @@ import { InputText } from 'primereact/inputtext';
 import { useState } from 'react';
 
 interface ParamsInterface {
-  loading: boolean;
-  engineeringTargets: EngineeringTarget[];
   selectedTarget: EngineeringTarget | null;
   setSelectedTarget: (_: EngineeringTarget | null) => void;
   headerItems?: React.ReactNode;
 }
 
-export function CatalogTable({
-  loading,
-  engineeringTargets,
-  selectedTarget,
-  setSelectedTarget,
-  headerItems,
-}: ParamsInterface) {
+export function CatalogTable({ selectedTarget, setSelectedTarget, headerItems }: ParamsInterface) {
   const [filters, setFilters] = useState({
     name: { value: '', matchMode: FilterMatchMode.CONTAINS },
     type: { value: '', matchMode: FilterMatchMode.CONTAINS },
@@ -38,6 +31,8 @@ export function CatalogTable({
     }));
     setGlobalFilterValue(value);
   }
+
+  const { data: engineeringTargets, loading } = useEngineeringTargets();
 
   const header = (
     <div className="header-table">

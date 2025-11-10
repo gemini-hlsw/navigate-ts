@@ -23,9 +23,9 @@ describe(Target.name, () => {
     });
     const dialog = page.getByRole('dialog');
     await expect.element(dialog).toBeVisible();
-    expect(dialog.getByText(`Edit target ${target.name}`)).toBeVisible();
+    await expect.element(dialog.getByText(`Edit target ${target.name}`)).toBeVisible();
     const name = dialog.getByLabelText('Name');
-    expect(name).toBeEnabled();
+    await expect.element(name).toBeEnabled();
     expect(name).toHaveValue(target.name);
     expect(dialog.getByRole('button', { name: 'Update' })).toBeEnabled();
   });

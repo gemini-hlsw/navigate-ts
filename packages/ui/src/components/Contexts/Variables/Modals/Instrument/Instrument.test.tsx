@@ -30,23 +30,28 @@ describe(`${Instrument.name} modal`, () => {
   ];
 
   it('should hide with importInstrument false', async () => {
-    const sut = await renderWithContext(<Instrument />, { mocks, initialValues: [[importInstrumentAtom, false]] });
+    await renderWithContext(<Instrument />, { mocks, initialValues: [[importInstrumentAtom, false]] });
+    const dialog = page.getByRole('dialog');
 
-    await expect.element(sut.getByTestId('import-instrument-modal-content')).not.toBeInTheDocument();
+    await expect.element(dialog).not.toBeInTheDocument();
   });
 
   it('should show with importInstrument true', async () => {
-    const sut = await renderWithContext(<Instrument />, { mocks, initialValues: [[importInstrumentAtom, true]] });
+    await renderWithContext(<Instrument />, { mocks, initialValues: [[importInstrumentAtom, true]] });
+    const dialog = page.getByRole('dialog');
 
-    await expect.element(sut.getByTestId('import-instrument-modal-content')).toBeInTheDocument();
+    await expect.element(dialog.getByText('Import instrument')).toBeVisible();
+    await expect.element(dialog.getByLabelText('Instrument', { exact: true })).toBeEnabled();
+    await expect.element(dialog.getByRole('button', { name: 'Import' })).toBeDisabled();
   });
 
   it('should show instruments after selecting name and port', async () => {
     const sut = await renderWithContext(<Instrument />, { mocks, initialValues: [[importInstrumentAtom, true]] });
+    const dialog = page.getByRole('dialog');
 
     // Select instrument options
-    await selectDropdownOption(sut, 'Instrument', 'GMOS_SOUTH');
-    await selectDropdownOption(sut, 'issPort', '3');
+    await selectDropdownOption(sut, 'Select instrument', 'GMOS_SOUTH');
+    await selectDropdownOption(sut, 'Select port', '3');
     await expect
       .poll(() => getInstrumentsMock.request.variables)
       .toHaveBeenCalledExactlyOnceWith({
@@ -55,8 +60,8 @@ describe(`${Instrument.name} modal`, () => {
       });
 
     // Select first row of instrument table and import it
-    await userEvent.click(page.getByText('Initial configuration').first());
-    await userEvent.click(page.getByTestId('import-button'));
+    await userEvent.click(dialog.getByText('Initial configuration').first());
+    await userEvent.click(dialog.getByTestId('import-button'));
 
     expect(updateConfigurationMock.request.variables).toHaveBeenCalledExactlyOnceWith({
       obsInstrument: 'GMOS_SOUTH',

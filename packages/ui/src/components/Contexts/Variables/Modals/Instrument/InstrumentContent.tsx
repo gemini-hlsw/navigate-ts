@@ -1,13 +1,10 @@
 import { skipToken } from '@apollo/client/react';
-import { useConfiguration, useUpdateConfiguration } from '@gql/configs/Configuration';
 import {
-  GET_INSTRUMENT,
   useConfiguredInstrument,
   useDeleteInstrument,
   useDistinctInstruments,
   useDistinctPorts,
   useInstruments,
-  useSetTemporaryInstrument,
 } from '@gql/configs/Instrument';
 import type { Instrument as InstrumentName } from '@gql/odb/gen/graphql';
 import { formatDate } from 'date-fns';
@@ -16,138 +13,45 @@ import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
 import { ConfirmPopup, confirmPopup } from 'primereact/confirmpopup';
 import { DataTable } from 'primereact/datatable';
-import { Dialog } from 'primereact/dialog';
 import { Dropdown } from 'primereact/dropdown';
 import { useMountEffect } from 'primereact/hooks';
 import { MultiSelect } from 'primereact/multiselect';
 import { useRef, useState } from 'react';
 
-import { useImportInstrument } from '@/components/atoms/instrument';
 import { CircleCheck, CircleXMark, Trash } from '@/components/Icons';
-import { useToast } from '@/Helpers/toast';
 import type { InstrumentType } from '@/types';
 
-export function Instrument() {
-  const [importInstrument, setImportInstrument] = useImportInstrument();
-
-  const [instrument, setInstrument] = useState<InstrumentType | null>(null);
-
-  const { data: configurationData, loading: configurationLoading } = useConfiguration();
-
-  const { data: configuredInstrument, loading: configuredInstrumentLoading } = useConfiguredInstrument();
-
-  const [setTemporaryInstrument, { loading: setTemporaryInstrumentLoading }] = useSetTemporaryInstrument();
-  const [updateConfiguration, { loading: updateConfigurationLoading }] = useUpdateConfiguration();
-
-  const toast = useToast();
-
-  const closeModal = () => {
-    setImportInstrument(false);
-    setInstrument(null);
-  };
-
-  const modifyInstrument = async () => {
-    if (instrument && configurationData?.configuration) {
-      await Promise.all([
-        setTemporaryInstrument({
-          variables: {
-            ...instrument,
-          },
-        }),
-        updateConfiguration({
-          variables: {
-            pk: configurationData.configuration.pk,
-            obsInstrument: instrument.name,
-          },
-          optimisticResponse: {
-            updateConfiguration: {
-              ...configurationData.configuration,
-              obsInstrument: instrument.name,
-            },
-          },
-          refetchQueries: [GET_INSTRUMENT],
-          awaitRefetchQueries: true,
-        }),
-      ]);
-
-      if (instrument.comment?.includes('Default fallback configuration')) {
-        toast?.show({
-          severity: 'warn',
-          summary: 'Warning',
-          detail: instrument.comment,
-        });
-      }
-
-      closeModal();
-    } else {
-      toast?.show({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'No instrument selected',
-      });
-    }
-  };
-
-  const loading =
-    setTemporaryInstrumentLoading || updateConfigurationLoading || configurationLoading || configuredInstrumentLoading;
-
-  const footer = (
-    <div className="modal-footer">
-      <Button text severity="danger" label="Cancel" onClick={closeModal} />
-      <Button
-        label="Import"
-        disabled={!instrument}
-        loading={loading}
-        onClick={modifyInstrument}
-        data-testid="import-button"
-      />
-    </div>
-  );
-
-  return (
-    <Dialog header="Import instrument" visible={importInstrument} footer={footer} modal onHide={closeModal}>
-      <InstrumentModalContent
-        instrument={instrument}
-        setInstrument={setInstrument}
-        importInstrument={importInstrument}
-        configuredInstrument={configuredInstrument}
-      />
-    </Dialog>
-  );
-}
-
-function InstrumentModalContent({
-  importInstrument,
+export function InstrumentContent({
   instrument,
   setInstrument,
-  configuredInstrument,
 }: {
-  importInstrument: boolean;
   instrument: InstrumentType | null;
   setInstrument: (_: InstrumentType | null) => void;
-  configuredInstrument: InstrumentType | undefined;
 }) {
+  const { data: configuredInstrument, loading: configuredInstrumentLoading } = useConfiguredInstrument();
+
   const [name, setName] = useState<InstrumentName | null>(configuredInstrument?.name ?? null);
   const [port, setPort] = useState<number | null>(configuredInstrument?.issPort ?? null);
 
   const [deleteInstrument, { loading: deleteInstrumentLoading }] = useDeleteInstrument();
 
-  const { data: distinctInstrumentsData, loading: distinctInstrumentsLoading } = useDistinctInstruments({
-    skip: !importInstrument,
-  });
+  const { data: distinctInstrumentsData, loading: distinctInstrumentsLoading } = useDistinctInstruments({});
   const { data: distinctPortsData, loading: distinctPortsLoading } = useDistinctPorts(
-    !name ? skipToken : { skip: !importInstrument, variables: { name } },
+    !name ? skipToken : { variables: { name } },
   );
   const { data: instrumentsData, loading: instrumentsLoading } = useInstruments(
-    !name || !port
-      ? skipToken
-      : { skip: !importInstrument, fetchPolicy: 'cache-and-network', variables: { name, issPort: port } },
+    !name || !port ? skipToken : { fetchPolicy: 'cache-and-network', variables: { name, issPort: port } },
   );
 
   const nameOptions = distinctInstrumentsData?.distinctInstruments ?? [];
   const portOptions = distinctPortsData?.distinctPorts ?? [];
 
-  const loading = distinctInstrumentsLoading || distinctPortsLoading || instrumentsLoading || deleteInstrumentLoading;
+  const loading =
+    distinctInstrumentsLoading ||
+    distinctPortsLoading ||
+    instrumentsLoading ||
+    deleteInstrumentLoading ||
+    configuredInstrumentLoading;
 
   return (
     <div className="import-instrument" data-testid="import-instrument-modal-content">

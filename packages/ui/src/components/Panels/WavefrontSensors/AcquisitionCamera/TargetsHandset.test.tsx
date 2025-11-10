@@ -297,11 +297,11 @@ describe(TargetsHandset.name, () => {
   });
 
   async function selectAlignment(alignment: Alignment) {
-    await selectDropdownOption(sut, 'Alignment', alignment);
+    await selectDropdownOption(sut, 'Select alignment', alignment);
   }
 
   async function selectTarget(target: AdjustTarget) {
-    await selectDropdownOption(sut, 'Target', target);
+    await selectDropdownOption(sut, 'Select target', target);
   }
 
   async function testDirectionButtonClick(

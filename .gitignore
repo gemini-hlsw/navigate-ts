@@ -30,12 +30,6 @@ coverage/
 .env.*
 !.env.example
 
-# sbt specific
-target/
-metals.sbt
-.bsp/
-
-
 /packages/ui/src/gql/*/gen/
 /packages/configs/src/*/gen/
 

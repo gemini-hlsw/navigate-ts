@@ -1,13 +1,13 @@
 import './Modals.css';
 
-import { About } from './About';
-import { CalParams } from './CalParams';
-import { CalParamsHistory } from './CalParamsHistory';
+import { About } from './About/About';
+import { CalParams } from './CalParams/CalParams';
+import { CalParamsHistory } from './CalParams/CalParamsHistory';
 import { Catalog } from './Catalog/Catalog';
-import { Instrument } from './Instrument';
+import { Instrument } from './Instrument/Instrument';
 import { OdbImport } from './OdbImport/OdbImport';
-import { SlewFlags } from './SlewFlags';
-import { Target } from './Target';
+import { SlewFlags } from './SlewFlags/SlewFlags';
+import { Target } from './Target/Target';
 
 export function Modals() {
   return (

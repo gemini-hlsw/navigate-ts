@@ -16,13 +16,13 @@ describe(M2Baffles.name, () => {
   });
 
   it('should render', async () => {
-    await expect.element(sut.getByLabelText('Mode')).toHaveValue('AUTO');
+    await expect.element(sut.getByLabelText('Mode', { exact: true })).toHaveValue('AUTO');
     expect(sut.getByLabelText('Central Baffle')).not.toBeInTheDocument();
     expect(sut.getByLabelText('Deployable Baffle')).not.toBeInTheDocument();
   });
 
   it('should render manual options when mode is MANUAL', async () => {
-    await selectDropdownOption(sut, 'Mode', 'MANUAL');
+    await selectDropdownOption(sut, 'Select mode', 'MANUAL');
 
     expect(updateConfigurationMock.request.variables).toHaveBeenCalledExactlyOnceWith({
       pk: 1,

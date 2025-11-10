@@ -3,42 +3,22 @@ import type { CalParamsCreateInput } from '@gql/configs/gen/graphql';
 import { CommentConfirmButton } from '@Shared/CommentConfirmButton';
 import { clsx } from 'clsx';
 import { Button } from 'primereact/button';
-import { Dialog } from 'primereact/dialog';
 import { InputNumber, type InputNumberProps } from 'primereact/inputnumber';
 import { Tooltip } from 'primereact/tooltip';
-import { startTransition, Suspense, useEffect, useId, useState } from 'react';
+import { startTransition, useEffect, useId, useState } from 'react';
 
 import { useCanEdit } from '@/components/atoms/auth';
-import { useCalParamsVisible, useSetCalParamsHistoryVisible } from '@/components/atoms/calparams';
+import { useSetCalParamsHistoryVisible } from '@/components/atoms/calparams';
 import { useServerConfigValue } from '@/components/atoms/config';
 import { ClockRotateLeft, FloppyDisk, TriangleExclamation } from '@/components/Icons';
-import { SolarProgress } from '@/components/SolarProgress';
 import { isNotNullish } from '@/Helpers/functions';
-
-export function CalParams() {
-  const [visible, setVisible] = useCalParamsVisible();
-
-  return (
-    <Dialog header="Calibration Parameters" visible={visible} onHide={() => setVisible(false)}>
-      <Suspense
-        fallback={
-          <div className="cal-params-loading">
-            <SolarProgress />
-          </div>
-        }
-      >
-        <CalParamsContent />
-      </Suspense>
-    </Dialog>
-  );
-}
 
 /**
  * Format numbers with at least 2 fraction digits.
  */
 const numFormat = new Intl.NumberFormat(undefined, { minimumFractionDigits: 2 });
 
-function CalParamsContent() {
+export function CalParamsContent() {
   const { site } = useServerConfigValue();
   const setCalParamsHistoryVisible = useSetCalParamsHistoryVisible();
 

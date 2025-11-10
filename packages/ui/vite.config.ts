@@ -128,6 +128,7 @@ export default defineConfig(({ mode }) => ({
     browser: {
       enabled: true,
       provider: playwright({
+        actionTimeout: 10_000,
         contextOptions: {
           // Disable animations in tests to speed them up
           reducedMotion: 'reduce',

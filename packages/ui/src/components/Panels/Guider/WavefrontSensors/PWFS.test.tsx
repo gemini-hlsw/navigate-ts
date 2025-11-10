@@ -29,7 +29,7 @@ describe(PWFS1.name, () => {
   it('should call pwfs1Filter when changing filter', async () => {
     const sut = await renderWithContext(<PWFS1 disabled={false} />, { mocks });
 
-    await selectDropdownOption(sut, 'Filter', 'Red');
+    await selectDropdownOption(sut, 'Select filter', 'Red');
 
     expect(pwfs1FilterMock.request.variables).toHaveBeenCalledWith({ filter: 'RED' });
   });
@@ -37,7 +37,7 @@ describe(PWFS1.name, () => {
   it('should call pwfs1FieldStop when changing field stop', async () => {
     const sut = await renderWithContext(<PWFS1 disabled={false} />, { mocks });
 
-    await selectDropdownOption(sut, 'Field stop', 'open1');
+    await selectDropdownOption(sut, 'Select stop', 'open1');
 
     expect(pwfs1FieldStopMock.request.variables).toHaveBeenCalledWith({ fieldStop: 'OPEN1' });
   });
@@ -57,7 +57,7 @@ describe(PWFS2.name, () => {
   it('should call pwfs2Filter when changing filter', async () => {
     const sut = await renderWithContext(<PWFS2 disabled={false} />, { mocks });
 
-    await selectDropdownOption(sut, 'Filter', 'Red');
+    await selectDropdownOption(sut, 'Select filter', 'Red');
 
     expect(pwfs2FilterMock.request.variables).toHaveBeenCalledWith({ filter: 'RED' });
   });
@@ -65,7 +65,7 @@ describe(PWFS2.name, () => {
   it('should call pwfs2FieldStop when changing field stop', async () => {
     const sut = await renderWithContext(<PWFS2 disabled={false} />, { mocks });
 
-    await selectDropdownOption(sut, 'Field stop', 'open2');
+    await selectDropdownOption(sut, 'Select stop', 'open2');
 
     expect(pwfs2FieldStopMock.request.variables).toHaveBeenCalledWith({ fieldStop: 'OPEN2' });
   });

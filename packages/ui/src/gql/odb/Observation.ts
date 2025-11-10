@@ -153,7 +153,7 @@ export const GET_GUIDE_ENVIRONMENT = graphql(`
 `);
 
 export function useGetGuideEnvironment() {
-  return useLazyQuery(GET_GUIDE_ENVIRONMENT);
+  return useLazyQuery(GET_GUIDE_ENVIRONMENT, { errorPolicy: 'all' });
 }
 
 export const GET_CENTRAL_WAVELENGTH = graphql(`
@@ -209,5 +209,5 @@ export const GET_CENTRAL_WAVELENGTH = graphql(`
 `);
 
 export function useGetCentralWavelength() {
-  return useLazyQuery(GET_CENTRAL_WAVELENGTH);
+  return useLazyQuery(GET_CENTRAL_WAVELENGTH, { errorPolicy: 'all' });
 }

@@ -41,6 +41,7 @@ export function M2Baffles({ canEdit }: { canEdit: boolean }) {
           options={modeOptions}
           value={configuration?.baffleMode ?? null}
           onChange={(e) => updateBaffle({ baffleMode: e.value as BaffleMode })}
+          placeholder="Select mode"
         />
 
         {configuration?.baffleMode === 'MANUAL' && (

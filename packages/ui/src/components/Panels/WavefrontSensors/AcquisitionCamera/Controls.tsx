@@ -56,6 +56,7 @@ export function AlignmentSelector({
         value={alignment}
         options={alignmentOptions.map((cs) => cs)}
         onChange={(e) => updateAlignment(e.value as Alignment)}
+        placeholder="Select alignment"
       />
     </>
   );
