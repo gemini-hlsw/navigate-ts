@@ -6,7 +6,7 @@ catalog:
   '@parcel/watcher': 2.5.1
   '@types/node': 24.10.0
   graphql: 16.12.0
-  lucuma-core: 0.153.0
+  lucuma-core: 0.153.1
   lucuma-schemas: 0.177.0-20251111-be36d1b1
   typescript: 5.9.3
 
