@@ -1,4 +1,4 @@
-import { formatToSignedArcseconds, isNotNullish, isNullish } from './functions';
+import { formatToSignedArcseconds, isNotNullish, isNullish, round } from './functions';
 
 describe(formatToSignedArcseconds.name, () => {
   it('should format signed arcseconds correctly', () => {
@@ -57,5 +57,26 @@ describe(isNotNullish.name, () => {
     expect(isNotNullish([])).true;
     expect(isNotNullish({})).true;
     expect(isNotNullish(1)).true;
+  });
+});
+
+describe(round.name, () => {
+  it('should round numbers correctly', () => {
+    expect(round(1.23, 2)).toBe('1.23');
+    expect(round(1.2349, 2)).toBe('1.23');
+    expect(round(1.235, 2)).toBe('1.24');
+    expect(round(-1.2349, 2)).toBe('-1.23');
+    expect(round(-1.235, 2)).toBe('-1.24');
+    expect(round(1.2, 3)).toBe('1.200');
+    expect(round(1.9999, 3)).toBe('2.000');
+  });
+
+  it('should handle zero decimals', () => {
+    expect(round(1.5, 0)).toBe('2');
+    expect(round(1.4, 0)).toBe('1');
+  });
+
+  it('throws for negative decimals', () => {
+    expect(() => round(1.2345, -2)).toThrow();
   });
 });

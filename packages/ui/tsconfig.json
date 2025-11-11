@@ -1,6 +1,7 @@
 {
   "extends": ["@tsconfig/strictest/tsconfig", "@tsconfig/vite-react/tsconfig.json"],
   "compilerOptions": {
+    "lib": ["ES2024", "DOM", "DOM.Iterable"],
     "paths": {
       "@Telescope/*": ["./src/components/Panels/Telescope/*"],
       "@WavefrontSensors/*": ["./src/components/Panels/WavefrontSensors/*"],

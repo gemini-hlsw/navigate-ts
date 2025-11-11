@@ -42,7 +42,6 @@ export function Rotator({ canEdit }: { canEdit: boolean }) {
           value={rotator?.angle ?? null}
           minFractionDigits={2}
           maxFractionDigits={3}
-          roundingMode="halfEven"
           onValueChange={async (e) => {
             if (rotator)
               await updateRotator({

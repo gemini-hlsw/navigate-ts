@@ -39,8 +39,19 @@ export function formatToSignedArcseconds(arcseconds: number | string | undefined
     if (Number.isNaN(num)) {
       return defaultValue;
     }
-    return signedArcSeconds(num).toFixed(2);
+    return round(signedArcSeconds(num), 2);
   }
+}
+
+/**
+ * Round a number to a specified number of decimal places
+ */
+export function round(value: number, decimals: number): string {
+  return value.toLocaleString(undefined, {
+    minimumFractionDigits: decimals,
+    maximumFractionDigits: decimals,
+    useGrouping: false,
+  });
 }
 
 /**

@@ -1,6 +1,7 @@
 import type { LogMessage } from '@gql/server/gen/graphql';
 import { useLogMessages } from '@gql/server/Logs';
 import { Title } from '@Shared/Title/Title';
+import { formatDate } from 'date-fns';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 
@@ -21,7 +22,12 @@ export default function Logs() {
           e.stopPropagation();
         }}
       >
-        <Column field="timestamp" header="Timestamp" className="text-small"></Column>
+        <Column
+          field="timestamp"
+          header="Timestamp"
+          className="text-small"
+          body={(t: LogMessage) => formatDate(new Date(t.timestamp), 'Ppp')}
+        ></Column>
         <Column field="message" header="Message" className="log-message text-small"></Column>
       </DataTable>
     </div>
