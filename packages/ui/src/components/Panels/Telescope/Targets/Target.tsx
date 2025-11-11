@@ -3,6 +3,7 @@ import { useRef } from 'react';
 
 import { useCanEdit } from '@/components/atoms/auth';
 import { useSetTargetEdit } from '@/components/atoms/target';
+import { isNotNullish, round } from '@/Helpers/functions';
 import { useLongPress } from '@/Helpers/longPress';
 import type { TargetType, TypeOfTarget } from '@/types';
 
@@ -88,7 +89,7 @@ export function Target({
           <span className="text-right">{target.ra?.hms}&nbsp;RA</span>
           <span className="text-right">{target.dec?.dms}&nbsp;Dec</span>
           <span className="text-right">
-            {target.band}&nbsp;{target.magnitude?.toFixed(2)}
+            {target.band}&nbsp;{isNotNullish(target.magnitude) && round(target.magnitude, 2)}
           </span>
         </div>
       </li>

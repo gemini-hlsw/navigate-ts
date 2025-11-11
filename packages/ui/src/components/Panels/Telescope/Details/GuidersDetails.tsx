@@ -1,5 +1,7 @@
 import { Title } from '@Shared/Title/Title';
 
+import { round } from '@/Helpers/functions';
+
 export function GuidersDetails() {
   const GUIDERS_VALUES = [
     {
@@ -31,9 +33,9 @@ export function GuidersDetails() {
   const rows = GUIDERS_VALUES.map((row) => (
     <div className="row" key={`guiders-row-${row.name}`}>
       <span>{row.name}</span>
-      <span className={row.x > row.x_max || row.x < row.x_min ? 'vals error' : 'vals'}>{row.x.toFixed(2)}</span>
-      <span className={row.y > row.y_max || row.y < row.y_min ? 'vals error' : 'vals'}>{row.y.toFixed(2)}</span>
-      <span className={row.r > row.r_max || row.r < row.r_min ? 'vals error' : 'vals'}>{row.r.toFixed(2)}</span>
+      <span className={row.x > row.x_max || row.x < row.x_min ? 'vals error' : 'vals'}>{round(row.x, 2)}</span>
+      <span className={row.y > row.y_max || row.y < row.y_min ? 'vals error' : 'vals'}>{round(row.y, 2)}</span>
+      <span className={row.r > row.r_max || row.r < row.r_min ? 'vals error' : 'vals'}>{round(row.r, 2)}</span>
     </div>
   ));
 
