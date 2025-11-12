@@ -68,6 +68,23 @@ const selectedObservation: OdbObservationType = {
     label: 'G-2025B-0571-Q-0003',
     __typename: 'ObservationReference',
   },
+  program: {
+    id: 'p-11d',
+    pi: {
+      id: 'm-14f',
+      user: {
+        id: 'u-7ea',
+        profile: {
+          givenName: 'Bryan',
+          familyName: 'Miller',
+          __typename: 'UserProfile',
+        },
+        __typename: 'User',
+      },
+      __typename: 'ProgramUser',
+    },
+    __typename: 'Program',
+  },
   targetEnvironment: {
     firstScienceTarget: {
       id: 't-60d',
