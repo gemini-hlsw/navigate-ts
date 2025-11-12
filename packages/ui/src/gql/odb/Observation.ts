@@ -12,6 +12,19 @@ export const OBSERVATION_FRAGMENT = graphql(`
     reference {
       label
     }
+    program {
+      id
+      pi {
+        id
+        user {
+          id
+          profile {
+            givenName
+            familyName
+          }
+        }
+      }
+    }
     targetEnvironment {
       firstScienceTarget {
         ...TargetItem

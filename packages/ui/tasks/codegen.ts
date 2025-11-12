@@ -38,7 +38,7 @@ const scalars = {
   PosInt: 'number',
   PosLong: 'number',
   PosShort: 'number',
-  ProgramId: 'number',
+  ProgramId: 'string',
   ProgramReferenceLabel: 'string',
   ProgramUserId: 'string',
   ProposalReferenceLabel: 'string',
