@@ -55,11 +55,11 @@ export default function WavefrontSensor({
   } else if (wfs === 'PWFS1') {
     /* Show placeholder */
     observeButton = <Pwfs1ObserveButton canEdit={canEdit && !configLoading} />;
-    skyButton = <TakeSkyButton freq={freq} wfs="PWFS_1" canEdit={canEdit} />;
+    skyButton = <TakeSkyButton freq={freq} wfs="PWFS1" canEdit={canEdit} />;
   } else if (wfs === 'PWFS2') {
     /* Show placeholder */
     observeButton = <Pwfs2ObserveButton canEdit={canEdit && !configLoading} />;
-    skyButton = <TakeSkyButton freq={freq} wfs="PWFS_2" canEdit={canEdit} />;
+    skyButton = <TakeSkyButton freq={freq} wfs="PWFS2" canEdit={canEdit} />;
   }
 
   return (
@@ -165,7 +165,6 @@ function TakeSkyButton({ freq, wfs, canEdit }: { freq: number; wfs: GuideProbe; 
 
   return (
     <Button
-      className={wfs.includes('OIWFS') ? '' : 'under-construction'}
       loading={takeSkyLoading}
       disabled={!canEdit || configLoading}
       style={{ gridArea: 'g23' }}

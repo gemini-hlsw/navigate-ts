@@ -65,9 +65,9 @@ export function Configuration() {
       case 'OI':
         return instrumentToOiwfs(instrument);
       case 'P1':
-        return 'PWFS_1';
+        return 'PWFS1';
       case 'P2':
-        return 'PWFS_2';
+        return 'PWFS2';
       default:
         return undefined;
     }

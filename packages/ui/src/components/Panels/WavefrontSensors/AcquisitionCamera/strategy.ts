@@ -105,8 +105,8 @@ export const strategies = {
       },
     }),
   },
-  PWFS1: wfsStrategy('PWFS_1'),
-  PWFS2: wfsStrategy('PWFS_2'),
+  PWFS1: wfsStrategy('PWFS1'),
+  PWFS2: wfsStrategy('PWFS2'),
   OIWFS: wfsStrategy('GMOS_OIWFS'),
 } satisfies Record<Alignment, HandsetStrategy>;
 

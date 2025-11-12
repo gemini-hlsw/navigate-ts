@@ -14,7 +14,7 @@ function GuiderFooter({ disabled }: { disabled: boolean }) {
     <div className="guiders-footer">
       <Dropdown
         disabled={disabled} // check is a valid target
-        value={'NORMAL'}
+        value="NORMAL"
         options={[{ label: 'Normal Guiding', value: 'NORMAL' }]}
       />
     </div>
@@ -34,7 +34,7 @@ export function GuiderTargets() {
   const displayProbes: React.ReactNode[] = [];
   if (oiTargets.length) {
     displayProbes.push(
-      <div key={'OIWFS'} className="guide-probe">
+      <div key="OIWFS" className="guide-probe">
         <Title title={oiSelected ? `OIWFS: ${oiSelected.name}` : 'OIWFS'} />
         <TargetList targets={oiTargets} type="OIWFS" />
         <GuiderFooter disabled={!canEdit} />
@@ -44,7 +44,7 @@ export function GuiderTargets() {
 
   if (p1Targets.length) {
     displayProbes.push(
-      <div key={'PWFS1'} className="guide-probe">
+      <div key="PWFS1" className="guide-probe">
         <Title title={p1Selected ? `PWFS1: ${p1Selected.name}` : 'PWFS1'} />
         <TargetList targets={p1Targets} type="PWFS1" />
         <GuiderFooter disabled={!canEdit} />
@@ -54,7 +54,7 @@ export function GuiderTargets() {
 
   if (p2Targets.length) {
     displayProbes.push(
-      <div key={'PWFS2'} className="guide-probe">
+      <div key="PWFS2" className="guide-probe">
         <Title title={p2Selected ? `PWFS2: ${p2Selected.name}` : 'PWFS2'} />
         <TargetList targets={p2Targets} type="PWFS2" />
         <GuiderFooter disabled={!canEdit} />
