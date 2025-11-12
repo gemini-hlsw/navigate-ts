@@ -14,7 +14,7 @@ export function Rotator({ canEdit }: { canEdit: boolean }) {
 
   return (
     <div className="rotator">
-      <Title title={'Rotator'} />
+      <Title title="Rotator" />
       <div className="body">
         <label htmlFor="rotator-mode" className="label">
           Mode

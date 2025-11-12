@@ -292,7 +292,7 @@ describe(TargetsHandset.name, () => {
     await testDirectionButtonClick(testId, undefined, adjustTargetMutationMock.request.variables, {
       target: 'OIWFS',
       openLoops: true,
-      offset: { probeFrameAdjustment: { ...expectedInput, probeFrame: 'PWFS_2' } },
+      offset: { probeFrameAdjustment: { ...expectedInput, probeFrame: 'PWFS2' } },
     });
   });
 

@@ -103,7 +103,7 @@ export function Altair({ canEdit }: { canEdit: boolean }) {
 
   return (
     <div className="ao-altair under-construction">
-      <Title title={'Altair'} />
+      <Title title="Altair" />
       <div className="body">
         <label htmlFor="beamsplitter" className="label">
           Beamsplitter

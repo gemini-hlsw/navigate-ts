@@ -27,9 +27,9 @@ export function extractGuideTargets(data: GetGuideEnvironmentQuery | undefined) 
       };
       if (t.probe.endsWith('OIWFS')) {
         acc.oiwfs.push({ ...auxTarget, type: 'OIWFS' });
-      } else if (t.probe === 'PWFS_1') {
+      } else if (t.probe === 'PWFS1') {
         acc.pwfs1.push({ ...auxTarget, type: 'PWFS1' });
-      } else if (t.probe === 'PWFS_2') {
+      } else if (t.probe === 'PWFS2') {
         acc.pwfs2.push({ ...auxTarget, type: 'PWFS2' });
       } else {
         console.warn('Unknown guide target:', t);

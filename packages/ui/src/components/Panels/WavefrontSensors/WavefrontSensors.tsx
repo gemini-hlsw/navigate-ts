@@ -16,11 +16,11 @@ export function WavefrontSensors({ prevPanel, nextPanel }: { prevPanel: () => vo
       <Title title="WAVEFRONT SENSORS" prevPanel={prevPanel} nextPanel={nextPanel}></Title>
       <div className="body">
         <div className="sensors">
-          <WavefrontSensor canEdit={canEdit} wfs={'OIWFS'} />
-          <WavefrontSensor canEdit={canEdit} wfs={'PWFS1'} className="under-construction" />
-          <WavefrontSensor canEdit={canEdit} wfs={'PWFS2'} className="under-construction" />
+          <WavefrontSensor canEdit={canEdit} wfs="OIWFS" />
+          <WavefrontSensor canEdit={canEdit} wfs="PWFS1" />
+          <WavefrontSensor canEdit={canEdit} wfs="PWFS2" />
         </div>
-        <AcquisitionCamera canEdit={canEdit} ac={'AC'} />
+        <AcquisitionCamera canEdit={canEdit} ac="AC" />
         <Logs />
       </div>
     </div>
