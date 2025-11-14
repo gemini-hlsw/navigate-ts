@@ -22,27 +22,37 @@ export function createInstrumentSpecificsInput(instrument: InstrumentConfig): In
 
 export function createTargetPropertiesInput(target: Target): TargetPropertiesInput {
   return {
-    id: target.id ?? '',
+    id: target.id,
     name: target.name,
-    sidereal: {
-      ra: { hms: target?.ra?.hms },
-      dec: { dms: target?.dec?.dms },
-      epoch: target?.epoch,
-      properMotion: {
-        ra: {
-          microarcsecondsPerYear: target.properMotion?.ra,
-        },
-        dec: {
-          microarcsecondsPerYear: target.properMotion?.dec,
-        },
-      },
-      radialVelocity: {
-        centimetersPerSecond: target.radialVelocity,
-      },
-      parallax: {
-        microarcseconds: target.parallax,
-      },
-    },
+    sidereal:
+      target.type !== 'FIXED'
+        ? {
+            ra: { hms: target.ra?.hms },
+            dec: { dms: target.dec?.dms },
+            epoch: target.epoch,
+            properMotion: {
+              ra: {
+                microarcsecondsPerYear: target.properMotion?.ra,
+              },
+              dec: {
+                microarcsecondsPerYear: target.properMotion?.dec,
+              },
+            },
+            radialVelocity: {
+              centimetersPerSecond: target.radialVelocity,
+            },
+            parallax: {
+              microarcseconds: target.parallax,
+            },
+          }
+        : undefined,
+    azel:
+      target.type === 'FIXED'
+        ? {
+            azimuth: { degrees: target.az?.degrees },
+            elevation: { degrees: target.el?.degrees },
+          }
+        : undefined,
     // nonsidereal: // <- ???
     wavelength: target.wavelength ? { nanometers: target.wavelength } : undefined,
   };
