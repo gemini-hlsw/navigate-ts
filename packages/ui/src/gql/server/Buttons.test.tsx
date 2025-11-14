@@ -40,7 +40,6 @@ describe(Slew.name, () => {
                 "micrometers": 1.05,
               },
             },
-            "manualConfig": undefined,
           },
           "instParams": {
             "agName": "ACQ_CAM",
