@@ -1,5 +1,6 @@
 import imgUrl from '@assets/underconstruction.png';
 import { useConfiguration } from '@gql/configs/Configuration';
+import type { WfsType } from '@gql/configs/gen/graphql';
 import type { GuideProbe } from '@gql/server/gen/graphql';
 import { useGuideState } from '@gql/server/GuideState';
 import { useOiwfsObserve, useOiwfsStopObserve, useTakeSky } from '@gql/server/WavefrontSensors';
@@ -18,7 +19,7 @@ export default function WavefrontSensor({
   className,
 }: {
   canEdit: boolean;
-  wfs: 'OIWFS' | 'PWFS1' | 'PWFS2';
+  wfs: Omit<WfsType, 'NONE'>;
   className?: string;
 }) {
   const id = useId();

@@ -61,23 +61,28 @@ export function createTargetPropertiesInput(target: Target): TargetPropertiesInp
 export function createBafflesInput(
   calParams: Pick<CalParams, 'baffleVisible' | 'baffleNearIR'>,
   configuration: Pick<Configuration, 'baffleMode' | 'centralBaffle' | 'deployableBaffle'>,
-): BaffleConfigInput {
-  return {
-    autoConfig:
-      configuration.baffleMode === 'AUTO'
-        ? {
-            nearirLimit: { micrometers: calParams.baffleNearIR },
-            visibleLimit: { micrometers: calParams.baffleVisible },
-          }
-        : undefined,
-    manualConfig:
-      configuration.baffleMode === 'MANUAL'
-        ? {
-            centralBaffle: configuration.centralBaffle!,
-            deployableBaffle: configuration.deployableBaffle!,
-          }
-        : undefined,
-  };
+): BaffleConfigInput | undefined {
+  switch (configuration.baffleMode) {
+    case 'AUTO':
+      return {
+        autoConfig: {
+          nearirLimit: { micrometers: calParams.baffleNearIR },
+          visibleLimit: { micrometers: calParams.baffleVisible },
+        },
+      };
+    case 'MANUAL':
+      return {
+        manualConfig: {
+          centralBaffle: configuration.centralBaffle!,
+          deployableBaffle: configuration.deployableBaffle!,
+        },
+      };
+    case 'IGNORED':
+      return undefined;
+    default:
+      console.warn(`Unknown baffle mode: ${String(configuration.baffleMode)}`);
+      return undefined;
+  }
 }
 
 export function createTcsConfigInput(
