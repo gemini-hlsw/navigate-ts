@@ -9,7 +9,7 @@ import { useRotator } from '@gql/configs/Rotator';
 import { useSlewFlags } from '@gql/configs/SlewFlags';
 import { useTargets } from '@gql/configs/Target';
 import type { VariablesOf } from '@graphql-typed-document-node/core';
-import { createBafflesInput } from '@Telescope/Targets/inputs';
+import { createTcsConfigInput } from '@Telescope/Targets/inputs';
 import { clsx } from 'clsx';
 import type { ButtonProps } from 'primereact/button';
 import { Button } from 'primereact/button';
@@ -23,7 +23,7 @@ import type { SlewFlagsType } from '@/types';
 
 import { MOUNT_FOLLOW_MUTATION, OIWFS_FOLLOW_MUTATION, ROTATOR_FOLLOW_MUTATION, SCS_FOLLOW_MUTATION } from './follow';
 import { graphql } from './gen';
-import type { Instrument, MechSystemState } from './gen/graphql';
+import type { MechSystemState, RunSlewMutationVariables } from './gen/graphql';
 import { MOUNT_PARK_MUTATION, OIWFS_PARK_MUTATION, ROTATOR_PARK_MUTATION } from './park';
 
 // Generic mutation button
@@ -212,90 +212,10 @@ export function Slew(props: ButtonProps) {
     );
   }
 
-  const variables: VariablesOf<typeof SLEW_MUTATION> = {
+  const variables: RunSlewMutationVariables = {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     slewOptions: (({ pk, __typename, ...o }) => o)(slewFlags),
-    config: {
-      instParams: {
-        iaa: { degrees: instrument.iaa },
-        focusOffset: { micrometers: instrument.focusOffset },
-        agName: instrument.name,
-        origin: {
-          x: { arcseconds: instrument.originX },
-          y: { arcseconds: instrument.originY },
-        },
-      },
-      sourceATarget: {
-        id: selectedTarget.id,
-        name: selectedTarget.name,
-        sidereal:
-          selectedTarget.type === 'FIXED'
-            ? undefined
-            : {
-                ra: { hms: selectedTarget?.ra?.hms },
-                dec: { dms: selectedTarget?.dec?.dms },
-                epoch: selectedTarget?.epoch,
-                properMotion: {
-                  ra: {
-                    microarcsecondsPerYear: selectedTarget.properMotion?.ra,
-                  },
-                  dec: {
-                    microarcsecondsPerYear: selectedTarget.properMotion?.dec,
-                  },
-                },
-                radialVelocity: {
-                  centimetersPerSecond: selectedTarget.radialVelocity,
-                },
-                parallax: {
-                  microarcseconds: selectedTarget.parallax,
-                },
-              },
-        azel:
-          selectedTarget.type === 'FIXED'
-            ? {
-                azimuth: { degrees: selectedTarget.az?.degrees },
-                elevation: { degrees: selectedTarget.el?.degrees },
-              }
-            : undefined,
-        wavelength: { nanometers: selectedTarget.wavelength },
-      },
-      instrument: instrument.name as Instrument,
-      rotator: { ipa: { degrees: rotator.angle }, mode: rotator.tracking },
-      baffles: createBafflesInput(calParams, configuration),
-      ...(selectedOiTarget && {
-        oiwfs: {
-          target: {
-            name: selectedOiTarget.name,
-            sidereal: {
-              ra: { hms: selectedOiTarget.ra?.hms },
-              dec: { dms: selectedOiTarget.dec?.dms },
-              epoch: selectedOiTarget.epoch,
-              properMotion: {
-                ra: {
-                  microarcsecondsPerYear: selectedOiTarget.properMotion?.ra,
-                },
-                dec: {
-                  microarcsecondsPerYear: selectedOiTarget.properMotion?.dec,
-                },
-              },
-              radialVelocity: {
-                centimetersPerSecond: selectedOiTarget.radialVelocity,
-              },
-              parallax: {
-                microarcseconds: selectedOiTarget.parallax,
-              },
-            },
-          },
-          tracking: {
-            // TODO: this should be selected depending on the "GuiderFooter" dropdown value!
-            nodAchopA: true,
-            nodAchopB: false,
-            nodBchopA: false,
-            nodBchopB: true,
-          },
-        },
-      }),
-    },
+    config: createTcsConfigInput(instrument, rotator, selectedTarget, selectedOiTarget, calParams, configuration),
     obsId: configuration?.obsId,
   };
 
