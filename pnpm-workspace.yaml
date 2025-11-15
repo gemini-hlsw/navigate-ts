@@ -2,7 +2,7 @@ packages:
   - packages/*
 
 catalog:
-  '@graphql-codegen/cli': 6.0.1
+  '@graphql-codegen/cli': 6.0.2
   '@parcel/watcher': 2.5.1
   '@types/node': 24.10.0
   graphql: 16.12.0
