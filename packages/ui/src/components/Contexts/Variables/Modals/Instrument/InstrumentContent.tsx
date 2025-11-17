@@ -19,6 +19,7 @@ import { MultiSelect } from 'primereact/multiselect';
 import { useRef, useState } from 'react';
 
 import { CircleCheck, CircleXMark, Trash } from '@/components/Icons';
+import { when } from '@/Helpers/functions';
 import type { InstrumentType } from '@/types';
 
 export function InstrumentContent({
@@ -83,7 +84,7 @@ export function InstrumentContent({
           placeholder="Select port"
         />
       </div>
-      {port && name ? (
+      {when(port && name, () => (
         <InstrumentTable
           instruments={instrumentsData?.instruments ?? []}
           selectedInstrument={instrument}
@@ -91,7 +92,7 @@ export function InstrumentContent({
           deleteInstrument={(pk) => deleteInstrument({ variables: { pk } })}
           loading={loading}
         />
-      ) : undefined}
+      ))}
     </div>
   );
 }

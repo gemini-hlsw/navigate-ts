@@ -16,6 +16,7 @@ import { useSetCalParamsVisible } from '@/components/atoms/calparams';
 import { useServerConfigValue } from '@/components/atoms/config';
 import { useTheme } from '@/components/atoms/theme';
 import { ChevronDown, Info, Map, Moon, SignIn, SignOut, Sliders, Sun, User } from '@/components/Icons';
+import { when } from '@/Helpers/functions';
 
 import { ConnectionLost } from './ConnectionLost';
 
@@ -98,7 +99,7 @@ export default function Navbar() {
           className="p-button-text nav-btn"
           buttonClassName={clsx(!user && 'menu-button-not-logged-in')}
           model={items}
-          onClick={() => (!user ? navigateToSignIn() : undefined)}
+          onClick={() => when(!user, navigateToSignIn)}
           dropdownIcon={<ChevronDown size="lg" />}
         ></SplitButton>
       </div>

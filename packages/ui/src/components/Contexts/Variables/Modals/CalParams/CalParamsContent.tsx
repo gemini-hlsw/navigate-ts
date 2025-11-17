@@ -11,7 +11,7 @@ import { useCanEdit } from '@/components/atoms/auth';
 import { useSetCalParamsHistoryVisible } from '@/components/atoms/calparams';
 import { useServerConfigValue } from '@/components/atoms/config';
 import { ClockRotateLeft, FloppyDisk, TriangleExclamation } from '@/components/Icons';
-import { isNotNullish } from '@/Helpers/functions';
+import { isNotNullish, when } from '@/Helpers/functions';
 
 /**
  * Format numbers with at least 2 fraction digits.
@@ -328,7 +328,7 @@ function CalParamInput({
         value={value ?? null}
         minFractionDigits={minFractionDigits}
         maxFractionDigits={maxFractionDigits}
-        onChange={(e) => (isNotNullish(e.value) ? onChange(e.value) : undefined)}
+        onChange={(e) => when(e.value, onChange)}
         disabled={loading || !canEdit}
       />
     </>

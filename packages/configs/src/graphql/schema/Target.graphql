@@ -21,8 +21,8 @@ type Dec {
 }
 
 type ProperMotion {
-  ra: Float
-  dec: Float
+  ra: Float!
+  dec: Float!
 }
 
 type Az {

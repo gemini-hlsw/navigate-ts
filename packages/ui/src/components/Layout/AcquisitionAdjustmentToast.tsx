@@ -62,11 +62,11 @@ function AcquisitionAdjustmentPrompt({ state }: { state: AcquisitionAdjustmentSt
               arcseconds: state.offset.q.arcseconds,
             },
           },
-          iaa: {
-            degrees: state.iaa?.degrees,
+          iaa: state.iaa && {
+            degrees: state.iaa.degrees,
           },
-          ipa: {
-            degrees: state.ipa?.degrees,
+          ipa: state.ipa && {
+            degrees: state.ipa.degrees,
           },
           command,
         },

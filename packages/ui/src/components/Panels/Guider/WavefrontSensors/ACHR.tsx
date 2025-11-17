@@ -5,7 +5,7 @@ import { Dropdown } from 'primereact/dropdown';
 import { useState } from 'react';
 
 import { useServerConfigValue } from '@/components/atoms/config';
-import { isNotNullish } from '@/Helpers/functions';
+import { isNotNullish, when } from '@/Helpers/functions';
 
 import { useMovingLabel } from './hooks';
 
@@ -138,7 +138,7 @@ export function ACHR({ disabled }: { disabled: boolean }) {
               variables: {
                 size: {
                   type: e.value as AcWindowSize,
-                  center: e.value !== 'FULL' ? { x: calParams?.acqCamX, y: calParams?.acqCamY } : undefined,
+                  center: when(e.value !== 'FULL', () => ({ x: calParams?.acqCamX, y: calParams?.acqCamY })),
                 },
               },
             });
