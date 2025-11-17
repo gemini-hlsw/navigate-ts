@@ -16,7 +16,7 @@ import Layout from './components/Layout/Layout';
 import Login from './components/Login/Login';
 import { SolarProgress } from './components/SolarProgress';
 import { VersionManager } from './components/VersionManager/VersionManager';
-import { isNotNullish } from './Helpers/functions';
+import { when } from './Helpers/functions';
 import { ToastProvider } from './Helpers/toast';
 
 const router = createBrowserRouter([
@@ -77,7 +77,9 @@ export function App() {
                 <b>Could not load server configuration.</b>
               </p>
               <p>{error.message}</p>
-              {isNotNullish(retryInSeconds) && <p>Retrying {formatTime.format(retryInSeconds, 'second')}...</p>}
+              {when(retryInSeconds, (retryInSeconds) => (
+                <p>Retrying {formatTime.format(retryInSeconds, 'second')}...</p>
+              ))}
             </>
           }
           severity="error"

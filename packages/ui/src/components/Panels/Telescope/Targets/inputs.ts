@@ -1,11 +1,15 @@
 import type { CalParams, Configuration, InstrumentConfig, Rotator, Target } from '@gql/configs/gen/graphql';
 import type {
+  AzElTargetInput,
   BaffleConfigInput,
   InstrumentSpecificsInput,
   RotatorTrackingInput,
+  SiderealInput,
   TargetPropertiesInput,
   TcsConfigInput,
 } from '@gql/server/gen/graphql';
+
+import { when } from '@/Helpers/functions';
 
 export function createRotatorTrackingInput(rotator: Rotator): RotatorTrackingInput {
   return { ipa: { degrees: rotator.angle }, mode: rotator.tracking };
@@ -24,37 +28,41 @@ export function createTargetPropertiesInput(target: Target): TargetPropertiesInp
   return {
     id: target.id,
     name: target.name,
-    sidereal:
-      target.type !== 'FIXED'
-        ? {
-            ra: { hms: target.ra?.hms },
-            dec: { dms: target.dec?.dms },
-            epoch: target.epoch,
-            properMotion: {
-              ra: {
-                microarcsecondsPerYear: target.properMotion?.ra,
-              },
-              dec: {
-                microarcsecondsPerYear: target.properMotion?.dec,
-              },
-            },
-            radialVelocity: {
-              centimetersPerSecond: target.radialVelocity,
-            },
-            parallax: {
-              microarcseconds: target.parallax,
-            },
-          }
-        : undefined,
-    azel:
-      target.type === 'FIXED'
-        ? {
-            azimuth: { degrees: target.az?.degrees },
-            elevation: { degrees: target.el?.degrees },
-          }
-        : undefined,
+    sidereal: when(target.type !== 'FIXED', () => createSiderealInput(target)),
+    azel: when(target.type === 'FIXED', () => createAzElTargetInput(target)),
     // nonsidereal: // <- ???
-    wavelength: target.wavelength ? { nanometers: target.wavelength } : undefined,
+    wavelength: when(target.wavelength, (w) => ({ nanometers: w })),
+  };
+}
+
+function createAzElTargetInput(target: Target): AzElTargetInput | undefined {
+  return when(target.az, (az) =>
+    when(target.el, (el) => ({
+      azimuth: { degrees: az.degrees },
+      elevation: { degrees: el.degrees },
+    })),
+  );
+}
+
+export function createSiderealInput(target: Target): SiderealInput {
+  return {
+    ra: when(target.ra, ({ hms }) => ({ hms })),
+    dec: when(target.dec, ({ dms }) => ({ dms })),
+    epoch: target.epoch,
+    properMotion: when(target.properMotion, ({ ra, dec }) => ({
+      ra: {
+        microarcsecondsPerYear: ra,
+      },
+      dec: {
+        microarcsecondsPerYear: dec,
+      },
+    })),
+    radialVelocity: when(target.radialVelocity, (rv) => ({
+      centimetersPerSecond: rv,
+    })),
+    parallax: when(target.parallax, (p) => ({
+      microarcseconds: p,
+    })),
   };
 }
 
@@ -107,38 +115,18 @@ export function createTcsConfigInput(
     rotator: rotatorInput,
     sourceATarget: targetInput,
     baffles: bafflesInput,
-    oiwfs: oiTarget
-      ? {
-          tracking: {
-            // TODO: this should be selected depending on the "GuiderFooter" dropdown value!
-            nodAchopA: true,
-            nodAchopB: false,
-            nodBchopA: false,
-            nodBchopB: true,
-          },
-          target: {
-            name: oiTarget.name,
-            sidereal: {
-              ra: { hms: oiTarget.ra?.hms },
-              dec: { dms: oiTarget.dec?.dms },
-              epoch: oiTarget.epoch,
-              properMotion: {
-                ra: {
-                  microarcsecondsPerYear: oiTarget.properMotion?.ra,
-                },
-                dec: {
-                  microarcsecondsPerYear: oiTarget.properMotion?.dec,
-                },
-              },
-              radialVelocity: {
-                centimetersPerSecond: oiTarget.radialVelocity,
-              },
-              parallax: {
-                microarcseconds: oiTarget.parallax,
-              },
-            },
-          },
-        }
-      : undefined,
+    oiwfs: when(oiTarget, (oiTarget) => ({
+      tracking: {
+        // TODO: this should be selected depending on the "GuiderFooter" dropdown value!
+        nodAchopA: true,
+        nodAchopB: false,
+        nodBchopA: false,
+        nodBchopB: true,
+      },
+      target: {
+        name: oiTarget.name,
+        sidereal: createSiderealInput(oiTarget),
+      },
+    })),
   };
 }

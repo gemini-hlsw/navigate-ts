@@ -254,11 +254,7 @@ const mocks = [
             },
             az: null,
             el: null,
-            properMotion: {
-              ra: null,
-              dec: null,
-              __typename: 'ProperMotion',
-            },
+            properMotion: null,
             radialVelocity: -33200000,
             parallax: 0,
             magnitude: null,

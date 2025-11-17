@@ -1,4 +1,4 @@
-import { formatToSignedArcseconds, isNotNullish, isNullish, round } from './functions';
+import { formatToSignedArcseconds, isNotNullish, isNullish, round, when } from './functions';
 
 describe(formatToSignedArcseconds.name, () => {
   it('should format signed arcseconds correctly', () => {
@@ -78,5 +78,34 @@ describe(round.name, () => {
 
   it('throws for negative decimals', () => {
     expect(() => round(1.2345, -2)).toThrow();
+  });
+});
+
+describe(when.name, () => {
+  it('should return the value when condition is not nullish', () => {
+    expect(when('value', (t) => t)).toBe('value');
+    expect(when(true, () => 'value')).toBe('value');
+  });
+  it('should return undefined when condition is nullish', () => {
+    expect(when(null, (t) => t)).toBeUndefined();
+    expect(when(undefined, (t) => t)).toBeUndefined();
+    expect(when(false, (t) => t)).toBeUndefined();
+  });
+
+  it('should return third arg when condition is nullish', () => {
+    expect(
+      when(
+        null,
+        (t) => t,
+        () => 'default',
+      ),
+    ).toBe('default');
+    expect(
+      when(
+        undefined,
+        (t) => t,
+        () => 'default',
+      ),
+    ).toBe('default');
   });
 });

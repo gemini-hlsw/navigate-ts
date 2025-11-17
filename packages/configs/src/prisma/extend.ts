@@ -64,7 +64,7 @@ export function extendPrisma(prisma: PrismaClient) {
         properMotion: {
           needs: { type: true, pmRa: true, pmDec: true },
           compute(target) {
-            if (target.type === 'FIXED') {
+            if (target.type === 'FIXED' || target.pmRa === null || target.pmDec === null) {
               return undefined;
             } else {
               return {
@@ -131,7 +131,7 @@ export function extendPrisma(prisma: PrismaClient) {
         properMotion: {
           needs: { type: true, pmRa: true, pmDec: true },
           compute(target) {
-            if (target.type === 'FIXED') {
+            if (target.type === 'FIXED' || target.pmRa === null || target.pmDec === null) {
               return undefined;
             } else {
               return {

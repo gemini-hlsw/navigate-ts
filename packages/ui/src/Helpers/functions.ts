@@ -10,7 +10,24 @@ export function isNullish(val: unknown): val is undefined | null {
   return val === null || val === undefined;
 }
 
-export function getConfigWfs(configuration: Configuration | null | undefined): WfsType {
+/**
+ * When `condition` is not null or undefined, returns the result of calling `trueCase()`, else
+ * returns the result of calling `falseCase()` if `falseCase` is defined.
+ *
+ * This is a convenience wrapper around a ternary expression that makes it a
+ * little nicer to write an inline conditional without an else.
+ */
+export function when<C, T, F = undefined>(
+  condition: C | undefined | null | false,
+  trueCase: (c: C) => T,
+  falseCase?: () => F,
+): C extends undefined | null ? F : T {
+  return isNullish(condition) || condition === false
+    ? (falseCase?.() as C extends undefined | null ? F : T)
+    : (trueCase(condition) as C extends undefined | null ? F : T);
+}
+
+export function getConfigWfs(configuration: Configuration | undefined | null): WfsType {
   const oiNull = isNullish(configuration?.selectedOiTarget);
   const p1Null = isNullish(configuration?.selectedP1Target);
   const p2Null = isNullish(configuration?.selectedP2Target);

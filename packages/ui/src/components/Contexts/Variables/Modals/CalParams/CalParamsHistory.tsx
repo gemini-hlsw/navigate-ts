@@ -8,6 +8,7 @@ import { lazy, startTransition, Suspense, useState } from 'react';
 
 import { useCanEdit } from '@/components/atoms/auth';
 import { useCalParamsHistoryVisible } from '@/components/atoms/calparams';
+import { when } from '@/Helpers/functions';
 import { useToast } from '@/Helpers/toast';
 
 import { ModalSolarProgress } from '../ModalSolarProgress';
@@ -39,11 +40,11 @@ export function CalParamsHistory() {
         loading={loading}
         message="Comment:"
         onConfirm={(msg) => onRevertParams(msg, selection!).then(close)}
-        initialComment={
-          selection
-            ? `Reverted to parameters from ${formatDate(new Date(selection.createdAt), 'Pp')}\n\n${selection.comment}`
-            : undefined
-        }
+        initialComment={when(
+          selection,
+          ({ createdAt, comment }) =>
+            `Reverted to parameters from ${formatDate(new Date(createdAt), 'Pp')}\n\n${comment}`,
+        )}
       />
     </div>
   );
