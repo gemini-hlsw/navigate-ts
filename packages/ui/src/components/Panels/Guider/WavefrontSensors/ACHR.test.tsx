@@ -1,5 +1,5 @@
 import { CAL_PARAMS } from '@gql/configs/CalParams';
-import { AC_MECHS_STATE, AC_MECHS_STATE_SUB } from '@gql/server/MechState';
+import { AC_MECHS_STATE, AC_MECHS_STATE_SUB } from '@gql/server/MechsState';
 import type { MockedResponseOf } from '@gql/util';
 
 import { renderWithContext } from '@/test/render';

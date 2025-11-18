@@ -3,7 +3,17 @@ import { useConfiguration } from '@gql/configs/Configuration';
 import type { WfsType } from '@gql/configs/gen/graphql';
 import type { GuideProbe } from '@gql/server/gen/graphql';
 import { useGuideState } from '@gql/server/GuideState';
-import { useOiwfsObserve, useOiwfsStopObserve, useTakeSky } from '@gql/server/WavefrontSensors';
+import {
+  type ObserveResult,
+  type StopObserveResult,
+  useOiwfsObserve,
+  useOiwfsStopObserve,
+  usePwfs1Observe,
+  usePwfs1StopObserve,
+  usePwfs2Observe,
+  usePwfs2StopObserve,
+  useTakeSky,
+} from '@gql/server/WavefrontSensors';
 import { clsx } from 'clsx';
 import { Button } from 'primereact/button';
 import { Checkbox } from 'primereact/checkbox';
@@ -54,12 +64,10 @@ export default function WavefrontSensor({
     observeButton = <OiwfsObserveButton freq={freq} canEdit={canEdit && !configLoading} />;
     skyButton = <TakeSkyButton freq={freq} wfs="GMOS_OIWFS" canEdit={canEdit} />;
   } else if (wfs === 'PWFS1') {
-    /* Show placeholder */
-    observeButton = <Pwfs1ObserveButton canEdit={canEdit && !configLoading} />;
+    observeButton = <Pwfs1ObserveButton freq={freq} canEdit={canEdit && !configLoading} />;
     skyButton = <TakeSkyButton freq={freq} wfs="PWFS1" canEdit={canEdit} />;
   } else if (wfs === 'PWFS2') {
-    /* Show placeholder */
-    observeButton = <Pwfs2ObserveButton canEdit={canEdit && !configLoading} />;
+    observeButton = <Pwfs2ObserveButton freq={freq} canEdit={canEdit && !configLoading} />;
     skyButton = <TakeSkyButton freq={freq} wfs="PWFS2" canEdit={canEdit} />;
   }
 
@@ -95,12 +103,76 @@ export default function WavefrontSensor({
 }
 
 function OiwfsObserveButton({ freq, canEdit }: { freq: number; canEdit: boolean }) {
-  const { data: guideStateData, loading: guideStateLoading, setStale } = useGuideState();
+  const { data: guideStateData, loading, setStale } = useGuideState();
 
-  const [startObserve, { loading: startObserveLoading }] = useOiwfsObserve(setStale);
-  const [stopObserve, { loading: stopObserveLoading }] = useOiwfsStopObserve(setStale);
+  const observe = useOiwfsObserve(setStale);
+  const stopObserve = useOiwfsStopObserve(setStale);
 
-  const integrating = guideStateData?.oiIntegrating;
+  return (
+    <ObserveButton
+      loading={loading}
+      freq={freq}
+      canEdit={canEdit}
+      integrating={guideStateData?.oiIntegrating}
+      observeResult={observe}
+      stopObserveResult={stopObserve}
+    />
+  );
+}
+
+function Pwfs1ObserveButton({ freq, canEdit }: { freq: number; canEdit: boolean }) {
+  const { data: guideStateData, loading, setStale } = useGuideState();
+
+  const observe = usePwfs1Observe(setStale);
+  const stopObserve = usePwfs1StopObserve(setStale);
+  return (
+    <ObserveButton
+      loading={loading}
+      freq={freq}
+      canEdit={canEdit}
+      integrating={guideStateData?.p1Integrating}
+      observeResult={observe}
+      stopObserveResult={stopObserve}
+    />
+  );
+}
+
+function Pwfs2ObserveButton({ freq, canEdit }: { freq: number; canEdit: boolean }) {
+  const { data: guideStateData, loading, setStale } = useGuideState();
+
+  const observe = usePwfs2Observe(setStale);
+  const stopObserve = usePwfs2StopObserve(setStale);
+  return (
+    <ObserveButton
+      loading={loading}
+      freq={freq}
+      canEdit={canEdit}
+      integrating={guideStateData?.p2Integrating}
+      observeResult={observe}
+      stopObserveResult={stopObserve}
+    />
+  );
+}
+
+export function ObserveButton({
+  freq,
+  canEdit,
+  integrating,
+  observeResult,
+  stopObserveResult,
+  loading,
+  style = { gridArea: 'g13' },
+}: {
+  freq: number;
+  canEdit: boolean;
+  integrating: boolean | undefined;
+  observeResult: ObserveResult;
+  stopObserveResult: StopObserveResult;
+  loading: boolean;
+  style?: React.CSSProperties;
+}) {
+  const [startObserve, { loading: startObserveLoading }] = observeResult;
+  const [stopObserve, { loading: stopObserveLoading }] = stopObserveResult;
 
   const onClick = () =>
     integrating
@@ -111,40 +183,14 @@ function OiwfsObserveButton({ freq, canEdit }: { freq: number; canEdit: boolean 
 
   return (
     <Button
-      loading={guideStateLoading || startObserveLoading || stopObserveLoading}
+      loading={loading || startObserveLoading || stopObserveLoading}
       disabled={!canEdit}
-      style={{ gridArea: 'g13' }}
+      style={style}
       icon={integrating ? <Stop /> : <Play />}
       severity={integrating ? 'danger' : undefined}
       aria-label={integrating ? 'Stop' : 'Start'}
       tooltip={integrating ? 'Stop' : 'Start'}
       onClick={onClick}
-    />
-  );
-}
-
-function Pwfs1ObserveButton({ canEdit }: { canEdit: boolean }) {
-  return (
-    <Button
-      className="under-construction"
-      disabled={!canEdit}
-      icon={<Play />}
-      style={{ gridArea: 'g13' }}
-      aria-label="Start"
-      tooltip="Start"
-    />
-  );
-}
-
-function Pwfs2ObserveButton({ canEdit }: { canEdit: boolean }) {
-  return (
-    <Button
-      className="under-construction"
-      disabled={!canEdit}
-      icon={<Play />}
-      style={{ gridArea: 'g13' }}
-      aria-label="Start"
-      tooltip="Start"
     />
   );
 }

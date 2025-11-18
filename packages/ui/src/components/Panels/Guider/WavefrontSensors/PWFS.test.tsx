@@ -7,7 +7,7 @@ import {
   PWFS2_FILTER,
   PWFS2_MECHS_STATE,
   PWFS2_MECHS_STATE_SUB,
-} from '@gql/server/MechState';
+} from '@gql/server/MechsState';
 import type { MockedResponseOf } from '@gql/util';
 
 import { selectDropdownOption } from '@/test/helpers';
