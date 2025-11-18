@@ -1,34 +1,22 @@
 import imgUrl from '@assets/underconstruction.png';
-import { useAcObserve, useAcStopObserve } from '@gql/server/AcquisitionCamera';
 import { useGuideState } from '@gql/server/GuideState';
+import { useAcObserve, useAcStopObserve } from '@gql/server/WavefrontSensors';
+import { ObserveButton } from '@WavefrontSensors/WavefrontSensor/WavefrontSensor';
 import { Button } from 'primereact/button';
 import { Checkbox } from 'primereact/checkbox';
 import { Dropdown } from 'primereact/dropdown';
 import { Splitter, SplitterPanel } from 'primereact/splitter';
 import { useState } from 'react';
 
-import { Play, Stop } from '@/components/Icons';
-
 import MainControls from './MainControls';
 
 export default function AcquisitionCamera({ canEdit, ac }: { canEdit: boolean; ac: string }) {
-  const { data: guideStateData, loading: guideStateLoading, setStale } = useGuideState();
+  const { data: guideStateData, loading, setStale } = useGuideState();
 
-  const [startObserve, { loading: startObserveLoading }] = useAcObserve(setStale);
-  const [stopObserve, { loading: stopObserveLoading }] = useAcStopObserve(setStale);
-
-  const integrating = guideStateData?.acIntegrating;
+  const observeResult = useAcObserve(setStale);
+  const stopObserveResult = useAcStopObserve(setStale);
 
   const [exp, setExp] = useState(0.01);
-
-  const onClick = () =>
-    integrating
-      ? stopObserve({})
-      : startObserve({
-          variables: { period: { milliseconds: exp * 1000 } },
-        });
-
-  const loading = guideStateLoading || startObserveLoading || stopObserveLoading;
 
   return (
     <div className="acquisition-camera">
@@ -67,15 +55,14 @@ export default function AcquisitionCamera({ canEdit, ac }: { canEdit: boolean; a
                 checked={true}
               />
 
-              <Button
+              <ObserveButton
                 loading={loading}
-                disabled={!canEdit}
+                freq={1 / exp}
+                canEdit={canEdit}
+                integrating={guideStateData?.acIntegrating}
+                observeResult={observeResult}
+                stopObserveResult={stopObserveResult}
                 style={{ gridArea: 'g6' }}
-                icon={integrating ? <Stop /> : <Play />}
-                severity={integrating ? 'danger' : undefined}
-                aria-label={integrating ? 'Stop' : 'Start'}
-                tooltip={integrating ? 'Stop' : 'Start'}
-                onClick={onClick}
               />
               <Button
                 className="under-construction"

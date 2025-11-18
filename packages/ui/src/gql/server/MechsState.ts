@@ -130,7 +130,7 @@ export function usePwfs2MechsState() {
   return useQueryAndSubscription(PWFS2_MECHS_STATE, PWFS2_MECHS_STATE_SUB, 'pwfs2MechsState');
 }
 
-export type UsePwfsMechState = typeof usePwfs1MechsState | typeof usePwfs2MechsState;
+export type PwfsMechsStateResult = ReturnType<typeof usePwfs1MechsState | typeof usePwfs2MechsState>;
 
 export const PWFS1_FILTER = graphql(`
   mutation pwfs1Filter($filter: PwfsFilter!) {
@@ -154,7 +154,7 @@ export const PWFS2_FILTER = graphql(`
   }
 `);
 
-export type UsePwfsFilter = typeof usePwfs1Filter | typeof usePwfs2Filter;
+export type PwfsFilterResult = ReturnType<typeof usePwfs1Filter | typeof usePwfs2Filter>;
 
 export function usePwfs2Filter() {
   return useMutation(PWFS2_FILTER);
@@ -186,4 +186,4 @@ export function usePwfs2FieldStop() {
   return useMutation(PWFS2_FIELD_STOP);
 }
 
-export type UsePwfsFieldStop = typeof usePwfs1FieldStop | typeof usePwfs2FieldStop;
+export type PwfsFieldStopResult = ReturnType<typeof usePwfs1FieldStop | typeof usePwfs2FieldStop>;

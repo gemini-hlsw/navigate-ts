@@ -1,5 +1,5 @@
 import type { PwfsFieldStop, PwfsFilter } from '@gql/server/gen/graphql';
-import type { UsePwfsFieldStop, UsePwfsFilter, UsePwfsMechState } from '@gql/server/MechState';
+import type { PwfsFieldStopResult, PwfsFilterResult, PwfsMechsStateResult } from '@gql/server/MechsState';
 import {
   usePwfs1FieldStop,
   usePwfs1Filter,
@@ -7,7 +7,7 @@ import {
   usePwfs2FieldStop,
   usePwfs2Filter,
   usePwfs2MechsState,
-} from '@gql/server/MechState';
+} from '@gql/server/MechsState';
 import { Dropdown } from 'primereact/dropdown';
 
 import { isNotNullish } from '@/Helpers/functions';
@@ -37,25 +37,25 @@ const fieldStopOptions: { value: PwfsFieldStop; label: string }[] = [
 
 function PWFS({
   disabled,
-  useMechState,
-  useFilter,
-  useFieldStop,
+  mechsStateResult,
+  filterResult,
+  fieldStopResult,
 }: {
   disabled: boolean;
-  useMechState: UsePwfsMechState;
-  useFilter: UsePwfsFilter;
-  useFieldStop: UsePwfsFieldStop;
+  mechsStateResult: PwfsMechsStateResult;
+  filterResult: PwfsFilterResult;
+  fieldStopResult: PwfsFieldStopResult;
 }) {
-  const { data, loading: mechStateLoading } = useMechState();
+  const { data, loading: mechsStateLoading } = mechsStateResult;
 
-  const [setFilter, { loading: filterLoading }] = useFilter();
-  const [setFieldStop, { loading: fieldStopLoading }] = useFieldStop();
+  const [setFilter, { loading: filterLoading }] = filterResult;
+  const [setFieldStop, { loading: fieldStopLoading }] = fieldStopResult;
 
-  const loading = mechStateLoading || filterLoading || fieldStopLoading;
+  const loading = mechsStateLoading || filterLoading || fieldStopLoading;
 
-  const [filterMovingLabel, setRequestedFilter] = useMovingLabel(mechStateLoading, data?.filter, filterOptions);
+  const [filterMovingLabel, setRequestedFilter] = useMovingLabel(mechsStateLoading, data?.filter, filterOptions);
   const [fieldStopMovingLabel, setRequestedFieldStop] = useMovingLabel(
-    mechStateLoading,
+    mechsStateLoading,
     data?.fieldStop,
     fieldStopOptions,
   );
@@ -98,23 +98,29 @@ function PWFS({
 }
 
 export function PWFS1({ disabled }: { disabled: boolean }) {
+  const mechsStateResult = usePwfs1MechsState();
+  const filterResult = usePwfs1Filter();
+  const fieldStopResult = usePwfs1FieldStop();
   return (
     <PWFS
       disabled={disabled}
-      useMechState={usePwfs1MechsState}
-      useFilter={usePwfs1Filter}
-      useFieldStop={usePwfs1FieldStop}
+      mechsStateResult={mechsStateResult}
+      filterResult={filterResult}
+      fieldStopResult={fieldStopResult}
     />
   );
 }
 
 export function PWFS2({ disabled }: { disabled: boolean }) {
+  const mechsStateResult = usePwfs2MechsState();
+  const filterResult = usePwfs2Filter();
+  const fieldStopResult = usePwfs2FieldStop();
   return (
     <PWFS
       disabled={disabled}
-      useMechState={usePwfs2MechsState}
-      useFilter={usePwfs2Filter}
-      useFieldStop={usePwfs2FieldStop}
+      mechsStateResult={mechsStateResult}
+      filterResult={filterResult}
+      fieldStopResult={fieldStopResult}
     />
   );
 }
