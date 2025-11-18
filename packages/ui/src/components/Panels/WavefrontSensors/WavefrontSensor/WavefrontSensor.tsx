@@ -76,8 +76,11 @@ export default function WavefrontSensor({
       <span className="wfs-name">{wfs}</span>
       <img src={imgUrl} alt="wfs" />
       <div className="controls">
-        <span style={{ alignSelf: 'center', gridArea: 'g11' }}>Freq</span>
+        <label htmlFor={`freq-${id}`} style={{ alignSelf: 'center', gridArea: 'g11' }}>
+          Freq
+        </label>
         <Dropdown
+          inputId={`freq-${id}`}
           disabled={!canEdit || configLoading}
           style={{ gridArea: 'g12' }}
           value={freq}
