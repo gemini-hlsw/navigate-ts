@@ -23,8 +23,8 @@ catalogs:
       specifier: 0.155.0
       version: 0.155.0
     lucuma-schemas:
-      specifier: 0.177.0-20251114-11684727
-      version: 0.177.0-20251114-11684727
+      specifier: 0.177.0-20251119-e3a25cbc
+      version: 0.177.0-20251119-e3a25cbc
     typescript:
       specifier: 5.9.3
       version: 5.9.3
@@ -132,7 +132,7 @@ importers:
         version: 24.10.1
       lucuma-schemas:
         specifier: 'catalog:'
-        version: 0.177.0-20251114-11684727
+        version: 0.177.0-20251119-e3a25cbc
       typescript:
         specifier: 'catalog:'
         version: 5.9.3
@@ -216,7 +216,7 @@ importers:
         version: 0.155.0
       lucuma-schemas:
         specifier: 'catalog:'
-        version: 0.177.0-20251114-11684727
+        version: 0.177.0-20251119-e3a25cbc
       lucuma-ui-css:
         specifier: 0.175.0
         version: 0.175.0
@@ -3302,8 +3302,8 @@ packages:
   lucuma-core@0.155.0:
     resolution: {integrity: sha512-V4VDOzOIzwsIzGss7K+O5wgjzKWn2Cj5yGmR4Z4XHmh9czRFnThatLcbjMe9JRifrrohJ+rXadJDu/oJbgheTA==}
 
-  lucuma-schemas@0.177.0-20251114-11684727:
-    resolution: {integrity: sha512-h0ouyJH3t5UFDzcsaE98dghYPqbmthKxsIvxTwFdHEvLWkKh4a8MNZLmZpmYM5kE0xoV+2uvHBGmtovW45ns0g==}
+  lucuma-schemas@0.177.0-20251119-e3a25cbc:
+    resolution: {integrity: sha512-ejfPwhzV7zbw5QGLZdw9jUtkzmRWIh/pT6IP2tisYSBwhy+uWPx7HNHNnn1BbkRe+1Ns/Nr8mE7EYxwmbES+Nw==}
 
   lucuma-ui-css@0.175.0:
     resolution: {integrity: sha512-VwsYLqxRrrC9jdoz8Sg/BwcIuFjC4iWL1QRjQdvSmajGiG+Qdg3h/g7ZWAUR1ZBnKct+Crs2qWAw5BxO5zMLDg==}
@@ -8042,7 +8042,7 @@ snapshots:
 
   lucuma-core@0.155.0: {}
 
-  lucuma-schemas@0.177.0-20251114-11684727: {}
+  lucuma-schemas@0.177.0-20251119-e3a25cbc: {}
 
   lucuma-ui-css@0.175.0: {}
 
