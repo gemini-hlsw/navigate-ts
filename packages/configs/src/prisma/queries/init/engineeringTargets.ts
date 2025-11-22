@@ -17,5 +17,6 @@ export const INITIAL_ENGINEERING_TARGETS: (Prisma.EngineeringTargetCreateInput &
     id: 'zenith',
     rotatorMode: 'TRACKING',
     rotatorAngle: 0.0,
+    baffleMode: 'IGNORED',
   },
 ];
