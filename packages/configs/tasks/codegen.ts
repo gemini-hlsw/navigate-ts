@@ -1,17 +1,13 @@
 import { defineConfig } from '@eddeee888/gcg-typescript-resolver-files';
 import type { CodegenConfig } from '@graphql-codegen/cli';
 
-import { fixResolversContent, fixTypesContent } from './fix-generated.js';
-
 export default {
   overwrite: true,
   schema: './src/graphql/schema/*.graphql',
   hooks: {
     beforeOneFileWrite: (filename: string, content: string) => {
-      if (filename.endsWith('types.generated.ts')) {
-        return fixTypesContent(content);
-      } else if (filename.endsWith('resolvers.generated.ts')) {
-        return fixResolversContent(content);
+      if (filename.endsWith('resolvers.generated.ts')) {
+        return content.replace(/\.js'/g, ".ts'");
       }
     },
   },
@@ -25,6 +21,7 @@ export default {
         inputMaybeValue: 'T | undefined',
         skipTypename: true,
         useTypeImports: true,
+        importExtension: '.ts',
       },
       resolverGeneration: 'minimal',
       resolverRelativeTargetDir: '../resolvers',
