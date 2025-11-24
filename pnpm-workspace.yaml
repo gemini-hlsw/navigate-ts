@@ -21,3 +21,20 @@ minimumReleaseAgeExclude:
 trustPolicy: no-downgrade
 trustPolicyExclude:
   - 'rxjs@7.8.2'
+  - semver
+  - chokidar
+  - '@graphql-tools/*'
+  - ua-parser-js
+
+onlyBuiltDependencies:
+  - '@parcel/watcher'
+  - '@prisma/client'
+  - '@prisma/engines'
+  - 'esbuild'
+  - 'prisma'
+
+ignoredBuiltDependencies:
+  - 'cpu-features'
+  - 'protobufjs'
+  - 'ssh2'
+  - 'unrs-resolver'
