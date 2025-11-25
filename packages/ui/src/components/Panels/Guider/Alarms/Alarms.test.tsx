@@ -32,7 +32,7 @@ describe(Alarms.name, () => {
     await userEvent.fill(limitInput, '900');
 
     await expect.element(page.getByTestId('limit-PWFS1')).toHaveValue('900');
-    expect(store.get(guideAlarmSoundAtom)).true;
+    expect(store.get(guideAlarmSoundAtom)).toEqual('SUBAPERTURES_BAD');
   });
 });
 

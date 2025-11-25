@@ -33,7 +33,7 @@ describe(Alarm.name, () => {
         guideQuality={guideQuality}
         alarm={alarm}
         disabled={false}
-        hasAlarm={true}
+        alarmState={'GUIDE_COUNTS'}
         onUpdateAlarm={onUpdateAlarm}
       />,
     );
@@ -51,7 +51,7 @@ describe(Alarm.name, () => {
         guideQuality={{ ...guideQuality, centroidDetected: false }}
         alarm={alarm}
         disabled={false}
-        hasAlarm={false}
+        alarmState={undefined}
         onUpdateAlarm={onUpdateAlarm}
       />,
     );
@@ -79,7 +79,7 @@ describe(Alarm.name, () => {
         guideQuality={guideQuality}
         alarm={alarm}
         disabled={false}
-        hasAlarm={false}
+        alarmState={undefined}
         onUpdateAlarm={onUpdateAlarm}
       />,
     );
@@ -94,7 +94,7 @@ describe(Alarm.name, () => {
         guideQuality={{ ...guideQuality, flux: 799 }}
         alarm={alarm}
         disabled={false}
-        hasAlarm={true}
+        alarmState={'GUIDE_COUNTS'}
         onUpdateAlarm={onUpdateAlarm}
       />,
     );
@@ -108,7 +108,7 @@ describe(Alarm.name, () => {
         guideQuality={{ ...guideQuality, centroidDetected: false }}
         alarm={alarm}
         disabled={false}
-        hasAlarm={true}
+        alarmState={'SUBAPERTURES_BAD'}
         onUpdateAlarm={onUpdateAlarm}
       />,
     );

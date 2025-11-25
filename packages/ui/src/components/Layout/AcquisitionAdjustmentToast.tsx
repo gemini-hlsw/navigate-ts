@@ -36,10 +36,9 @@ export function useAcquisitionAdjustmentToast() {
         sticky: true,
       };
       toast?.show(acquisitionAdjustmentToast);
-      void alarmAudio.play();
+      void alarmAudio?.play();
 
       return () => {
-        alarmAudio.pause();
         toast?.remove(acquisitionAdjustmentToast);
       };
     }

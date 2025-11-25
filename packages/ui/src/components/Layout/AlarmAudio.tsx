@@ -1,5 +1,3 @@
-import alarmSoundMp3 from '@assets/sounds/alarm.mp3';
-import alarmSoundWebm from '@assets/sounds/alarm.webm';
 import { useEffect } from 'react';
 
 import { useAudio } from '@/Helpers/hooks';
@@ -9,20 +7,20 @@ import { useAlarmValue } from '../atoms/alarm';
 export function useAlarmAudio() {
   const alarm = useAlarmValue();
 
-  const alarmAudio = useAudio(alarmSoundMp3, alarmSoundWebm, { loop: true });
+  const alarmAudio = useAudio(alarm?.mp3, alarm?.webm);
 
   useEffect(() => {
     const checkAlarm = () => {
       if (alarm)
         alarmAudio
-          .play()
+          ?.play()
           .then(() => clearInterval(AudioRetryInterval))
           .catch((err: unknown) => {
             console.log('waiting for user interaction to play first notification', err);
           });
       else {
         clearInterval(AudioRetryInterval);
-        alarmAudio.pause();
+        alarmAudio?.pause();
       }
     };
 
@@ -33,8 +31,6 @@ export function useAlarmAudio() {
     // Stop the alarm when the component is unmounted
     return () => {
       clearInterval(AudioRetryInterval);
-      alarmAudio.pause();
-      alarmAudio.remove();
     };
   }, [alarm, alarmAudio]);
 }

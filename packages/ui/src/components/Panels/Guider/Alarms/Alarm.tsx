@@ -8,6 +8,7 @@ import type { ToggleButtonChangeEvent } from 'primereact/togglebutton';
 import { ToggleButton } from 'primereact/togglebutton';
 import { useId } from 'react';
 
+import type { AlarmType } from '@/components/atoms/alarm';
 import { Volume, VolumeSlash } from '@/components/Icons';
 import { isNotNullish } from '@/Helpers/functions';
 
@@ -17,14 +18,14 @@ export function Alarm({
   guideQuality,
   alarm,
   onUpdateAlarm,
-  hasAlarm,
+  alarmState,
 }: {
   wfs: WfsType;
   disabled: boolean;
   guideQuality: GuideQuality | undefined;
   alarm: GuideAlarm | undefined;
   onUpdateAlarm: (alarm: UpdateGuideAlarmMutationVariables) => void;
-  hasAlarm: boolean;
+  alarmState: AlarmType | undefined;
 }) {
   const id = useId();
 
@@ -43,8 +44,8 @@ export function Alarm({
 
   return (
     <div
-      data-testid={hasAlarm ? 'has-alarm' : 'no-alarm'}
-      className={clsx('alarm', hasAlarm && 'has-alarm animate-error-bg')}
+      data-testid={alarmState ? 'has-alarm' : 'no-alarm'}
+      className={clsx('alarm', alarmState && 'has-alarm animate-error-bg')}
     >
       <div className="title-bar">
         <Title title={wfs} />
