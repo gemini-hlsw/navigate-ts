@@ -4,6 +4,8 @@
   "configMigration": true,
   "platformAutomerge": true,
   "automergeStrategy": "squash",
+  "minimumReleaseAge": "2 days",
+  "prCreation": "not-pending",
   "lockFileMaintenance": {
     "enabled": true
   },
@@ -45,7 +47,8 @@
     {
       "description": "Schedule schema updates to run daily",
       "matchPackageNames": ["lucuma-schemas"],
-      "schedule": ["* 0-4 * * *"]
+      "schedule": ["* 0-4 * * *"],
+      "minimumReleaseAge": null
     }
   ]
 }

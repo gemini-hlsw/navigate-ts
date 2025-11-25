@@ -11,3 +11,13 @@ catalog:
   typescript: 5.9.3
 
 injectWorkspacePackages: true
+
+# 2 days, in minutes
+minimumReleaseAge: 2880
+minimumReleaseAgeExclude:
+  - 'lucuma-core'
+  - 'lucuma-schemas'
+
+trustPolicy: no-downgrade
+trustPolicyExclude:
+  - 'rxjs@7.8.2'
