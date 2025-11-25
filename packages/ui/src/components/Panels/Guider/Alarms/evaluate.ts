@@ -1,6 +1,8 @@
 import type { GuideAlarm, WfsType } from '@gql/configs/gen/graphql';
 import type { GuideConfigurationState, GuideQuality } from '@gql/server/gen/graphql';
 
+import type { AlarmType } from '@/components/atoms/alarm';
+
 type GuideState = Pick<
   GuideConfigurationState,
   'm1Input' | 'm2Inputs' | 'mountOffload' | 'p1Integrating' | 'p2Integrating' | 'oiIntegrating'
@@ -13,30 +15,37 @@ export function evaluateAlarm(
   alarm: GuideAlarm | undefined,
   guideQuality: GuideQuality | undefined,
   guideState: GuideState | undefined,
-): boolean {
-  if (!alarm || !guideQuality || !guideState) return false;
+): AlarmType | undefined {
+  if (!alarm || !guideQuality || !guideState) return undefined;
 
   const allInputs = [...(guideState.m2Inputs ?? []), guideState.m1Input] as (string | undefined)[];
 
   const correctingM1OrM2 = allInputs.includes(alarm.wfs);
 
-  const isDrifting = guideQuality.flux < alarm.limit || !guideQuality.centroidDetected;
-
   const isActive = alarmIsActive(guideState, alarm);
 
-  return correctingM1OrM2 && isDrifting && isActive;
+  if (correctingM1OrM2 && isActive) {
+    if (guideQuality.flux < alarm.limit) return 'GUIDE_COUNTS';
+    if (!guideQuality.centroidDetected) return 'SUBAPERTURES_BAD';
+  }
+  return undefined;
 }
 
 /**
  * In addition to other alarm rules, if a WFS is used for M2 tip/tilt correction and The offloading of corrections to the mount is enabled, the alarm must also produce a sound.
  * Disabling alarms should only stop the sound.
  */
-export function evaluateAlarmSound(alarm: GuideAlarm, guideQuality: GuideQuality, guideState: GuideState): boolean {
+export function evaluateAlarmSound(
+  alarm: GuideAlarm,
+  guideQuality: GuideQuality,
+  guideState: GuideState,
+): AlarmType | undefined {
   const correctingM2TipTilt = ((guideState.m2Inputs ?? []) as WfsType[]).includes(alarm.wfs);
 
-  return (
-    alarm.enabled && evaluateAlarm(alarm, guideQuality, guideState) && guideState.mountOffload && correctingM2TipTilt
-  );
+  if (alarm.enabled && guideState.mountOffload && correctingM2TipTilt) {
+    return evaluateAlarm(alarm, guideQuality, guideState);
+  }
+  return undefined;
 }
 
 function alarmIsActive(guideState: GuideState, alarm: GuideAlarm): boolean {

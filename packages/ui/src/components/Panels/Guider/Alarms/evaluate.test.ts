@@ -14,7 +14,7 @@ describe(evaluateAlarm.name, () => {
         },
         createGuideState(),
       ),
-    ).false;
+    ).toBeUndefined();
   });
 
   it('should be false if no guide quality is set', () => {
@@ -29,7 +29,7 @@ describe(evaluateAlarm.name, () => {
         undefined,
         createGuideState(),
       ),
-    ).false;
+    ).toBeUndefined();
   });
 
   it('should be false if no guide state is set', () => {
@@ -48,7 +48,7 @@ describe(evaluateAlarm.name, () => {
         },
         undefined,
       ),
-    ).false;
+    ).toBeUndefined();
   });
 
   it('should be false if the flux is above the limit', () => {
@@ -67,7 +67,7 @@ describe(evaluateAlarm.name, () => {
         },
         createGuideState(),
       ),
-    ).false;
+    ).toBeUndefined();
   });
 
   it('should be true if no centroid is detected', () => {
@@ -86,7 +86,7 @@ describe(evaluateAlarm.name, () => {
         },
         createGuideState(),
       ),
-    ).true;
+    ).toEqual('SUBAPERTURES_BAD');
   });
 
   it('should be true if flux is below the limit', () => {
@@ -105,7 +105,7 @@ describe(evaluateAlarm.name, () => {
         },
         createGuideState(),
       ),
-    ).true;
+    ).toEqual('GUIDE_COUNTS');
   });
 
   it('should be false if the alarm is not active', () => {
@@ -124,7 +124,7 @@ describe(evaluateAlarm.name, () => {
         },
         createGuideState({ oiIntegrating: false }),
       ),
-    ).false;
+    ).toBeUndefined();
   });
 
   it('should be true if the alarm is active', () => {
@@ -143,7 +143,7 @@ describe(evaluateAlarm.name, () => {
         },
         createGuideState({ oiIntegrating: true }),
       ),
-    ).true;
+    ).toEqual('GUIDE_COUNTS');
   });
 });
 
@@ -164,7 +164,7 @@ describe(evaluateAlarmSound.name, () => {
         },
         createGuideState(),
       ),
-    ).true;
+    ).toEqual('GUIDE_COUNTS');
   });
 
   it('should be false if the alarm is disabled', () => {
@@ -183,7 +183,7 @@ describe(evaluateAlarmSound.name, () => {
         },
         createGuideState(),
       ),
-    ).false;
+    ).toBeUndefined();
   });
 
   it('should be false if not correcting', () => {
@@ -202,7 +202,7 @@ describe(evaluateAlarmSound.name, () => {
         },
         createGuideState({ m2Inputs: [] }),
       ),
-    ).false;
+    ).toBeUndefined();
   });
 
   it('should be false if not offloading', () => {
@@ -221,7 +221,7 @@ describe(evaluateAlarmSound.name, () => {
         },
         createGuideState({ mountOffload: false }),
       ),
-    ).false;
+    ).toBeUndefined();
   });
 });
 

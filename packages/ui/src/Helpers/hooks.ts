@@ -25,16 +25,24 @@ export type SetStale = ReturnType<typeof useStale>[1];
  * @param webm - webm file path (fallback)
  * @param options - options for the audio player
  */
-export function useAudio(mp3: string, webm: string, options = { loop: false }) {
+export function useAudio(mp3: string | undefined, webm: string | undefined) {
   const audio = useMemo(() => {
+    if (!mp3 || !webm) return;
+
     const audio = selectPlayableAudio(mp3, webm);
-    audio.loop = options.loop;
 
     // Be nicer to developers' ears
     if (import.meta.env.DEV) audio.volume = 0.3;
 
     return audio;
-  }, [mp3, webm, options.loop]);
+  }, [mp3, webm]);
+
+  useEffect(() => {
+    return () => {
+      audio?.pause();
+      audio?.remove();
+    };
+  }, [audio]);
 
   return audio;
 }
@@ -48,9 +56,15 @@ function selectPlayableAudio(mp3S: string, webmS: string) {
   if (mp3.canPlayType('audio/mpeg')) return mp3;
   else {
     const webm = new Audio(webmS);
-    if (webm.canPlayType('audio/webm')) return webm;
+    if (webm.canPlayType('audio/webm')) {
+      mp3.remove();
+      return webm;
+    }
     // If neither can play, at least we'll try mp3
-    else return mp3;
+    else {
+      webm.remove();
+      return mp3;
+    }
   }
 }
 

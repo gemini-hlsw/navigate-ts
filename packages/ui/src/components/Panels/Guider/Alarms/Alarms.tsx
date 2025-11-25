@@ -25,15 +25,16 @@ export function Alarms() {
   const [updateAlarm, { loading: updateLoading }] = useUpdateGuideAlarm();
 
   useEffect(() => {
-    const hasAlarm =
-      !!alarms &&
-      !!guideQualities &&
-      !!guideState &&
-      (evaluateAlarmSound(alarms.OIWFS, guideQualities.oiwfs, guideState) ||
-        evaluateAlarmSound(alarms.PWFS1, guideQualities.pwfs1, guideState) ||
-        evaluateAlarmSound(alarms.PWFS2, guideQualities.pwfs2, guideState));
+    if (alarms && guideQualities && guideState) {
+      const alarm =
+        evaluateAlarmSound(alarms.OIWFS, guideQualities.oiwfs, guideState) ??
+        evaluateAlarmSound(alarms.PWFS1, guideQualities.pwfs1, guideState) ??
+        evaluateAlarmSound(alarms.PWFS2, guideQualities.pwfs2, guideState);
 
-    toggleGuideAlarm(hasAlarm);
+      toggleGuideAlarm(alarm);
+      return () => toggleGuideAlarm(undefined);
+    }
+    return;
   }, [alarms, guideQualities, guideState, toggleGuideAlarm]);
 
   const onUpdateAlarm = (variables: UpdateGuideAlarmMutationVariables) => updateAlarm({ variables });
@@ -50,7 +51,7 @@ export function Alarms() {
           alarm={alarms?.PWFS1}
           disabled={disabled}
           onUpdateAlarm={onUpdateAlarm}
-          hasAlarm={evaluateAlarm(alarms?.PWFS1, guideQualities?.pwfs1, guideState)}
+          alarmState={evaluateAlarm(alarms?.PWFS1, guideQualities?.pwfs1, guideState)}
         />
         <Alarm
           wfs="PWFS2"
@@ -58,7 +59,7 @@ export function Alarms() {
           alarm={alarms?.PWFS2}
           disabled={disabled}
           onUpdateAlarm={onUpdateAlarm}
-          hasAlarm={evaluateAlarm(alarms?.PWFS2, guideQualities?.pwfs2, guideState)}
+          alarmState={evaluateAlarm(alarms?.PWFS2, guideQualities?.pwfs2, guideState)}
         />
         <Alarm
           wfs="OIWFS"
@@ -66,7 +67,7 @@ export function Alarms() {
           alarm={alarms?.OIWFS}
           disabled={disabled}
           onUpdateAlarm={onUpdateAlarm}
-          hasAlarm={evaluateAlarm(alarms?.OIWFS, guideQualities?.oiwfs, guideState)}
+          alarmState={evaluateAlarm(alarms?.OIWFS, guideQualities?.oiwfs, guideState)}
         />
       </div>
     </div>
