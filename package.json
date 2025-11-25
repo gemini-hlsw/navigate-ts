@@ -49,7 +49,17 @@
   },
   "pnpm": {
     "onlyBuiltDependencies": [
-      "@prisma/client"
+      "@parcel/watcher",
+      "@prisma/client",
+      "@prisma/engines",
+      "esbuild",
+      "prisma"
+    ],
+    "ignoredBuiltDependencies": [
+      "cpu-features",
+      "protobufjs",
+      "ssh2",
+      "unrs-resolver"
     ]
   }
 }
