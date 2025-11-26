@@ -1,6 +1,6 @@
 import type { UpdateMechanismMutationVariables } from '@gql/configs/gen/graphql';
 import { useMechanism, useUpdateMechanism } from '@gql/configs/Mechanism';
-import { CrcsPark, McsPark, OiwfsPark } from '@gql/server/Buttons';
+import { CrcsPark, McsPark, OiwfsPark, Pwfs1Park, Pwfs2Park } from '@gql/server/Buttons';
 import { clsx } from 'clsx';
 import { Button } from 'primereact/button';
 import { Dropdown } from 'primereact/dropdown';
@@ -14,13 +14,13 @@ import type { MechanismType } from '@/types';
 export function TopSubsystems({ canEdit }: { canEdit: boolean }) {
   return (
     <div className="top-left">
-      <McsPark disabled={!canEdit} style={{ gridArea: 'g11' }} label="Park" />
+      <McsPark disabled={!canEdit} style={{ gridArea: 'g11' }} label="Park" data-testid="park-mcs" />
       <Button className="under-construction" disabled={!canEdit} style={{ gridArea: 'g12' }} label="Unwrap" />
-      <CrcsPark disabled={!canEdit} style={{ gridArea: 'g31' }} label="Park" />
+      <CrcsPark disabled={!canEdit} style={{ gridArea: 'g31' }} label="Park" data-testid="park-crcs" />
       <Button className="under-construction" disabled={!canEdit} style={{ gridArea: 'g32' }} label="Unwrap" />
-      <Button className="under-construction" disabled={!canEdit} style={{ gridArea: 'g41' }} label="Park" />
+      <Pwfs1Park disabled={!canEdit} style={{ gridArea: 'g41' }} label="Park" data-testid="park-pwfs1" />
       <Button className="under-construction" disabled={!canEdit} style={{ gridArea: 'g42' }} label="Unwrap" />
-      <Button className="under-construction" disabled={!canEdit} style={{ gridArea: 'g51' }} label="Park" />
+      <Pwfs2Park disabled={!canEdit} style={{ gridArea: 'g51' }} label="Park" data-testid="park-pwfs2" />
       <Button className="under-construction" disabled={!canEdit} style={{ gridArea: 'g52' }} label="Unwrap" />
     </div>
   );
@@ -72,6 +72,12 @@ export function BotSubsystems({ canEdit }: { canEdit: boolean }) {
       variables: {
         pk: state.pk,
         ...vars,
+      },
+      optimisticResponse: {
+        updateMechanism: {
+          ...state,
+          ...vars,
+        } as MechanismType,
       },
     });
 

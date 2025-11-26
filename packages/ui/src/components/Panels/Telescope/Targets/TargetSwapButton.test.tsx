@@ -10,6 +10,7 @@ import type { MockedResponseOf } from '@gql/util';
 import type { ResultOf } from '@graphql-typed-document-node/core';
 import type { RenderResult } from 'vitest-browser-react';
 
+import { operationOutcome } from '@/test/helpers';
 import { renderWithContext } from '@/test/render';
 
 import { TargetSwapButton } from './TargetSwapButton';
@@ -200,9 +201,7 @@ const mocks = [
       },
     },
     result: vi.fn().mockReturnValue({
-      data: {
-        swapTarget: { __typename: 'OperationOutcome', result: 'SUCCESS', msg: '' },
-      } satisfies ResultOf<typeof SWAP_TARGET_MUTATION>,
+      data: { swapTarget: operationOutcome } satisfies ResultOf<typeof SWAP_TARGET_MUTATION>,
     }),
   } satisfies MockedResponseOf<typeof SWAP_TARGET_MUTATION>,
   {
@@ -282,9 +281,7 @@ const mocks = [
       },
     },
     result: vi.fn().mockReturnValue({
-      data: {
-        restoreTarget: { __typename: 'OperationOutcome', result: 'SUCCESS', msg: '' },
-      } satisfies ResultOf<typeof RESTORE_TARGET_MUTATION>,
+      data: { restoreTarget: operationOutcome } satisfies ResultOf<typeof RESTORE_TARGET_MUTATION>,
     }),
   } satisfies MockedResponseOf<typeof RESTORE_TARGET_MUTATION>,
   {

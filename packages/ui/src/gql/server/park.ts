@@ -26,3 +26,21 @@ export const OIWFS_PARK_MUTATION = graphql(`
     }
   }
 `);
+
+export const PWFS1_PARK_MUTATION = graphql(`
+  mutation pwfs1Park {
+    pwfs1Park {
+      result
+      msg
+    }
+  }
+`);
+
+export const PWFS2_PARK_MUTATION = graphql(`
+  mutation pwfs2Park {
+    pwfs2Park {
+      result
+      msg
+    }
+  }
+`);

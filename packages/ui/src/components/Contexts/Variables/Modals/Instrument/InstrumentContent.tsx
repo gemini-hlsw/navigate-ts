@@ -64,7 +64,7 @@ export function InstrumentContent({
           loading={loading}
           options={nameOptions}
           onChange={(e) => {
-            setName(e.target.value as InstrumentName);
+            setName(e.value as InstrumentName);
             setPort(null);
             setInstrument(null);
           }}
@@ -78,7 +78,7 @@ export function InstrumentContent({
           value={port}
           options={portOptions}
           onChange={(e) => {
-            setPort(e.target.value as number);
+            setPort(e.value as number);
             setInstrument(null);
           }}
           placeholder="Select port"

@@ -58,7 +58,7 @@ export function GeMS({ canEdit }: { canEdit: boolean }) {
           loading={loading}
           value={state.beamsplitter}
           options={['400 nm', '550 nm', '700nm', '850 nm', '1000 nm']}
-          onChange={(e) => modifyGemsInstrument('beamsplitter', e.target.value as string)}
+          onChange={(e) => modifyGemsInstrument('beamsplitter', e.value as string)}
           placeholder="Select a beamsplitter"
         />
         <label htmlFor="asometric-mode" className="label">
@@ -70,7 +70,7 @@ export function GeMS({ canEdit }: { canEdit: boolean }) {
           loading={loading}
           value={state.astrometricMode}
           options={['Best', 'Average']}
-          onChange={(e) => modifyGemsInstrument('astrometricMode', e.target.value as string)}
+          onChange={(e) => modifyGemsInstrument('astrometricMode', e.value as string)}
           placeholder="Select a mode"
         />
       </div>
@@ -114,7 +114,7 @@ export function Altair({ canEdit }: { canEdit: boolean }) {
           disabled={!canEdit}
           value={state.beamsplitter}
           options={['400 nm', '550 nm', '700nm', '850 nm', '1000 nm']}
-          onChange={(e) => modifyAltairInstrument('beamsplitter', e.target.value as string)}
+          onChange={(e) => modifyAltairInstrument('beamsplitter', e.value as string)}
           placeholder="Select a tracking"
         />
         <label htmlFor="nd-filter" className="label">

@@ -42,7 +42,7 @@ type Query {
 
   instruments(name: Instrument, issPort: Int, wfs: WfsType, extraParams: JSON): [InstrumentConfig!]!
 
-  distinctInstruments: [String!]!
+  distinctInstruments: [Instrument!]!
 
   distinctPorts(name: Instrument): [Int!]!
 }

@@ -17,7 +17,7 @@ import type { MockedResponseOf } from '@gql/util';
 import type { ResultOf } from '@graphql-typed-document-node/core';
 import type { Mock } from 'vitest';
 
-import { selectDropdownOption } from '@/test/helpers';
+import { operationOutcome, selectDropdownOption } from '@/test/helpers';
 import { type RenderResultWithStore, renderWithContext } from '@/test/render';
 
 import type { Alignment } from './Controls';
@@ -374,13 +374,7 @@ const resetTargetAdjustmentMutationMock = {
     variables: vi.fn().mockReturnValue(true),
   },
   result: vi.fn().mockReturnValue({
-    data: {
-      resetTargetAdjustment: {
-        __typename: 'OperationOutcome',
-        result: 'SUCCESS',
-        msg: null,
-      },
-    } satisfies ResultOf<typeof RESET_TARGET_ADJUSTMENT_MUTATION>,
+    data: { resetTargetAdjustment: operationOutcome } satisfies ResultOf<typeof RESET_TARGET_ADJUSTMENT_MUTATION>,
   }),
 } satisfies MockedResponseOf<typeof RESET_TARGET_ADJUSTMENT_MUTATION>;
 
@@ -391,13 +385,7 @@ const adjustTargetMutationMock = {
   },
   maxUsageCount: Infinity,
   result: vi.fn().mockReturnValue({
-    data: {
-      adjustTarget: {
-        __typename: 'OperationOutcome',
-        result: 'SUCCESS',
-        msg: null,
-      },
-    } satisfies ResultOf<typeof ADJUST_TARGET_MUTATION>,
+    data: { adjustTarget: operationOutcome } satisfies ResultOf<typeof ADJUST_TARGET_MUTATION>,
   }),
 } satisfies MockedResponseOf<typeof ADJUST_TARGET_MUTATION>;
 
@@ -407,13 +395,7 @@ const absorbTargetAdjustmentMutationMock = {
     variables: vi.fn().mockReturnValue(true),
   },
   result: vi.fn().mockReturnValue({
-    data: {
-      absorbTargetAdjustment: {
-        __typename: 'OperationOutcome',
-        result: 'SUCCESS',
-        msg: null,
-      },
-    } satisfies ResultOf<typeof ABSORB_TARGET_ADJUSTMENT_MUTATION>,
+    data: { absorbTargetAdjustment: operationOutcome } satisfies ResultOf<typeof ABSORB_TARGET_ADJUSTMENT_MUTATION>,
   }),
 } satisfies MockedResponseOf<typeof ABSORB_TARGET_ADJUSTMENT_MUTATION>;
 
