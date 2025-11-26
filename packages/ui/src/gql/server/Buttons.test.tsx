@@ -6,6 +6,7 @@ import { GET_TARGETS } from '@gql/configs/Target';
 import type { MockedResponseOf } from '@gql/util';
 import type { ResultOf, VariablesOf } from '@graphql-typed-document-node/core';
 
+import { operationOutcome } from '@/test/helpers';
 import { renderWithContext } from '@/test/render';
 
 import { Slew, SLEW_MUTATION } from './Buttons';
@@ -259,12 +260,7 @@ const slewMutationMock = {
     variables: vi.fn().mockReturnValue(true),
   },
   result: vi.fn().mockReturnValue({
-    data: {
-      slew: {
-        __typename: 'OperationOutcome',
-        result: 'SUCCESS',
-      },
-    } satisfies ResultOf<typeof SLEW_MUTATION>,
+    data: { slew: operationOutcome } satisfies ResultOf<typeof SLEW_MUTATION>,
   }),
 } satisfies MockedResponseOf<typeof SLEW_MUTATION>;
 

@@ -1,4 +1,4 @@
-import type { QueryResolvers } from './../../gen/types.generated.ts';
+import type { Instrument, QueryResolvers } from './../../gen/types.generated.ts';
 
 export const distinctInstruments: NonNullable<QueryResolvers['distinctInstruments']> = async (
   _parent,
@@ -10,5 +10,5 @@ export const distinctInstruments: NonNullable<QueryResolvers['distinctInstrument
     select: { name: true },
     orderBy: { name: 'asc' },
   });
-  return results.map((r) => r.name);
+  return results.map((r) => r.name as Instrument);
 };

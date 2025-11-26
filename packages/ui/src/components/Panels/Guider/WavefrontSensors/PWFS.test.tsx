@@ -10,7 +10,7 @@ import {
 } from '@gql/server/MechsState';
 import type { MockedResponseOf } from '@gql/util';
 
-import { selectDropdownOption } from '@/test/helpers';
+import { operationOutcome, selectDropdownOption } from '@/test/helpers';
 import { renderWithContext } from '@/test/render';
 
 import { PWFS1, PWFS2 } from './PWFS';
@@ -141,13 +141,7 @@ const pwfs1FilterMock = {
     variables: vi.fn().mockReturnValue(true),
   },
   result: {
-    data: {
-      pwfs1Filter: {
-        __typename: 'OperationOutcome',
-        result: 'SUCCESS',
-        msg: '',
-      },
-    },
+    data: { pwfs1Filter: operationOutcome },
   },
 } satisfies MockedResponseOf<typeof PWFS1_FILTER>;
 
@@ -157,13 +151,7 @@ const pwfs2FilterMock = {
     variables: vi.fn().mockReturnValue(true),
   },
   result: {
-    data: {
-      pwfs2Filter: {
-        __typename: 'OperationOutcome',
-        result: 'SUCCESS',
-        msg: '',
-      },
-    },
+    data: { pwfs2Filter: operationOutcome },
   },
 } satisfies MockedResponseOf<typeof PWFS2_FILTER>;
 
@@ -173,13 +161,7 @@ const pwfs1FieldStopMock = {
     variables: vi.fn().mockReturnValue(true),
   },
   result: {
-    data: {
-      pwfs1FieldStop: {
-        __typename: 'OperationOutcome',
-        result: 'SUCCESS',
-        msg: '',
-      },
-    },
+    data: { pwfs1FieldStop: operationOutcome },
   },
 } satisfies MockedResponseOf<typeof PWFS1_FIELD_STOP>;
 
@@ -189,13 +171,7 @@ const pwfs2FieldStopMock = {
     variables: vi.fn().mockReturnValue(true),
   },
   result: {
-    data: {
-      pwfs2FieldStop: {
-        __typename: 'OperationOutcome',
-        result: 'SUCCESS',
-        msg: '',
-      },
-    },
+    data: { pwfs2FieldStop: operationOutcome },
   },
 } satisfies MockedResponseOf<typeof PWFS2_FIELD_STOP>;
 

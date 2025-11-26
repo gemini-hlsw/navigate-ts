@@ -1,3 +1,4 @@
+import type { OperationOutcome } from '@gql/server/gen/graphql';
 import { type LocatorSelectors, page, userEvent } from 'vitest/browser';
 
 /**
@@ -27,3 +28,12 @@ export async function selectDropdownOption(sut: LocatorSelectors, dropdownPlaceh
   await expect.element(option).toBeVisible();
   await userEvent.click(option);
 }
+
+/**
+ * A generic successful OperationOutcome object for use in tests
+ */
+export const operationOutcome: OperationOutcome = {
+  __typename: 'OperationOutcome',
+  result: 'SUCCESS',
+  msg: null,
+};

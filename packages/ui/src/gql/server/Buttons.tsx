@@ -61,7 +61,7 @@ function MutationButton<T extends DocumentNode>({
   return (
     <Button {...props} onClick={() => mutationFunction({ variables })} loading={props.loading || loading}>
       {icons?.length && <span className="mutation-button-icons">{icons}</span>}
-      <span className="p-button-label">{label}</span>
+      {label && <span className="p-button-label">{label}</span>}
     </Button>
   );
 }

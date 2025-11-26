@@ -14,13 +14,13 @@ import type { MechanismType } from '@/types';
 export function TopSubsystems({ canEdit }: { canEdit: boolean }) {
   return (
     <div className="top-left">
-      <McsPark disabled={!canEdit} style={{ gridArea: 'g11' }} label="Park" />
+      <McsPark disabled={!canEdit} style={{ gridArea: 'g11' }} label="Park" data-testid="park-mcs" />
       <Button className="under-construction" disabled={!canEdit} style={{ gridArea: 'g12' }} label="Unwrap" />
-      <CrcsPark disabled={!canEdit} style={{ gridArea: 'g31' }} label="Park" />
+      <CrcsPark disabled={!canEdit} style={{ gridArea: 'g31' }} label="Park" data-testid="park-crcs" />
       <Button className="under-construction" disabled={!canEdit} style={{ gridArea: 'g32' }} label="Unwrap" />
-      <Pwfs1Park disabled={!canEdit} style={{ gridArea: 'g41' }} label="Park" />
+      <Pwfs1Park disabled={!canEdit} style={{ gridArea: 'g41' }} label="Park" data-testid="park-pwfs1" />
       <Button className="under-construction" disabled={!canEdit} style={{ gridArea: 'g42' }} label="Unwrap" />
-      <Pwfs2Park disabled={!canEdit} style={{ gridArea: 'g51' }} label="Park" />
+      <Pwfs2Park disabled={!canEdit} style={{ gridArea: 'g51' }} label="Park" data-testid="park-pwfs2" />
       <Button className="under-construction" disabled={!canEdit} style={{ gridArea: 'g52' }} label="Unwrap" />
     </div>
   );
@@ -72,6 +72,12 @@ export function BotSubsystems({ canEdit }: { canEdit: boolean }) {
       variables: {
         pk: state.pk,
         ...vars,
+      },
+      optimisticResponse: {
+        updateMechanism: {
+          ...state,
+          ...vars,
+        } as MechanismType,
       },
     });
 

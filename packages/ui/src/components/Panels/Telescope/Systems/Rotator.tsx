@@ -23,12 +23,14 @@ export function Rotator({ canEdit }: { canEdit: boolean }) {
           inputId="rotator-mode"
           disabled={!canEdit}
           value={rotator?.tracking ?? null}
-          options={['TRACKING', 'FIXED']}
+          options={['TRACKING', 'FIXED'] satisfies TrackingType[]}
           loading={loading}
           onChange={async (e) => {
+            const tracking = e.value as TrackingType;
             if (rotator)
               await updateRotator({
-                variables: { pk: rotator.pk, tracking: e.value as TrackingType },
+                variables: { pk: rotator.pk, tracking },
+                optimisticResponse: { updateRotator: { ...rotator, tracking } },
               });
           }}
           placeholder="Select a tracking"
@@ -43,9 +45,11 @@ export function Rotator({ canEdit }: { canEdit: boolean }) {
           minFractionDigits={2}
           maxFractionDigits={3}
           onValueChange={async (e) => {
+            const angle = e.target.value!;
             if (rotator)
               await updateRotator({
-                variables: { pk: rotator.pk, angle: e.target.value },
+                variables: { pk: rotator.pk, angle },
+                optimisticResponse: { updateRotator: { ...rotator, angle } },
               });
           }}
           mode="decimal"

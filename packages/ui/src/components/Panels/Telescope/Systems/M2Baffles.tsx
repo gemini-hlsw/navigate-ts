@@ -1,5 +1,5 @@
 import { useConfiguration, useUpdateConfiguration } from '@gql/configs/Configuration';
-import type { BaffleMode, UpdateConfigurationMutationVariables } from '@gql/configs/gen/graphql';
+import type { BaffleMode, Configuration, UpdateConfigurationMutationVariables } from '@gql/configs/gen/graphql';
 import type { CentralBaffle, DeployableBaffle } from '@gql/server/gen/graphql';
 import { Title } from '@Shared/Title/Title';
 import { Dropdown } from 'primereact/dropdown';
@@ -25,6 +25,12 @@ export function M2Baffles({ canEdit }: { canEdit: boolean }) {
       variables: {
         pk: configuration.pk,
         ...vars,
+      },
+      optimisticResponse: {
+        updateConfiguration: {
+          ...configuration,
+          ...vars,
+        } as Configuration,
       },
     });
   };
