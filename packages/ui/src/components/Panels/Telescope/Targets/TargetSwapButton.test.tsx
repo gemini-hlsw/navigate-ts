@@ -12,6 +12,7 @@ import type { RenderResult } from 'vitest-browser-react';
 
 import { operationOutcome } from '@/test/helpers';
 import { renderWithContext } from '@/test/render';
+import type { TargetType } from '@/types';
 
 import { TargetSwapButton } from './TargetSwapButton';
 
@@ -21,7 +22,12 @@ describe(TargetSwapButton.name, () => {
   describe('onSwappedTarget is false', () => {
     beforeEach(async () => {
       sut = await renderWithContext(
-        <TargetSwapButton selectedTarget={selectedTarget as Target} oiSelected={oiSelected as Target} />,
+        <TargetSwapButton
+          selectedTarget={selectedTarget as Target}
+          selectedOi={selectedOi as Target}
+          selectedP1={undefined}
+          selectedP2={undefined}
+        />,
         {
           mocks: [...mocks, ...navigateStatesMock(false)],
         },
@@ -46,7 +52,12 @@ describe(TargetSwapButton.name, () => {
   describe('onSwappedTarget is true', () => {
     beforeEach(async () => {
       sut = await renderWithContext(
-        <TargetSwapButton selectedTarget={selectedTarget as Target} oiSelected={oiSelected as Target} />,
+        <TargetSwapButton
+          selectedTarget={selectedTarget as Target}
+          selectedOi={selectedOi as Target}
+          selectedP1={undefined}
+          selectedP2={undefined}
+        />,
         {
           mocks: [...mocks, ...navigateStatesMock(true)],
         },
@@ -74,14 +85,17 @@ const selectedTarget = {
   ra: {
     degrees: 56.69542085833334,
     hms: '03:46:46.901006',
+    __typename: 'RA',
   },
   dec: {
     degrees: 80.07267194527778,
     dms: '+80:04:21.618990',
+    __typename: 'Dec',
   },
   properMotion: {
     ra: 0,
     dec: 0,
+    __typename: 'ProperMotion',
   },
   radialVelocity: 0,
   parallax: 0,
@@ -91,23 +105,29 @@ const selectedTarget = {
   type: 'SCIENCE',
   wavelength: 100,
   createdAt: '2024-09-25T11:57:29.410Z',
-};
+  band: null,
+  magnitude: null,
+  __typename: 'Target',
+} satisfies TargetType;
 
-const oiSelected = {
+const selectedOi = {
   pk: 10,
   id: 't-000',
   name: 'OI Target',
   ra: {
     degrees: 56.69542085833334,
     hms: '03:46:46.901006',
+    __typename: 'RA',
   },
   dec: {
     degrees: 80.07267194527778,
     dms: '+80:04:21.618990',
+    __typename: 'Dec',
   },
   properMotion: {
     ra: 0,
     dec: 0,
+    __typename: 'ProperMotion',
   },
   radialVelocity: 0,
   parallax: 0,
@@ -116,7 +136,11 @@ const oiSelected = {
   epoch: 'J2000.000',
   type: 'OIWFS',
   createdAt: '2024-09-25T11:57:29.410Z',
-};
+  band: null,
+  magnitude: null,
+  wavelength: null,
+  __typename: 'Target',
+} satisfies TargetType;
 
 const mocks = [
   {
@@ -175,25 +199,25 @@ const mocks = [
           },
           rotator: { ipa: { degrees: 0 }, mode: 'TRACKING' },
           guideTarget: {
-            id: oiSelected.id,
-            name: oiSelected.name,
+            id: selectedOi.id,
+            name: selectedOi.name,
             sidereal: {
-              ra: { hms: oiSelected.ra.hms },
-              dec: { dms: oiSelected.dec.dms },
-              epoch: oiSelected.epoch,
+              ra: { hms: selectedOi.ra.hms },
+              dec: { dms: selectedOi.dec.dms },
+              epoch: selectedOi.epoch,
               properMotion: {
                 ra: {
-                  microarcsecondsPerYear: oiSelected.properMotion?.ra,
+                  microarcsecondsPerYear: selectedOi.properMotion?.ra,
                 },
                 dec: {
-                  microarcsecondsPerYear: oiSelected.properMotion?.dec,
+                  microarcsecondsPerYear: selectedOi.properMotion?.dec,
                 },
               },
               radialVelocity: {
-                centimetersPerSecond: oiSelected.radialVelocity,
+                centimetersPerSecond: selectedOi.radialVelocity,
               },
               parallax: {
-                microarcseconds: oiSelected.parallax,
+                microarcseconds: selectedOi.parallax,
               },
             },
           },
@@ -249,24 +273,24 @@ const mocks = [
               nodBchopB: true,
             },
             target: {
-              name: oiSelected.name,
+              name: selectedOi.name,
               sidereal: {
-                ra: { hms: oiSelected?.ra?.hms },
-                dec: { dms: oiSelected?.dec?.dms },
-                epoch: oiSelected.epoch,
+                ra: { hms: selectedOi?.ra?.hms },
+                dec: { dms: selectedOi?.dec?.dms },
+                epoch: selectedOi.epoch,
                 properMotion: {
                   ra: {
-                    microarcsecondsPerYear: oiSelected.properMotion?.ra,
+                    microarcsecondsPerYear: selectedOi.properMotion?.ra,
                   },
                   dec: {
-                    microarcsecondsPerYear: oiSelected.properMotion?.dec,
+                    microarcsecondsPerYear: selectedOi.properMotion?.dec,
                   },
                 },
                 radialVelocity: {
-                  centimetersPerSecond: oiSelected.radialVelocity,
+                  centimetersPerSecond: selectedOi.radialVelocity,
                 },
                 parallax: {
-                  microarcseconds: oiSelected.parallax,
+                  microarcseconds: selectedOi.parallax,
                 },
               },
             },

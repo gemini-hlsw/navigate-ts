@@ -18,14 +18,14 @@ export function isBaseTarget(target: Pick<TargetType, 'type'> | undefined | null
   if (isNullish(target)) return false;
   else return ['SCIENCE', 'BLINDOFFSET', 'FIXED'].includes(target.type);
 }
-export function isOiTarget(target: Pick<TargetType, 'type'>) {
-  return target.type === 'OIWFS';
+export function isOiTarget(target: Pick<TargetType, 'type'> | undefined) {
+  return target?.type === 'OIWFS';
 }
-export function isP1Target(target: Pick<TargetType, 'type'>) {
-  return target.type === 'PWFS1';
+export function isP1Target(target: Pick<TargetType, 'type'> | undefined) {
+  return target?.type === 'PWFS1';
 }
-export function isP2Target(target: Pick<TargetType, 'type'>) {
-  return target.type === 'PWFS2';
+export function isP2Target(target: Pick<TargetType, 'type'> | undefined) {
+  return target?.type === 'PWFS2';
 }
 
 export type MockedResponseOf<T extends DocumentNode> =

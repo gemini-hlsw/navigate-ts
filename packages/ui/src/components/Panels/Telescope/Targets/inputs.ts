@@ -2,12 +2,14 @@ import type { CalParams, Configuration, InstrumentConfig, Rotator, Target } from
 import type {
   AzElTargetInput,
   BaffleConfigInput,
+  GuiderConfig,
   InstrumentSpecificsInput,
   RotatorTrackingInput,
   SiderealInput,
   TargetPropertiesInput,
   TcsConfigInput,
 } from '@gql/server/gen/graphql';
+import { isOiTarget, isP1Target, isP2Target } from '@gql/util';
 
 import { when } from '@/Helpers/functions';
 
@@ -93,11 +95,27 @@ export function createBafflesInput(
   }
 }
 
+function createGuiderConfig(target: Target): GuiderConfig {
+  return {
+    tracking: {
+      // TODO: this should be selected depending on the "GuiderFooter" dropdown value!
+      nodAchopA: true,
+      nodAchopB: false,
+      nodBchopA: false,
+      nodBchopB: true,
+    },
+    target: {
+      name: target.name,
+      sidereal: createSiderealInput(target),
+    },
+  };
+}
+
 export function createTcsConfigInput(
   instrument: InstrumentConfig,
   rotator: Rotator,
   target: Target,
-  oiTarget: Target | undefined,
+  guiderTarget: Target | undefined,
   calParams: Pick<CalParams, 'baffleVisible' | 'baffleNearIR'>,
   configuration: Pick<Configuration, 'baffleMode' | 'centralBaffle' | 'deployableBaffle'>,
 ): TcsConfigInput {
@@ -115,18 +133,8 @@ export function createTcsConfigInput(
     rotator: rotatorInput,
     sourceATarget: targetInput,
     baffles: bafflesInput,
-    oiwfs: when(oiTarget, (oiTarget) => ({
-      tracking: {
-        // TODO: this should be selected depending on the "GuiderFooter" dropdown value!
-        nodAchopA: true,
-        nodAchopB: false,
-        nodBchopA: false,
-        nodBchopB: true,
-      },
-      target: {
-        name: oiTarget.name,
-        sidereal: createSiderealInput(oiTarget),
-      },
-    })),
+    oiwfs: when(isOiTarget(guiderTarget) && guiderTarget, createGuiderConfig),
+    pwfs1: when(isP1Target(guiderTarget) && guiderTarget, createGuiderConfig),
+    pwfs2: when(isP2Target(guiderTarget) && guiderTarget, createGuiderConfig),
   };
 }

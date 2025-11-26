@@ -57,13 +57,14 @@ function useTcsConfigInput():
   const rotator = rotatorData?.rotator;
 
   const { data: targetsData, loading: targetsLoading } = useTargets();
+  const { baseTargets, oiTargets, p1Targets, p2Targets } = targetsData;
 
   const { data: calParamsData, loading: calParamsLoading } = useCalParams(site);
   const calParams = calParamsData?.calParams;
 
   const loading = configurationLoading || instrumentLoading || rotatorLoading || targetsLoading || calParamsLoading;
 
-  const baseTarget = targetsData.baseTargets.find((t) => t.pk === configuration?.selectedTarget);
+  const baseTarget = baseTargets.find((t) => t.pk === configuration?.selectedTarget);
 
   if (!instrument || !rotator || !baseTarget || !calParams || !configuration) {
     let detail: string;
@@ -81,10 +82,13 @@ function useTcsConfigInput():
     return { data: undefined, loading, detail };
   }
 
-  const oiTarget = targetsData.oiTargets.find((t) => t.pk === configuration?.selectedOiTarget);
+  const oiTarget = oiTargets.find((t) => t.pk === configuration?.selectedOiTarget);
+  const p1Target = p1Targets.find((t) => t.pk === configuration?.selectedP1Target);
+  const p2Target = p2Targets.find((t) => t.pk === configuration?.selectedP2Target);
+  const guiderTarget = oiTarget ?? p1Target ?? p2Target;
 
   return {
-    data: createTcsConfigInput(instrument, rotator, baseTarget, oiTarget, calParams, configuration),
+    data: createTcsConfigInput(instrument, rotator, baseTarget, guiderTarget, calParams, configuration),
     loading,
     detail: undefined,
   };

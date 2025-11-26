@@ -27,15 +27,15 @@ export function GuiderTargets() {
   const configuration = useConfiguration().data?.configuration;
 
   const selectedTarget: Target | undefined = allTargets.find((t) => t.pk === configuration?.selectedTarget);
-  const oiSelected: Target | undefined = oiTargets.find((t) => t.pk === configuration?.selectedOiTarget);
-  const p1Selected: Target | undefined = p1Targets.find((t) => t.pk === configuration?.selectedP1Target);
-  const p2Selected: Target | undefined = p2Targets.find((t) => t.pk === configuration?.selectedP2Target);
+  const selectedOi: Target | undefined = oiTargets.find((t) => t.pk === configuration?.selectedOiTarget);
+  const selectedP1: Target | undefined = p1Targets.find((t) => t.pk === configuration?.selectedP1Target);
+  const selectedP2: Target | undefined = p2Targets.find((t) => t.pk === configuration?.selectedP2Target);
 
   const displayProbes: React.ReactNode[] = [];
   if (oiTargets.length) {
     displayProbes.push(
       <div key="OIWFS" className="guide-probe">
-        <Title title={oiSelected ? `OIWFS: ${oiSelected.name}` : 'OIWFS'} />
+        <Title title={selectedOi ? `OIWFS: ${selectedOi.name}` : 'OIWFS'} />
         <TargetList targets={oiTargets} type="OIWFS" />
         <GuiderFooter disabled={!canEdit} />
       </div>,
@@ -45,7 +45,7 @@ export function GuiderTargets() {
   if (p1Targets.length) {
     displayProbes.push(
       <div key="PWFS1" className="guide-probe">
-        <Title title={p1Selected ? `PWFS1: ${p1Selected.name}` : 'PWFS1'} />
+        <Title title={selectedP1 ? `PWFS1: ${selectedP1.name}` : 'PWFS1'} />
         <TargetList targets={p1Targets} type="PWFS1" />
         <GuiderFooter disabled={!canEdit} />
       </div>,
@@ -55,7 +55,7 @@ export function GuiderTargets() {
   if (p2Targets.length) {
     displayProbes.push(
       <div key="PWFS2" className="guide-probe">
-        <Title title={p2Selected ? `PWFS2: ${p2Selected.name}` : 'PWFS2'} />
+        <Title title={selectedP2 ? `PWFS2: ${selectedP2.name}` : 'PWFS2'} />
         <TargetList targets={p2Targets} type="PWFS2" />
         <GuiderFooter disabled={!canEdit} />
       </div>,
@@ -77,9 +77,9 @@ export function GuiderTargets() {
       <div className="body">{displayProbes}</div>
       <TargetSwapButton
         selectedTarget={selectedTarget}
-        oiSelected={oiSelected}
-        // p1Selected={p1Selected}
-        // p2Selected={p2Selected}
+        selectedOi={selectedOi}
+        selectedP1={selectedP1}
+        selectedP2={selectedP2}
       />
     </div>
   );

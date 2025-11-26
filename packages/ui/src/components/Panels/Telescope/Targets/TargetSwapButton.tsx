@@ -20,14 +20,14 @@ import {
 
 export function TargetSwapButton({
   selectedTarget,
-  oiSelected,
-  // p1Selected,
-  // p2Selected,
+  selectedOi,
+  selectedP1,
+  selectedP2,
 }: {
   selectedTarget: Target | undefined;
-  oiSelected: Target | undefined;
-  // p1Selected: Target | undefined;
-  // p2Selected: Target | undefined;
+  selectedOi: Target | undefined;
+  selectedP1: Target | undefined;
+  selectedP2: Target | undefined;
 }) {
   const { site } = useServerConfigValue();
 
@@ -70,7 +70,8 @@ export function TargetSwapButton({
   const severity = data?.onSwappedTarget ? 'danger' : undefined;
 
   const onClick = async () => {
-    if (selectedTarget?.id && instrument && rotator && oiSelected && acInst && calParams && configuration) {
+    const guiderTarget = selectedOi ?? selectedP1 ?? selectedP2;
+    if (selectedTarget?.id && instrument && rotator && guiderTarget && acInst && calParams && configuration) {
       // TODO: other inputs for swap/nonswap
 
       if (data?.onSwappedTarget) {
@@ -78,7 +79,7 @@ export function TargetSwapButton({
         // Use the science target
         await restoreTarget({
           variables: {
-            config: createTcsConfigInput(instrument, rotator, selectedTarget, oiSelected, calParams, configuration),
+            config: createTcsConfigInput(instrument, rotator, selectedTarget, guiderTarget, calParams, configuration),
           },
         });
       } else {
@@ -87,8 +88,7 @@ export function TargetSwapButton({
         const instrumentInput = createInstrumentSpecificsInput(acInst);
 
         // Use Guide target if swapping
-        // TODO: Will use OI for now, in the future can be OI, P1 or P2
-        const targetInput = createTargetPropertiesInput({ ...oiSelected, id: oiSelected.id ?? 't-000' });
+        const targetInput = createTargetPropertiesInput({ ...guiderTarget, id: guiderTarget.id ?? 't-000' });
 
         await swapTarget({
           variables: {
@@ -104,7 +104,7 @@ export function TargetSwapButton({
       let detail: string;
       if (!selectedTarget) {
         detail = 'No target';
-      } else if (!oiSelected) {
+      } else if (!guiderTarget) {
         detail = 'No guide star';
       } else if (!acInst) {
         detail = 'No acquisition camera';

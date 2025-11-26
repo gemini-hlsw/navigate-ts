@@ -61,6 +61,8 @@ describe(Slew.name, () => {
           },
           "instrument": "ACQ_CAM",
           "oiwfs": undefined,
+          "pwfs1": undefined,
+          "pwfs2": undefined,
           "rotator": {
             "ipa": {
               "degrees": 0,

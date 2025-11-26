@@ -226,6 +226,9 @@ export function Slew(props: ButtonProps) {
 
   const selectedTarget = baseTargets.find((t) => t.pk === configuration?.selectedTarget);
   const selectedOiTarget = oiTargets.find((t) => t.pk === configuration?.selectedOiTarget);
+  const selectedP1Target = targetsData.p1Targets.find((t) => t.pk === configuration?.selectedP1Target);
+  const selectedP2Target = targetsData.p2Targets.find((t) => t.pk === configuration?.selectedP2Target);
+  const guiderTarget = selectedOiTarget ?? selectedP1Target ?? selectedP2Target;
 
   if (!selectedTarget?.id || !instrument || !rotator || !calParams || !configuration) {
     const missing = !selectedTarget?.id
@@ -252,7 +255,7 @@ export function Slew(props: ButtonProps) {
   const variables: RunSlewMutationVariables = {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     slewOptions: (({ pk, __typename, ...o }) => o)(slewFlags),
-    config: createTcsConfigInput(instrument, rotator, selectedTarget, selectedOiTarget, calParams, configuration),
+    config: createTcsConfigInput(instrument, rotator, selectedTarget, guiderTarget, calParams, configuration),
     obsId: configuration?.obsId,
   };
 
