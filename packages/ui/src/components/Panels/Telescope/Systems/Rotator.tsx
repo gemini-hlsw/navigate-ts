@@ -28,7 +28,7 @@ export function Rotator({ canEdit }: { canEdit: boolean }) {
           onChange={async (e) => {
             if (rotator)
               await updateRotator({
-                variables: { pk: rotator.pk, tracking: e.target.value as TrackingType },
+                variables: { pk: rotator.pk, tracking: e.value as TrackingType },
               });
           }}
           placeholder="Select a tracking"

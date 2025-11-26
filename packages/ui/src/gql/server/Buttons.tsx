@@ -21,10 +21,23 @@ import { BTN_CLASSES } from '@/Helpers/constants';
 import type { SetStale } from '@/Helpers/hooks';
 import type { SlewFlagsType } from '@/types';
 
-import { MOUNT_FOLLOW_MUTATION, OIWFS_FOLLOW_MUTATION, ROTATOR_FOLLOW_MUTATION, SCS_FOLLOW_MUTATION } from './follow';
+import {
+  MOUNT_FOLLOW_MUTATION,
+  OIWFS_FOLLOW_MUTATION,
+  PWFS1_FOLLOW_MUTATION,
+  PWFS2_FOLLOW_MUTATION,
+  ROTATOR_FOLLOW_MUTATION,
+  SCS_FOLLOW_MUTATION,
+} from './follow';
 import { graphql } from './gen';
 import type { MechSystemState, RunSlewMutationVariables } from './gen/graphql';
-import { MOUNT_PARK_MUTATION, OIWFS_PARK_MUTATION, ROTATOR_PARK_MUTATION } from './park';
+import {
+  MOUNT_PARK_MUTATION,
+  OIWFS_PARK_MUTATION,
+  PWFS1_PARK_MUTATION,
+  PWFS2_PARK_MUTATION,
+  ROTATOR_PARK_MUTATION,
+} from './park';
 
 // Generic mutation button
 function MutationButton<T extends DocumentNode>({
@@ -104,9 +117,17 @@ export function PWFS1({
   inUse,
   ...props
 }: ButtonProps & { state: MechSystemState | undefined; inUse: boolean }) {
-  // TODO: Implement PWFS1 mutation
-  const { classes, title } = classNameForState(state, inUse);
-  return <Button {...props} title={title} className={clsx(className, classes)} />;
+  const { classes, title, icons } = classNameForState(state, inUse);
+  return (
+    <MutationButton
+      mutation={PWFS1_FOLLOW_MUTATION}
+      icons={icons}
+      variables={{ enable: state?.follow === 'NOT_FOLLOWING' }}
+      {...props}
+      title={title}
+      className={clsx(className, classes)}
+    />
+  );
 }
 
 export function PWFS2({
@@ -115,9 +136,17 @@ export function PWFS2({
   inUse,
   ...props
 }: ButtonProps & { state: MechSystemState | undefined; inUse: boolean }) {
-  // TODO: Implement PWFS2 mutation
-  const { classes, title } = classNameForState(state, inUse);
-  return <Button {...props} title={title} className={clsx(className, classes)} />;
+  const { classes, title, icons } = classNameForState(state, inUse);
+  return (
+    <MutationButton
+      mutation={PWFS2_FOLLOW_MUTATION}
+      icons={icons}
+      variables={{ enable: state?.follow === 'NOT_FOLLOWING' }}
+      {...props}
+      title={title}
+      className={clsx(className, classes)}
+    />
+  );
 }
 
 export function AOWFS({ className, ...props }: ButtonProps) {
@@ -154,6 +183,14 @@ export function CrcsPark(props: ButtonProps) {
 
 export function OiwfsPark(props: ButtonProps) {
   return <MutationButton mutation={OIWFS_PARK_MUTATION} variables={{}} {...props} />;
+}
+
+export function Pwfs1Park(props: ButtonProps) {
+  return <MutationButton mutation={PWFS1_PARK_MUTATION} variables={{}} {...props} />;
+}
+
+export function Pwfs2Park(props: ButtonProps) {
+  return <MutationButton mutation={PWFS2_PARK_MUTATION} variables={{}} {...props} />;
 }
 
 // SLEW

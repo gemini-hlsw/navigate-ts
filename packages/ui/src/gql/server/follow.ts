@@ -39,3 +39,21 @@ export const OIWFS_FOLLOW_MUTATION = graphql(`
     }
   }
 `);
+
+export const PWFS1_FOLLOW_MUTATION = graphql(`
+  mutation changePwfs1State($enable: Boolean!) {
+    pwfs1Follow(enable: $enable) {
+      result
+      msg
+    }
+  }
+`);
+
+export const PWFS2_FOLLOW_MUTATION = graphql(`
+  mutation changePwfs2State($enable: Boolean!) {
+    pwfs2Follow(enable: $enable) {
+      result
+      msg
+    }
+  }
+`);

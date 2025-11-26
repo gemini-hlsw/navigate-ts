@@ -1,6 +1,6 @@
 import type { UpdateMechanismMutationVariables } from '@gql/configs/gen/graphql';
 import { useMechanism, useUpdateMechanism } from '@gql/configs/Mechanism';
-import { CrcsPark, McsPark, OiwfsPark } from '@gql/server/Buttons';
+import { CrcsPark, McsPark, OiwfsPark, Pwfs1Park, Pwfs2Park } from '@gql/server/Buttons';
 import { clsx } from 'clsx';
 import { Button } from 'primereact/button';
 import { Dropdown } from 'primereact/dropdown';
@@ -18,9 +18,9 @@ export function TopSubsystems({ canEdit }: { canEdit: boolean }) {
       <Button className="under-construction" disabled={!canEdit} style={{ gridArea: 'g12' }} label="Unwrap" />
       <CrcsPark disabled={!canEdit} style={{ gridArea: 'g31' }} label="Park" />
       <Button className="under-construction" disabled={!canEdit} style={{ gridArea: 'g32' }} label="Unwrap" />
-      <Button className="under-construction" disabled={!canEdit} style={{ gridArea: 'g41' }} label="Park" />
+      <Pwfs1Park disabled={!canEdit} style={{ gridArea: 'g41' }} label="Park" />
       <Button className="under-construction" disabled={!canEdit} style={{ gridArea: 'g42' }} label="Unwrap" />
-      <Button className="under-construction" disabled={!canEdit} style={{ gridArea: 'g51' }} label="Park" />
+      <Pwfs2Park disabled={!canEdit} style={{ gridArea: 'g51' }} label="Park" />
       <Button className="under-construction" disabled={!canEdit} style={{ gridArea: 'g52' }} label="Unwrap" />
     </div>
   );

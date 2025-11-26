@@ -68,7 +68,8 @@ export function TargetContent({
         onChange={(e) => {
           let stringC1 = '';
           let stringC2 = '';
-          if (e.target.value === 'celestial' && coordsType === 'horizontal') {
+          const value = e.value as string;
+          if (value === 'celestial' && coordsType === 'horizontal') {
             stringC1 = deg2hms(auxTarget?.az?.degrees ?? 0);
             stringC2 = deg2dms(auxTarget?.el?.degrees ?? 0);
             setAuxTarget((prev) => ({
@@ -87,7 +88,7 @@ export function TargetContent({
               el: null,
               type: 'SCIENCE',
             }));
-          } else if (e.target.value === 'horizontal' && coordsType === 'celestial') {
+          } else if (value === 'horizontal' && coordsType === 'celestial') {
             stringC1 = deg2dms(auxTarget?.ra?.degrees ?? 0);
             stringC2 = deg2dms(auxTarget?.dec?.degrees ?? 0);
             setAuxTarget((prev) => ({
@@ -109,7 +110,7 @@ export function TargetContent({
           }
           setc1String(stringC1);
           setc2String(stringC2);
-          setCoordsType(e.target.value as string);
+          setCoordsType(value);
         }}
         placeholder="Select coordinates type"
       />

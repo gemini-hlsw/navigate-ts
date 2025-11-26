@@ -277,7 +277,7 @@ export function Configuration() {
             loading={loading}
             value={state.probeTracking}
             options={['OI➡OI', 'OI➡P1', 'OI➡P2', 'P1➡P1', 'P2➡P2', 'NONE']}
-            onChange={(e) => modifyGuideLoop('probeTracking', e.target.value as string)}
+            onChange={(e) => modifyGuideLoop('probeTracking', e.value as string)}
             placeholder="Select a tracking"
           />
         </div>
