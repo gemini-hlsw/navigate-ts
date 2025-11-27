@@ -37,7 +37,7 @@ describe(useImportObservation.name, () => {
 
     expect(callback).toHaveBeenCalledOnce();
     expect(updateConfigurationMock.request.variables).toHaveBeenCalledTimes(2);
-    expect(updateConfigurationMock.request.variables).toHaveBeenCalledWith({
+    expect(updateConfigurationMock.request.variables).toHaveBeenNthCalledWith(1, {
       pk: 1,
       baffleMode: 'AUTO',
       centralBaffle: null,
@@ -49,8 +49,9 @@ describe(useImportObservation.name, () => {
       obsTitle: 'Mayall V',
       selectedTarget: 34,
     });
-    expect(updateConfigurationMock.request.variables).toHaveBeenCalledWith({
+    expect(updateConfigurationMock.request.variables).toHaveBeenLastCalledWith({
       pk: 1,
+      selectedGuiderTarget: null,
       selectedOiTarget: 35,
       selectedP1Target: 35,
       selectedP2Target: 35,
@@ -153,6 +154,7 @@ const mocks = [
           selectedOiTarget: 8,
           selectedP1Target: null,
           selectedP2Target: null,
+          selectedGuiderTarget: null,
           oiGuidingType: 'NORMAL',
           p1GuidingType: 'NORMAL',
           p2GuidingType: 'NORMAL',
@@ -434,6 +436,7 @@ const updateConfigurationMock = {
         selectedOiTarget: 8,
         selectedP1Target: null,
         selectedP2Target: null,
+        selectedGuiderTarget: null,
         oiGuidingType: 'NORMAL',
         p1GuidingType: 'NORMAL',
         p2GuidingType: 'NORMAL',

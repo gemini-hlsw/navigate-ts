@@ -8,6 +8,7 @@ import { Title } from '@Shared/Title/Title';
 import { Checkbox } from 'primereact/checkbox';
 
 import { useCanEdit } from '@/components/atoms/auth';
+import { isNotNullish } from '@/Helpers/functions';
 
 export function Altair() {
   const canEdit = useCanEdit();
@@ -19,19 +20,7 @@ export function Altair() {
     name: T,
     value: NonNullable<UpdateAltairGuideLoopMutationVariables[T]>,
   ) {
-    if (state)
-      await updateAltairGuideLoop({
-        variables: {
-          pk: state.pk,
-          [name]: value,
-        },
-        optimisticResponse: {
-          updateAltairGuideLoop: {
-            ...state,
-            [name]: value,
-          },
-        },
-      });
+    if (isNotNullish(state?.pk)) await updateAltairGuideLoop({ variables: { pk: state.pk, [name]: value } });
   }
 
   const disabled = !canEdit || loading || updateLoading;
@@ -127,19 +116,7 @@ export function GeMS() {
     name: T,
     value: NonNullable<UpdateGemsGuideLoopMutationVariables[T]>,
   ) {
-    if (state)
-      await updateGemsGuideLoop({
-        variables: {
-          pk: state.pk,
-          [name]: value,
-        },
-        optimisticResponse: {
-          updateGemsGuideLoop: {
-            ...state,
-            [name]: value,
-          },
-        },
-      });
+    if (isNotNullish(state?.pk)) await updateGemsGuideLoop({ variables: { pk: state.pk, [name]: value } });
   }
 
   const disabled = !canEdit || getLoading || updateLoading;

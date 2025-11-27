@@ -3,6 +3,7 @@ import { Title } from '@Shared/Title/Title';
 import { Dropdown } from 'primereact/dropdown';
 import { InputNumber } from 'primereact/inputnumber';
 
+import { isNotNullish } from '@/Helpers/functions';
 import type { TrackingType } from '@/types';
 
 export function Rotator({ canEdit }: { canEdit: boolean }) {
@@ -27,11 +28,7 @@ export function Rotator({ canEdit }: { canEdit: boolean }) {
           loading={loading}
           onChange={async (e) => {
             const tracking = e.value as TrackingType;
-            if (rotator)
-              await updateRotator({
-                variables: { pk: rotator.pk, tracking },
-                optimisticResponse: { updateRotator: { ...rotator, tracking } },
-              });
+            if (isNotNullish(rotator?.pk)) await updateRotator({ variables: { pk: rotator.pk, tracking } });
           }}
           placeholder="Select a tracking"
         />
@@ -46,11 +43,7 @@ export function Rotator({ canEdit }: { canEdit: boolean }) {
           maxFractionDigits={3}
           onValueChange={async (e) => {
             const angle = e.target.value!;
-            if (rotator)
-              await updateRotator({
-                variables: { pk: rotator.pk, angle },
-                optimisticResponse: { updateRotator: { ...rotator, angle } },
-              });
+            if (isNotNullish(rotator?.pk)) await updateRotator({ variables: { pk: rotator.pk, angle } });
           }}
           mode="decimal"
         />

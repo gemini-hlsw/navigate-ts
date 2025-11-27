@@ -33,7 +33,17 @@ export const UPDATE_ROTATOR = graphql(`
 `);
 
 export function useUpdateRotator() {
+  const rotator = useRotator().data?.rotator;
   return useMutation(UPDATE_ROTATOR, {
     context: { clientName: 'navigateConfigs' },
+    optimisticResponse: (vars, { IGNORE }) =>
+      rotator
+        ? {
+            updateRotator: {
+              ...rotator,
+              ...vars,
+            } as typeof rotator,
+          }
+        : IGNORE,
   });
 }

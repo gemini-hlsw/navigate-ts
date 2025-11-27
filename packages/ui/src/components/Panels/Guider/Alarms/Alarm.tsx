@@ -10,7 +10,7 @@ import { useId } from 'react';
 
 import type { AlarmType } from '@/components/atoms/alarm';
 import { Volume, VolumeSlash } from '@/components/Icons';
-import { isNotNullish } from '@/Helpers/functions';
+import { isNotNullish, round } from '@/Helpers/functions';
 
 export function Alarm({
   wfs,
@@ -64,9 +64,7 @@ export function Alarm({
         <label htmlFor={`flux-${id}`} className="label">
           Counts
         </label>
-        <output id={`flux-${id}`} style={{ alignSelf: 'center' }}>
-          {guideQuality?.flux ?? ''}
-        </output>
+        <output id={`flux-${id}`}>{isNotNullish(guideQuality?.flux) ? round(guideQuality.flux, 0) : ''}</output>
         <label htmlFor={`limit-${id}`} className="label">
           Limit
         </label>
@@ -75,15 +73,14 @@ export function Alarm({
           min={0}
           disabled={disabledOrNoData}
           value={limit}
+          maxFractionDigits={0}
           onValueChange={onLimitChange}
           data-testid={`limit-${wfs}`}
         />
         <label htmlFor={`centroid-${id}`} className="label">
           Subaperture
         </label>
-        <output id={`centroid-${id}`} style={{ alignSelf: 'center' }}>
-          {guideQuality?.centroidDetected ? 'OK' : 'BAD'}
-        </output>
+        <output id={`centroid-${id}`}>{guideQuality?.centroidDetected ? 'OK' : 'BAD'}</output>
       </div>
     </div>
   );

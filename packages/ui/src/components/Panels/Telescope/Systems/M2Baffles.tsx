@@ -1,10 +1,10 @@
 import { useConfiguration, useUpdateConfiguration } from '@gql/configs/Configuration';
-import type { BaffleMode, Configuration, UpdateConfigurationMutationVariables } from '@gql/configs/gen/graphql';
+import type { BaffleMode, UpdateConfigurationMutationVariables } from '@gql/configs/gen/graphql';
 import type { CentralBaffle, DeployableBaffle } from '@gql/server/gen/graphql';
 import { Title } from '@Shared/Title/Title';
 import { Dropdown } from 'primereact/dropdown';
 
-import { isNullish } from '@/Helpers/functions';
+import { isNotNullish, isNullish } from '@/Helpers/functions';
 
 const modeOptions: BaffleMode[] = ['AUTO', 'MANUAL', 'IGNORED'];
 const centralOptions: CentralBaffle[] = ['OPEN', 'CLOSED'];
@@ -17,22 +17,10 @@ export function M2Baffles({ canEdit }: { canEdit: boolean }) {
 
   const loading = configurationLoading || updateLoading;
 
-  const updateBaffle = (
+  const updateBaffle = async (
     vars: Pick<UpdateConfigurationMutationVariables, 'baffleMode' | 'centralBaffle' | 'deployableBaffle'>,
   ) => {
-    if (isNullish(configuration?.pk)) return;
-    return updateConfiguration({
-      variables: {
-        pk: configuration.pk,
-        ...vars,
-      },
-      optimisticResponse: {
-        updateConfiguration: {
-          ...configuration,
-          ...vars,
-        } as Configuration,
-      },
-    });
+    if (isNotNullish(configuration?.pk)) await updateConfiguration({ variables: { pk: configuration.pk, ...vars } });
   };
 
   return (

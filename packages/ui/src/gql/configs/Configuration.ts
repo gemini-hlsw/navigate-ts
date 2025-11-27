@@ -9,6 +9,7 @@ export const CONFIGURATION_FRAGMENT = graphql(`
     selectedOiTarget
     selectedP1Target
     selectedP2Target
+    selectedGuiderTarget
     oiGuidingType
     p1GuidingType
     p2GuidingType
@@ -44,6 +45,7 @@ export const UPDATE_CONFIGURATION = graphql(`
     $selectedOiTarget: Int
     $selectedP1Target: Int
     $selectedP2Target: Int
+    $selectedGuiderTarget: Int
     $oiGuidingType: GuidingType
     $p1GuidingType: GuidingType
     $p2GuidingType: GuidingType
@@ -62,6 +64,7 @@ export const UPDATE_CONFIGURATION = graphql(`
       selectedOiTarget: $selectedOiTarget
       selectedP1Target: $selectedP1Target
       selectedP2Target: $selectedP2Target
+      selectedGuiderTarget: $selectedGuiderTarget
       oiGuidingType: $oiGuidingType
       p1GuidingType: $p1GuidingType
       p2GuidingType: $p2GuidingType
@@ -80,7 +83,17 @@ export const UPDATE_CONFIGURATION = graphql(`
 `);
 
 export function useUpdateConfiguration() {
+  const configuration = useConfiguration().data?.configuration;
   return useMutation(UPDATE_CONFIGURATION, {
     context: { clientName: 'navigateConfigs' },
+    optimisticResponse: (vars, { IGNORE }) =>
+      configuration
+        ? {
+            updateConfiguration: {
+              ...configuration,
+              ...vars,
+            } as typeof configuration,
+          }
+        : IGNORE,
   });
 }

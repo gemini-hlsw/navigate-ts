@@ -68,18 +68,7 @@ export function BotSubsystems({ canEdit }: { canEdit: boolean }) {
   const loading = mechanismLoading || updateLoading;
 
   const modifyMechanism = (vars: Omit<UpdateMechanismMutationVariables, 'pk'>) =>
-    updateMechanism({
-      variables: {
-        pk: state.pk,
-        ...vars,
-      },
-      optimisticResponse: {
-        updateMechanism: {
-          ...state,
-          ...vars,
-        } as MechanismType,
-      },
-    });
+    updateMechanism({ variables: { pk: state.pk, ...vars } });
 
   return (
     <div className="bottom">

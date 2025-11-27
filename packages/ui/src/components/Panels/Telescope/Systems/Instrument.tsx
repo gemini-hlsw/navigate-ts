@@ -36,9 +36,7 @@ export function Instrument({ canEdit }: { canEdit: boolean }) {
     if (instrument) {
       await updateInstrument({
         variables: { pk: instrument.pk, comment, isTemporary: false },
-        optimisticResponse: {
-          updateInstrument: { ...instrument, comment, isTemporary: false },
-        },
+        optimisticResponse: { updateInstrument: { ...instrument, comment, isTemporary: false } },
       });
     }
   };

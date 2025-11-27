@@ -53,7 +53,17 @@ const UPDATE_GEMS_GUIDE_LOOP = graphql(`
 `);
 
 export function useUpdateGemsGuideLoop() {
+  const gemsGuideLoop = useGetGemsGuideLoop().data?.gemsGuideLoop;
   return useMutation(UPDATE_GEMS_GUIDE_LOOP, {
     context: { clientName: 'navigateConfigs' },
+    optimisticResponse: (vars, { IGNORE }) =>
+      gemsGuideLoop
+        ? {
+            updateGemsGuideLoop: {
+              ...gemsGuideLoop,
+              ...vars,
+            } as typeof gemsGuideLoop,
+          }
+        : IGNORE,
   });
 }

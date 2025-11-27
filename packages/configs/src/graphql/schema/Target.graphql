@@ -111,5 +111,5 @@ type Mutation {
 
   removeAndCreateBaseTargets(targets: [TargetInput!]): [Target!]!
 
-  removeAndCreateWfsTargets(wfs: TargetType, targets: [TargetInput!]): [Target!]!
+  removeAndCreateWfsTargets(wfs: TargetType!, targets: [TargetInput!]): [Target!]!
 }

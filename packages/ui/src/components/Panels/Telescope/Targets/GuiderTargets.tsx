@@ -1,5 +1,4 @@
 import { useConfiguration } from '@gql/configs/Configuration';
-import type { Target } from '@gql/configs/gen/graphql';
 import { useTargets } from '@gql/configs/Target';
 import { Title } from '@Shared/Title/Title';
 import { Dropdown } from 'primereact/dropdown';
@@ -23,13 +22,17 @@ function GuiderFooter({ disabled }: { disabled: boolean }) {
 
 export function GuiderTargets() {
   const canEdit = useCanEdit();
-  const { oiTargets, p1Targets, p2Targets, allTargets } = useTargets().data;
-  const configuration = useConfiguration().data?.configuration;
+  const { data: targetsData, loading: targetsLoading } = useTargets();
+  const { oiTargets, p1Targets, p2Targets, guiderTargets } = targetsData;
+  const { data: configurationData, loading: configurationLoading } = useConfiguration();
+  const configuration = configurationData?.configuration;
 
-  const selectedTarget: Target | undefined = allTargets.find((t) => t.pk === configuration?.selectedTarget);
-  const selectedOi: Target | undefined = oiTargets.find((t) => t.pk === configuration?.selectedOiTarget);
-  const selectedP1: Target | undefined = p1Targets.find((t) => t.pk === configuration?.selectedP1Target);
-  const selectedP2: Target | undefined = p2Targets.find((t) => t.pk === configuration?.selectedP2Target);
+  const loading = targetsLoading || configurationLoading;
+
+  const selectedOi = oiTargets.find((t) => t.pk === configuration?.selectedOiTarget);
+  const selectedP1 = p1Targets.find((t) => t.pk === configuration?.selectedP1Target);
+  const selectedP2 = p2Targets.find((t) => t.pk === configuration?.selectedP2Target);
+  const selectedGuider = guiderTargets.find((t) => t.pk === configuration?.selectedGuiderTarget);
 
   const displayProbes: React.ReactNode[] = [];
   if (oiTargets.length) {
@@ -76,10 +79,10 @@ export function GuiderTargets() {
       <Title title="Guiders" />
       <div className="body">{displayProbes}</div>
       <TargetSwapButton
-        selectedTarget={selectedTarget}
-        selectedOi={selectedOi}
-        selectedP1={selectedP1}
-        selectedP2={selectedP2}
+        guiderTargets={guiderTargets}
+        selectedGuider={selectedGuider}
+        loading={loading}
+        configurationPk={configuration?.pk}
       />
     </div>
   );

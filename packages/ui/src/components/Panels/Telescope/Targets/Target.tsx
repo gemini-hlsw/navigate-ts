@@ -11,13 +11,11 @@ export function Target({
   target,
   updateSelectedTarget,
   selectedTarget = undefined,
-  targetIndex = undefined,
   disabled,
 }: {
   target: TargetType;
   updateSelectedTarget: (target: number) => void | Promise<void>;
   selectedTarget?: number | null;
-  targetIndex?: number | undefined;
   disabled?: boolean;
 }) {
   const canEdit = useCanEdit();
@@ -29,7 +27,6 @@ export function Target({
     setTargetEdit({
       isVisible: true,
       target: target,
-      targetIndex: targetIndex,
     });
   }
 
@@ -52,7 +49,6 @@ export function Target({
         setTargetEdit({
           isVisible: true,
           target: target,
-          targetIndex: targetIndex,
         });
         break;
       default:

@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from '@apollo/client/react';
 
 import { graphql } from './gen';
+import type { WfsType } from './gen/graphql';
 
 export const WFS_FRAGMENT = graphql(`
   fragment WfsItem on GuideAlarm {
@@ -41,7 +42,19 @@ export const UPDATE_GUIDE_ALARM = graphql(`
 `);
 
 export function useUpdateGuideAlarm() {
+  const guideAlarms = useGuideAlarms().data?.guideAlarms;
   return useMutation(UPDATE_GUIDE_ALARM, {
     context: { clientName: 'navigateConfigs' },
+    optimisticResponse: (vars, { IGNORE }) => {
+      const alarm = guideAlarms?.[vars.wfs as Exclude<WfsType, 'NONE'>];
+      return alarm
+        ? {
+            updateGuideAlarm: {
+              ...alarm,
+              ...vars,
+            } as typeof alarm,
+          }
+        : IGNORE;
+    },
   });
 }

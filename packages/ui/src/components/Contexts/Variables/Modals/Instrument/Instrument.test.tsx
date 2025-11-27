@@ -52,12 +52,10 @@ describe(`${Instrument.name} modal`, () => {
     // Select instrument options
     await selectDropdownOption(sut, 'Select instrument', 'GMOS_SOUTH');
     await selectDropdownOption(sut, 'Select port', '3');
-    await expect
-      .poll(() => getInstrumentsMock.request.variables)
-      .toHaveBeenCalledExactlyOnceWith({
-        name: 'GMOS_SOUTH',
-        issPort: 3,
-      });
+    expect(getInstrumentsMock.request.variables).toHaveBeenCalledExactlyOnceWith({
+      name: 'GMOS_SOUTH',
+      issPort: 3,
+    });
 
     // Select first row of instrument table and import it
     await userEvent.click(dialog.getByText('Initial configuration').first());
@@ -99,6 +97,7 @@ const getConfigurationMock = {
         selectedOiTarget: 3,
         selectedP1Target: null,
         selectedP2Target: null,
+        selectedGuiderTarget: null,
         oiGuidingType: 'NORMAL',
         p1GuidingType: 'NORMAL',
         p2GuidingType: 'NORMAL',

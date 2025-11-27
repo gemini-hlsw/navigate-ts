@@ -1,13 +1,13 @@
 import { CAL_PARAMS } from '@gql/configs/CalParams';
 import { GET_CONFIGURATION } from '@gql/configs/Configuration';
-import type { Target } from '@gql/configs/gen/graphql';
 import { GET_INSTRUMENT } from '@gql/configs/Instrument';
 import { GET_ROTATOR } from '@gql/configs/Rotator';
+import { GET_TARGETS } from '@gql/configs/Target';
 import { GET_INSTRUMENT_PORT } from '@gql/server/Instrument';
 import { NAVIGATE_STATE, NAVIGATE_STATE_SUBSCRIPTION } from '@gql/server/NavigateState';
 import { RESTORE_TARGET_MUTATION, SWAP_TARGET_MUTATION } from '@gql/server/TargetSwap';
 import type { MockedResponseOf } from '@gql/util';
-import type { ResultOf } from '@graphql-typed-document-node/core';
+import { userEvent } from 'vitest/browser';
 import type { RenderResult } from 'vitest-browser-react';
 
 import { operationOutcome } from '@/test/helpers';
@@ -23,10 +23,10 @@ describe(TargetSwapButton.name, () => {
     beforeEach(async () => {
       sut = await renderWithContext(
         <TargetSwapButton
-          selectedTarget={selectedTarget as Target}
-          selectedOi={selectedOi as Target}
-          selectedP1={undefined}
-          selectedP2={undefined}
+          configurationPk={1}
+          guiderTargets={[selectedOi]}
+          selectedGuider={selectedOi}
+          loading={false}
         />,
         {
           mocks: [...mocks, ...navigateStatesMock(false)],
@@ -42,10 +42,42 @@ describe(TargetSwapButton.name, () => {
     });
 
     it('should swap target when onSwappedTarget is false', async () => {
-      await sut.getByRole('button').click();
+      await userEvent.click(sut.getByRole('button'));
 
-      const swapTargetMock = mocks.find((m) => m.request.query === SWAP_TARGET_MUTATION)!;
-      await expect.poll(() => swapTargetMock.result).toHaveBeenCalledOnce();
+      expect(swapTargetMock.request.variables).toHaveBeenCalledExactlyOnceWith({
+        swapConfig: {
+          acParams: {
+            iaa: { degrees: 359.877 },
+            focusOffset: { micrometers: 0 },
+            agName: 'GMOS_SOUTH',
+            origin: { x: { arcseconds: 0 }, y: { arcseconds: 0 } },
+          },
+          rotator: { ipa: { degrees: 0 }, mode: 'TRACKING' },
+          guideTarget: {
+            id: selectedOi.id,
+            name: selectedOi.name,
+            sidereal: {
+              ra: { hms: selectedOi.ra.hms },
+              dec: { dms: selectedOi.dec.dms },
+              epoch: selectedOi.epoch,
+              properMotion: {
+                ra: {
+                  microarcsecondsPerYear: selectedOi.properMotion?.ra,
+                },
+                dec: {
+                  microarcsecondsPerYear: selectedOi.properMotion?.dec,
+                },
+              },
+              radialVelocity: {
+                centimetersPerSecond: selectedOi.radialVelocity,
+              },
+              parallax: {
+                microarcseconds: selectedOi.parallax,
+              },
+            },
+          },
+        },
+      });
     });
   });
 
@@ -53,10 +85,10 @@ describe(TargetSwapButton.name, () => {
     beforeEach(async () => {
       sut = await renderWithContext(
         <TargetSwapButton
-          selectedTarget={selectedTarget as Target}
-          selectedOi={selectedOi as Target}
-          selectedP1={undefined}
-          selectedP2={undefined}
+          configurationPk={1}
+          guiderTargets={[selectedOi]}
+          selectedGuider={selectedOi}
+          loading={false}
         />,
         {
           mocks: [...mocks, ...navigateStatesMock(true)],
@@ -70,10 +102,80 @@ describe(TargetSwapButton.name, () => {
       await expect.element(sut.getByRole('button')).toHaveTextContent('Point to Base');
       await expect.element(sut.getByRole('button')).toHaveClass('p-button-danger');
 
-      await sut.getByRole('button').click();
+      await userEvent.click(sut.getByRole('button'));
 
-      const restoreTargetMock = mocks.find((m) => m.request.query === RESTORE_TARGET_MUTATION)!;
-      await expect.poll(() => restoreTargetMock.result).toHaveBeenCalled();
+      expect(restoreTargetMock.request.variables).toHaveBeenCalledExactlyOnceWith({
+        config: {
+          baffles: {
+            autoConfig: {
+              nearirLimit: {
+                micrometers: 3,
+              },
+              visibleLimit: {
+                micrometers: 1.05,
+              },
+            },
+          },
+          instParams: {
+            agName: 'GMOS_SOUTH',
+            focusOffset: {
+              micrometers: 0,
+            },
+            iaa: {
+              degrees: 359.877,
+            },
+            origin: {
+              x: {
+                arcseconds: 0,
+              },
+              y: {
+                arcseconds: 0,
+              },
+            },
+          },
+          instrument: 'GMOS_SOUTH',
+          oiwfs: undefined,
+          pwfs1: undefined,
+          pwfs2: undefined,
+          rotator: {
+            ipa: {
+              degrees: 0,
+            },
+            mode: 'TRACKING',
+          },
+          sourceATarget: {
+            azel: undefined,
+            id: 't-19e',
+            name: 'TYC 4517-185-1',
+            sidereal: {
+              dec: {
+                dms: '+80:04:21.618990',
+              },
+              epoch: 'J2000.000',
+              parallax: {
+                microarcseconds: 0,
+              },
+              properMotion: {
+                dec: {
+                  microarcsecondsPerYear: 0,
+                },
+                ra: {
+                  microarcsecondsPerYear: 0,
+                },
+              },
+              ra: {
+                hms: '03:46:46.901006',
+              },
+              radialVelocity: {
+                centimetersPerSecond: 0,
+              },
+            },
+            wavelength: {
+              nanometers: 100,
+            },
+          },
+        },
+      });
     });
   });
 });
@@ -142,6 +244,26 @@ const selectedOi = {
   __typename: 'Target',
 } satisfies TargetType;
 
+const restoreTargetMock = {
+  request: {
+    query: RESTORE_TARGET_MUTATION,
+    variables: vi.fn().mockReturnValue(true),
+  },
+  result: {
+    data: { restoreTarget: operationOutcome },
+  },
+} satisfies MockedResponseOf<typeof RESTORE_TARGET_MUTATION>;
+
+const swapTargetMock = {
+  request: {
+    query: SWAP_TARGET_MUTATION,
+    variables: vi.fn().mockReturnValue(true),
+  },
+  result: {
+    data: { swapTarget: operationOutcome },
+  },
+} satisfies MockedResponseOf<typeof SWAP_TARGET_MUTATION>;
+
 const mocks = [
   {
     request: {
@@ -186,128 +308,8 @@ const mocks = [
       },
     },
   } satisfies MockedResponseOf<typeof GET_INSTRUMENT>,
-  {
-    request: {
-      query: SWAP_TARGET_MUTATION,
-      variables: {
-        swapConfig: {
-          acParams: {
-            iaa: { degrees: 359.877 },
-            focusOffset: { micrometers: 0 },
-            agName: 'GMOS_SOUTH',
-            origin: { x: { arcseconds: 0 }, y: { arcseconds: 0 } },
-          },
-          rotator: { ipa: { degrees: 0 }, mode: 'TRACKING' },
-          guideTarget: {
-            id: selectedOi.id,
-            name: selectedOi.name,
-            sidereal: {
-              ra: { hms: selectedOi.ra.hms },
-              dec: { dms: selectedOi.dec.dms },
-              epoch: selectedOi.epoch,
-              properMotion: {
-                ra: {
-                  microarcsecondsPerYear: selectedOi.properMotion?.ra,
-                },
-                dec: {
-                  microarcsecondsPerYear: selectedOi.properMotion?.dec,
-                },
-              },
-              radialVelocity: {
-                centimetersPerSecond: selectedOi.radialVelocity,
-              },
-              parallax: {
-                microarcseconds: selectedOi.parallax,
-              },
-            },
-          },
-        },
-      },
-    },
-    result: vi.fn().mockReturnValue({
-      data: { swapTarget: operationOutcome } satisfies ResultOf<typeof SWAP_TARGET_MUTATION>,
-    }),
-  } satisfies MockedResponseOf<typeof SWAP_TARGET_MUTATION>,
-  {
-    request: {
-      query: RESTORE_TARGET_MUTATION,
-      variables: {
-        config: {
-          instrument: 'GMOS_SOUTH',
-          instParams: {
-            iaa: { degrees: 359.877 },
-            focusOffset: { micrometers: 0 },
-            agName: 'GMOS_SOUTH',
-            origin: { x: { arcseconds: 0 }, y: { arcseconds: 0 } },
-          },
-          rotator: { ipa: { degrees: 0 }, mode: 'TRACKING' },
-          sourceATarget: {
-            id: selectedTarget.id,
-            name: selectedTarget.name,
-            sidereal: {
-              ra: { hms: selectedTarget.ra.hms },
-              dec: { dms: selectedTarget.dec.dms },
-              epoch: selectedTarget.epoch,
-              properMotion: {
-                ra: {
-                  microarcsecondsPerYear: selectedTarget.properMotion?.ra,
-                },
-                dec: {
-                  microarcsecondsPerYear: selectedTarget.properMotion?.dec,
-                },
-              },
-              radialVelocity: {
-                centimetersPerSecond: selectedTarget.radialVelocity,
-              },
-              parallax: {
-                microarcseconds: selectedTarget.parallax,
-              },
-            },
-            wavelength: { nanometers: selectedTarget.wavelength },
-          },
-          oiwfs: {
-            tracking: {
-              nodAchopA: true,
-              nodAchopB: false,
-              nodBchopA: false,
-              nodBchopB: true,
-            },
-            target: {
-              name: selectedOi.name,
-              sidereal: {
-                ra: { hms: selectedOi?.ra?.hms },
-                dec: { dms: selectedOi?.dec?.dms },
-                epoch: selectedOi.epoch,
-                properMotion: {
-                  ra: {
-                    microarcsecondsPerYear: selectedOi.properMotion?.ra,
-                  },
-                  dec: {
-                    microarcsecondsPerYear: selectedOi.properMotion?.dec,
-                  },
-                },
-                radialVelocity: {
-                  centimetersPerSecond: selectedOi.radialVelocity,
-                },
-                parallax: {
-                  microarcseconds: selectedOi.parallax,
-                },
-              },
-            },
-          },
-          baffles: {
-            autoConfig: {
-              nearirLimit: { micrometers: 3 },
-              visibleLimit: { micrometers: 1.05 },
-            },
-          },
-        },
-      },
-    },
-    result: vi.fn().mockReturnValue({
-      data: { restoreTarget: operationOutcome } satisfies ResultOf<typeof RESTORE_TARGET_MUTATION>,
-    }),
-  } satisfies MockedResponseOf<typeof RESTORE_TARGET_MUTATION>,
+  swapTargetMock,
+  restoreTargetMock,
   {
     request: {
       query: GET_CONFIGURATION,
@@ -322,6 +324,7 @@ const mocks = [
           selectedOiTarget: 8,
           selectedP1Target: null,
           selectedP2Target: null,
+          selectedGuiderTarget: null,
           oiGuidingType: 'NORMAL',
           p1GuidingType: 'NORMAL',
           p2GuidingType: 'NORMAL',
@@ -343,11 +346,11 @@ const mocks = [
       variables: () => true,
     },
     maxUsageCount: Infinity,
-    result: vi.fn().mockReturnValue({
+    result: {
       data: {
         instrumentPort: 3,
-      } satisfies ResultOf<typeof GET_INSTRUMENT_PORT>,
-    }),
+      },
+    },
   } satisfies MockedResponseOf<typeof GET_INSTRUMENT_PORT>,
   {
     request: {
@@ -384,6 +387,17 @@ const mocks = [
       },
     },
   } satisfies MockedResponseOf<typeof CAL_PARAMS>,
+  {
+    request: {
+      query: GET_TARGETS,
+      variables: {},
+    },
+    result: {
+      data: {
+        targets: [selectedTarget, selectedOi],
+      },
+    },
+  } satisfies MockedResponseOf<typeof GET_TARGETS>,
 ];
 
 const navigateStatesMock = (onSwappedTarget: boolean) => [

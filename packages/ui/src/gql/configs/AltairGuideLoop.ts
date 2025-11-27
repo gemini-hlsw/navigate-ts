@@ -59,7 +59,17 @@ const UPDATE_ALTAIR_GUIDE_LOOP = graphql(`
 `);
 
 export function useUpdateAltairGuideLoop() {
+  const altairGuideLoop = useAltairGuideLoop().data?.altairGuideLoop;
   return useMutation(UPDATE_ALTAIR_GUIDE_LOOP, {
     context: { clientName: 'navigateConfigs' },
+    optimisticResponse: (vars, { IGNORE }) =>
+      altairGuideLoop
+        ? {
+            updateAltairGuideLoop: {
+              ...altairGuideLoop,
+              ...vars,
+            } as typeof altairGuideLoop,
+          }
+        : IGNORE,
   });
 }

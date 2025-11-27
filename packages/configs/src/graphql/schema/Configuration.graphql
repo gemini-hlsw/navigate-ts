@@ -28,6 +28,7 @@ type Configuration {
   selectedOiTarget: Int
   selectedP1Target: Int
   selectedP2Target: Int
+  selectedGuiderTarget: Int
   oiGuidingType: GuidingType!
   p1GuidingType: GuidingType!
   p2GuidingType: GuidingType!
@@ -53,6 +54,7 @@ type Mutation {
     selectedOiTarget: Int
     selectedP1Target: Int
     selectedP2Target: Int
+    selectedGuiderTarget: Int
     oiGuidingType: GuidingType!
     p1GuidingType: GuidingType!
     p2GuidingType: GuidingType!
@@ -72,6 +74,7 @@ type Mutation {
     selectedOiTarget: Int
     selectedP1Target: Int
     selectedP2Target: Int
+    selectedGuiderTarget: Int
     oiGuidingType: GuidingType
     p1GuidingType: GuidingType
     p2GuidingType: GuidingType

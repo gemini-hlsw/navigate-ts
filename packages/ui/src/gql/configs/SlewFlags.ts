@@ -83,7 +83,17 @@ const UPDATE_SLEW_FLAGS = graphql(`
 `);
 
 export function useUpdateSlewFlags() {
+  const slewFlags = useSlewFlags().data?.slewFlags;
   return useMutation(UPDATE_SLEW_FLAGS, {
     context: { clientName: 'navigateConfigs' },
+    optimisticResponse: (vars, { IGNORE }) =>
+      slewFlags
+        ? {
+            updateSlewFlags: {
+              ...slewFlags,
+              ...vars,
+            } as typeof slewFlags,
+          }
+        : IGNORE,
   });
 }

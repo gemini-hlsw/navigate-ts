@@ -98,6 +98,7 @@ const mocks: MockLink.MockedResponse[] = [
           selectedOiTarget: 3,
           selectedP1Target: null,
           selectedP2Target: null,
+          selectedGuiderTarget: 3,
           oiGuidingType: 'NORMAL',
           p1GuidingType: 'NORMAL',
           p2GuidingType: 'NORMAL',

@@ -150,7 +150,17 @@ const UPDATE_MECHANISM = graphql(`
 `);
 
 export function useUpdateMechanism() {
+  const mechanism = useMechanism().data?.mechanism;
   return useMutation(UPDATE_MECHANISM, {
     context: { clientName: 'navigateConfigs' },
+    optimisticResponse: (vars, { IGNORE }) =>
+      mechanism
+        ? {
+            updateMechanism: {
+              ...mechanism,
+              ...vars,
+            } as typeof mechanism,
+          }
+        : IGNORE,
   });
 }

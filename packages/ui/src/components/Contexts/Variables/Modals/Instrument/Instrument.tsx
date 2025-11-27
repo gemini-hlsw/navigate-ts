@@ -78,12 +78,6 @@ function useModifyInstrument() {
             pk: configuration.pk,
             obsInstrument: instrument.name,
           },
-          optimisticResponse: {
-            updateConfiguration: {
-              ...configuration,
-              obsInstrument: instrument.name,
-            },
-          },
           refetchQueries: [GET_INSTRUMENT],
           awaitRefetchQueries: true,
         }),

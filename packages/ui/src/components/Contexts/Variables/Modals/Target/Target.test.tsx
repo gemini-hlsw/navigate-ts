@@ -1,4 +1,4 @@
-import { UPDATE_TARGET } from '@gql/configs/Target';
+import { GET_TARGETS, UPDATE_TARGET } from '@gql/configs/Target';
 import type { MockedResponseOf } from '@gql/util';
 import { page, userEvent } from 'vitest/browser';
 
@@ -14,12 +14,12 @@ describe(Target.name, () => {
   const targetEditVisible = {
     isVisible: true,
     target: target,
-    targetIndex: 0,
   };
 
   it('should render', async () => {
     await renderWithContext(<Target />, {
       initialValues: [[targetEditAtom, targetEditVisible]],
+      mocks: [getTargetsMock],
     });
     const dialog = page.getByRole('dialog');
     await expect.element(dialog).toBeVisible();
@@ -36,6 +36,7 @@ describe(Target.name, () => {
         [targetEditAtom, targetEditVisible],
         [odbTokenAtom, expiredJwt],
       ],
+      mocks: [getTargetsMock],
     });
     const dialog = page.getByRole('dialog');
     await expect.element(dialog.getByLabelText('Name')).toBeDisabled();
@@ -44,7 +45,7 @@ describe(Target.name, () => {
 
   it('calls updateTarget mutation when updating', async () => {
     await renderWithContext(<Target />, {
-      mocks: [updateTargetMock],
+      mocks: [updateTargetMock, getTargetsMock],
       initialValues: [[targetEditAtom, targetEditVisible]],
     });
     const dialog = page.getByRole('dialog');
@@ -106,3 +107,15 @@ const updateTargetMock = {
     },
   }),
 } satisfies MockedResponseOf<typeof UPDATE_TARGET>;
+
+const getTargetsMock = {
+  request: {
+    query: GET_TARGETS,
+    variables: {},
+  },
+  result: {
+    data: {
+      targets: [target],
+    },
+  },
+} satisfies MockedResponseOf<typeof GET_TARGETS>;

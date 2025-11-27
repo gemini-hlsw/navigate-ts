@@ -1,4 +1,16 @@
-import type { CalParams, Configuration, InstrumentConfig, Rotator, Target } from '@gql/configs/gen/graphql';
+import { useCalParams } from '@gql/configs/CalParams';
+import { useConfiguration } from '@gql/configs/Configuration';
+import type {
+  CalParams,
+  Configuration,
+  InstrumentConfig,
+  Rotator,
+  Target,
+  UpdateConfigurationMutationVariables,
+} from '@gql/configs/gen/graphql';
+import { useConfiguredInstrument } from '@gql/configs/Instrument';
+import { useRotator } from '@gql/configs/Rotator';
+import { useTargets } from '@gql/configs/Target';
 import type {
   AzElTargetInput,
   BaffleConfigInput,
@@ -9,9 +21,10 @@ import type {
   TargetPropertiesInput,
   TcsConfigInput,
 } from '@gql/server/gen/graphql';
-import { isOiTarget, isP1Target, isP2Target } from '@gql/util';
 
+import { useServerConfigValue } from '@/components/atoms/config';
 import { when } from '@/Helpers/functions';
+import type { TypeOfTarget } from '@/types';
 
 export function createRotatorTrackingInput(rotator: Rotator): RotatorTrackingInput {
   return { ipa: { degrees: rotator.angle }, mode: rotator.tracking };
@@ -115,7 +128,9 @@ export function createTcsConfigInput(
   instrument: InstrumentConfig,
   rotator: Rotator,
   target: Target,
-  guiderTarget: Target | undefined,
+  oiTarget: Target | undefined,
+  p1Target: Target | undefined,
+  p2Target: Target | undefined,
   calParams: Pick<CalParams, 'baffleVisible' | 'baffleNearIR'>,
   configuration: Pick<Configuration, 'baffleMode' | 'centralBaffle' | 'deployableBaffle'>,
 ): TcsConfigInput {
@@ -133,8 +148,101 @@ export function createTcsConfigInput(
     rotator: rotatorInput,
     sourceATarget: targetInput,
     baffles: bafflesInput,
-    oiwfs: when(isOiTarget(guiderTarget) && guiderTarget, createGuiderConfig),
-    pwfs1: when(isP1Target(guiderTarget) && guiderTarget, createGuiderConfig),
-    pwfs2: when(isP2Target(guiderTarget) && guiderTarget, createGuiderConfig),
+    oiwfs: when(oiTarget, createGuiderConfig),
+    pwfs1: when(p1Target, createGuiderConfig),
+    pwfs2: when(p2Target, createGuiderConfig),
   };
+}
+
+/**
+ * Create TCS config input from current configuration, instrument, rotator and target.
+ *
+ * @returns either the input data, or a detail string explaining why it could not be created.
+ */
+export function useTcsConfigInput():
+  | { data: TcsConfigInput; loading: boolean; detail: undefined }
+  | { data: undefined; loading: boolean; detail: string } {
+  const { site } = useServerConfigValue();
+
+  const { data: configurationData, loading: configurationLoading } = useConfiguration();
+  const configuration = configurationData?.configuration;
+
+  const { data: instrument, loading: instrumentLoading } = useConfiguredInstrument();
+
+  const { data: rotatorData, loading: rotatorLoading } = useRotator();
+  const rotator = rotatorData?.rotator;
+
+  const { data: targetsData, loading: targetsLoading } = useTargets();
+  const { baseTargets, oiTargets, p1Targets, p2Targets } = targetsData;
+
+  const { data: calParamsData, loading: calParamsLoading } = useCalParams(site);
+  const calParams = calParamsData?.calParams;
+
+  const loading = configurationLoading || instrumentLoading || rotatorLoading || targetsLoading || calParamsLoading;
+
+  const baseTarget = baseTargets.find((t) => t.pk === configuration?.selectedTarget);
+
+  if (!instrument || !rotator || !baseTarget || !calParams || !configuration) {
+    let detail: string;
+    if (!instrument) {
+      detail = 'No instrument';
+    } else if (!rotator) {
+      detail = 'No rotator';
+    } else if (!baseTarget) {
+      detail = 'No target';
+    } else if (!calParams) {
+      detail = 'No cal params configuration';
+    } else if (!configuration) {
+      detail = 'No configuration';
+    } else {
+      detail = 'Unknown error';
+    }
+    return { data: undefined, loading, detail };
+  }
+
+  const oiTarget = oiTargets.find((t) => t.pk === configuration?.selectedOiTarget);
+  const p1Target = p1Targets.find((t) => t.pk === configuration?.selectedP1Target);
+  const p2Target = p2Targets.find((t) => t.pk === configuration?.selectedP2Target);
+
+  const data = createTcsConfigInput(
+    instrument,
+    rotator,
+    baseTarget,
+    oiTarget,
+    p1Target,
+    p2Target,
+    calParams,
+    configuration,
+  );
+
+  return { data, loading, detail: undefined };
+}
+
+export function createUpdateSelectedTargetVariables(
+  configurationPk: number,
+  type: TypeOfTarget | undefined,
+  targetPk: number,
+) {
+  const variables: Pick<
+    UpdateConfigurationMutationVariables,
+    'pk' | 'selectedOiTarget' | 'selectedP1Target' | 'selectedP2Target' | 'selectedTarget' | 'selectedGuiderTarget'
+  > = { pk: configurationPk, selectedGuiderTarget: targetPk };
+  switch (type) {
+    case 'OIWFS':
+      variables.selectedOiTarget = targetPk;
+      break;
+    case 'PWFS1':
+      variables.selectedP1Target = targetPk;
+      break;
+    case 'PWFS2':
+      variables.selectedP2Target = targetPk;
+      break;
+    default:
+    case 'SCIENCE':
+    case 'BLINDOFFSET':
+    case 'FIXED':
+      variables.selectedTarget = targetPk;
+      break;
+  }
+  return variables;
 }

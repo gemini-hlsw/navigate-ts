@@ -60,16 +60,7 @@ function SlewFlagInput({
 
   async function updateFlags() {
     await updateSlewFlags({
-      variables: {
-        pk: flags.pk,
-        [flag]: !flags[flag],
-      },
-      optimisticResponse: {
-        updateSlewFlags: {
-          ...flags,
-          [flag]: !flags[flag],
-        },
-      },
+      variables: { pk: flags.pk, [flag]: !flags[flag] },
     });
   }
   const inputId = `${flag}-${id}`;
