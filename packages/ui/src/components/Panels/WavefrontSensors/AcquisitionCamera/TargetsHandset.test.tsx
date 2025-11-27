@@ -16,6 +16,7 @@ import {
 import type { MockedResponseOf } from '@gql/util';
 import type { ResultOf } from '@graphql-typed-document-node/core';
 import type { Mock } from 'vitest';
+import { userEvent } from 'vitest/browser';
 
 import { operationOutcome, selectDropdownOption } from '@/test/helpers';
 import { type RenderResultWithStore, renderWithContext } from '@/test/render';
@@ -35,46 +36,40 @@ describe(TargetsHandset.name, () => {
   });
 
   it('clicking applies calls adjustTarget mutation', async () => {
-    await sut.getByRole('button', { name: 'Apply' }).click();
+    await userEvent.click(sut.getByRole('button', { name: 'Apply' }));
 
-    await expect
-      .poll(() => adjustTargetMutationMock.result)
-      .toHaveBeenCalledExactlyOnceWith({
-        target: 'OIWFS',
-        offset: {
-          focalPlaneAdjustment: {
-            deltaX: { arcseconds: 0.0 },
-            deltaY: { arcseconds: 0.0 },
-          },
+    expect(adjustTargetMutationMock.request.variables).toHaveBeenCalledExactlyOnceWith({
+      target: 'OIWFS',
+      offset: {
+        focalPlaneAdjustment: {
+          deltaX: { arcseconds: 0.0 },
+          deltaY: { arcseconds: 0.0 },
         },
-        openLoops: true,
-      });
+      },
+      openLoops: true,
+    });
   });
 
   it('clicking reset calls resetTargetAdjustment mutation', async () => {
-    await sut.getByRole('button', { name: 'Reset' }).click();
+    await userEvent.click(sut.getByRole('button', { name: 'Reset' }));
 
-    await expect
-      .poll(() => resetTargetAdjustmentMutationMock.request.variables)
-      .toHaveBeenCalledExactlyOnceWith({
-        target: 'OIWFS',
-        openLoops: true,
-      });
+    expect(resetTargetAdjustmentMutationMock.request.variables).toHaveBeenCalledExactlyOnceWith({
+      target: 'OIWFS',
+      openLoops: true,
+    });
   });
 
   it('clicking absorb calls absorbTargetAdjustment mutation', async () => {
-    await sut.getByRole('button', { name: 'Absorb' }).click();
+    await userEvent.click(sut.getByRole('button', { name: 'Absorb' }));
 
-    await expect
-      .poll(() => absorbTargetAdjustmentMutationMock.request.variables)
-      .toHaveBeenCalledExactlyOnceWith({
-        target: 'OIWFS',
-      });
+    expect(absorbTargetAdjustmentMutationMock.request.variables).toHaveBeenCalledExactlyOnceWith({
+      target: 'OIWFS',
+    });
   });
 
   it('switching target sends different target to absorbTargetAdjustment mutation', async () => {
     await selectTarget('PWFS1');
-    await sut.getByRole('button', { name: 'Absorb' }).click();
+    await userEvent.click(sut.getByRole('button', { name: 'Absorb' }));
 
     expect(absorbTargetAdjustmentMutationMock.request.variables).toHaveBeenCalledWith({
       target: 'PWFS1',
@@ -166,7 +161,7 @@ describe(TargetsHandset.name, () => {
       },
     ],
   ])('inputs for AC %s matches %s', async (testId, label, expectedInput) => {
-    await sut.getByLabelText('Open loops').click();
+    await userEvent.click(sut.getByLabelText('Open loops'));
     await testDirectionButtonClick(testId, label, adjustTargetMutationMock.request.variables, {
       target: 'OIWFS',
       openLoops: false,
@@ -312,9 +307,9 @@ describe(TargetsHandset.name, () => {
   ) {
     const button = sut.getByTestId(testId);
     if (label) await expect.element(button).toHaveAttribute('aria-label', label);
-    await button.click();
+    await userEvent.click(button);
 
-    await expect.poll(() => mock).toHaveBeenCalledWith(expectedInput);
+    expect(mock).toHaveBeenCalledWith(expectedInput);
   }
 });
 
@@ -373,9 +368,9 @@ const resetTargetAdjustmentMutationMock = {
     query: RESET_TARGET_ADJUSTMENT_MUTATION,
     variables: vi.fn().mockReturnValue(true),
   },
-  result: vi.fn().mockReturnValue({
-    data: { resetTargetAdjustment: operationOutcome } satisfies ResultOf<typeof RESET_TARGET_ADJUSTMENT_MUTATION>,
-  }),
+  result: {
+    data: { resetTargetAdjustment: operationOutcome },
+  },
 } satisfies MockedResponseOf<typeof RESET_TARGET_ADJUSTMENT_MUTATION>;
 
 const adjustTargetMutationMock = {
@@ -384,9 +379,9 @@ const adjustTargetMutationMock = {
     variables: vi.fn().mockReturnValue(true),
   },
   maxUsageCount: Infinity,
-  result: vi.fn().mockReturnValue({
-    data: { adjustTarget: operationOutcome } satisfies ResultOf<typeof ADJUST_TARGET_MUTATION>,
-  }),
+  result: {
+    data: { adjustTarget: operationOutcome },
+  },
 } satisfies MockedResponseOf<typeof ADJUST_TARGET_MUTATION>;
 
 const absorbTargetAdjustmentMutationMock = {
@@ -394,9 +389,9 @@ const absorbTargetAdjustmentMutationMock = {
     query: ABSORB_TARGET_ADJUSTMENT_MUTATION,
     variables: vi.fn().mockReturnValue(true),
   },
-  result: vi.fn().mockReturnValue({
-    data: { absorbTargetAdjustment: operationOutcome } satisfies ResultOf<typeof ABSORB_TARGET_ADJUSTMENT_MUTATION>,
-  }),
+  result: {
+    data: { absorbTargetAdjustment: operationOutcome },
+  },
 } satisfies MockedResponseOf<typeof ABSORB_TARGET_ADJUSTMENT_MUTATION>;
 
 const mocks: MockLink.MockedResponse[] = [
@@ -413,6 +408,7 @@ const mocks: MockLink.MockedResponse[] = [
           selectedOiTarget: 3,
           selectedP1Target: null,
           selectedP2Target: null,
+          selectedGuiderTarget: null,
           oiGuidingType: 'NORMAL',
           p1GuidingType: 'NORMAL',
           p2GuidingType: 'NORMAL',

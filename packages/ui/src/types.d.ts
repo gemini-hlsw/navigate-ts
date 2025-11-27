@@ -63,7 +63,6 @@ export type PanelType = 'telescope' | 'wavefront-sensors' | 'guider';
 export interface TargetEditType {
   isVisible: boolean;
   target: TargetType | null;
-  targetIndex: number | undefined;
 }
 
 export type Semester = OdbScalars['Semester']['input'];

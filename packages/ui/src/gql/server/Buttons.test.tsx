@@ -4,7 +4,8 @@ import { GET_INSTRUMENT } from '@gql/configs/Instrument';
 import { GET_ROTATOR } from '@gql/configs/Rotator';
 import { GET_TARGETS } from '@gql/configs/Target';
 import type { MockedResponseOf } from '@gql/util';
-import type { ResultOf, VariablesOf } from '@graphql-typed-document-node/core';
+import type { VariablesOf } from '@graphql-typed-document-node/core';
+import { userEvent } from 'vitest/browser';
 
 import { operationOutcome } from '@/test/helpers';
 import { renderWithContext } from '@/test/render';
@@ -25,7 +26,7 @@ describe(Slew.name, () => {
         calParamsMock,
       ],
     });
-    await sut.getByRole('button').click();
+    await userEvent.click(sut.getByRole('button'));
 
     expect(slewMutationMock.request.variables).toHaveBeenCalledOnce();
     const variables = slewMutationMock.request.variables.mock.calls[0]?.[0] as VariablesOf<typeof SLEW_MUTATION>;
@@ -61,6 +62,8 @@ describe(Slew.name, () => {
           },
           "instrument": "ACQ_CAM",
           "oiwfs": undefined,
+          "pwfs1": undefined,
+          "pwfs2": undefined,
           "rotator": {
             "ipa": {
               "degrees": 0,
@@ -136,6 +139,7 @@ const configurationMock = {
         selectedOiTarget: null,
         selectedP1Target: null,
         selectedP2Target: null,
+        selectedGuiderTarget: null,
         oiGuidingType: 'NORMAL',
         p1GuidingType: 'NORMAL',
         p2GuidingType: 'NORMAL',
@@ -259,9 +263,9 @@ const slewMutationMock = {
     query: SLEW_MUTATION,
     variables: vi.fn().mockReturnValue(true),
   },
-  result: vi.fn().mockReturnValue({
-    data: { slew: operationOutcome } satisfies ResultOf<typeof SLEW_MUTATION>,
-  }),
+  result: {
+    data: { slew: operationOutcome },
+  },
 } satisfies MockedResponseOf<typeof SLEW_MUTATION>;
 
 const calParamsMock = {

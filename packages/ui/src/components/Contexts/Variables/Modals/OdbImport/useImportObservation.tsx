@@ -1,9 +1,5 @@
 import { useConfiguration, useUpdateConfiguration } from '@gql/configs/Configuration';
-import type {
-  TargetType,
-  UpdateConfigurationMutationVariables,
-  UpdateRotatorMutationVariables,
-} from '@gql/configs/gen/graphql';
+import type { TargetType, UpdateRotatorMutationVariables } from '@gql/configs/gen/graphql';
 import { GET_INSTRUMENT, useResetInstruments } from '@gql/configs/Instrument';
 import { useRotator, useUpdateRotator } from '@gql/configs/Rotator';
 import { useRemoveAndCreateBaseTargets, useRemoveAndCreateWfsTargets } from '@gql/configs/Target';
@@ -69,27 +65,20 @@ export function useImportObservation() {
       // Second create the observation base targets (SCIENCE and BLINDOFFSET)
       const { data: baseTargetsData } = await removeAndCreateBaseTargets({ variables: { targets: baseTargets } });
 
-      const configurationVariables = {
-        pk: configuration.pk,
-        obsId: selectedObservation.id,
-        obsTitle: selectedObservation.title,
-        obsSubtitle: selectedObservation.subtitle,
-        obsInstrument: selectedObservation.instrument,
-        // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
-        obsReference: selectedObservation.reference?.label!,
-        baffleMode: 'AUTO',
-        centralBaffle: null,
-        deployableBaffle: null,
-        // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
-        selectedTarget: baseTargetsData?.removeAndCreateBaseTargets[0]?.pk!,
-      } satisfies UpdateConfigurationMutationVariables;
       await updateConfiguration({
-        variables: configurationVariables,
-        optimisticResponse: {
-          updateConfiguration: {
-            ...configuration,
-            ...configurationVariables,
-          },
+        variables: {
+          pk: configuration.pk,
+          obsId: selectedObservation.id,
+          obsTitle: selectedObservation.title,
+          obsSubtitle: selectedObservation.subtitle,
+          obsInstrument: selectedObservation.instrument,
+          // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
+          obsReference: selectedObservation.reference?.label!,
+          baffleMode: 'AUTO',
+          centralBaffle: null,
+          deployableBaffle: null,
+          // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
+          selectedTarget: baseTargetsData?.removeAndCreateBaseTargets[0]?.pk!,
         },
       });
 
@@ -130,32 +119,25 @@ export function useImportObservation() {
               targets: pwfs2,
             },
           }),
-          updateRotator({
-            variables: rotatorVariables,
-            optimisticResponse: {
-              updateRotator: {
-                ...rotator,
-                ...rotatorVariables,
-              },
-            },
-          }),
+          updateRotator({ variables: rotatorVariables }),
         ]);
 
         // Set the first of each result as the selected target if there is only 1
         const selectedOiTarget = firstIfOnlyOne(oi.data?.removeAndCreateWfsTargets)?.pk ?? null;
         const selectedP1Target = firstIfOnlyOne(p1.data?.removeAndCreateWfsTargets)?.pk ?? null;
         const selectedP2Target = firstIfOnlyOne(p2.data?.removeAndCreateWfsTargets)?.pk ?? null;
+        const selectedGuiderTarget = firstIfOnlyOne(
+          [selectedOiTarget, selectedP1Target, selectedP2Target].filter(isNotNullish),
+        );
 
-        if (configuration?.pk) {
+        if (isNotNullish(configuration?.pk)) {
           await updateConfiguration({
-            variables: { pk: configuration.pk, selectedOiTarget, selectedP1Target, selectedP2Target },
-            optimisticResponse: {
-              updateConfiguration: {
-                ...configuration,
-                selectedOiTarget,
-                selectedP1Target,
-                selectedP2Target,
-              },
+            variables: {
+              pk: configuration.pk,
+              selectedOiTarget,
+              selectedP1Target,
+              selectedP2Target,
+              selectedGuiderTarget,
             },
           });
         }

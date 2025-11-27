@@ -16,22 +16,23 @@ datasource db {
 }
 
 model Configuration {
-  pk               Int               @id @default(autoincrement())
-  selectedTarget   Int?
-  selectedOiTarget Int?
-  selectedP1Target Int?
-  selectedP2Target Int?
-  oiGuidingType    GuidingType
-  p1GuidingType    GuidingType
-  p2GuidingType    GuidingType
-  obsTitle         String?
-  obsId            String?
-  obsInstrument    String?
-  obsSubtitle      String?
-  obsReference     String?
-  baffleMode       BaffleMode        @default(AUTO)
-  centralBaffle    CentralBaffle?
-  deployableBaffle DeployableBaffle?
+  pk                   Int               @id @default(autoincrement())
+  selectedTarget       Int?
+  selectedOiTarget     Int?
+  selectedP1Target     Int?
+  selectedP2Target     Int?
+  selectedGuiderTarget Int?
+  oiGuidingType        GuidingType
+  p1GuidingType        GuidingType
+  p2GuidingType        GuidingType
+  obsTitle             String?
+  obsId                String?
+  obsInstrument        String?
+  obsSubtitle          String?
+  obsReference         String?
+  baffleMode           BaffleMode        @default(AUTO)
+  centralBaffle        CentralBaffle?
+  deployableBaffle     DeployableBaffle?
 }
 
 enum GuidingType {

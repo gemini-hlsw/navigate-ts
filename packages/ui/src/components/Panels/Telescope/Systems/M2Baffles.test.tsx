@@ -46,6 +46,7 @@ const getConfigurationMock = {
         selectedOiTarget: 8,
         selectedP1Target: null,
         selectedP2Target: null,
+        selectedGuiderTarget: null,
         oiGuidingType: 'NORMAL',
         p1GuidingType: 'NORMAL',
         p2GuidingType: 'NORMAL',

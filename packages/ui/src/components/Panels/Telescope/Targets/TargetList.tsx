@@ -1,8 +1,8 @@
 import { useConfiguration, useUpdateConfiguration } from '@gql/configs/Configuration';
-import type { UpdateConfigurationMutationVariables } from '@gql/configs/gen/graphql';
 
 import type { TargetType, TypeOfTarget } from '@/types';
 
+import { createUpdateSelectedTargetVariables } from './inputs';
 import { Target } from './Target';
 
 export function TargetList({ targets, type }: { targets: TargetType[]; type?: TypeOfTarget }) {
@@ -35,47 +35,16 @@ export function TargetList({ targets, type }: { targets: TargetType[]; type?: Ty
 
   async function updateSelectedTarget(targetPk: number) {
     if (configuration) {
-      const variables: Pick<
-        UpdateConfigurationMutationVariables,
-        'pk' | 'selectedOiTarget' | 'selectedP1Target' | 'selectedP2Target' | 'selectedTarget'
-      > = { pk: configuration.pk };
-
-      switch (type) {
-        case 'OIWFS':
-          variables.selectedOiTarget = targetPk;
-          break;
-        case 'PWFS1':
-          variables.selectedP1Target = targetPk;
-          break;
-        case 'PWFS2':
-          variables.selectedP2Target = targetPk;
-          break;
-        default:
-        case 'SCIENCE':
-        case 'BLINDOFFSET':
-        case 'FIXED':
-          variables.selectedTarget = targetPk;
-          break;
-      }
-      await updateConfiguration({
-        variables,
-        optimisticResponse: {
-          updateConfiguration: {
-            ...configuration,
-            ...variables,
-          },
-        },
-      });
+      await updateConfiguration({ variables: createUpdateSelectedTargetVariables(configuration.pk, type, targetPk) });
     }
   }
 
-  const displayTargets = targets.map((target: TargetType, index: number) => (
+  const displayTargets = targets.map((target: TargetType) => (
     <Target
       key={`obsTarget-${target.pk ?? ''}-${target.id ?? ''}`}
       target={target}
       updateSelectedTarget={updateSelectedTarget}
       selectedTarget={selectedTarget}
-      targetIndex={index}
       disabled={loading}
     />
   ));

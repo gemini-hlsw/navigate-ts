@@ -21,19 +21,7 @@ export function GeMS({ canEdit }: { canEdit: boolean }) {
     name: T,
     value: NonNullable<UpdateGemsInstrumentMutationVariables[T]>,
   ) {
-    if (state.pk)
-      await updateGemsInstrument({
-        variables: {
-          pk: state.pk,
-          [name]: value,
-        },
-        optimisticResponse: {
-          updateGemsInstrument: {
-            ...state,
-            [name]: value,
-          },
-        },
-      });
+    if (isNotNullish(state.pk)) await updateGemsInstrument({ variables: { pk: state.pk, [name]: value } });
   }
 
   return (
@@ -86,19 +74,8 @@ export function Altair({ canEdit }: { canEdit: boolean }) {
     name: T,
     value: UpdateAltairInstrumentMutationVariables[T],
   ) {
-    if (isNotNullish(value) && state.pk)
-      await updateAltairInstrument({
-        variables: {
-          pk: state.pk,
-          [name]: value,
-        },
-        optimisticResponse: {
-          updateAltairInstrument: {
-            ...state,
-            [name]: value,
-          },
-        },
-      });
+    if (isNotNullish(value) && isNotNullish(state.pk))
+      await updateAltairInstrument({ variables: { pk: state.pk, [name]: value } });
   }
 
   return (

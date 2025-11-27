@@ -1,5 +1,5 @@
 import { useConfiguration, useUpdateConfiguration } from '@gql/configs/Configuration';
-import type { EngineeringTarget, UpdateConfigurationMutationVariables } from '@gql/configs/gen/graphql';
+import type { EngineeringTarget } from '@gql/configs/gen/graphql';
 import { useRotator, useUpdateRotator } from '@gql/configs/Rotator';
 import { useRemoveAndCreateBaseTargets } from '@gql/configs/Target';
 import { Button } from 'primereact/button';
@@ -96,30 +96,22 @@ function useUpdateTarget() {
         },
       });
 
-      const configurationVariables = {
-        pk: configuration.pk,
-        obsId: 'o-100',
-        obsTitle: selectedTarget.name,
-        obsSubtitle: '',
-        obsInstrument: selectedTarget.instrument,
-        obsReference: '',
-        selectedOiTarget: null,
-        selectedP1Target: null,
-        selectedP2Target: null,
-        baffleMode: selectedTarget.baffleMode,
-        centralBaffle: selectedTarget.centralBaffle,
-        deployableBaffle: selectedTarget.deployableBaffle,
-        // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
-        selectedTarget: t?.removeAndCreateBaseTargets[0]?.pk!,
-      } satisfies UpdateConfigurationMutationVariables;
-
       await updateConfiguration({
-        variables: configurationVariables,
-        optimisticResponse: {
-          updateConfiguration: {
-            ...configuration,
-            ...configurationVariables,
-          },
+        variables: {
+          pk: configuration.pk,
+          obsId: 'o-100',
+          obsTitle: selectedTarget.name,
+          obsSubtitle: '',
+          obsInstrument: selectedTarget.instrument,
+          obsReference: '',
+          selectedOiTarget: null,
+          selectedP1Target: null,
+          selectedP2Target: null,
+          selectedGuiderTarget: null,
+          baffleMode: selectedTarget.baffleMode,
+          centralBaffle: selectedTarget.centralBaffle,
+          deployableBaffle: selectedTarget.deployableBaffle,
+          selectedTarget: t?.removeAndCreateBaseTargets[0]?.pk ?? null,
         },
       });
 
@@ -129,15 +121,7 @@ function useUpdateTarget() {
           angle: selectedTarget.rotatorAngle,
           tracking: selectedTarget.rotatorMode,
         };
-        await updateRotator({
-          variables: rotatorVariables,
-          optimisticResponse: {
-            updateRotator: {
-              ...rotator,
-              ...rotatorVariables,
-            },
-          },
-        });
+        await updateRotator({ variables: rotatorVariables });
       }
     });
   }

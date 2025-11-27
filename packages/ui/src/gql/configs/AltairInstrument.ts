@@ -65,7 +65,17 @@ const UPDATE_ALTAIR_INSTRUMENT = graphql(`
 `);
 
 export function useUpdateAltairInstrument() {
+  const altairInstrument = useAltairInstrument().data?.altairInstrument;
   return useMutation(UPDATE_ALTAIR_INSTRUMENT, {
     context: { clientName: 'navigateConfigs' },
+    optimisticResponse: (vars, { IGNORE }) =>
+      altairInstrument
+        ? {
+            updateAltairInstrument: {
+              ...altairInstrument,
+              ...vars,
+            } as typeof altairInstrument,
+          }
+        : IGNORE,
   });
 }

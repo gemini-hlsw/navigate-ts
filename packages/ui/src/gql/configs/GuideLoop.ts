@@ -71,7 +71,17 @@ const UPDATE_GUIDE_LOOP = graphql(`
 `);
 
 export function useUpdateGuideLoop() {
+  const guideLoop = useGetGuideLoop().data?.guideLoop;
   return useMutation(UPDATE_GUIDE_LOOP, {
     context: { clientName: 'navigateConfigs' },
+    optimisticResponse: (vars, { IGNORE }) =>
+      guideLoop
+        ? {
+            updateGuideLoop: {
+              ...guideLoop,
+              ...vars,
+            } as typeof guideLoop,
+          }
+        : IGNORE,
   });
 }

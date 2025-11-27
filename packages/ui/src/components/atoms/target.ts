@@ -6,7 +6,6 @@ import type { TargetEditType } from '@/types';
 export const targetEditAtom = atomWithReset<TargetEditType>({
   isVisible: false,
   target: null,
-  targetIndex: undefined,
 });
 
 export const useTargetEdit = () => useAtom(targetEditAtom);

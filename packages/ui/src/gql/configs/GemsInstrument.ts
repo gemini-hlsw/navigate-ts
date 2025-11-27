@@ -34,7 +34,17 @@ const UPDATE_GEMS_INSTRUMENT = graphql(`
 `);
 
 export function useUpdateGemsInstrument() {
+  const gemsInstrument = useGemsInstrument().data?.gemsInstrument;
   return useMutation(UPDATE_GEMS_INSTRUMENT, {
     context: { clientName: 'navigateConfigs' },
+    optimisticResponse: (vars, { IGNORE }) =>
+      gemsInstrument
+        ? {
+            updateGemsInstrument: {
+              ...gemsInstrument,
+              ...vars,
+            } as typeof gemsInstrument,
+          }
+        : IGNORE,
   });
 }

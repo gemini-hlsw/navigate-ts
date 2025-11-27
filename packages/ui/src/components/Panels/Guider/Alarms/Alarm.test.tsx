@@ -40,7 +40,7 @@ describe(Alarm.name, () => {
   });
 
   it('should render', async () => {
-    await expect.element(page.getByLabelText('Counts')).toHaveTextContent('1000');
+    await expect.element(page.getByLabelText('Counts')).toHaveTextContent('1,000');
     await expect.element(page.getByLabelText('Subaperture')).toHaveTextContent('OK');
   });
 

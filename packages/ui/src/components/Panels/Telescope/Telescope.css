@@ -458,6 +458,10 @@
   }
 }
 
+.guider-target-dropdown-item {
+  font-size: 0.9rem;
+}
+
 @media only screen and (width <= 768px) {
   .telescope {
     > .body {

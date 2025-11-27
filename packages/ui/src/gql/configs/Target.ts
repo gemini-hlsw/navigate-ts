@@ -57,14 +57,18 @@ export function useTargets() {
   return useMemo(() => {
     const targets: Target[] = result.data?.targets ?? [];
 
+    const oiTargets = targets.filter(isOiTarget);
+    const p1Targets = targets.filter(isP1Target);
+    const p2Targets = targets.filter(isP2Target);
     return {
       ...result,
       data: {
         baseTargets: targets.filter(isBaseTarget),
-        oiTargets: targets.filter(isOiTarget),
-        p1Targets: targets.filter(isP1Target),
-        p2Targets: targets.filter(isP2Target),
+        oiTargets: oiTargets,
+        p1Targets: p1Targets,
+        p2Targets: p2Targets,
         allTargets: targets,
+        guiderTargets: [...oiTargets, ...p1Targets, ...p2Targets],
       },
     };
   }, [result]);
@@ -109,8 +113,20 @@ export const UPDATE_TARGET = graphql(`
 `);
 
 export function useUpdateTarget() {
+  const targets = useTargets().data.allTargets;
   return useMutation(UPDATE_TARGET, {
     context: { clientName: 'navigateConfigs' },
+    optimisticResponse: (vars, { IGNORE }) => {
+      const target = targets.find((t) => t.pk === vars.pk);
+      return target
+        ? {
+            updateTarget: {
+              ...target,
+              ...vars,
+            } as typeof target,
+          }
+        : IGNORE;
+    },
   });
 }
 

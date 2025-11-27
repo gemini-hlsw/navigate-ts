@@ -7,6 +7,7 @@ import { Button } from 'primereact/button';
 
 import { useCanEdit } from '@/components/atoms/auth';
 import { Check } from '@/components/Icons';
+import { isNotNullish } from '@/Helpers/functions';
 
 /**
  * | UI Option               | LightSource | LightSink |
@@ -40,19 +41,7 @@ export function LightPath() {
     name: T,
     value: UpdateGuideLoopMutationVariables[T],
   ) {
-    if (state.pk)
-      await updateGuideLoop({
-        variables: {
-          pk: state.pk,
-          [name]: value,
-        },
-        optimisticResponse: {
-          updateGuideLoop: {
-            ...(state as GuideLoop),
-            [name]: value,
-          },
-        },
-      });
+    if (isNotNullish(state.pk)) await updateGuideLoop({ variables: { pk: state.pk, [name]: value } });
   }
   const disabled = !canEdit;
   const loading = getLoading || updateLoading || lightpathConfigLoading;

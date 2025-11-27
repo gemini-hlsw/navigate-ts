@@ -13,7 +13,7 @@ import { useCallback, useEffect, useMemo } from 'react';
 
 import { useCanEdit } from '@/components/atoms/auth';
 import { useServerConfigValue } from '@/components/atoms/config';
-import { instrumentToOiwfs } from '@/Helpers/functions';
+import { instrumentToOiwfs, isNotNullish } from '@/Helpers/functions';
 
 import { Altair, GeMS } from './AdaptiveOptics';
 import { BrokenChain, ConnectedChain } from './Chain';
@@ -43,19 +43,7 @@ export function Configuration() {
 
   const modifyGuideLoop = useCallback(
     async <T extends keyof UpdateGuideLoopMutationVariables>(name: T, value: UpdateGuideLoopMutationVariables[T]) => {
-      if (state.pk)
-        await updateGuideLoop({
-          variables: {
-            pk: state.pk,
-            [name]: value,
-          },
-          optimisticResponse: {
-            updateGuideLoop: {
-              ...state,
-              [name]: value,
-            },
-          },
-        });
+      if (isNotNullish(state.pk)) await updateGuideLoop({ variables: { pk: state.pk, [name]: value } });
     },
     [state, updateGuideLoop],
   );

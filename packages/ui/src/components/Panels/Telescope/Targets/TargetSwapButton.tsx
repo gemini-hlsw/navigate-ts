@@ -1,124 +1,77 @@
-import { useCalParams } from '@gql/configs/CalParams';
-import { useConfiguration } from '@gql/configs/Configuration';
+import { useUpdateConfiguration } from '@gql/configs/Configuration';
 import type { Target } from '@gql/configs/gen/graphql';
-import { useConfiguredInstrument, useInstrument } from '@gql/configs/Instrument';
-import { useRotator } from '@gql/configs/Rotator';
 import { useNavigateState } from '@gql/server/NavigateState';
 import { useRestoreTarget, useSwapTarget } from '@gql/server/TargetSwap';
 import { Button } from 'primereact/button';
+import { SplitButton } from 'primereact/splitbutton';
 
 import { useCanEdit } from '@/components/atoms/auth';
-import { useServerConfigValue } from '@/components/atoms/config';
+import { isNullish } from '@/Helpers/functions';
 import { useToast } from '@/Helpers/toast';
 
-import {
-  createInstrumentSpecificsInput,
-  createRotatorTrackingInput,
-  createTargetPropertiesInput,
-  createTcsConfigInput,
-} from './inputs';
+import { createTargetPropertiesInput, createUpdateSelectedTargetVariables, useTcsConfigInput } from './inputs';
 
 export function TargetSwapButton({
-  selectedTarget,
-  oiSelected,
-  // p1Selected,
-  // p2Selected,
+  configurationPk,
+  guiderTargets,
+  selectedGuider,
+  loading: propLoading,
 }: {
-  selectedTarget: Target | undefined;
-  oiSelected: Target | undefined;
-  // p1Selected: Target | undefined;
-  // p2Selected: Target | undefined;
+  configurationPk: number | undefined;
+  guiderTargets: Target[];
+  selectedGuider: Target | undefined;
+  loading: boolean;
 }) {
-  const { site } = useServerConfigValue();
-
   const canEdit = useCanEdit();
   const toast = useToast();
 
   const { data, loading: stateLoading, setStale } = useNavigateState();
+
   const [swapTarget, { loading: swapLoading }] = useSwapTarget(setStale);
   const [restoreTarget, { loading: restoreLoading }] = useRestoreTarget(setStale);
+  const [updateConfiguration, { loading: updateConfigurationLoading }] = useUpdateConfiguration();
 
-  const { data: configurationData, loading: configurationLoading } = useConfiguration();
-  const configuration = configurationData?.configuration;
-
-  const { data: instrument, loading: instrumentLoading } = useConfiguredInstrument();
-
-  const { data: acData, loading: acLoading } = useInstrument({
-    variables: { name: `ACQ_CAM` },
-  });
-
-  const acInst = acData?.instrument;
-  const { data: rotatorData, loading: rotatorLoading } = useRotator();
-  const rotator = rotatorData?.rotator;
-
-  const { data: calParamsData, loading: calParamsLoading } = useCalParams(site);
-  const calParams = calParamsData?.calParams;
+  const { data: tcsConfig, loading: tcsConfigInputLoading, detail } = useTcsConfigInput();
 
   const loading =
-    stateLoading ||
-    swapLoading ||
-    restoreLoading ||
-    instrumentLoading ||
-    rotatorLoading ||
-    acLoading ||
-    calParamsLoading ||
-    configurationLoading;
+    stateLoading || swapLoading || restoreLoading || tcsConfigInputLoading || updateConfigurationLoading || propLoading;
 
   const disabled = !canEdit;
 
-  const label = data?.onSwappedTarget ? 'Point to Base' : 'Point to Guide Star';
+  const label =
+    (data?.onSwappedTarget ? 'Point to Base' : 'Point to Guide Star') +
+    (selectedGuider ? ` (${selectedGuider.name})` : '');
   const severity = data?.onSwappedTarget ? 'danger' : undefined;
 
   const onClick = async () => {
-    if (selectedTarget?.id && instrument && rotator && oiSelected && acInst && calParams && configuration) {
-      // TODO: other inputs for swap/nonswap
-
+    if (tcsConfig) {
       if (data?.onSwappedTarget) {
         // If restoring
         // Use the science target
-        await restoreTarget({
-          variables: {
-            config: createTcsConfigInput(instrument, rotator, selectedTarget, oiSelected, calParams, configuration),
-          },
-        });
+        await restoreTarget({ variables: { config: tcsConfig } });
       } else {
+        if (!selectedGuider) {
+          toast?.show({
+            severity: 'warn',
+            summary: 'Cannot swap target',
+            detail: 'No guide target selected',
+          });
+          return;
+        }
         // If swapping
-        // Use the acquisition camera
-        const instrumentInput = createInstrumentSpecificsInput(acInst);
-
         // Use Guide target if swapping
-        // TODO: Will use OI for now, in the future can be OI, P1 or P2
-        const targetInput = createTargetPropertiesInput({ ...oiSelected, id: oiSelected.id ?? 't-000' });
-
+        const targetInput = createTargetPropertiesInput(selectedGuider);
         await swapTarget({
           variables: {
             swapConfig: {
-              acParams: instrumentInput,
-              rotator: createRotatorTrackingInput(rotator),
+              acParams: tcsConfig.instParams,
+              rotator: tcsConfig.rotator,
               guideTarget: targetInput,
             },
           },
         });
       }
     } else {
-      let detail: string;
-      if (!selectedTarget) {
-        detail = 'No target';
-      } else if (!oiSelected) {
-        detail = 'No guide star';
-      } else if (!acInst) {
-        detail = 'No acquisition camera';
-      } else if (!instrument) {
-        detail = 'No instrument';
-      } else if (!rotator) {
-        detail = 'No rotator';
-      } else if (!calParams) {
-        detail = 'No cal params configuration';
-      } else if (!configuration) {
-        detail = 'No configuration';
-      } else {
-        detail = 'Unknown error';
-      }
       toast?.show({
         severity: 'warn',
         summary: data?.onSwappedTarget ? 'Cannot restore target' : 'Cannot swap target',
@@ -127,14 +80,44 @@ export function TargetSwapButton({
     }
   };
 
-  return (
-    <Button
-      disabled={disabled}
-      className="footer"
-      label={label}
-      onClick={onClick}
-      severity={severity}
-      loading={loading}
-    />
-  );
+  if (guiderTargets.length === 1 || data?.onSwappedTarget)
+    return (
+      <Button
+        disabled={disabled}
+        className="footer"
+        label={label}
+        onClick={onClick}
+        severity={severity}
+        loading={loading}
+      />
+    );
+  else
+    // Show dropdown to select a specific guider target
+    return (
+      <SplitButton
+        disabled={disabled}
+        className="footer"
+        label={label}
+        onClick={onClick}
+        severity={severity}
+        loading={loading}
+        model={Object.entries(Object.groupBy(guiderTargets, (t) => t.type)).map(([type, targets], _, arr) => ({
+          id: type,
+          label: type,
+          // Only show if there are targets of this type
+          visible: targets.length > 0,
+          // Auto-expand if only one type
+          expanded: arr.length === 1 ? true : undefined,
+          className: 'guider-target-dropdown-item',
+          items: targets.map((t) => ({
+            id: t.pk.toString(),
+            label: t.name,
+            disabled: disabled || isNullish(configurationPk),
+            className: 'guider-target-dropdown-item',
+            command: () =>
+              updateConfiguration({ variables: createUpdateSelectedTargetVariables(configurationPk!, t.type, t.pk) }),
+          })),
+        }))}
+      />
+    );
 }

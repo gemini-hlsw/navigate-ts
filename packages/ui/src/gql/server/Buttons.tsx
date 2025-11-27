@@ -2,20 +2,15 @@
 
 import type { DocumentNode, OperationVariables } from '@apollo/client';
 import { useMutation } from '@apollo/client/react';
-import { useCalParams } from '@gql/configs/CalParams';
 import { useConfiguration } from '@gql/configs/Configuration';
-import { useConfiguredInstrument } from '@gql/configs/Instrument';
-import { useRotator } from '@gql/configs/Rotator';
 import { useSlewFlags } from '@gql/configs/SlewFlags';
-import { useTargets } from '@gql/configs/Target';
 import type { VariablesOf } from '@graphql-typed-document-node/core';
-import { createTcsConfigInput } from '@Telescope/Targets/inputs';
+import { useTcsConfigInput } from '@Telescope/Targets/inputs';
 import { clsx } from 'clsx';
 import type { ButtonProps } from 'primereact/button';
 import { Button } from 'primereact/button';
 import type { ReactNode } from 'react';
 
-import { useServerConfigValue } from '@/components/atoms/config';
 import { Crosshairs, CrosshairsSlash, Parking, ParkingSlash } from '@/components/Icons';
 import { BTN_CLASSES } from '@/Helpers/constants';
 import type { SetStale } from '@/Helpers/hooks';
@@ -203,46 +198,20 @@ export const SLEW_MUTATION = graphql(`
 `);
 
 export function Slew(props: ButtonProps) {
-  const { site } = useServerConfigValue();
-
-  const { data: targetsData, loading: targetsLoading } = useTargets();
-  const { oiTargets, baseTargets } = targetsData;
-
   const { data, loading: slewLoading } = useSlewFlags();
   const slewFlags = data?.slewFlags ?? ({} as SlewFlagsType);
 
-  const { data: rotatorData, loading: rotatorLoading } = useRotator();
-  const rotator = rotatorData?.rotator;
   const { data: configData, loading: configLoading } = useConfiguration();
   const configuration = configData?.configuration;
 
-  const { data: instrument, loading: instrumentLoading } = useConfiguredInstrument();
+  const { data: tcsConfig, loading: tcsConfigInputLoading, detail } = useTcsConfigInput();
+  const loading = slewLoading || configLoading || tcsConfigInputLoading;
 
-  const { data: calParamsData, loading: calParamsLoading } = useCalParams(site);
-  const calParams = calParamsData?.calParams;
-
-  const loading =
-    targetsLoading || slewLoading || rotatorLoading || configLoading || instrumentLoading || calParamsLoading;
-
-  const selectedTarget = baseTargets.find((t) => t.pk === configuration?.selectedTarget);
-  const selectedOiTarget = oiTargets.find((t) => t.pk === configuration?.selectedOiTarget);
-
-  if (!selectedTarget?.id || !instrument || !rotator || !calParams || !configuration) {
-    const missing = !selectedTarget?.id
-      ? 'target'
-      : !instrument
-        ? 'instrument'
-        : !rotator
-          ? 'rotator'
-          : !calParams
-            ? 'cal params'
-            : !configuration
-              ? 'configuration'
-              : '';
+  if (detail) {
     return (
       <Button
         {...props}
-        label={missing ? `${props.label ?? ''} (No ${missing})` : props.label}
+        label={detail ? `${props.label ?? ''} (${detail})` : props.label}
         loading={loading}
         disabled={true}
       />
@@ -252,7 +221,7 @@ export function Slew(props: ButtonProps) {
   const variables: RunSlewMutationVariables = {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     slewOptions: (({ pk, __typename, ...o }) => o)(slewFlags),
-    config: createTcsConfigInput(instrument, rotator, selectedTarget, selectedOiTarget, calParams, configuration),
+    config: tcsConfig!,
     obsId: configuration?.obsId,
   };
 

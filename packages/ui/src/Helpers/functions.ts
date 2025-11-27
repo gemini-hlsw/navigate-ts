@@ -28,20 +28,12 @@ export function when<C, T, F = undefined>(
 }
 
 export function getConfigWfs(configuration: Configuration | undefined | null): WfsType {
-  const oiNull = isNullish(configuration?.selectedOiTarget);
-  const p1Null = isNullish(configuration?.selectedP1Target);
-  const p2Null = isNullish(configuration?.selectedP2Target);
+  const { selectedGuiderTarget, selectedOiTarget, selectedP1Target, selectedP2Target } = configuration ?? {};
 
-  // So far we only support 'OIWFS' or 'NONE' WFS.
-  // TODO: There are special cases where multiple WFS are enabled,
-  // but this is not supported yet and we need to discuss how to do it.
-  if (oiNull && p1Null && p2Null) return 'NONE';
-  if (!oiNull && p1Null && p2Null) return 'OIWFS';
-  if (oiNull && !p1Null && p2Null) return 'PWFS1';
-  if (oiNull && p1Null && !p2Null) return 'PWFS2';
-
-  // For now will return 'NONE' if any other case is detected.
-  return 'NONE';
+  if (isNotNullish(selectedOiTarget) && selectedGuiderTarget === selectedOiTarget) return 'OIWFS';
+  if (isNotNullish(selectedP1Target) && selectedGuiderTarget === selectedP1Target) return 'PWFS1';
+  if (isNotNullish(selectedP2Target) && selectedGuiderTarget === selectedP2Target) return 'PWFS2';
+  else return 'NONE';
 }
 
 /**
@@ -56,18 +48,22 @@ export function formatToSignedArcseconds(arcseconds: number | string | undefined
     if (Number.isNaN(num)) {
       return defaultValue;
     }
-    return round(signedArcSeconds(num), 2);
+    return round(signedArcSeconds(num), 2, { useGrouping: false });
   }
 }
 
 /**
  * Round a number to a specified number of decimal places
  */
-export function round(value: number, decimals: number): string {
-  return value.toLocaleString(undefined, {
+export function round(
+  value: number,
+  decimals: number,
+  options: Omit<Intl.NumberFormatOptions, 'minimumFractionDigits' | 'maximumFractionDigits'> = {},
+): string {
+  return value.toLocaleString('en-US', {
     minimumFractionDigits: decimals,
     maximumFractionDigits: decimals,
-    useGrouping: false,
+    ...options,
   });
 }
 
@@ -90,6 +86,6 @@ export function instrumentToOiwfs(instrument: Instrument | null | undefined): Gu
 /**
  * Get the first element of an array if it has only one element
  */
-export function firstIfOnlyOne<T>(arr: T[] | undefined): T | undefined {
-  return arr?.length === 1 ? arr[0] : undefined;
+export function firstIfOnlyOne<T>(arr: T[] | undefined): T | null {
+  return arr?.length === 1 ? (arr[0] ?? null) : null;
 }

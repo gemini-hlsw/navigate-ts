@@ -12,6 +12,6 @@ export const removeAndCreateWfsTargets: NonNullable<MutationResolvers['removeAnd
     },
   });
   return prisma.target.createManyAndReturn({
-    data: (args.targets ?? []) as Target[],
+    data: (args.targets ?? []).map((t) => ({ ...t, type: args.wfs })) as Target[],
   });
 };
