@@ -6,7 +6,7 @@ import { Button } from 'primereact/button';
 import { SplitButton } from 'primereact/splitbutton';
 
 import { useCanEdit } from '@/components/atoms/auth';
-import { isNullish } from '@/Helpers/functions';
+import { groupBy, isNullish } from '@/Helpers/functions';
 import { useToast } from '@/Helpers/toast';
 
 import { createTargetPropertiesInput, createUpdateSelectedTargetVariables, useTcsConfigInput } from './inputs';
@@ -101,7 +101,7 @@ export function TargetSwapButton({
         onClick={onClick}
         severity={severity}
         loading={loading}
-        model={Object.entries(Object.groupBy(guiderTargets, (t) => t.type)).map(([type, targets], _, arr) => ({
+        model={Object.entries(groupBy(guiderTargets, (t) => t.type)).map(([type, targets], _, arr) => ({
           id: type,
           label: type,
           // Only show if there are targets of this type
