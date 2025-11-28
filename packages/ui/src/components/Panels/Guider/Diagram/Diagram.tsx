@@ -56,7 +56,7 @@ const initialEdges: Edge[] = [
   },
 ];
 
-const WFS_LIST = ['OIWFS', 'P1WFS', 'P2WFS'];
+const WFS_LIST = ['OIWFS', 'PWFS1', 'PWFS2'];
 
 function Flow() {
   const { setNodes, setEdges, fitView } = useReactFlow();
@@ -101,8 +101,8 @@ function Flow() {
 
     if (configuration?.selectedP1Target) {
       sourceNodes.push({
-        id: 'P1WFS',
-        data: { label: 'P1WFS' },
+        id: 'PWFS1',
+        data: { label: 'PWFS1' },
         position: { x: sourceNodes.length * 100, y: 0 },
         className: 'inactive',
         type: 'input',
@@ -111,8 +111,8 @@ function Flow() {
 
     if (configuration?.selectedP2Target) {
       sourceNodes.push({
-        id: 'P2WFS',
-        data: { label: 'P2WFS' },
+        id: 'PWFS2',
+        data: { label: 'PWFS2' },
         position: { x: sourceNodes.length * 100, y: 0 },
         className: 'inactive',
         type: 'input',
