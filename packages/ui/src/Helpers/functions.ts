@@ -89,3 +89,14 @@ export function instrumentToOiwfs(instrument: Instrument | null | undefined): Gu
 export function firstIfOnlyOne<T>(arr: T[] | undefined): T | null {
   return arr?.length === 1 ? (arr[0] ?? null) : null;
 }
+
+export function groupBy<K extends PropertyKey, T>(arr: T[], criteria: (element: T) => K): Partial<Record<K, T[]>> {
+  if (Object.groupBy) return Object.groupBy(arr, criteria);
+  else
+    return arr.reduce((acc: Partial<Record<K, T[]>>, item) => {
+      const key = criteria(item);
+      acc[key] ??= [];
+      acc[key].push(item);
+      return acc;
+    }, {});
+}
