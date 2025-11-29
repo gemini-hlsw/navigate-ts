@@ -46,20 +46,5 @@
   "lint-staged": {
     "*.{js,mjs,ts,tsx,jsx,css,md,json,yml,yaml}": "prettier --write",
     "*.css": "stylelint --fix"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "@parcel/watcher",
-      "@prisma/client",
-      "@prisma/engines",
-      "esbuild",
-      "prisma"
-    ],
-    "ignoredBuiltDependencies": [
-      "cpu-features",
-      "protobufjs",
-      "ssh2",
-      "unrs-resolver"
-    ]
   }
 }
