@@ -116,7 +116,7 @@ importers:
         version: 0.158.0
       prisma:
         specifier: 7.0.1
-        version: 7.0.1(@types/react@19.2.5)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(typescript@5.9.3)
+        version: 7.0.1(@types/react@19.2.7)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(typescript@5.9.3)
     devDependencies:
       '@eddeee888/gcg-typescript-resolver-files':
         specifier: 0.14.1
@@ -150,7 +150,7 @@ importers:
         version: 24.10.1
       navigate-configs:
         specifier: workspace:*
-        version: file:packages/configs(@types/react@19.2.5)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(typescript@5.9.3)
+        version: file:packages/configs(@types/react@19.2.7)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(typescript@5.9.3)
 
   packages/ui:
     devDependencies:
@@ -176,11 +176,11 @@ importers:
         specifier: 'catalog:'
         version: 2.5.1
       '@types/react':
-        specifier: 19.2.5
-        version: 19.2.5
+        specifier: 19.2.7
+        version: 19.2.7
       '@types/react-dom':
         specifier: 19.2.3
-        version: 19.2.3(@types/react@19.2.5)
+        version: 19.2.3(@types/react@19.2.7)
       '@vitejs/plugin-react':
         specifier: 5.1.1
         version: 5.1.1(vite@7.2.2(@types/node@24.10.1)(jiti@2.6.1)(sass@1.94.0)(yaml@2.8.1))
@@ -189,7 +189,7 @@ importers:
         version: 4.0.9(playwright@1.56.1)(vite@7.2.2(@types/node@24.10.1)(jiti@2.6.1)(sass@1.94.0)(yaml@2.8.1))(vitest@4.0.9)
       '@xyflow/react':
         specifier: 12.9.3
-        version: 12.9.3(@types/react@19.2.5)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+        version: 12.9.3(@types/react@19.2.7)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       babel-plugin-react-compiler:
         specifier: 1.0.0
         version: 1.0.0
@@ -213,7 +213,7 @@ importers:
         version: 6.0.6(graphql@16.12.0)(ws@8.18.3)
       jotai:
         specifier: 2.15.1
-        version: 2.15.1(@babel/core@7.28.5)(@babel/template@7.27.2)(@types/react@19.2.5)(react@19.2.0)
+        version: 2.15.1(@babel/core@7.28.5)(@babel/template@7.27.2)(@types/react@19.2.7)(react@19.2.0)
       lucuma-core:
         specifier: 'catalog:'
         version: 0.158.0
@@ -231,7 +231,7 @@ importers:
         version: 1.56.1
       primereact:
         specifier: 10.9.7
-        version: 10.9.7(@types/react@19.2.5)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+        version: 10.9.7(@types/react@19.2.7)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       react:
         specifier: 19.2.0
         version: 19.2.0
@@ -255,7 +255,7 @@ importers:
         version: 4.0.9(@types/node@24.10.1)(@vitest/browser-playwright@4.0.9)(jiti@2.6.1)(sass@1.94.0)(yaml@2.8.1)
       vitest-browser-react:
         specifier: 2.0.2
-        version: 2.0.2(@types/react-dom@19.2.3(@types/react@19.2.5))(@types/react@19.2.5)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(vitest@4.0.9)
+        version: 2.0.2(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(vitest@4.0.9)
 
 packages:
 
@@ -1643,8 +1643,8 @@ packages:
     peerDependencies:
       '@types/react': '*'
 
-  '@types/react@19.2.5':
-    resolution: {integrity: sha512-keKxkZMqnDicuvFoJbzrhbtdLSPhj/rZThDlKWCDbgXmUg0rEUFtRssDXKYmtXluZlIqiC5VqkCgRwzuyLHKHw==}
+  '@types/react@19.2.7':
+    resolution: {integrity: sha512-MWtvHrGZLFttgeEj28VXHxpmwYbor/ATPYbBfSFZEIRK0ecCFLl2Qo55z52Hss+UV9CRN7trSeq1zbgx7YDWWg==}
 
   '@types/ssh2-streams@0.1.13':
     resolution: {integrity: sha512-faHyY3brO9oLEA0QlcO8N2wT7R0+1sHWZvQ+y3rMLwdY1ZyS1z0W3t65j9PqT4HmQ6ALzNe7RZlNuCNE0wBSWA==}
@@ -6030,7 +6030,7 @@ snapshots:
     dependencies:
       '@prisma/client-runtime-utils': 7.0.1
     optionalDependencies:
-      prisma: 7.0.1(@types/react@19.2.5)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(typescript@5.9.3)
+      prisma: 7.0.1(@types/react@19.2.7)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(typescript@5.9.3)
       typescript: 5.9.3
 
   '@prisma/config@7.0.1':
@@ -6097,9 +6097,9 @@ snapshots:
 
   '@prisma/query-plan-executor@6.18.0': {}
 
-  '@prisma/studio-core@0.8.2(@types/react@19.2.5)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
+  '@prisma/studio-core@0.8.2(@types/react@19.2.7)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
     dependencies:
-      '@types/react': 19.2.5
+      '@types/react': 19.2.7
       react: 19.2.0
       react-dom: 19.2.0(react@19.2.0)
 
@@ -6309,15 +6309,15 @@ snapshots:
     dependencies:
       undici-types: 7.16.0
 
-  '@types/react-dom@19.2.3(@types/react@19.2.5)':
+  '@types/react-dom@19.2.3(@types/react@19.2.7)':
     dependencies:
-      '@types/react': 19.2.5
+      '@types/react': 19.2.7
 
-  '@types/react-transition-group@4.4.12(@types/react@19.2.5)':
+  '@types/react-transition-group@4.4.12(@types/react@19.2.7)':
     dependencies:
-      '@types/react': 19.2.5
+      '@types/react': 19.2.7
 
-  '@types/react@19.2.5':
+  '@types/react@19.2.7':
     dependencies:
       csstype: 3.2.2
 
@@ -6620,13 +6620,13 @@ snapshots:
     dependencies:
       tslib: 2.8.1
 
-  '@xyflow/react@12.9.3(@types/react@19.2.5)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
+  '@xyflow/react@12.9.3(@types/react@19.2.7)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
     dependencies:
       '@xyflow/system': 0.0.73
       classcat: 5.0.5
       react: 19.2.0
       react-dom: 19.2.0(react@19.2.0)
-      zustand: 4.5.7(@types/react@19.2.5)(react@19.2.0)
+      zustand: 4.5.7(@types/react@19.2.7)(react@19.2.0)
     transitivePeerDependencies:
       - '@types/react'
       - immer
@@ -8188,11 +8188,11 @@ snapshots:
 
   jiti@2.6.1: {}
 
-  jotai@2.15.1(@babel/core@7.28.5)(@babel/template@7.27.2)(@types/react@19.2.5)(react@19.2.0):
+  jotai@2.15.1(@babel/core@7.28.5)(@babel/template@7.27.2)(@types/react@19.2.7)(react@19.2.0):
     optionalDependencies:
       '@babel/core': 7.28.5
       '@babel/template': 7.27.2
-      '@types/react': 19.2.5
+      '@types/react': 19.2.7
       react: 19.2.0
 
   js-tokens@4.0.0: {}
@@ -8420,7 +8420,7 @@ snapshots:
 
   natural-compare@1.4.0: {}
 
-  navigate-configs@file:packages/configs(@types/react@19.2.5)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(typescript@5.9.3):
+  navigate-configs@file:packages/configs(@types/react@19.2.7)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(typescript@5.9.3):
     dependencies:
       '@prisma/adapter-pg': 7.0.1
       '@prisma/client': 7.0.1(prisma@7.0.1(typescript@5.9.3))(typescript@5.9.3)
@@ -8429,7 +8429,7 @@ snapshots:
       graphql-scalars: 1.25.0(graphql@16.12.0)
       graphql-yoga: 5.16.2(graphql@16.12.0)
       lucuma-core: 0.158.0
-      prisma: 7.0.1(@types/react@19.2.5)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(typescript@5.9.3)
+      prisma: 7.0.1(@types/react@19.2.7)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(typescript@5.9.3)
     transitivePeerDependencies:
       - '@types/react'
       - better-sqlite3
@@ -8717,21 +8717,21 @@ snapshots:
 
   prettier@3.6.2: {}
 
-  primereact@10.9.7(@types/react@19.2.5)(react-dom@19.2.0(react@19.2.0))(react@19.2.0):
+  primereact@10.9.7(@types/react@19.2.7)(react-dom@19.2.0(react@19.2.0))(react@19.2.0):
     dependencies:
-      '@types/react-transition-group': 4.4.12(@types/react@19.2.5)
+      '@types/react-transition-group': 4.4.12(@types/react@19.2.7)
       react: 19.2.0
       react-dom: 19.2.0(react@19.2.0)
       react-transition-group: 4.4.5(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
     optionalDependencies:
-      '@types/react': 19.2.5
+      '@types/react': 19.2.7
 
-  prisma@7.0.1(@types/react@19.2.5)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(typescript@5.9.3):
+  prisma@7.0.1(@types/react@19.2.7)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(typescript@5.9.3):
     dependencies:
       '@prisma/config': 7.0.1
       '@prisma/dev': 0.13.0(typescript@5.9.3)
       '@prisma/engines': 7.0.1
-      '@prisma/studio-core': 0.8.2(@types/react@19.2.5)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      '@prisma/studio-core': 0.8.2(@types/react@19.2.7)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       mysql2: 3.15.3
       postgres: 3.4.7
     optionalDependencies:
@@ -9589,14 +9589,14 @@ snapshots:
       sass: 1.94.0
       yaml: 2.8.1
 
-  vitest-browser-react@2.0.2(@types/react-dom@19.2.3(@types/react@19.2.5))(@types/react@19.2.5)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(vitest@4.0.9):
+  vitest-browser-react@2.0.2(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(vitest@4.0.9):
     dependencies:
       react: 19.2.0
       react-dom: 19.2.0(react@19.2.0)
       vitest: 4.0.9(@types/node@24.10.1)(@vitest/browser-playwright@4.0.9)(jiti@2.6.1)(sass@1.94.0)(yaml@2.8.1)
     optionalDependencies:
-      '@types/react': 19.2.5
-      '@types/react-dom': 19.2.3(@types/react@19.2.5)
+      '@types/react': 19.2.7
+      '@types/react-dom': 19.2.3(@types/react@19.2.7)
 
   vitest@4.0.9(@types/node@24.10.1)(@vitest/browser-playwright@4.0.9)(jiti@2.6.1)(sass@1.94.0)(yaml@2.8.1):
     dependencies:
@@ -9777,9 +9777,9 @@ snapshots:
 
   zod@4.1.12: {}
 
-  zustand@4.5.7(@types/react@19.2.5)(react@19.2.0):
+  zustand@4.5.7(@types/react@19.2.7)(react@19.2.0):
     dependencies:
       use-sync-external-store: 1.6.0(react@19.2.0)
     optionalDependencies:
-      '@types/react': 19.2.5
+      '@types/react': 19.2.7
       react: 19.2.0
