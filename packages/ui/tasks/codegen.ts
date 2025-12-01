@@ -1,6 +1,7 @@
 import { join } from 'node:path';
 
 import type { CodegenConfig } from '@graphql-codegen/cli';
+import type { ClientPresetConfig } from '@graphql-codegen/client-preset';
 
 // Simple mapping of scalar types to their TypeScript representation
 // Some of these might be wrong or incomplete, feel free to adjust as needed
@@ -52,7 +53,7 @@ const scalars = {
   UserInvitationId: 'string',
   UserInvitationKey: 'string',
   VisitId: 'string',
-};
+} satisfies Record<string, string>;
 /*eslint-disable sort-keys*/
 
 const sharedConfig = {
@@ -72,7 +73,7 @@ const sharedConfig = {
 
 const presetConfig = {
   fragmentMasking: false,
-};
+} satisfies ClientPresetConfig;
 
 export default {
   ignoreNoDocuments: true,
