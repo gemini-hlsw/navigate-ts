@@ -42,7 +42,7 @@
     "@eddeee888/gcg-typescript-resolver-files": "0.14.1",
     "@graphql-codegen/cli": "catalog:",
     "@parcel/watcher": "catalog:",
-    "@testcontainers/postgresql": "11.8.1",
+    "@testcontainers/postgresql": "11.9.0",
     "@types/node": "catalog:",
     "lucuma-schemas": "catalog:",
     "typescript": "catalog:"
