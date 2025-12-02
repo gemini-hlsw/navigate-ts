@@ -67,6 +67,12 @@ export function Configuration() {
       if (state.m2TipTiltSource.split(',').includes('OIWFS')) {
         m2Inputs.push('OIWFS');
       }
+      if (state.m2TipTiltSource.split(',').includes('PWFS1')) {
+        m2Inputs.push('PWFS1');
+      }
+      if (state.m2TipTiltSource.split(',').includes('PWFS2')) {
+        m2Inputs.push('PWFS2');
+      }
     }
     const m1Input =
       state.m1CorrectionsEnable && state.m2ComaM1CorrectionsSource ? state.m2ComaM1CorrectionsSource : undefined;
@@ -143,8 +149,8 @@ export function Configuration() {
               onChange={(e) => modifyGuideLoop('m2TipTiltSource', (e.value as string[]).join(','))}
               options={[
                 { label: 'OIWFS', value: 'OIWFS' },
-                // { label: "PWFS1", value: "PWFS1" },
-                // { label: "PWFS2", value: "PWFS2" },
+                { label: 'PWFS1', value: 'PWFS1' },
+                { label: 'PWFS2', value: 'PWFS2' },
                 // { label: "GAOS", value: "GAOS" },
               ]}
               placeholder="Select sources"
@@ -189,8 +195,8 @@ export function Configuration() {
               onChange={(e) => modifyGuideLoop('m2FocusSource', (e.value as string[]).join(','))}
               options={[
                 { label: 'OIWFS', value: 'OIWFS' },
-                // { label: "PWFS1", value: "PWFS1" },
-                // { label: "PWFS2", value: "PWFS2" },
+                { label: 'PWFS1', value: 'PWFS1' },
+                { label: 'PWFS2', value: 'PWFS2' },
                 // { label: "GAOS", value: "GAOS" },
               ]}
               placeholder="Select sources"
@@ -221,7 +227,7 @@ export function Configuration() {
             loading={loading}
             value={state.m2ComaM1CorrectionsSource}
             // options={["PWFS1", "PWFS2", "PWFS1 & PWFS2", "OIWFS", "GAOS"]}
-            options={['OIWFS']}
+            options={['OIWFS', 'PWFS1', 'PWFS2']}
             onChange={(e) => modifyGuideLoop('m2ComaM1CorrectionsSource', e.target.value as string)}
             placeholder="Select a source"
           />

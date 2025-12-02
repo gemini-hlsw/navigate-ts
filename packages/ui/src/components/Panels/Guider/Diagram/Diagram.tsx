@@ -1,6 +1,7 @@
 import '@xyflow/react/dist/style.css';
 
 import { useConfiguration } from '@gql/configs/Configuration';
+import type { WfsType } from '@gql/configs/gen/graphql';
 import type { Edge, Node } from '@xyflow/react';
 import { Background, Controls, ReactFlow, ReactFlowProvider, useReactFlow } from '@xyflow/react';
 import { useEffect, useMemo } from 'react';
@@ -56,7 +57,7 @@ const initialEdges: Edge[] = [
   },
 ];
 
-const WFS_LIST = ['OIWFS', 'PWFS1', 'PWFS2'];
+const WFS_LIST: string[] = ['OIWFS', 'PWFS1', 'PWFS2'] satisfies WfsType[];
 
 function Flow() {
   const { setNodes, setEdges, fitView } = useReactFlow();
