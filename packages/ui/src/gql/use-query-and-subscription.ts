@@ -50,7 +50,7 @@ export function useQueryAndSubscription<
 
   useEffect(() => {
     if (options.useStale) setStale(false);
-  }, [setStale, options.useStale]);
+  }, [data, setStale, options.useStale]);
 
   return {
     ...query,

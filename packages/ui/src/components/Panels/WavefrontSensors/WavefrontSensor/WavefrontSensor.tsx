@@ -4,6 +4,14 @@ import type { WfsType } from '@gql/configs/gen/graphql';
 import type { GuideProbe } from '@gql/server/gen/graphql';
 import { useGuideState } from '@gql/server/GuideState';
 import {
+  useOiwfsConfigState,
+  usePwfs1ConfigState,
+  usePwfs2ConfigState,
+  useSetOiwfsCircularBuffer,
+  useSetPwfs1CircularBuffer,
+  useSetPwfs2CircularBuffer,
+} from '@gql/server/NavigateState';
+import {
   type ObserveResult,
   type StopObserveResult,
   useOiwfsObserve,
@@ -18,7 +26,7 @@ import { clsx } from 'clsx';
 import { Button } from 'primereact/button';
 import { Checkbox } from 'primereact/checkbox';
 import { Dropdown } from 'primereact/dropdown';
-import { useEffect, useId, useState } from 'react';
+import { type CSSProperties, useEffect, useId, useState } from 'react';
 
 import { Play, Stop } from '@/components/Icons';
 import { instrumentToOiwfs } from '@/Helpers/functions';
@@ -29,10 +37,11 @@ export default function WavefrontSensor({
   className,
 }: {
   canEdit: boolean;
-  wfs: Omit<WfsType, 'NONE'>;
+  wfs: Exclude<WfsType, 'NONE'>;
   className?: string;
 }) {
   const id = useId();
+
   const [freq, setFreq] = useState(200);
   const [freqOptions, setFreqOptions] = useState([1, 2, 10, 20, 50, 100, 125, 200]);
 
@@ -58,17 +67,24 @@ export default function WavefrontSensor({
     }
   }, [configuration?.obsInstrument, freq]);
 
-  let observeButton: React.ReactNode | undefined;
-  let skyButton: React.ReactNode | undefined;
+  let observeButton: React.ReactElement | undefined;
+  let skyButton: React.ReactElement | undefined;
+  let saveButton: React.ReactElement | undefined;
+  const saveProps: SaveCheckboxProps = { canEdit, inputId: `save-${id}`, style: { gridArea: 'g22' } };
   if (wfs === 'OIWFS') {
     observeButton = <OiwfsObserveButton freq={freq} canEdit={canEdit && !configLoading} />;
     skyButton = <TakeSkyButton freq={freq} wfs="GMOS_OIWFS" canEdit={canEdit} />;
+    saveButton = <OiwfsSaveCheckbox {...saveProps} />;
   } else if (wfs === 'PWFS1') {
     observeButton = <Pwfs1ObserveButton freq={freq} canEdit={canEdit && !configLoading} />;
     skyButton = <TakeSkyButton freq={freq} wfs="PWFS1" canEdit={canEdit} />;
+    saveButton = <Pwfs1SaveCheckbox {...saveProps} />;
   } else if (wfs === 'PWFS2') {
     observeButton = <Pwfs2ObserveButton freq={freq} canEdit={canEdit && !configLoading} />;
     skyButton = <TakeSkyButton freq={freq} wfs="PWFS2" canEdit={canEdit} />;
+    saveButton = <Pwfs2SaveCheckbox {...saveProps} />;
+  } else {
+    console.warn(`Unknown wavefront sensor type: ${wfs as string}`);
   }
 
   return (
@@ -76,7 +92,7 @@ export default function WavefrontSensor({
       <span className="wfs-name">{wfs}</span>
       <img src={imgUrl} alt="wfs" />
       <div className="controls">
-        <label htmlFor={`freq-${id}`} style={{ alignSelf: 'center', gridArea: 'g11' }}>
+        <label htmlFor={`freq-${id}`} style={{ gridArea: 'g11' }}>
           Freq
         </label>
         <Dropdown
@@ -88,16 +104,10 @@ export default function WavefrontSensor({
           onChange={(e) => setFreq(e.value as number)}
         />
         {observeButton}
-        <label htmlFor={`save-${id}`} style={{ alignSelf: 'center', gridArea: 'g21' }}>
+        <label htmlFor={`save-${id}`} style={{ gridArea: 'g21' }}>
           Save
         </label>
-        <Checkbox
-          inputId={`save-${id}`}
-          className="under-construction"
-          disabled={!canEdit}
-          style={{ gridArea: 'g22' }}
-          checked={true}
-        />
+        {saveButton}
         {skyButton}
         <Button className="under-construction" disabled={!canEdit} style={{ gridArea: 'g3' }} label="Autoadjust" />
       </div>
@@ -119,6 +129,63 @@ function OiwfsObserveButton({ freq, canEdit }: { freq: number; canEdit: boolean 
       integrating={guideStateData?.oiIntegrating}
       observeResult={observe}
       stopObserveResult={stopObserve}
+    />
+  );
+}
+
+interface SaveCheckboxProps {
+  canEdit: boolean;
+  inputId: string;
+  style: CSSProperties;
+}
+
+function OiwfsSaveCheckbox({ canEdit, inputId, style }: SaveCheckboxProps) {
+  const { data, loading: dataLoading, setStale } = useOiwfsConfigState();
+  const [setOiwfsCircularBuffer, { loading: mutationLoading }] = useSetOiwfsCircularBuffer(setStale);
+
+  const loading = dataLoading || mutationLoading;
+
+  return (
+    <Checkbox
+      checked={data?.saving ?? false}
+      disabled={!canEdit || loading}
+      inputId={inputId}
+      style={style}
+      onChange={(e) => setOiwfsCircularBuffer({ variables: { enabled: e.checked ?? false } })}
+    />
+  );
+}
+
+function Pwfs1SaveCheckbox({ canEdit, inputId, style }: SaveCheckboxProps) {
+  const { data, loading: dataLoading, setStale } = usePwfs1ConfigState();
+  const [setPwfs1CircularBuffer, { loading: mutationLoading }] = useSetPwfs1CircularBuffer(setStale);
+
+  const loading = dataLoading || mutationLoading;
+
+  return (
+    <Checkbox
+      checked={data?.saving ?? false}
+      disabled={!canEdit || loading}
+      inputId={inputId}
+      style={style}
+      onChange={(e) => setPwfs1CircularBuffer({ variables: { enabled: e.checked ?? false } })}
+    />
+  );
+}
+
+function Pwfs2SaveCheckbox({ canEdit, inputId, style }: SaveCheckboxProps) {
+  const { data, loading: dataLoading, setStale } = usePwfs2ConfigState();
+  const [setPwfs2CircularBuffer, { loading: mutationLoading }] = useSetPwfs2CircularBuffer(setStale);
+
+  const loading = dataLoading || mutationLoading;
+
+  return (
+    <Checkbox
+      checked={data?.saving ?? false}
+      disabled={!canEdit || loading}
+      inputId={inputId}
+      style={style}
+      onChange={(e) => setPwfs2CircularBuffer({ variables: { enabled: e.checked ?? false } })}
     />
   );
 }
