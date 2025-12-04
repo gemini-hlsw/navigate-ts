@@ -56,6 +56,7 @@ export const INSTRUMENT_FRAGMENT = graphql(`
     ao
     extraParams
     isTemporary
+    alignAngle
     comment
     createdAt
   }
@@ -113,6 +114,7 @@ export const SET_TEMPORARY_INSTRUMENT = graphql(`
     $originY: Float
     $ao: Boolean!
     $extraParams: JSON
+    $alignAngle: Float
   ) {
     setTemporaryInstrument(
       name: $name
@@ -124,6 +126,7 @@ export const SET_TEMPORARY_INSTRUMENT = graphql(`
       originY: $originY
       ao: $ao
       extraParams: $extraParams
+      alignAngle: $alignAngle
     ) {
       ...InstrumentItem
     }
@@ -151,6 +154,7 @@ export const UPDATE_INSTRUMENT = graphql(`
     $ao: Boolean
     $extraParams: JSON
     $isTemporary: Boolean
+    $alignAngle: Float
     $comment: String
   ) {
     updateInstrument(
@@ -165,6 +169,7 @@ export const UPDATE_INSTRUMENT = graphql(`
       ao: $ao
       extraParams: $extraParams
       isTemporary: $isTemporary
+      alignAngle: $alignAngle
       comment: $comment
     ) {
       ...InstrumentItem

@@ -1,11 +1,14 @@
 import type { MockLink } from '@apollo/client/testing';
 import { GET_CONFIGURATION } from '@gql/configs/Configuration';
+import type { InstrumentConfig } from '@gql/configs/gen/graphql';
+import { GET_INSTRUMENT, UPDATE_INSTRUMENT } from '@gql/configs/Instrument';
 import type {
   AdjustTarget,
   MutationAdjustOriginArgs,
   MutationAdjustPointingArgs,
   MutationAdjustTargetArgs,
 } from '@gql/server/gen/graphql';
+import { GET_INSTRUMENT_PORT } from '@gql/server/Instrument';
 import {
   ABSORB_TARGET_ADJUSTMENT_MUTATION,
   ADJUST_TARGET_MUTATION,
@@ -18,6 +21,7 @@ import type { ResultOf } from '@graphql-typed-document-node/core';
 import type { Mock } from 'vitest';
 import { userEvent } from 'vitest/browser';
 
+import { createConfiguration, createFocalPlaneOffset, createInstrumentConfig } from '@/test/create';
 import { operationOutcome, selectDropdownOption } from '@/test/helpers';
 import { type RenderResultWithStore, renderWithContext } from '@/test/render';
 
@@ -77,12 +81,29 @@ describe(TargetsHandset.name, () => {
   });
 
   it('should be disabled when canEdit is false', async () => {
-    await sut.unmount();
-    sut = await renderWithContext(<TargetsHandset canEdit={false} />, { mocks });
+    await sut.rerender(<TargetsHandset canEdit={false} />);
 
     expect(sut.getByRole('button', { name: 'Apply' })).toBeDisabled();
     expect(sut.getByRole('button', { name: 'Reset' })).toBeDisabled();
     expect(sut.getByRole('button', { name: 'Absorb' })).toBeDisabled();
+  });
+
+  it('shows align angle input when OIWFS is selected', async () => {
+    await selectAlignment('OIWFS');
+    const alignAngleInput = sut.getByLabelText('Align angle');
+
+    await userEvent.type(alignAngleInput, '45{Enter}');
+
+    expect(updateInstrumentMock.request.variables).toHaveBeenCalledExactlyOnceWith({
+      pk: 1,
+      alignAngle: 45,
+    });
+  });
+
+  it('hides align angle input when other than OIWFS is selected', async () => {
+    await selectAlignment('Az/El');
+
+    expect(sut.getByLabelText('Align angle')).not.toBeInTheDocument();
   });
 
   it.each([
@@ -283,6 +304,14 @@ describe(TargetsHandset.name, () => {
       },
     ],
   ] as const)('inputs for PWFS2 %s matches', async (testId, expectedInput) => {
+    getInstrumentMock.result.mockReturnValue({
+      data: {
+        instrument: createInstrumentConfig({
+          wfs: 'PWFS2',
+        }),
+      },
+    });
+    await sut.rerender(<TargetsHandset canEdit={true} />);
     await selectAlignment('PWFS2');
     await testDirectionButtonClick(testId, undefined, adjustTargetMutationMock.request.variables, {
       target: 'OIWFS',
@@ -315,50 +344,10 @@ describe(TargetsHandset.name, () => {
 
 const targetAdjustmentOffsetsData: ResultOf<typeof TARGET_ADJUSTMENT_OFFSETS_QUERY> = {
   targetAdjustmentOffsets: {
-    sourceA: {
-      deltaX: {
-        arcseconds: 0.0,
-        __typename: 'Angle',
-      },
-      deltaY: {
-        arcseconds: 0.0,
-        __typename: 'Angle',
-      },
-      __typename: 'FocalPlaneOffset',
-    },
-    pwfs1: {
-      deltaX: {
-        arcseconds: 0.0,
-        __typename: 'Angle',
-      },
-      deltaY: {
-        arcseconds: 0.0,
-        __typename: 'Angle',
-      },
-      __typename: 'FocalPlaneOffset',
-    },
-    pwfs2: {
-      deltaX: {
-        arcseconds: 0.0,
-        __typename: 'Angle',
-      },
-      deltaY: {
-        arcseconds: 0.0,
-        __typename: 'Angle',
-      },
-      __typename: 'FocalPlaneOffset',
-    },
-    oiwfs: {
-      deltaX: {
-        arcseconds: 0.0,
-        __typename: 'Angle',
-      },
-      deltaY: {
-        arcseconds: 0.0,
-        __typename: 'Angle',
-      },
-      __typename: 'FocalPlaneOffset',
-    },
+    sourceA: createFocalPlaneOffset(),
+    pwfs1: createFocalPlaneOffset(),
+    pwfs2: createFocalPlaneOffset(),
+    oiwfs: createFocalPlaneOffset(),
     __typename: 'TargetOffsets',
   },
 };
@@ -394,6 +383,37 @@ const absorbTargetAdjustmentMutationMock = {
   },
 } satisfies MockedResponseOf<typeof ABSORB_TARGET_ADJUSTMENT_MUTATION>;
 
+const getInstrumentMock = {
+  request: {
+    query: GET_INSTRUMENT,
+    variables: vi.fn().mockReturnValue(true),
+  },
+  maxUsageCount: Infinity,
+  result: vi.fn().mockReturnValue({
+    data: {
+      instrument: createInstrumentConfig({
+        wfs: 'OIWFS',
+      }),
+    },
+  }),
+} satisfies MockedResponseOf<typeof GET_INSTRUMENT>;
+
+const updateInstrumentMock = {
+  request: {
+    query: UPDATE_INSTRUMENT,
+    variables: vi.fn().mockReturnValue(true),
+  },
+  maxUsageCount: Infinity,
+  result: (arg) => ({
+    data: {
+      updateInstrument: createInstrumentConfig({
+        wfs: 'OIWFS',
+        ...(arg as Partial<InstrumentConfig>),
+      }),
+    },
+  }),
+} satisfies MockedResponseOf<typeof UPDATE_INSTRUMENT>;
+
 const mocks: MockLink.MockedResponse[] = [
   {
     request: {
@@ -402,26 +422,13 @@ const mocks: MockLink.MockedResponse[] = [
     },
     result: {
       data: {
-        configuration: {
-          pk: 1,
-          selectedTarget: 1,
-          selectedOiTarget: 3,
-          selectedP1Target: null,
-          selectedP2Target: null,
-          selectedGuiderTarget: null,
-          oiGuidingType: 'NORMAL',
-          p1GuidingType: 'NORMAL',
-          p2GuidingType: 'NORMAL',
-          obsTitle: 'Feige 110',
-          obsId: 'o-2790',
-          obsInstrument: 'GMOS_NORTH',
-          obsSubtitle: null,
-          obsReference: 'G-2025A-ENG-GMOSN-01-0004',
-          baffleMode: 'AUTO',
-          centralBaffle: null,
-          deployableBaffle: null,
-          __typename: 'Configuration',
-        },
+        configuration: createConfiguration({
+          selectedOiTarget: 1,
+          selectedP1Target: 2,
+          selectedP2Target: 3,
+          selectedGuiderTarget: 1,
+          selectedTarget: 4,
+        }),
       },
     },
   } satisfies MockedResponseOf<typeof GET_CONFIGURATION>,
@@ -444,7 +451,21 @@ const mocks: MockLink.MockedResponse[] = [
       data: targetAdjustmentOffsetsData,
     },
   } satisfies MockedResponseOf<typeof TARGET_ADJUSTMENT_OFFSETS_SUBSCRIPTION>,
+  {
+    request: {
+      query: GET_INSTRUMENT_PORT,
+      variables: () => true,
+    },
+    maxUsageCount: Infinity,
+    result: {
+      data: {
+        instrumentPort: 3,
+      },
+    },
+  } satisfies MockedResponseOf<typeof GET_INSTRUMENT_PORT>,
   adjustTargetMutationMock,
   resetTargetAdjustmentMutationMock,
   absorbTargetAdjustmentMutationMock,
+  getInstrumentMock,
+  updateInstrumentMock,
 ];

@@ -1,5 +1,3 @@
-import type { GuideAlarm } from '@gql/configs/gen/graphql';
-import type { GuideQuality } from '@gql/server/gen/graphql';
 import type { ComponentProps } from 'react';
 import type { MockedFunction } from 'vitest';
 import type { Locator } from 'vitest/browser';
@@ -7,23 +5,22 @@ import { page, userEvent } from 'vitest/browser';
 import type { RenderResult } from 'vitest-browser-react';
 import { render } from 'vitest-browser-react';
 
+import { createGuideAlarm, createGuideQuality } from '@/test/create';
+
 import { Alarm } from './Alarm';
 
 describe(Alarm.name, () => {
   let sut: RenderResult;
   let onUpdateAlarm: MockedFunction<ComponentProps<typeof Alarm>['onUpdateAlarm']>;
 
-  const guideQuality: GuideQuality = {
+  const guideQuality = createGuideQuality({
     centroidDetected: true,
     flux: 1000,
-    __typename: 'GuideQuality',
-  };
-  const alarm: GuideAlarm = {
+  });
+
+  const alarm = createGuideAlarm({
     wfs: 'PWFS1',
-    enabled: true,
-    limit: 900,
-    __typename: 'GuideAlarm',
-  };
+  });
 
   beforeEach(async () => {
     onUpdateAlarm = vi.fn();

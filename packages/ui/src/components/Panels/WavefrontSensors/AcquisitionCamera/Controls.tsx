@@ -1,4 +1,5 @@
 import { useConfiguration } from '@gql/configs/Configuration';
+import type { WfsType } from '@gql/configs/gen/graphql';
 import { Button } from 'primereact/button';
 import { Divider } from 'primereact/divider';
 import { Dropdown } from 'primereact/dropdown';
@@ -8,26 +9,36 @@ import { Slider } from 'primereact/slider';
 import { startTransition, useId, useState } from 'react';
 
 import { CaretDown, CaretLeft, CaretRight, CaretUp } from '@/components/Icons';
-import { formatToSignedArcseconds, instrumentToOiwfs } from '@/Helpers/functions';
+import { formatToSignedArcseconds, instrumentToOiwfs, isNotNullish } from '@/Helpers/functions';
 
 import type { Coords, HandsetStrategy } from './strategy';
 import { strategies, wfsStrategy } from './strategy';
 
 type CoordOnChange = (value: Coords) => void;
 
-const alignmentOptions = ['Az/El', 'AC', 'Instrument', 'RA/Dec', 'PWFS1', 'PWFS2', 'OIWFS'] as const;
-export type Alignment = (typeof alignmentOptions)[number];
+const alignmentOptions = [
+  { value: 'Az/El', show: () => true },
+  { value: 'AC', show: () => true },
+  { value: 'Instrument', show: () => true },
+  { value: 'RA/Dec', show: () => true },
+  { value: 'PWFS1', show: (wfs?: WfsType) => wfs === 'PWFS1' },
+  { value: 'PWFS2', show: (wfs?: WfsType) => wfs === 'PWFS2' },
+  { value: 'OIWFS', show: (wfs?: WfsType) => wfs === 'OIWFS' },
+] as const;
+export type Alignment = (typeof alignmentOptions)[number]['value'];
 
 export function AlignmentSelector({
   onChange,
   defaultAlignment,
   loading,
   canEdit,
+  instrumentWfs,
 }: {
   onChange: (strategy: HandsetStrategy) => void;
   defaultAlignment: Alignment;
   loading: boolean;
   canEdit: boolean;
+  instrumentWfs: WfsType | undefined;
 }) {
   const id = useId();
   // Local State
@@ -54,7 +65,7 @@ export function AlignmentSelector({
         inputId={`coord-system-${id}`}
         disabled={loading || !canEdit || configLoading}
         value={alignment}
-        options={alignmentOptions.map((cs) => cs)}
+        options={alignmentOptions.filter((a) => a.show(instrumentWfs)).map((cs) => cs.value)}
         onChange={(e) => updateAlignment(e.value as Alignment)}
         placeholder="Select alignment"
       />
@@ -278,5 +289,29 @@ export function Autoadjust() {
     <div className="control-row under-construction">
       <Button label="Autoadjust" />
     </div>
+  );
+}
+
+export function AlignAngleInput({
+  disabled,
+  value,
+  onChange,
+}: {
+  disabled: boolean;
+  value: number | null;
+  onChange: (value: number | null | undefined) => void;
+}) {
+  const id = useId();
+  return (
+    <>
+      <label htmlFor={`alignment-angle-${id}`}>Align Angle</label>
+      <InputNumber
+        inputId={`alignment-angle-${id}`}
+        suffix="°"
+        disabled={disabled}
+        value={value}
+        onValueChange={(e) => (isNotNullish(e.value) ? onChange(e.value) : undefined)}
+      />
+    </>
   );
 }

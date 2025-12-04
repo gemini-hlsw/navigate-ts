@@ -1,4 +1,5 @@
 import type { MockLink } from '@apollo/client/testing';
+import type { GuideAlarm } from '@gql/configs/gen/graphql';
 import { GET_GUIDE_ALARMS, UPDATE_GUIDE_ALARM } from '@gql/configs/GuideAlarm';
 import { GUIDE_QUALITY_QUERY, GUIDE_QUALITY_SUBSCRIPTION } from '@gql/server/GuideQuality';
 import { GUIDE_STATE_QUERY, GUIDE_STATE_SUBSCRIPTION } from '@gql/server/GuideState';
@@ -7,6 +8,7 @@ import type { Store } from 'jotai/vanilla/store';
 import { page, userEvent } from 'vitest/browser';
 
 import { guideAlarmSoundAtom } from '@/components/atoms/alarm';
+import { createGuideAlarm, createGuideQuality, createGuideState } from '@/test/create';
 import { renderWithContext } from '@/test/render';
 
 import { Alarms } from './Alarms';
@@ -45,24 +47,21 @@ const mocks: MockLink.MockedResponse[] = [
     result: {
       data: {
         guideAlarms: {
-          OIWFS: {
+          OIWFS: createGuideAlarm({
             wfs: 'OIWFS',
             limit: 900,
             enabled: true,
-            __typename: 'GuideAlarm',
-          },
-          PWFS1: {
+          }),
+          PWFS1: createGuideAlarm({
             wfs: 'PWFS1',
             limit: 901,
             enabled: false,
-            __typename: 'GuideAlarm',
-          },
-          PWFS2: {
+          }),
+          PWFS2: createGuideAlarm({
             wfs: 'PWFS2',
             limit: 902,
             enabled: false,
-            __typename: 'GuideAlarm',
-          },
+          }),
           __typename: 'GuideAlarms',
         },
       },
@@ -76,21 +75,15 @@ const mocks: MockLink.MockedResponse[] = [
     result: {
       data: {
         guidersQualityValues: {
-          oiwfs: {
+          oiwfs: createGuideQuality({
             flux: 901,
-            centroidDetected: false,
-            __typename: 'GuideQuality',
-          },
-          pwfs1: {
+          }),
+          pwfs1: createGuideQuality({
             flux: 902,
-            centroidDetected: false,
-            __typename: 'GuideQuality',
-          },
-          pwfs2: {
+          }),
+          pwfs2: createGuideQuality({
             flux: 903,
-            centroidDetected: false,
-            __typename: 'GuideQuality',
-          },
+          }),
           __typename: 'GuidersQualityValues',
         },
       },
@@ -105,21 +98,15 @@ const mocks: MockLink.MockedResponse[] = [
     result: {
       data: {
         guidersQualityValues: {
-          oiwfs: {
+          oiwfs: createGuideQuality({
             flux: 901,
-            centroidDetected: false,
-            __typename: 'GuideQuality',
-          },
-          pwfs1: {
+          }),
+          pwfs1: createGuideQuality({
             flux: 902,
-            centroidDetected: false,
-            __typename: 'GuideQuality',
-          },
-          pwfs2: {
+          }),
+          pwfs2: createGuideQuality({
             flux: 903,
-            centroidDetected: false,
-            __typename: 'GuideQuality',
-          },
+          }),
           __typename: 'GuidersQualityValues',
         },
       },
@@ -130,16 +117,14 @@ const mocks: MockLink.MockedResponse[] = [
       query: UPDATE_GUIDE_ALARM,
       variables: { wfs: 'PWFS1', limit: 900 },
     },
-    result: {
+    result: (arg) => ({
       data: {
-        updateGuideAlarm: {
+        updateGuideAlarm: createGuideAlarm({
           wfs: 'PWFS1',
-          limit: 900,
-          enabled: true,
-          __typename: 'GuideAlarm',
-        },
+          ...(arg as Partial<GuideAlarm>),
+        }),
       },
-    },
+    }),
   } satisfies MockedResponseOf<typeof UPDATE_GUIDE_ALARM>,
   {
     request: {
@@ -148,17 +133,7 @@ const mocks: MockLink.MockedResponse[] = [
     },
     result: {
       data: {
-        guideState: {
-          m2Inputs: ['OIWFS'],
-          m2Coma: false,
-          m1Input: null,
-          mountOffload: true,
-          p1Integrating: false,
-          p2Integrating: false,
-          oiIntegrating: true,
-          acIntegrating: false,
-          __typename: 'GuideConfigurationState',
-        },
+        guideState: createGuideState(),
       },
     },
   } satisfies MockedResponseOf<typeof GUIDE_STATE_QUERY>,
@@ -170,17 +145,7 @@ const mocks: MockLink.MockedResponse[] = [
     maxUsageCount: Infinity,
     result: {
       data: {
-        guideState: {
-          m2Inputs: ['OIWFS'],
-          m2Coma: false,
-          m1Input: null,
-          mountOffload: true,
-          p1Integrating: false,
-          p2Integrating: false,
-          oiIntegrating: true,
-          acIntegrating: false,
-          __typename: 'GuideConfigurationState',
-        },
+        guideState: createGuideState(),
       },
     },
   } satisfies MockedResponseOf<typeof GUIDE_STATE_SUBSCRIPTION>,

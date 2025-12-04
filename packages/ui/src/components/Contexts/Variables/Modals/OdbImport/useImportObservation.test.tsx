@@ -1,5 +1,6 @@
 import { MockedProvider } from '@apollo/client/testing/react';
 import { GET_CONFIGURATION, UPDATE_CONFIGURATION } from '@gql/configs/Configuration';
+import type { Configuration, Rotator } from '@gql/configs/gen/graphql';
 import { RESET_INSTRUMENTS } from '@gql/configs/Instrument';
 import { GET_ROTATOR, UPDATE_ROTATOR } from '@gql/configs/Rotator';
 import { REMOVE_AND_CREATE_BASE_TARGETS, REMOVE_AND_CREATE_WFS_TARGETS } from '@gql/configs/Target';
@@ -8,6 +9,7 @@ import type { MockedResponseOf } from '@gql/util';
 import { describe, expect, it, type Mock } from 'vitest';
 import { renderHook, type RenderHookResult } from 'vitest-browser-react';
 
+import { createConfiguration, createRotator, createTarget } from '@/test/create';
 import type { OdbObservationType } from '@/types';
 
 import { useImportObservation } from './useImportObservation';
@@ -132,12 +134,7 @@ const mocks = [
     },
     result: {
       data: {
-        rotator: {
-          pk: 2,
-          angle: 0,
-          tracking: 'TRACKING',
-          __typename: 'Rotator',
-        },
+        rotator: createRotator(),
       },
     },
   } satisfies MockedResponseOf<typeof GET_ROTATOR>,
@@ -148,26 +145,7 @@ const mocks = [
     },
     result: {
       data: {
-        configuration: {
-          pk: 1,
-          selectedTarget: 3,
-          selectedOiTarget: 8,
-          selectedP1Target: null,
-          selectedP2Target: null,
-          selectedGuiderTarget: null,
-          oiGuidingType: 'NORMAL',
-          p1GuidingType: 'NORMAL',
-          p2GuidingType: 'NORMAL',
-          obsTitle: 'Markarian 573',
-          obsId: 'o-1e1',
-          obsInstrument: 'GMOS_NORTH',
-          obsSubtitle: null,
-          obsReference: 'G-2025A-ENG-GMOSN-01-0004',
-          baffleMode: 'AUTO',
-          centralBaffle: null,
-          deployableBaffle: null,
-          __typename: 'Configuration',
-        },
+        configuration: createConfiguration(),
       },
     },
   } satisfies MockedResponseOf<typeof GET_CONFIGURATION>,
@@ -240,33 +218,9 @@ const mocks = [
     result: {
       data: {
         removeAndCreateBaseTargets: [
-          {
+          createTarget({
             pk: 34,
-            id: 't-60d',
-            name: 'Mayall V',
-            ra: {
-              degrees: 12.54152003333333,
-              hms: '00:50:09.964807',
-              __typename: 'RA',
-            },
-            dec: {
-              degrees: 41.68362081333333,
-              dms: '+41:41:01.034925',
-              __typename: 'Dec',
-            },
-            az: null,
-            el: null,
-            properMotion: null,
-            radialVelocity: -33200000,
-            parallax: 0,
-            magnitude: null,
-            band: null,
-            epoch: 'J2000.000',
-            type: 'SCIENCE',
-            wavelength: 630,
-            createdAt: '2025-10-23T14:55:52.655Z',
-            __typename: 'Target',
-          },
+          }),
         ],
       },
     },
@@ -276,16 +230,11 @@ const mocks = [
       query: UPDATE_ROTATOR,
       variables: () => true,
     },
-    result: {
+    result: (arg) => ({
       data: {
-        updateRotator: {
-          pk: 1,
-          angle: 0,
-          tracking: 'TRACKING',
-          __typename: 'Rotator',
-        },
+        updateRotator: createRotator(arg as Partial<Rotator>),
       },
-    },
+    }),
   } satisfies MockedResponseOf<typeof UPDATE_ROTATOR>,
   {
     request: {
@@ -296,37 +245,9 @@ const mocks = [
     result: {
       data: {
         removeAndCreateWfsTargets: [
-          {
+          createTarget({
             pk: 35,
-            id: 't-1',
-            name: 'Gaia DR3 375250953351514624',
-            ra: {
-              degrees: 12.497148925,
-              hms: '00:49:59.315741',
-              __typename: 'RA',
-            },
-            dec: {
-              degrees: 41.69727150555556,
-              dms: '+41:41:50.177415',
-              __typename: 'Dec',
-            },
-            az: null,
-            el: null,
-            properMotion: {
-              ra: 1121,
-              dec: -6810,
-              __typename: 'ProperMotion',
-            },
-            radialVelocity: 0,
-            parallax: 712,
-            magnitude: 13.935516,
-            band: 'G_RP',
-            epoch: 'J2025.763',
-            type: 'OIWFS',
-            wavelength: null,
-            createdAt: '2025-10-23T14:55:55.258Z',
-            __typename: 'Target',
-          },
+          }),
         ],
       },
     },
@@ -428,28 +349,9 @@ const updateConfigurationMock = {
     variables: vi.fn().mockReturnValue(true),
   },
   maxUsageCount: Infinity,
-  result: {
+  result: (arg) => ({
     data: {
-      updateConfiguration: {
-        pk: 1,
-        selectedTarget: 3,
-        selectedOiTarget: 8,
-        selectedP1Target: null,
-        selectedP2Target: null,
-        selectedGuiderTarget: null,
-        oiGuidingType: 'NORMAL',
-        p1GuidingType: 'NORMAL',
-        p2GuidingType: 'NORMAL',
-        obsTitle: 'Mayall V',
-        obsId: 'o-2e5',
-        obsInstrument: 'GMOS_NORTH',
-        obsSubtitle: null,
-        obsReference: 'G-2025B-0571-Q-0003',
-        baffleMode: 'AUTO',
-        centralBaffle: null,
-        deployableBaffle: null,
-        __typename: 'Configuration',
-      },
+      updateConfiguration: createConfiguration(arg as Partial<Configuration>),
     },
-  },
+  }),
 } satisfies MockedResponseOf<typeof UPDATE_CONFIGURATION>;

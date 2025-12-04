@@ -11,6 +11,7 @@ import type { ComponentRenderOptions } from 'vitest-browser-react';
 import { render } from 'vitest-browser-react';
 
 import { odbTokenAtom } from '@/components/atoms/auth';
+import { serverConfigAtom } from '@/components/atoms/config';
 import { longExpirationJwt } from '@/test/helpers';
 
 interface CreateOptions<T> {
@@ -39,9 +40,11 @@ export async function renderWithContext<T extends AtomTuples>(
   const store = createStore();
 
   // Add the default atom values to the initial value, if they are not already present
-  const initialValues = createOptions?.initialValues?.find(([atom]) => atom === odbTokenAtom)
-    ? createOptions.initialValues
-    : ([[odbTokenAtom, longExpirationJwt], ...(createOptions.initialValues ?? [])] as InferAtomTuples<T>);
+  const initialValues = [
+    ...addIfNotPresent(createOptions.initialValues, [serverConfigAtom, serverConfig]),
+    ...addIfNotPresent(createOptions.initialValues, [odbTokenAtom, longExpirationJwt]),
+    ...(createOptions.initialValues ?? []),
+  ];
 
   const renderResult = await render(
     <Provider store={store}>
@@ -60,8 +63,27 @@ export async function renderWithContext<T extends AtomTuples>(
     options,
   );
 
-  return Object.assign(renderResult, { store });
+  return Object.assign(renderResult, {
+    store,
+    rerender: async (ui: ReactElement) => {
+      await renderResult.unmount();
+      return renderWithContext(ui, createOptions, options);
+    },
+  });
 }
+
+function addIfNotPresent(tuples: AtomTuples | undefined, atom: AtomTuples[number]): AtomTuples {
+  if (tuples?.find(([a]) => a === atom[0])) return [];
+  else return [atom];
+}
+
+const serverConfig = {
+  version: '20251204-19269419',
+  site: 'GN',
+  odbUri: 'https://lucuma-postgres-odb-dev.herokuapp.com/odb',
+  ssoUri: 'https://sso-dev.gpp.lucuma.xyz',
+  __typename: 'ServerConfiguration',
+};
 
 const mocks: MockLink.MockedResponse[] = [
   {

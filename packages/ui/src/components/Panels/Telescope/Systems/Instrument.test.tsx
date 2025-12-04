@@ -1,11 +1,13 @@
 import type { MockLink } from '@apollo/client/testing';
 import { GET_CONFIGURATION } from '@gql/configs/Configuration';
+import type { InstrumentConfig } from '@gql/configs/gen/graphql';
 import { GET_INSTRUMENT, SET_TEMPORARY_INSTRUMENT, UPDATE_INSTRUMENT } from '@gql/configs/Instrument';
 import { GET_INSTRUMENT_PORT } from '@gql/server/Instrument';
 import type { MockedResponseOf } from '@gql/util';
 import { page, userEvent } from 'vitest/browser';
 
 import { importInstrumentAtom } from '@/components/atoms/instrument';
+import { createConfiguration, createInstrumentConfig } from '@/test/create';
 import type { RenderResultWithStore } from '@/test/render';
 import { renderWithContext } from '@/test/render';
 
@@ -32,22 +34,15 @@ describe(Instrument.name, () => {
     await expect.element(originXInput).not.toBeDisabled();
     await expect.element(originXInput).toHaveValue('0.20');
     await expect.element(sut.getByRole('button', { name: 'Save instrument' })).not.toBeDisabled();
-    expect(setTempInstrumentMock.request.variables).toHaveBeenCalledExactlyOnceWith({
-      __typename: 'InstrumentConfig',
-      pk: 1,
-      name: 'GMOS_NORTH',
-      iaa: 359.877,
-      issPort: 3,
-      focusOffset: 0,
-      wfs: 'OIWFS',
-      originX: 0.2,
-      originY: 0,
-      ao: false,
-      extraParams: {},
-      comment: null,
-      isTemporary: true,
-      createdAt,
-    });
+    expect(setTempInstrumentMock.request.variables).toHaveBeenCalledExactlyOnceWith(
+      createInstrumentConfig({
+        wfs: 'OIWFS',
+        originX: 0.2,
+        comment: null,
+        isTemporary: true,
+        createdAt,
+      }),
+    );
   });
 
   it('opens the instrument modal when the import button is clicked', async () => {
@@ -92,26 +87,7 @@ const mocks: MockLink.MockedResponse[] = [
     },
     result: {
       data: {
-        configuration: {
-          pk: 1,
-          selectedTarget: 1,
-          selectedOiTarget: 3,
-          selectedP1Target: null,
-          selectedP2Target: null,
-          selectedGuiderTarget: 3,
-          oiGuidingType: 'NORMAL',
-          p1GuidingType: 'NORMAL',
-          p2GuidingType: 'NORMAL',
-          obsTitle: 'Feige 110',
-          obsId: 'o-2790',
-          obsInstrument: 'GMOS_NORTH',
-          obsSubtitle: null,
-          obsReference: 'G-2025A-ENG-GMOSN-01-0004',
-          baffleMode: 'AUTO',
-          centralBaffle: null,
-          deployableBaffle: null,
-          __typename: 'Configuration',
-        },
+        configuration: createConfiguration({ selectedGuiderTarget: 3 }),
       },
     },
   } satisfies MockedResponseOf<typeof GET_CONFIGURATION>,
@@ -139,22 +115,13 @@ const getInstrumentMock = {
   maxUsageCount: Infinity,
   result: {
     data: {
-      instrument: {
-        pk: 1,
-        name: 'GMOS_NORTH',
-        iaa: 359.877,
-        issPort: 3,
-        focusOffset: 0,
+      instrument: createInstrumentConfig({
         wfs: 'OIWFS',
         originX: 0.1,
-        originY: 0,
-        ao: false,
-        extraParams: {},
         isTemporary: true,
         comment: null,
         createdAt,
-        __typename: 'InstrumentConfig',
-      },
+      }),
     },
   },
 } satisfies MockedResponseOf<typeof GET_INSTRUMENT>;
@@ -165,26 +132,14 @@ const updateInstrumentMock = {
     variables: vi.fn().mockReturnValue(true),
   },
   maxUsageCount: Infinity,
-  result: {
+  result: (arg) => ({
     data: {
-      updateInstrument: {
-        pk: 1,
-        name: 'GMOS_NORTH',
-        iaa: 359.877,
-        issPort: 3,
-        focusOffset: 0,
-        wfs: 'NONE',
-        originX: 0.2,
-        originY: 0,
-        ao: false,
-        extraParams: {},
-        comment: null,
-        isTemporary: true,
-        createdAt,
-        __typename: 'InstrumentConfig',
-      },
+      updateInstrument: createInstrumentConfig({
+        ...getInstrumentMock.result.data.instrument,
+        ...(arg as Partial<InstrumentConfig>),
+      }),
     },
-  },
+  }),
 } satisfies MockedResponseOf<typeof UPDATE_INSTRUMENT>;
 
 const setTempInstrumentMock = {
@@ -195,22 +150,12 @@ const setTempInstrumentMock = {
   maxUsageCount: Infinity,
   result: {
     data: {
-      setTemporaryInstrument: {
-        pk: 1,
-        name: 'GMOS_NORTH',
-        iaa: 359.877,
-        issPort: 3,
-        focusOffset: 0,
-        wfs: 'NONE',
+      setTemporaryInstrument: createInstrumentConfig({
         originX: 0.2,
-        originY: 0,
-        ao: false,
-        extraParams: {},
         comment: null,
         isTemporary: true,
         createdAt,
-        __typename: 'InstrumentConfig',
-      },
+      }),
     },
   },
 } satisfies MockedResponseOf<typeof SET_TEMPORARY_INSTRUMENT>;

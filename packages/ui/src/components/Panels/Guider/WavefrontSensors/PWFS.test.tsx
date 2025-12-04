@@ -10,6 +10,7 @@ import {
 } from '@gql/server/MechsState';
 import type { MockedResponseOf } from '@gql/util';
 
+import { createPwfsMechState } from '@/test/create';
 import { operationOutcome, selectDropdownOption } from '@/test/helpers';
 import { renderWithContext } from '@/test/render';
 
@@ -78,11 +79,7 @@ const pwfs1MechsStateMock = {
   maxUsageCount: Infinity,
   result: {
     data: {
-      pwfs1MechsState: {
-        filter: 'NEUTRAL',
-        fieldStop: 'PRISM',
-        __typename: 'PwfsMechsState',
-      },
+      pwfs1MechsState: createPwfsMechState(),
     },
   },
 } satisfies MockedResponseOf<typeof PWFS1_MECHS_STATE>;
@@ -94,11 +91,7 @@ const pwfs1MechStateSubMock = {
   maxUsageCount: Infinity,
   result: {
     data: {
-      pwfs1MechsState: {
-        filter: 'NEUTRAL',
-        fieldStop: 'PRISM',
-        __typename: 'PwfsMechsState',
-      },
+      pwfs1MechsState: createPwfsMechState(),
     },
   },
 } satisfies MockedResponseOf<typeof PWFS1_MECHS_STATE_SUB>;
@@ -110,11 +103,7 @@ const pwfs2MechsStateMock = {
   maxUsageCount: Infinity,
   result: {
     data: {
-      pwfs2MechsState: {
-        filter: 'NEUTRAL',
-        fieldStop: 'PRISM',
-        __typename: 'PwfsMechsState',
-      },
+      pwfs2MechsState: createPwfsMechState(),
     },
   },
 } satisfies MockedResponseOf<typeof PWFS2_MECHS_STATE>;
@@ -126,11 +115,7 @@ const pwfs2MechStateSubMock = {
   maxUsageCount: Infinity,
   result: {
     data: {
-      pwfs2MechsState: {
-        filter: 'NEUTRAL',
-        fieldStop: 'PRISM',
-        __typename: 'PwfsMechsState',
-      },
+      pwfs2MechsState: createPwfsMechState(),
     },
   },
 } satisfies MockedResponseOf<typeof PWFS2_MECHS_STATE_SUB>;

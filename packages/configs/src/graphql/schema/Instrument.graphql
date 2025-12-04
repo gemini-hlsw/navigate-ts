@@ -31,6 +31,7 @@ type InstrumentConfig {
   extraParams: JSON!
   "Whether the instrument parameters are temporary (not a new configuration)"
   isTemporary: Boolean!
+  alignAngle: Float
   "Comment about the update"
   comment: String
   "Datetime when it was created"
@@ -69,6 +70,7 @@ type Mutation {
     extraParams: JSON
     "Whether the instrument parameters are temporary (not a new configuration)"
     isTemporary: Boolean
+    alignAngle: Float
     "Comment about the update"
     comment: String
   ): InstrumentConfig!
@@ -85,6 +87,7 @@ type Mutation {
     ao: Boolean
     extraParams: JSON
     isTemporary: Boolean
+    alignAngle: Float
     comment: String
   ): InstrumentConfig!
 
@@ -99,6 +102,7 @@ type Mutation {
     originY: Float
     ao: Boolean
     extraParams: JSON
+    alignAngle: Float
     comment: String
   ): InstrumentConfig!
 

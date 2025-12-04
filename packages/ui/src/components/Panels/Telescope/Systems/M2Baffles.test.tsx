@@ -2,6 +2,7 @@ import { GET_CONFIGURATION, UPDATE_CONFIGURATION } from '@gql/configs/Configurat
 import type { Configuration } from '@gql/configs/gen/graphql';
 import type { MockedResponseOf } from '@gql/util';
 
+import { createConfiguration } from '@/test/create';
 import { selectDropdownOption } from '@/test/helpers';
 import { type RenderResultWithStore, renderWithContext } from '@/test/render';
 
@@ -40,26 +41,7 @@ const getConfigurationMock = {
   },
   result: {
     data: {
-      configuration: {
-        pk: 1,
-        selectedTarget: 3,
-        selectedOiTarget: 8,
-        selectedP1Target: null,
-        selectedP2Target: null,
-        selectedGuiderTarget: null,
-        oiGuidingType: 'NORMAL',
-        p1GuidingType: 'NORMAL',
-        p2GuidingType: 'NORMAL',
-        obsTitle: 'Markarian 573',
-        obsId: 'o-1e1',
-        obsInstrument: 'GMOS_NORTH',
-        obsSubtitle: null,
-        obsReference: 'G-2025A-ENG-GMOSN-01-0004',
-        baffleMode: 'AUTO',
-        centralBaffle: null,
-        deployableBaffle: null,
-        __typename: 'Configuration',
-      },
+      configuration: createConfiguration(),
     },
   },
 } satisfies MockedResponseOf<typeof GET_CONFIGURATION>;

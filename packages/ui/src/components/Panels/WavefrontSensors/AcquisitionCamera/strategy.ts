@@ -1,5 +1,7 @@
 import type { GuideProbe, HandsetAdjustmentInput } from '@gql/server/gen/graphql';
 
+import { when } from '@/Helpers/functions';
+
 import type { Alignment } from './Controls';
 
 export interface Coords {
@@ -35,13 +37,14 @@ interface LabelledCoordsMod {
  * How to handle handset adjustments for different coordinate systems.
  */
 export interface HandsetStrategy {
+  name: Alignment;
   up: LabelledCoordsMod;
   down: LabelledCoordsMod;
   right: LabelledCoordsMod;
   left: LabelledCoordsMod;
   horizontal: string;
   vertical: string;
-  toInput: (coords: Coords) => HandsetAdjustmentInput;
+  toInput: (coords: Coords, angleDegrees: number | undefined | null) => HandsetAdjustmentInput;
 }
 
 /**
@@ -50,6 +53,7 @@ export interface HandsetStrategy {
  */
 export const strategies = {
   'Az/El': {
+    name: 'Az/El',
     up: { label: '+El', mod: plusVertical },
     down: { label: '-El', mod: minusVertical },
     right: { label: '+Az', mod: plusHorizontal },
@@ -64,6 +68,7 @@ export const strategies = {
     }),
   },
   AC: {
+    name: 'AC',
     up: { label: '-X', mod: minusHorizontal },
     down: { label: '+X', mod: plusHorizontal },
     right: { label: '+Y', mod: plusVertical },
@@ -78,6 +83,7 @@ export const strategies = {
     }),
   },
   Instrument: {
+    name: 'Instrument',
     up: { label: '-Q', mod: minusVertical },
     down: { label: '+Q', mod: plusVertical },
     right: { label: '+P', mod: plusHorizontal },
@@ -92,6 +98,7 @@ export const strategies = {
     }),
   },
   'RA/Dec': {
+    name: 'RA/Dec',
     up: { label: 'N', mod: plusVertical },
     down: { label: 'S', mod: minusVertical },
     right: { label: 'W', mod: plusHorizontal },
@@ -112,17 +119,19 @@ export const strategies = {
 
 export function wfsStrategy(probe: GuideProbe): HandsetStrategy {
   return {
+    name: probe === 'GMOS_OIWFS' || probe === 'FLAMINGOS2_OIWFS' ? 'OIWFS' : probe,
     up: { label: undefined, mod: plusVertical },
     down: { label: undefined, mod: minusVertical },
     right: { label: undefined, mod: plusHorizontal },
     left: { label: undefined, mod: minusHorizontal },
     horizontal: 'u',
     vertical: 'v',
-    toInput: (coords: Coords) => ({
+    toInput: (coords, angleDegrees) => ({
       probeFrameAdjustment: {
         probeFrame: probe,
         deltaV: { arcseconds: coords.vertical },
         deltaU: { arcseconds: coords.horizontal },
+        alignAngle: when(angleDegrees, (degrees) => ({ degrees })),
       },
     }),
   };

@@ -12,6 +12,7 @@ import type { MockedResponseOf } from '@gql/util';
 import { page, userEvent } from 'vitest/browser';
 
 import { importInstrumentAtom } from '@/components/atoms/instrument';
+import { createConfiguration, createInstrumentConfig } from '@/test/create';
 import { selectDropdownOption } from '@/test/helpers';
 import { renderWithContext } from '@/test/render';
 
@@ -50,10 +51,10 @@ describe(`${Instrument.name} modal`, () => {
     const dialog = page.getByRole('dialog');
 
     // Select instrument options
-    await selectDropdownOption(sut, 'Select instrument', 'GMOS_SOUTH');
+    await selectDropdownOption(sut, 'Select instrument', 'GMOS_NORTH');
     await selectDropdownOption(sut, 'Select port', '3');
     expect(getInstrumentsMock.request.variables).toHaveBeenCalledExactlyOnceWith({
-      name: 'GMOS_SOUTH',
+      name: 'GMOS_NORTH',
       issPort: 3,
     });
 
@@ -62,25 +63,12 @@ describe(`${Instrument.name} modal`, () => {
     await userEvent.click(dialog.getByTestId('import-button'));
 
     expect(updateConfigurationMock.request.variables).toHaveBeenCalledExactlyOnceWith({
-      obsInstrument: 'GMOS_SOUTH',
+      obsInstrument: 'GMOS_NORTH',
       pk: 1,
     });
-    expect(setTemporaryInstrumentMock.request.variables).toHaveBeenCalledExactlyOnceWith({
-      __typename: 'InstrumentConfig',
-      pk: 1,
-      name: 'GMOS_SOUTH',
-      iaa: 359.856,
-      issPort: 3,
-      focusOffset: 0,
-      wfs: 'NONE',
-      originX: 0,
-      originY: 0,
-      ao: false,
-      extraParams: {},
-      isTemporary: false,
-      comment: 'Initial configuration',
-      createdAt: now,
-    });
+    expect(setTemporaryInstrumentMock.request.variables).toHaveBeenCalledExactlyOnceWith(
+      createInstrumentConfig({ createdAt: now }),
+    );
   });
 });
 
@@ -91,26 +79,7 @@ const getConfigurationMock = {
   },
   result: {
     data: {
-      configuration: {
-        pk: 1,
-        selectedTarget: 1,
-        selectedOiTarget: 3,
-        selectedP1Target: null,
-        selectedP2Target: null,
-        selectedGuiderTarget: null,
-        oiGuidingType: 'NORMAL',
-        p1GuidingType: 'NORMAL',
-        p2GuidingType: 'NORMAL',
-        obsTitle: 'Feige 110',
-        obsId: 'o-2790',
-        obsInstrument: 'GMOS_NORTH',
-        obsSubtitle: null,
-        obsReference: 'G-2025A-ENG-GMOSN-01-0004',
-        baffleMode: 'AUTO',
-        centralBaffle: null,
-        deployableBaffle: null,
-        __typename: 'Configuration',
-      },
+      configuration: createConfiguration(),
     },
   },
 } satisfies MockedResponseOf<typeof GET_CONFIGURATION>;
@@ -139,22 +108,7 @@ const getInstrumentMock = {
   maxUsageCount: Infinity,
   result: {
     data: {
-      instrument: {
-        pk: 1,
-        name: 'GMOS_NORTH',
-        iaa: 359.877,
-        issPort: 3,
-        focusOffset: 0,
-        wfs: 'OIWFS',
-        originX: 0.1,
-        originY: 0,
-        ao: false,
-        extraParams: {},
-        isTemporary: true,
-        comment: null,
-        createdAt,
-        __typename: 'InstrumentConfig',
-      },
+      instrument: createInstrumentConfig({ createdAt }),
     },
   },
 } satisfies MockedResponseOf<typeof GET_INSTRUMENT>;
@@ -192,38 +146,15 @@ const getInstrumentsMock = {
   result: {
     data: {
       instruments: [
-        {
+        createInstrumentConfig({
           pk: 1,
-          name: 'GMOS_SOUTH',
-          iaa: 359.856,
-          issPort: 3,
-          focusOffset: 0,
-          wfs: 'NONE',
-          originX: 0,
-          originY: 0,
-          ao: false,
-          extraParams: {},
-          isTemporary: false,
-          comment: 'Initial configuration',
           createdAt,
-          __typename: 'InstrumentConfig',
-        },
-        {
+        }),
+        createInstrumentConfig({
           pk: 2,
-          name: 'GMOS_SOUTH',
-          iaa: 359.856,
-          issPort: 3,
-          focusOffset: 0,
           wfs: 'OIWFS',
-          originX: 0,
-          originY: 0,
-          ao: false,
-          extraParams: {},
-          isTemporary: false,
-          comment: 'Initial configuration',
           createdAt: '2025-10-13T09:44:57.930Z',
-          __typename: 'InstrumentConfig',
-        },
+        }),
       ],
     },
   },
