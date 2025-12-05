@@ -134,6 +134,7 @@ export function useObservationsByState(options: OptionsOf<typeof GET_OBSERVATION
       : {
           ...options,
           context: { clientName: 'odb' },
+          fetchPolicy: 'cache-and-network',
         },
   );
 }
