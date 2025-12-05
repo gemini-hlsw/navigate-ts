@@ -43,8 +43,7 @@
     "@parcel/watcher": "catalog:",
     "@testcontainers/postgresql": "11.9.0",
     "@types/node": "catalog:",
-    "lucuma-schemas": "catalog:",
-    "typescript": "catalog:"
+    "lucuma-schemas": "catalog:"
   },
   "files": [
     "dist",

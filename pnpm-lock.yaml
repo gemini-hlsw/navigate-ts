@@ -25,9 +25,6 @@ catalogs:
     lucuma-schemas:
       specifier: 0.177.0-20251203-7c3c0b6e
       version: 0.177.0-20251203-7c3c0b6e
-    typescript:
-      specifier: 5.9.3
-      version: 5.9.3
 
 importers:
 
@@ -85,7 +82,7 @@ importers:
         specifier: 39.0.1
         version: 39.0.1(stylelint@16.26.1(typescript@5.9.3))
       typescript:
-        specifier: 'catalog:'
+        specifier: 5.9.3
         version: 5.9.3
       typescript-eslint:
         specifier: 8.48.1
@@ -98,7 +95,7 @@ importers:
         version: 7.1.0
       '@prisma/client':
         specifier: 7.1.0
-        version: 7.1.0(prisma@7.1.0(typescript@5.9.3))(typescript@5.9.3)
+        version: 7.1.0(prisma@7.1.0(@types/react@19.2.7)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(typescript@5.9.3))(typescript@5.9.3)
       graphql:
         specifier: 'catalog:'
         version: 16.12.0
@@ -133,9 +130,6 @@ importers:
       lucuma-schemas:
         specifier: 'catalog:'
         version: 0.177.0-20251203-7c3c0b6e
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
 
   packages/e2e:
     devDependencies:
@@ -6031,7 +6025,7 @@ snapshots:
 
   '@prisma/client-runtime-utils@7.1.0': {}
 
-  '@prisma/client@7.1.0(prisma@7.1.0(typescript@5.9.3))(typescript@5.9.3)':
+  '@prisma/client@7.1.0(prisma@7.1.0(@types/react@19.2.7)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(typescript@5.9.3))(typescript@5.9.3)':
     dependencies:
       '@prisma/client-runtime-utils': 7.1.0
     optionalDependencies:
@@ -8429,7 +8423,7 @@ snapshots:
   navigate-configs@file:packages/configs(@types/react@19.2.7)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(typescript@5.9.3):
     dependencies:
       '@prisma/adapter-pg': 7.1.0
-      '@prisma/client': 7.1.0(prisma@7.1.0(typescript@5.9.3))(typescript@5.9.3)
+      '@prisma/client': 7.1.0(prisma@7.1.0(@types/react@19.2.7)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(typescript@5.9.3))(typescript@5.9.3)
       graphql: 16.12.0
       graphql-scalars: 1.25.0(graphql@16.12.0)
       graphql-yoga: 5.17.1(graphql@16.12.0)
