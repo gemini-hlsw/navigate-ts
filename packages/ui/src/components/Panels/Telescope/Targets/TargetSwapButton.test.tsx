@@ -10,9 +10,17 @@ import type { MockedResponseOf } from '@gql/util';
 import { userEvent } from 'vitest/browser';
 import type { RenderResult } from 'vitest-browser-react';
 
+import {
+  createCalParams,
+  createConfiguration,
+  createDec,
+  createInstrumentConfig,
+  createRA,
+  createRotator,
+  createTarget,
+} from '@/test/create';
 import { operationOutcome } from '@/test/helpers';
 import { renderWithContext } from '@/test/render';
-import type { TargetType } from '@/types';
 
 import { TargetSwapButton } from './TargetSwapButton';
 
@@ -47,9 +55,9 @@ describe(TargetSwapButton.name, () => {
       expect(swapTargetMock.request.variables).toHaveBeenCalledExactlyOnceWith({
         swapConfig: {
           acParams: {
-            iaa: { degrees: 359.877 },
+            iaa: { degrees: 359.856 },
             focusOffset: { micrometers: 0 },
-            agName: 'GMOS_SOUTH',
+            agName: 'GMOS_NORTH',
             origin: { x: { arcseconds: 0 }, y: { arcseconds: 0 } },
           },
           rotator: { ipa: { degrees: 0 }, mode: 'TRACKING' },
@@ -57,8 +65,8 @@ describe(TargetSwapButton.name, () => {
             id: selectedOi.id,
             name: selectedOi.name,
             sidereal: {
-              ra: { hms: selectedOi.ra.hms },
-              dec: { dms: selectedOi.dec.dms },
+              ra: { hms: selectedOi.ra!.hms },
+              dec: { dms: selectedOi.dec!.dms },
               epoch: selectedOi.epoch,
               properMotion: {
                 ra: {
@@ -117,12 +125,12 @@ describe(TargetSwapButton.name, () => {
             },
           },
           instParams: {
-            agName: 'GMOS_SOUTH',
+            agName: 'GMOS_NORTH',
             focusOffset: {
               micrometers: 0,
             },
             iaa: {
-              degrees: 359.877,
+              degrees: 359.856,
             },
             origin: {
               x: {
@@ -133,7 +141,7 @@ describe(TargetSwapButton.name, () => {
               },
             },
           },
-          instrument: 'GMOS_SOUTH',
+          instrument: 'GMOS_NORTH',
           oiwfs: undefined,
           pwfs1: undefined,
           pwfs2: undefined,
@@ -180,69 +188,21 @@ describe(TargetSwapButton.name, () => {
   });
 });
 
-const selectedTarget = {
-  pk: 3,
-  id: 't-19e',
-  name: 'TYC 4517-185-1',
-  ra: {
+const selectedTarget = createTarget({
+  ra: createRA({
     degrees: 56.69542085833334,
     hms: '03:46:46.901006',
-    __typename: 'RA',
-  },
-  dec: {
-    degrees: 80.07267194527778,
-    dms: '+80:04:21.618990',
-    __typename: 'Dec',
-  },
-  properMotion: {
-    ra: 0,
-    dec: 0,
-    __typename: 'ProperMotion',
-  },
-  radialVelocity: 0,
-  parallax: 0,
-  az: null,
-  el: null,
-  epoch: 'J2000.000',
-  type: 'SCIENCE',
-  wavelength: 100,
-  createdAt: '2024-09-25T11:57:29.410Z',
-  band: null,
-  magnitude: null,
-  __typename: 'Target',
-} satisfies TargetType;
+  }),
+  dec: createDec({ degrees: 80.07267194527778, dms: '+80:04:21.618990' }),
+});
 
-const selectedOi = {
+const selectedOi = createTarget({
   pk: 10,
   id: 't-000',
   name: 'OI Target',
-  ra: {
-    degrees: 56.69542085833334,
-    hms: '03:46:46.901006',
-    __typename: 'RA',
-  },
-  dec: {
-    degrees: 80.07267194527778,
-    dms: '+80:04:21.618990',
-    __typename: 'Dec',
-  },
-  properMotion: {
-    ra: 0,
-    dec: 0,
-    __typename: 'ProperMotion',
-  },
-  radialVelocity: 0,
-  parallax: 0,
-  az: null,
-  el: null,
-  epoch: 'J2000.000',
   type: 'OIWFS',
-  createdAt: '2024-09-25T11:57:29.410Z',
-  band: null,
-  magnitude: null,
   wavelength: null,
-  __typename: 'Target',
-} satisfies TargetType;
+});
 
 const restoreTargetMock = {
   request: {
@@ -272,12 +232,7 @@ const mocks = [
     },
     result: {
       data: {
-        rotator: {
-          __typename: 'Rotator',
-          pk: 2,
-          angle: 0,
-          tracking: 'TRACKING',
-        },
+        rotator: createRotator(),
       },
     },
   } satisfies MockedResponseOf<typeof GET_ROTATOR>,
@@ -289,22 +244,9 @@ const mocks = [
     maxUsageCount: Infinity,
     result: {
       data: {
-        instrument: {
-          __typename: 'InstrumentConfig',
-          pk: 1,
+        instrument: createInstrumentConfig({
           wfs: 'OIWFS',
-          iaa: 359.877,
-          issPort: 3,
-          focusOffset: 0.0,
-          name: 'GMOS_SOUTH',
-          ao: false,
-          originX: 0.0,
-          originY: 0.0,
-          extraParams: {},
-          isTemporary: false,
-          comment: null,
-          createdAt: new Date().toISOString(),
-        },
+        }),
       },
     },
   } satisfies MockedResponseOf<typeof GET_INSTRUMENT>,
@@ -317,26 +259,10 @@ const mocks = [
     },
     result: {
       data: {
-        configuration: {
-          __typename: 'Configuration',
-          pk: 1,
+        configuration: createConfiguration({
           selectedTarget: 3,
           selectedOiTarget: 8,
-          selectedP1Target: null,
-          selectedP2Target: null,
-          selectedGuiderTarget: null,
-          oiGuidingType: 'NORMAL',
-          p1GuidingType: 'NORMAL',
-          p2GuidingType: 'NORMAL',
-          obsTitle: 'Markarian 573',
-          obsId: 'o-1e1',
-          obsInstrument: 'GMOS_NORTH',
-          obsSubtitle: null,
-          obsReference: 'G-2025A-ENG-GMOSN-01-0004',
-          baffleMode: 'AUTO',
-          centralBaffle: null,
-          deployableBaffle: null,
-        },
+        }),
       },
     },
   } satisfies MockedResponseOf<typeof GET_CONFIGURATION>,
@@ -359,31 +285,7 @@ const mocks = [
     },
     result: {
       data: {
-        calParams: {
-          __typename: 'CalParams',
-          pk: 1,
-          site: 'GN',
-          acqCamX: 518,
-          acqCamY: 550,
-          baffleVisible: 1.05,
-          baffleNearIR: 3,
-          topShutterCurrentLimit: 27,
-          bottomShutterCurrentLimit: 32,
-          pwfs1CenterX: 2.324,
-          pwfs1CenterY: -12.213,
-          pwfs1CenterZ: 0,
-          pwfs2CenterX: -3.493,
-          pwfs2CenterY: -2.48,
-          pwfs2CenterZ: 0,
-          defocusEnabled: true,
-          gmosSfoDefocus: 90,
-          gnirsSfoDefocus: 30,
-          gnirsP1Defocus: 3.7,
-          gmosP1Defocus: -7,
-          gmosOiDefocus: 0,
-          comment: 'Initial CalParams for GN',
-          createdAt: new Date().toISOString(),
-        },
+        calParams: createCalParams(),
       },
     },
   } satisfies MockedResponseOf<typeof CAL_PARAMS>,

@@ -7,6 +7,15 @@ import type { MockedResponseOf } from '@gql/util';
 import type { VariablesOf } from '@graphql-typed-document-node/core';
 import { userEvent } from 'vitest/browser';
 
+import {
+  createCalParams,
+  createConfiguration,
+  createInstrumentConfig,
+  createProperMotion,
+  createRA,
+  createRotator,
+  createTarget,
+} from '@/test/create';
 import { operationOutcome } from '@/test/helpers';
 import { renderWithContext } from '@/test/render';
 
@@ -133,26 +142,10 @@ const configurationMock = {
   },
   result: {
     data: {
-      configuration: {
-        pk: 2,
+      configuration: createConfiguration({
         selectedTarget: 8,
-        selectedOiTarget: null,
-        selectedP1Target: null,
-        selectedP2Target: null,
-        selectedGuiderTarget: null,
-        oiGuidingType: 'NORMAL',
-        p1GuidingType: 'NORMAL',
-        p2GuidingType: 'NORMAL',
-        obsTitle: 'WG  22',
         obsId: 'o-3580',
-        obsInstrument: 'GMOS_SOUTH',
-        obsSubtitle: null,
-        obsReference: 'G-2025A-0159-D-0433',
-        baffleMode: 'AUTO',
-        centralBaffle: null,
-        deployableBaffle: null,
-        __typename: 'Configuration',
-      },
+      }),
     },
   },
 } satisfies MockedResponseOf<typeof GET_CONFIGURATION>;
@@ -177,12 +170,7 @@ const rotatorMock = {
   },
   result: {
     data: {
-      rotator: {
-        pk: 1,
-        angle: 0,
-        tracking: 'TRACKING',
-        __typename: 'Rotator',
-      },
+      rotator: createRotator(),
     },
   },
 } satisfies MockedResponseOf<typeof GET_ROTATOR>;
@@ -195,22 +183,11 @@ const instrumentMock = {
   maxUsageCount: Infinity,
   result: {
     data: {
-      instrument: {
-        pk: 27,
+      instrument: createInstrumentConfig({
         name: 'ACQ_CAM',
         iaa: 0,
         issPort: 1,
-        focusOffset: 0,
-        wfs: 'NONE',
-        originX: 0,
-        originY: 0,
-        ao: false,
-        extraParams: {},
-        isTemporary: false,
-        comment: null,
-        createdAt: new Date().toISOString(),
-        __typename: 'InstrumentConfig',
-      },
+      }),
     },
   },
 } satisfies MockedResponseOf<typeof GET_INSTRUMENT>;
@@ -222,37 +199,19 @@ const getTargetsMock = {
   result: {
     data: {
       targets: [
-        {
+        createTarget({
           pk: 8,
           id: 't-4e16',
           name: 'WG  22',
-          ra: {
-            degrees: 189.7074213416667,
-            hms: '12:38:49.781122',
-            __typename: 'RA',
-          },
-          dec: {
-            degrees: 310.1999390236111,
-            dms: '-49:48:00.219525',
-            __typename: 'Dec',
-          },
-          az: null,
-          el: null,
-          properMotion: {
+          ra: createRA({ degrees: 189.7074213416667, hms: '12:38:49.781122' }),
+          properMotion: createProperMotion({
             ra: 123456,
             dec: 654321,
-            __typename: 'ProperMotion',
-          },
+          }),
           parallax: 789.123,
           radialVelocity: 321.654,
-          magnitude: 13.792915,
-          band: 'G',
-          epoch: 'J2000.000',
-          type: 'SCIENCE',
           wavelength: 630,
-          createdAt: '2025-07-22T14:13:04.094Z',
-          __typename: 'Target',
-        },
+        }),
       ],
     },
   },
@@ -275,31 +234,7 @@ const calParamsMock = {
   },
   result: {
     data: {
-      calParams: {
-        pk: 1,
-        site: 'GN',
-        acqCamX: 518,
-        acqCamY: 550,
-        baffleVisible: 1.05,
-        baffleNearIR: 3,
-        topShutterCurrentLimit: 27,
-        bottomShutterCurrentLimit: 32,
-        pwfs1CenterX: 2.324,
-        pwfs1CenterY: -12.213,
-        pwfs1CenterZ: 0,
-        pwfs2CenterX: -3.493,
-        pwfs2CenterY: -2.48,
-        pwfs2CenterZ: 0,
-        defocusEnabled: true,
-        gmosSfoDefocus: 90,
-        gnirsSfoDefocus: 30,
-        gnirsP1Defocus: 3.7,
-        gmosP1Defocus: -7,
-        gmosOiDefocus: 0,
-        comment: 'Initial CalParams for GN',
-        createdAt: new Date().toISOString(),
-        __typename: 'CalParams',
-      },
+      calParams: createCalParams(),
     },
   },
 } satisfies MockedResponseOf<typeof CAL_PARAMS>;

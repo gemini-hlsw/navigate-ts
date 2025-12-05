@@ -122,6 +122,7 @@ export function TargetContent({
         disabled={disabled || loading}
         style={{ gridArea: 'c11' }}
         value={(coordsType === 'celestial' ? auxTarget?.ra?.degrees : auxTarget?.az?.degrees) ?? null}
+        suffix="°"
         onValueChange={(e) => {
           let stringC1 = '';
           if (coordsType === 'celestial') {
@@ -188,6 +189,7 @@ export function TargetContent({
         disabled={disabled || loading}
         style={{ gridArea: 'c21' }}
         value={(coordsType === 'celestial' ? auxTarget?.dec?.degrees : auxTarget?.el?.degrees) ?? null}
+        suffix="°"
         onValueChange={(e) => {
           const stringC2 = deg2dms(e.target.value ?? 0);
           if (coordsType === 'celestial') {

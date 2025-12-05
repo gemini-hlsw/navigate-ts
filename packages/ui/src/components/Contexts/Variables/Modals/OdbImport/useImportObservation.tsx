@@ -72,13 +72,11 @@ export function useImportObservation() {
           obsTitle: selectedObservation.title,
           obsSubtitle: selectedObservation.subtitle,
           obsInstrument: selectedObservation.instrument,
-          // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
-          obsReference: selectedObservation.reference?.label!,
+          obsReference: selectedObservation.reference?.label,
           baffleMode: 'AUTO',
           centralBaffle: null,
           deployableBaffle: null,
-          // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
-          selectedTarget: baseTargetsData?.removeAndCreateBaseTargets[0]?.pk!,
+          selectedTarget: baseTargetsData?.removeAndCreateBaseTargets[0]?.pk,
         },
       });
 

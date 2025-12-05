@@ -1,3 +1,6 @@
+import { useConfiguration } from '@gql/configs/Configuration';
+import type { Configuration } from '@gql/configs/gen/graphql';
+import { useConfiguredInstrument, useUpdateInstrument } from '@gql/configs/Instrument';
 import type { AdjustTarget, GetTargetAdjustmentOffsetsQuery } from '@gql/server/gen/graphql';
 import {
   useAbsorbTargetAdjustment,
@@ -10,7 +13,16 @@ import { ButtonGroup } from 'primereact/buttongroup';
 import { Dropdown } from 'primereact/dropdown';
 import { useState } from 'react';
 
-import { AlignmentSelector, Autoadjust, CurrentCoordinates, InputControls, OpenLoopsInput } from './Controls';
+import { isNotNullish, when } from '@/Helpers/functions';
+
+import {
+  AlignAngleInput,
+  AlignmentSelector,
+  Autoadjust,
+  CurrentCoordinates,
+  InputControls,
+  OpenLoopsInput,
+} from './Controls';
 import type { Coords, HandsetStrategy } from './strategy';
 import { strategies } from './strategy';
 
@@ -19,16 +31,35 @@ type FocalPlaneOffset = NonNullable<GetTargetAdjustmentOffsetsQuery['targetAdjus
 export default function TargetsHandset({ canEdit }: { canEdit: boolean }) {
   // GraphQL Queries
   const { data: offsets, loading: offsetsLoading } = useTargetAdjustmentOffsets();
+  const { data: instrument, loading: instrumentLoading } = useConfiguredInstrument();
+  const { data: configurationData, loading: configurationLoading } = useConfiguration();
+  const configuration = configurationData?.configuration;
 
   // GraphQL Mutations
   const [adjustTarget, { loading: adjustTargetLoading }] = useAdjustTarget();
   const [resetOffset, { loading: resetOffsetLoading }] = useResetTargetAdjustment();
   const [absorbOffset, { loading: absorbOffsetLoading }] = useAbsorbTargetAdjustment();
+  const [updateInstrument, { loading: updateInstrumentLoading }] = useUpdateInstrument();
 
-  const loading = offsetsLoading || adjustTargetLoading || resetOffsetLoading || absorbOffsetLoading;
+  const loading =
+    offsetsLoading ||
+    adjustTargetLoading ||
+    resetOffsetLoading ||
+    absorbOffsetLoading ||
+    instrumentLoading ||
+    updateInstrumentLoading ||
+    configurationLoading;
+
+  const targetOptions = targetOptionsBase
+    .filter((option) => option.show(configuration))
+    .map((option) => ({ label: option.label, value: option.value }));
 
   // State
-  const [selectedTarget, setSelectedTarget] = useState(targetOptions[0]!.value);
+  const [selectedTarget, setSelectedTarget] = useState(targetOptions[0]?.value);
+
+  if (!selectedTarget && targetOptions.length > 0) {
+    setSelectedTarget(targetOptions[0]!.value);
+  }
 
   const defaultAlignment = 'AC';
   const [strategy, setStrategy] = useState<HandsetStrategy>(strategies[defaultAlignment]);
@@ -53,11 +84,16 @@ export default function TargetsHandset({ canEdit }: { canEdit: boolean }) {
 
   const [openLoops, setOpenLoops] = useState(true);
 
+  const alignAngleEnabled = strategy.name === 'OIWFS';
+
   const handleApply = (coords: Coords) =>
     adjustTarget({
       variables: {
-        target: selectedTarget,
-        offset: strategy.toInput(coords),
+        target: selectedTarget!,
+        offset: strategy.toInput(
+          coords,
+          when(alignAngleEnabled, () => instrument?.alignAngle),
+        ),
         openLoops,
       },
     });
@@ -65,13 +101,29 @@ export default function TargetsHandset({ canEdit }: { canEdit: boolean }) {
   return (
     <div className="handset">
       <div className="selector-group">
-        <TargetSelector loading={loading} target={selectedTarget} onChange={setSelectedTarget} canEdit={canEdit} />
+        <TargetSelector
+          loading={loading}
+          value={selectedTarget}
+          options={targetOptions}
+          onChange={setSelectedTarget}
+          canEdit={canEdit}
+        />
         <AlignmentSelector
           defaultAlignment={defaultAlignment}
           onChange={setStrategy}
           loading={loading}
           canEdit={canEdit}
+          instrumentWfs={instrument?.wfs}
         />
+
+        {alignAngleEnabled && (
+          <AlignAngleInput
+            disabled={loading || !canEdit || !instrument}
+            value={instrument?.alignAngle ?? null}
+            // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
+            onChange={(value) => updateInstrument({ variables: { pk: instrument?.pk!, alignAngle: value } })}
+          />
+        )}
       </div>
 
       <InputControls loading={loading} handleApply={handleApply} strategy={strategy} canEdit={canEdit} />
@@ -90,13 +142,13 @@ export default function TargetsHandset({ canEdit }: { canEdit: boolean }) {
             size="small"
             label="Reset"
             disabled={loading || !canEdit}
-            onClick={() => resetOffset({ variables: { openLoops, target: selectedTarget } })}
+            onClick={() => resetOffset({ variables: { openLoops, target: selectedTarget! } })}
           />
           <Button
             size="small"
             label="Absorb"
             disabled={loading || !canEdit}
-            onClick={() => absorbOffset({ variables: { target: selectedTarget } })}
+            onClick={() => absorbOffset({ variables: { target: selectedTarget! } })}
           />
         </ButtonGroup>
       </div>
@@ -106,20 +158,26 @@ export default function TargetsHandset({ canEdit }: { canEdit: boolean }) {
   );
 }
 
-const targetOptions: { label: string; value: AdjustTarget }[] = [
-  { value: 'OIWFS', label: 'OIWFS' },
-  { value: 'PWFS1', label: 'PWFS1' },
-  { value: 'PWFS2', label: 'PWFS2' },
-  { value: 'SOURCE_A', label: 'Base' },
+const targetOptionsBase: {
+  label: string;
+  value: AdjustTarget;
+  show: (c: Configuration | undefined | null) => boolean;
+}[] = [
+  { value: 'OIWFS', label: 'OIWFS', show: (c) => isNotNullish(c?.selectedOiTarget) },
+  { value: 'PWFS1', label: 'PWFS1', show: (c) => isNotNullish(c?.selectedP1Target) },
+  { value: 'PWFS2', label: 'PWFS2', show: (c) => isNotNullish(c?.selectedP2Target) },
+  { value: 'SOURCE_A', label: 'Base', show: (c) => isNotNullish(c?.selectedTarget) },
 ];
 
 function TargetSelector({
-  target,
+  value,
+  options,
   onChange,
   loading,
   canEdit,
 }: {
-  target: AdjustTarget;
+  value: AdjustTarget | undefined;
+  options: { label: string; value: AdjustTarget }[];
   onChange: (value: AdjustTarget) => void;
   loading: boolean;
   canEdit: boolean;
@@ -130,9 +188,9 @@ function TargetSelector({
       <Dropdown
         inputId="handsets-target"
         disabled={loading || !canEdit}
-        value={target}
+        value={value}
         onChange={(e) => onChange(e.value as AdjustTarget)}
-        options={targetOptions}
+        options={options}
         placeholder="Select target"
       />
     </>

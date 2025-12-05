@@ -1,0 +1,219 @@
+import type {
+  CalParams,
+  Configuration,
+  Dec,
+  GuideAlarm,
+  InstrumentConfig,
+  ProperMotion,
+  Ra,
+  Rotator,
+} from '@gql/configs/gen/graphql';
+import type { Angle as OdbAngle } from '@gql/odb/gen/graphql';
+
+import type {
+  AcMechs,
+  FocalPlaneOffsetItemFragment,
+  GuideConfigurationState,
+  GuideQuality,
+  PwfsMechsState,
+} from '@/gql/server/gen/graphql';
+import type { TargetType } from '@/types';
+
+// Create helpers for GraphQL types
+
+type Angle = Pick<OdbAngle, '__typename' | 'arcseconds'>;
+
+type OverridePartial<T extends { __typename: string }> = Omit<Partial<T>, '__typename'>;
+
+export function createPwfsMechState(overrides?: OverridePartial<PwfsMechsState>): PwfsMechsState {
+  return {
+    filter: 'NEUTRAL',
+    fieldStop: 'PRISM',
+    __typename: 'PwfsMechsState',
+    ...overrides,
+  };
+}
+
+export function createInstrumentConfig(overrides?: OverridePartial<InstrumentConfig>): InstrumentConfig {
+  return {
+    __typename: 'InstrumentConfig',
+    pk: 1,
+    name: 'GMOS_NORTH',
+    iaa: 359.856,
+    issPort: 3,
+    focusOffset: 0,
+    wfs: 'NONE',
+    originX: 0,
+    originY: 0,
+    ao: false,
+    extraParams: {},
+    isTemporary: false,
+    alignAngle: null,
+    comment: 'Initial configuration',
+    createdAt: new Date().toISOString(),
+    ...overrides,
+  };
+}
+
+export function createConfiguration(overrides?: OverridePartial<Configuration>): Configuration {
+  return {
+    pk: 1,
+    selectedTarget: 1,
+    selectedOiTarget: 3,
+    selectedP1Target: null,
+    selectedP2Target: null,
+    selectedGuiderTarget: null,
+    oiGuidingType: 'NORMAL',
+    p1GuidingType: 'NORMAL',
+    p2GuidingType: 'NORMAL',
+    obsTitle: 'Feige 110',
+    obsId: 'o-2790',
+    obsInstrument: 'GMOS_NORTH',
+    obsSubtitle: null,
+    obsReference: 'G-2025A-ENG-GMOSN-01-0004',
+    baffleMode: 'AUTO',
+    centralBaffle: null,
+    deployableBaffle: null,
+    __typename: 'Configuration',
+    ...overrides,
+  };
+}
+
+export function createGuideAlarm(overrides?: OverridePartial<GuideAlarm>): GuideAlarm {
+  return {
+    wfs: 'OIWFS',
+    limit: 900,
+    enabled: true,
+    __typename: 'GuideAlarm',
+    ...overrides,
+  };
+}
+
+export function createGuideState(overrides: OverridePartial<GuideConfigurationState> = {}): GuideConfigurationState {
+  return {
+    __typename: 'GuideConfigurationState',
+    m1Input: 'OIWFS',
+    m2Inputs: ['OIWFS'],
+    mountOffload: true,
+    m2Coma: false,
+    oiIntegrating: true,
+    acIntegrating: false,
+    p1Integrating: false,
+    p2Integrating: false,
+    ...overrides,
+  };
+}
+
+export function createGuideQuality(overrides?: OverridePartial<GuideQuality>): GuideQuality {
+  return {
+    centroidDetected: false,
+    flux: 899,
+    __typename: 'GuideQuality',
+    ...overrides,
+  };
+}
+
+export function createRotator(overrides?: OverridePartial<Rotator>): Rotator {
+  return { pk: 1, angle: 0, tracking: 'TRACKING', __typename: 'Rotator', ...overrides };
+}
+
+export function createAcMechs(overrides?: OverridePartial<AcMechs>): AcMechs {
+  return {
+    lens: 'AC',
+    filter: 'B_BLUE',
+    ndFilter: 'ND100',
+    __typename: 'AcMechs',
+    ...overrides,
+  };
+}
+
+export function createAngle(overrides?: OverridePartial<Angle>): Angle {
+  return {
+    arcseconds: 0,
+    __typename: 'Angle',
+    ...overrides,
+  };
+}
+
+export function createFocalPlaneOffset(
+  overrides?: OverridePartial<FocalPlaneOffsetItemFragment>,
+): FocalPlaneOffsetItemFragment {
+  return {
+    deltaX: createAngle(overrides?.deltaX),
+    deltaY: createAngle(overrides?.deltaY),
+    __typename: 'FocalPlaneOffset',
+  };
+}
+export function createRA(overrides?: OverridePartial<Ra>): Ra {
+  return { degrees: 12.497148925, hms: '00:49:59.315741', __typename: 'RA', ...overrides };
+}
+
+export function createDec(overrides?: OverridePartial<Dec>): Dec {
+  return {
+    degrees: 310.1999390236111,
+    dms: '-49:48:00.219525',
+    __typename: 'Dec',
+    ...overrides,
+  };
+}
+
+export function createProperMotion(overrides?: OverridePartial<ProperMotion>): ProperMotion {
+  return {
+    ra: 0,
+    dec: 0,
+    __typename: 'ProperMotion',
+    ...overrides,
+  };
+}
+
+export function createCalParams(overrides?: OverridePartial<CalParams>): CalParams {
+  return {
+    __typename: 'CalParams',
+    pk: 1,
+    site: 'GN',
+    acqCamX: 518,
+    acqCamY: 550,
+    baffleVisible: 1.05,
+    baffleNearIR: 3,
+    topShutterCurrentLimit: 27,
+    bottomShutterCurrentLimit: 32,
+    pwfs1CenterX: 2.324,
+    pwfs1CenterY: -12.213,
+    pwfs1CenterZ: 0,
+    pwfs2CenterX: -3.493,
+    pwfs2CenterY: -2.48,
+    pwfs2CenterZ: 0,
+    defocusEnabled: true,
+    gmosSfoDefocus: 90,
+    gnirsSfoDefocus: 30,
+    gnirsP1Defocus: 3.7,
+    gmosP1Defocus: -7,
+    gmosOiDefocus: 0,
+    comment: 'Initial CalParams for GN',
+    createdAt: new Date().toISOString(),
+    ...overrides,
+  };
+}
+
+export function createTarget(overrides?: OverridePartial<TargetType>): TargetType {
+  return {
+    pk: 3,
+    id: 't-19e',
+    name: 'TYC 4517-185-1',
+    ra: createRA(overrides?.ra ?? undefined),
+    dec: createDec(overrides?.dec ?? undefined),
+    properMotion: createProperMotion(overrides?.properMotion ?? undefined),
+    radialVelocity: 0,
+    parallax: 0,
+    az: null,
+    el: null,
+    epoch: 'J2000.000',
+    type: 'SCIENCE',
+    wavelength: 100,
+    createdAt: '2024-09-25T11:57:29.410Z',
+    band: null,
+    magnitude: null,
+    __typename: 'Target',
+    ...overrides,
+  };
+}

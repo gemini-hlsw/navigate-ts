@@ -4,6 +4,7 @@ import { page, userEvent } from 'vitest/browser';
 
 import { odbTokenAtom } from '@/components/atoms/auth';
 import { targetEditAtom } from '@/components/atoms/target';
+import { createDec, createTarget } from '@/test/create';
 import { expiredJwt } from '@/test/helpers';
 import { renderWithContext } from '@/test/render';
 import type { TargetType } from '@/types';
@@ -64,37 +65,9 @@ describe(Target.name, () => {
   });
 });
 
-const target: TargetType = {
-  __typename: 'Target',
-  pk: 35,
-  id: 't-1',
-  name: 'Gaia DR3 375250953351514624',
-  ra: {
-    degrees: 12.497148925,
-    hms: '00:49:59.315741',
-    __typename: 'RA',
-  },
-  dec: {
-    degrees: 41.69727150555556,
-    dms: '+41:41:50.177415',
-    __typename: 'Dec',
-  },
-  az: null,
-  el: null,
-  properMotion: {
-    ra: 1121,
-    dec: -6810,
-    __typename: 'ProperMotion',
-  },
-  radialVelocity: 0,
-  parallax: 712,
-  magnitude: 13.935516,
-  band: 'G_RP',
-  epoch: 'J2025.763',
-  type: 'OIWFS',
-  wavelength: null,
-  createdAt: '2025-10-23T14:55:55.258Z',
-};
+const target: TargetType = createTarget({
+  dec: createDec({ degrees: 41.69727150555556, dms: '+41:41:50.177415' }),
+});
 
 const updateTargetMock = {
   request: {
@@ -103,7 +76,7 @@ const updateTargetMock = {
   },
   result: (arg) => ({
     data: {
-      updateTarget: { ...(arg as TargetType), __typename: 'Target' },
+      updateTarget: createTarget({ ...target, ...arg } as TargetType),
     },
   }),
 } satisfies MockedResponseOf<typeof UPDATE_TARGET>;

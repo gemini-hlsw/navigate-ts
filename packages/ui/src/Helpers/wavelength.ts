@@ -25,7 +25,5 @@ export function extractCentralWavelength(
       return undefined;
   }
 
-  const instrumentConfig = config[instrumentName];
-  if (!instrumentConfig) return undefined;
-  return instrumentConfig.acquisition?.nextAtom.steps[0]?.instrumentConfig.centralWavelength?.nanometers;
+  return config[instrumentName]?.acquisition?.nextAtom.steps[0]?.instrumentConfig.centralWavelength?.nanometers;
 }
