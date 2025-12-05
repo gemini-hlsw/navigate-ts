@@ -71,10 +71,15 @@ export default defineConfig(({ mode }) => ({
     },
   },
   build: {
-    rollupOptions: {
+    rolldownOptions: {
       output: {
-        manualChunks(id) {
-          if (id.includes('primereact')) return 'prime';
+        advancedChunks: {
+          groups: [
+            {
+              name: 'prime',
+              test: /node_modules[\\/]primereact/,
+            },
+          ],
         },
       },
     },
