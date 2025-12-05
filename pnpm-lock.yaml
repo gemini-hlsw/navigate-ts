@@ -109,8 +109,8 @@ importers:
         specifier: 1.25.0
         version: 1.25.0(graphql@16.12.0)
       graphql-yoga:
-        specifier: 5.17.0
-        version: 5.17.0(graphql@16.12.0)
+        specifier: 5.17.1
+        version: 5.17.1(graphql@16.12.0)
       lucuma-core:
         specifier: 'catalog:'
         version: 0.158.0
@@ -2984,8 +2984,8 @@ packages:
       ws:
         optional: true
 
-  graphql-yoga@5.17.0:
-    resolution: {integrity: sha512-Ta2EmITlGzAJTffSA/BvMA5q2THRWeQrP8+Uc4WnSVTBafnQ2vpXdiNZ7Zsj57cxSw4+WEW2PTgEKGtJ4GcS3A==}
+  graphql-yoga@5.17.1:
+    resolution: {integrity: sha512-Izb2uVWfdoWm+tF4bi39KE6F4uml3r700/EwULPZYOciY8inmy4hw+98c6agy3C+xceXvTkP7Li6mY/EI8XliA==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       graphql: ^15.2.0 || ^16.0.0
@@ -5430,7 +5430,7 @@ snapshots:
     dependencies:
       graphql: 16.12.0
       lodash.sortby: 4.7.0
-      tslib: 2.6.3
+      tslib: 2.8.1
 
   '@graphql-tools/executor-common@0.0.4(graphql@16.12.0)':
     dependencies:
@@ -5621,14 +5621,14 @@ snapshots:
   '@graphql-tools/optimize@2.0.0(graphql@16.12.0)':
     dependencies:
       graphql: 16.12.0
-      tslib: 2.6.3
+      tslib: 2.8.1
 
   '@graphql-tools/relay-operation-optimizer@7.0.26(graphql@16.12.0)':
     dependencies:
       '@ardatan/relay-compiler': 12.0.3(graphql@16.12.0)
       '@graphql-tools/utils': 10.11.0(graphql@16.12.0)
       graphql: 16.12.0
-      tslib: 2.6.3
+      tslib: 2.8.1
     transitivePeerDependencies:
       - encoding
 
@@ -7916,7 +7916,7 @@ snapshots:
     optionalDependencies:
       ws: 8.18.3
 
-  graphql-yoga@5.17.0(graphql@16.12.0):
+  graphql-yoga@5.17.1(graphql@16.12.0):
     dependencies:
       '@envelop/core': 5.4.0
       '@envelop/instrumentation': 1.0.0
@@ -8439,7 +8439,7 @@ snapshots:
       '@prisma/client-runtime-utils': 7.0.1
       graphql: 16.12.0
       graphql-scalars: 1.25.0(graphql@16.12.0)
-      graphql-yoga: 5.17.0(graphql@16.12.0)
+      graphql-yoga: 5.17.1(graphql@16.12.0)
       lucuma-core: 0.158.0
       prisma: 7.0.1(@types/react@19.2.7)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(typescript@5.9.3)
     transitivePeerDependencies:
