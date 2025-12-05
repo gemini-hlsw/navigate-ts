@@ -11,10 +11,10 @@
   },
   "scripts": {
     "dev": "vite",
-    "tsc:watch": "tsc -w",
+    "tsc:watch": "tsgo -b -w",
     "codegen:watch": "graphql-codegen --config tasks/codegen.ts --watch 'src/gql/**/*.ts' --watch '../configs/src/graphql/*.graphql'",
     "prebuild": "pnpm run codegen",
-    "build": "tsc && vite build",
+    "build": "tsgo -b && vite build",
     "preview": "vite preview",
     "test": "vitest run",
     "lint:eslint": "eslint .",

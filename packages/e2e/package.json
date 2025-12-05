@@ -13,7 +13,7 @@
   "scripts": {
     "test:e2e": "playwright test",
     "lint:eslint": "eslint .",
-    "build": "tsc -b"
+    "build": "tsgo -b"
   },
   "dependencies": {},
   "devDependencies": {

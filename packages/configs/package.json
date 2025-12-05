@@ -19,7 +19,7 @@
     "test:integration": "node --test --enable-source-maps --test-timeout 20000 'src/integration/**/*.test.ts'",
     "generate": "prisma generate",
     "prebuild": "pnpm generate && pnpm codegen",
-    "build": "tsc -b",
+    "build": "tsgo -b",
     "start": "pnpm build && pnpm preview",
     "preview": "node --enable-source-maps ./dist/index.js",
     "dev": "node --env-file=.env --watch --enable-source-maps ./src/index.ts",
