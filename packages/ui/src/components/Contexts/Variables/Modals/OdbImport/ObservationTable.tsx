@@ -81,7 +81,7 @@ export function ObservationTable({ selectedObservation, setSelectedObservation }
     variables: {
       date: observingNight,
       site,
-      states: ['READY', 'ONGOING', 'COMPLETED'],
+      states: ['READY', 'ONGOING'],
     },
   });
   const observations = data?.observations.matches;
