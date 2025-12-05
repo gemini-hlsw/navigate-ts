@@ -46,5 +46,10 @@
   "lint-staged": {
     "*.{js,mjs,ts,tsx,jsx,css,md,json,yml,yaml}": "prettier --write",
     "*.css": "stylelint --fix"
+  },
+  "pnpm": {
+    "overrides": {
+      "vite": "8.0.0-beta.7"
+    }
   }
 }
