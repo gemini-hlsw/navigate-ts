@@ -3,7 +3,7 @@ import { dateToLocalObservingNight } from 'lucuma-core';
 import { FilterMatchMode } from 'primereact/api';
 import type { ColumnProps as PColumnProps } from 'primereact/column';
 import { Column } from 'primereact/column';
-import { DataTable, type DataTableFilterMeta } from 'primereact/datatable';
+import { DataTable } from 'primereact/datatable';
 import { IconField } from 'primereact/iconfield';
 import { InputIcon } from 'primereact/inputicon';
 import { InputText } from 'primereact/inputtext';
@@ -62,19 +62,27 @@ const defaultColumns: ColumnProps[] = [
   { field: 'instrument', header: 'Instrument', filterPlaceholder: 'Filter Instrument', visible: false },
 ];
 
+interface FilterValue {
+  value: string;
+  matchMode: FilterMatchMode;
+}
+type Filters = Record<string, FilterValue>;
+
 export function ObservationTable({ selectedObservation, setSelectedObservation }: ParamsInterface) {
   const { site } = useServerConfigValue();
   const observingNight = dateToLocalObservingNight(new Date());
 
   const [columns, setColumns] = useState(defaultColumns);
   const visibleColumns = columns.filter((c) => c.visible);
-  const [globalFilterValue, setGlobalFilterValue] = useState('');
-  const filters = visibleColumns.reduce<DataTableFilterMeta>(
-    (acc, c) => {
-      acc[c.field] = { value: '', matchMode: FilterMatchMode.CONTAINS };
-      return acc;
-    },
-    { global: { value: globalFilterValue, matchMode: FilterMatchMode.CONTAINS } },
+
+  const [filters, setFilters] = useState(() =>
+    defaultColumns.reduce<Filters>(
+      (acc, c) => {
+        acc[c.field] = { value: '', matchMode: FilterMatchMode.CONTAINS };
+        return acc;
+      },
+      { global: { value: '', matchMode: FilterMatchMode.CONTAINS } },
+    ),
   );
 
   const { data, loading } = useObservationsByState({
@@ -86,14 +94,14 @@ export function ObservationTable({ selectedObservation, setSelectedObservation }
   });
   const observations = data?.observations.matches;
 
-  const onGlobalFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setGlobalFilterValue(value);
-  };
+  const setGlobalFilterValue = (value: string) =>
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      global: { ...prevFilters.global!, value },
+    }));
 
-  const onMultiSelectChange = (e: { value: ColumnProps[] }) => {
+  const onMultiSelectChange = (e: { value: ColumnProps[] }) =>
     setColumns(columns.map((c) => ({ ...c, visible: e.value.some((v) => v.field === c.field) })));
-  };
 
   const header = (
     <div className="header-table">
@@ -107,7 +115,11 @@ export function ObservationTable({ selectedObservation, setSelectedObservation }
         <InputIcon>
           <Search />
         </InputIcon>
-        <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="Keyword Search" />
+        <InputText
+          value={filters.global?.value ?? ''}
+          onChange={(e) => setGlobalFilterValue(e.target.value)}
+          placeholder="Keyword Search"
+        />
       </IconField>
       <MultiSelect
         selectedItemsLabel={`${visibleColumns.length} columns selected`}
@@ -135,6 +147,7 @@ export function ObservationTable({ selectedObservation, setSelectedObservation }
         filters={filters}
         filterDisplay="row"
         loading={loading}
+        onFilter={(e) => setFilters(e.filters as Filters)}
         globalFilterFields={visibleColumns.map((c) => c.field)}
         header={header}
         emptyMessage="No observations found."
