@@ -1,5 +1,5 @@
 import { useConfiguration, useUpdateConfiguration } from '@gql/configs/Configuration';
-import type { TargetType, UpdateRotatorMutationVariables } from '@gql/configs/gen/graphql';
+import type { TargetType } from '@gql/configs/gen/graphql';
 import { GET_INSTRUMENT, useResetInstruments } from '@gql/configs/Instrument';
 import { useRotator, useUpdateRotator } from '@gql/configs/Rotator';
 import { useRemoveAndCreateBaseTargets, useRemoveAndCreateWfsTargets } from '@gql/configs/Target';
@@ -90,14 +90,6 @@ export function useImportObservation() {
 
         const { oiwfs, pwfs1, pwfs2 } = extractGuideTargets(guideEnv.data);
 
-        const rotatorVariables = {
-          pk: rotator.pk,
-          angle:
-            typeof guideEnv.data?.observation?.targetEnvironment.guideEnvironment.posAngle.degrees === 'string'
-              ? parseFloat(guideEnv.data?.observation?.targetEnvironment.guideEnvironment.posAngle.degrees)
-              : (guideEnv.data?.observation?.targetEnvironment.guideEnvironment.posAngle.degrees ?? 0),
-          tracking: 'TRACKING',
-        } satisfies UpdateRotatorMutationVariables;
         const [oi, p1, p2] = await Promise.all([
           removeAndCreateWfsTargets({
             variables: {
@@ -117,7 +109,16 @@ export function useImportObservation() {
               targets: pwfs2,
             },
           }),
-          updateRotator({ variables: rotatorVariables }),
+          updateRotator({
+            variables: {
+              pk: rotator.pk,
+              angle:
+                typeof guideEnv.data?.observation?.targetEnvironment.guideEnvironment.posAngle.degrees === 'string'
+                  ? parseFloat(guideEnv.data?.observation?.targetEnvironment.guideEnvironment.posAngle.degrees)
+                  : (guideEnv.data?.observation?.targetEnvironment.guideEnvironment.posAngle.degrees ?? 0),
+              tracking: 'TRACKING',
+            },
+          }),
         ]);
 
         // Set the first of each result as the selected target if there is only 1
@@ -128,17 +129,15 @@ export function useImportObservation() {
           [selectedOiTarget, selectedP1Target, selectedP2Target].filter(isNotNullish),
         );
 
-        if (isNotNullish(configuration?.pk)) {
-          await updateConfiguration({
-            variables: {
-              pk: configuration.pk,
-              selectedOiTarget,
-              selectedP1Target,
-              selectedP2Target,
-              selectedGuiderTarget,
-            },
-          });
-        }
+        await updateConfiguration({
+          variables: {
+            pk: configuration.pk,
+            selectedOiTarget,
+            selectedP1Target,
+            selectedP2Target,
+            selectedGuiderTarget,
+          },
+        });
       }
 
       if (selectedObservation.instrument) {

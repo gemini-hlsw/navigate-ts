@@ -105,7 +105,7 @@ const GET_OBSERVATION_BY_ID = graphql(`
 `);
 
 export function useObservationById() {
-  return useLazyQuery(GET_OBSERVATION_BY_ID);
+  return useLazyQuery(GET_OBSERVATION_BY_ID, { fetchPolicy: 'network-only' });
 }
 
 const GET_OBSERVATIONS_BY_STATE = graphql(`
@@ -166,7 +166,7 @@ export const GET_GUIDE_ENVIRONMENT = graphql(`
 `);
 
 export function useGetGuideEnvironment() {
-  return useLazyQuery(GET_GUIDE_ENVIRONMENT, { errorPolicy: 'all' });
+  return useLazyQuery(GET_GUIDE_ENVIRONMENT, { errorPolicy: 'all', fetchPolicy: 'network-only' });
 }
 
 export const GET_CENTRAL_WAVELENGTH = graphql(`
@@ -222,5 +222,5 @@ export const GET_CENTRAL_WAVELENGTH = graphql(`
 `);
 
 export function useGetCentralWavelength() {
-  return useLazyQuery(GET_CENTRAL_WAVELENGTH, { errorPolicy: 'all' });
+  return useLazyQuery(GET_CENTRAL_WAVELENGTH, { errorPolicy: 'all', fetchPolicy: 'network-only' });
 }
