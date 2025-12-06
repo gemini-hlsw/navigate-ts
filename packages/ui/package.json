@@ -32,7 +32,7 @@
     "@types/react-dom": "19.2.3",
     "@vitejs/plugin-react": "5.1.1",
     "@vitest/browser-playwright": "4.0.15",
-    "@xyflow/react": "12.9.3",
+    "@xyflow/react": "12.10.0",
     "babel-plugin-react-compiler": "1.0.0",
     "clsx": "2.1.1",
     "date-fns": "4.1.0",
