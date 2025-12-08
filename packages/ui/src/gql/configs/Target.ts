@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 
 import { graphql } from './gen';
 import type { Target } from './gen/graphql';
+import { GET_INSTRUMENT } from './Instrument';
 
 export const TARGET_FRAGMENT = graphql(`
   fragment ConfigsTargetItem on Target {
@@ -145,17 +146,22 @@ export function useRemoveAndCreateBaseTargets() {
   });
 }
 
-export const REMOVE_AND_CREATE_WFS_TARGETS = graphql(`
-  mutation removeAndCreateWfsTargets($wfs: TargetType!, $targets: [TargetInput!]!) {
-    removeAndCreateWfsTargets(wfs: $wfs, targets: $targets) {
-      ...ConfigsTargetItem
+export const DO_IMPORT_OBSERVATION = graphql(`
+  mutation doImportObservation($input: ImportObservationInput!) {
+    importObservation(input: $input) {
+      rotator {
+        ...RotatorItem
+      }
+      configuration {
+        ...ConfigurationItem
+      }
     }
   }
 `);
 
-export function useRemoveAndCreateWfsTargets() {
-  return useMutation(REMOVE_AND_CREATE_WFS_TARGETS, {
+export function useDoImportObservation() {
+  return useMutation(DO_IMPORT_OBSERVATION, {
     context: { clientName: 'navigateConfigs' },
-    refetchQueries: [GET_TARGETS],
+    refetchQueries: [GET_TARGETS, GET_INSTRUMENT],
   });
 }

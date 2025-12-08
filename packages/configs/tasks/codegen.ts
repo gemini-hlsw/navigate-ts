@@ -31,6 +31,7 @@ export default {
           resolver: '../resolvers/Scalars.ts.ts#PosIntResolver',
           type: 'number',
         },
+        BigDecimal: { type: 'string|number', resolver: '../resolvers/Scalars.ts.ts#BigDecimalResolver' },
         AttachmentId: { type: 'string', resolver: '../resolvers/Scalars.ts.ts#AttachmentIdResolver' },
         CallForProposalsId: { type: 'string', resolver: '../resolvers/Scalars.ts.ts#CallForProposalsIdResolver' },
         DatasetId: { type: 'string', resolver: '../resolvers/Scalars.ts.ts#DatasetIdResolver' },

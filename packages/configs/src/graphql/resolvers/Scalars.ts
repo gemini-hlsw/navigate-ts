@@ -62,3 +62,29 @@ function newObdIdGraphQLScalarType(name: string, idTag: string, parser: (value: 
     },
   });
 }
+
+export const BigDecimalResolver = new GraphQLScalarType<unknown, number>({
+  name: 'BigDecimal',
+  serialize(value) {
+    if (typeof value === 'string') {
+      return parseFloat(value);
+    } else if (typeof value === 'number') {
+      return value;
+    }
+    throw new Error(`Value is not a valid BigDecimal: ${String(value)}`);
+  },
+  parseValue(value) {
+    if (typeof value === 'string') {
+      return parseFloat(value);
+    } else if (typeof value === 'number') {
+      return value;
+    }
+    throw new Error(`Value is not a valid BigDecimal: ${String(value)}`);
+  },
+  parseLiteral(ast) {
+    if (ast.kind === Kind.STRING || ast.kind === Kind.INT || ast.kind === Kind.FLOAT) {
+      return parseFloat(ast.value);
+    }
+    throw new Error(`Value is not a valid BigDecimal: ${ast.kind}`);
+  },
+});

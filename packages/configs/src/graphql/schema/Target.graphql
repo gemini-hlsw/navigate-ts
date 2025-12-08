@@ -1,5 +1,7 @@
 #import DateTime from "./Scalars.graphql"
-#import PosInt, TargetId from "lucuma-schemas/odb"
+#import PosInt, TargetId, Instrument, AngleInput, ObservationId from "lucuma-schemas/odb"
+#import Configuration from "./Configuration.graphql"
+#import Rotator from "./Rotator.graphql"
 
 enum TargetType {
   FIXED
@@ -71,7 +73,6 @@ type Target {
 }
 
 type Query {
-  target(pk: PosInt, id: TargetId, name: String): Target
   targets(type: TargetType): [Target!]!
 }
 
@@ -89,6 +90,34 @@ input TargetInput {
   epoch: String
   type: TargetType
   wavelength: Int
+}
+
+input ObservationInput {
+  id: ObservationId!
+  title: String!
+  subtitle: String
+  instrument: Instrument
+  reference: String
+}
+
+input ImportObservationTargetsInput {
+  base: [TargetInput!]!
+  oiwfs: [TargetInput!]!
+  pwfs1: [TargetInput!]!
+  pwfs2: [TargetInput!]!
+}
+
+input ImportObservationInput {
+  configurationPk: PosInt!
+  rotatorPk: PosInt!
+  observation: ObservationInput!
+  targets: ImportObservationTargetsInput!
+  guideEnvironmentAngle: AngleInput
+}
+
+type ImportObservationResult {
+  configuration: Configuration!
+  rotator: Rotator!
 }
 
 type Mutation {
@@ -111,5 +140,5 @@ type Mutation {
 
   removeAndCreateBaseTargets(targets: [TargetInput!]): [Target!]!
 
-  removeAndCreateWfsTargets(wfs: TargetType!, targets: [TargetInput!]): [Target!]!
+  importObservation(input: ImportObservationInput!): ImportObservationResult
 }
