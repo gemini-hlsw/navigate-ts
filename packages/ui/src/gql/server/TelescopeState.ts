@@ -32,7 +32,7 @@ export const TELESCOPE_STATE_FRAGMENT = graphql(`
   }
 `);
 
-const GET_TELESCOPE_STATE = graphql(`
+export const GET_TELESCOPE_STATE = graphql(`
   query getTelescopeState {
     telescopeState {
       ...TelescopeStateItem

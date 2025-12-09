@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 
-import type { DocumentNode, OperationVariables } from '@apollo/client';
+import type { ApolloCache, DocumentNode, MutationUpdaterFunction, OperationVariables } from '@apollo/client';
 import { useMutation } from '@apollo/client/react';
 import { useConfiguration } from '@gql/configs/Configuration';
 import { useSlewFlags } from '@gql/configs/SlewFlags';
@@ -13,6 +13,7 @@ import type { ReactNode } from 'react';
 
 import { Crosshairs, CrosshairsSlash, Parking, ParkingSlash } from '@/components/Icons';
 import { BTN_CLASSES } from '@/Helpers/constants';
+import { when } from '@/Helpers/functions';
 import type { SetStale } from '@/Helpers/hooks';
 import type { SlewFlagsType } from '@/types';
 
@@ -25,7 +26,7 @@ import {
   SCS_FOLLOW_MUTATION,
 } from './follow';
 import { graphql } from './gen';
-import type { MechSystemState, RunSlewMutationVariables } from './gen/graphql';
+import type { MechSystemState, RunSlewMutationVariables, TelescopeState } from './gen/graphql';
 import {
   MOUNT_PARK_MUTATION,
   OIWFS_PARK_MUTATION,
@@ -33,28 +34,34 @@ import {
   PWFS2_PARK_MUTATION,
   ROTATOR_PARK_MUTATION,
 } from './park';
+import { GET_TELESCOPE_STATE } from './TelescopeState';
 
 // Generic mutation button
-function MutationButton<T extends DocumentNode>({
+function MutationButton<
+  T extends DocumentNode,
+  V extends VariablesOf<T> extends OperationVariables ? VariablesOf<T> : never,
+>({
   mutation,
   variables,
   setStale,
   icons,
   label,
+  update,
   ...props
 }: {
   mutation: T;
-  variables: VariablesOf<T> extends OperationVariables ? VariablesOf<T> : never;
+  variables: V;
   icons?: ReactNode[];
   setStale?: SetStale;
+  update?: MutationUpdaterFunction<T, V, ApolloCache>;
 } & ButtonProps) {
-  const [mutationFunction, { loading }] = useMutation<T>(mutation, {
+  const [mutationFunction, { loading }] = useMutation<T, V>(mutation, {
     variables: variables,
     onCompleted: () => setStale?.(true),
   });
 
   return (
-    <Button {...props} onClick={() => mutationFunction({ variables })} loading={props.loading || loading}>
+    <Button {...props} onClick={() => mutationFunction({ variables, update })} loading={props.loading || loading}>
       {icons?.length && <span className="mutation-button-icons">{icons}</span>}
       {label && <span className="p-button-label">{label}</span>}
     </Button>
@@ -70,6 +77,15 @@ export function MCS({ className, state, ...props }: ButtonProps & { state: MechS
     <MutationButton
       mutation={MOUNT_FOLLOW_MUTATION}
       variables={{ enable: state?.follow === 'NOT_FOLLOWING' }}
+      update={(cache, _result, { variables }) =>
+        updateTelescopeStateCache(cache, (telescopeState) => ({
+          ...telescopeState,
+          mount: {
+            ...telescopeState.mount,
+            follow: variables?.enable ? 'FOLLOWING' : 'NOT_FOLLOWING',
+          },
+        }))
+      }
       {...props}
       icons={icons}
       title={title}
@@ -85,6 +101,15 @@ export function SCS({ className, state, ...props }: ButtonProps & { state: MechS
       mutation={SCS_FOLLOW_MUTATION}
       icons={icons}
       variables={{ enable: state?.follow === 'NOT_FOLLOWING' }}
+      update={(cache, _result, { variables }) =>
+        updateTelescopeStateCache(cache, (telescopeState) => ({
+          ...telescopeState,
+          scs: {
+            ...telescopeState.mount,
+            follow: variables?.enable ? 'FOLLOWING' : 'NOT_FOLLOWING',
+          },
+        }))
+      }
       {...props}
       title={title}
       className={clsx(className, classes)}
@@ -99,6 +124,15 @@ export function CRCS({ className, state, ...props }: ButtonProps & { state: Mech
       mutation={ROTATOR_FOLLOW_MUTATION}
       icons={icons}
       variables={{ enable: state?.follow === 'NOT_FOLLOWING' }}
+      update={(cache, _result, { variables }) =>
+        updateTelescopeStateCache(cache, (telescopeState) => ({
+          ...telescopeState,
+          crcs: {
+            ...telescopeState.mount,
+            follow: variables?.enable ? 'FOLLOWING' : 'NOT_FOLLOWING',
+          },
+        }))
+      }
       {...props}
       title={title}
       className={clsx(className, classes)}
@@ -118,6 +152,15 @@ export function PWFS1({
       mutation={PWFS1_FOLLOW_MUTATION}
       icons={icons}
       variables={{ enable: state?.follow === 'NOT_FOLLOWING' }}
+      update={(cache, _result, { variables }) =>
+        updateTelescopeStateCache(cache, (telescopeState) => ({
+          ...telescopeState,
+          pwfs1: {
+            ...telescopeState.pwfs1,
+            follow: variables?.enable ? 'FOLLOWING' : 'NOT_FOLLOWING',
+          },
+        }))
+      }
       {...props}
       title={title}
       className={clsx(className, classes)}
@@ -137,6 +180,15 @@ export function PWFS2({
       mutation={PWFS2_FOLLOW_MUTATION}
       icons={icons}
       variables={{ enable: state?.follow === 'NOT_FOLLOWING' }}
+      update={(cache, _result, { variables }) =>
+        updateTelescopeStateCache(cache, (telescopeState) => ({
+          ...telescopeState,
+          pwfs2: {
+            ...telescopeState.pwfs2,
+            follow: variables?.enable ? 'FOLLOWING' : 'NOT_FOLLOWING',
+          },
+        }))
+      }
       {...props}
       title={title}
       className={clsx(className, classes)}
@@ -159,6 +211,15 @@ export function OIWFS({
   return (
     <MutationButton
       mutation={OIWFS_FOLLOW_MUTATION}
+      update={(cache, _result, { variables }) =>
+        updateTelescopeStateCache(cache, (telescopeState) => ({
+          ...telescopeState,
+          oiwfs: {
+            ...telescopeState.oiwfs,
+            follow: variables?.enable ? 'FOLLOWING' : 'NOT_FOLLOWING',
+          },
+        }))
+      }
       icons={icons}
       variables={{ enable: state?.follow === 'NOT_FOLLOWING' }}
       {...props}
@@ -270,4 +331,24 @@ function classNameForState(
   } else {
     return { classes: BTN_CLASSES.ACTIVE, title, icons };
   }
+}
+
+/**
+ * Helper function to update the telescope state in the cache. Usually after a mutation.
+ */
+function updateTelescopeStateCache(
+  cache: ApolloCache,
+  updateTelescopeState: (state: TelescopeState) => TelescopeState,
+) {
+  return cache.updateQuery(
+    {
+      id: 'ROOT_QUERY',
+      query: GET_TELESCOPE_STATE,
+    },
+    (data) =>
+      when(data, (data) => ({
+        ...data,
+        telescopeState: updateTelescopeState(data.telescopeState),
+      })),
+  );
 }
