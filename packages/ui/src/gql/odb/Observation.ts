@@ -77,6 +77,14 @@ export const SIDEREAL_FRAGMENT = graphql(`
   }
 `);
 
+export const NONSIDEREAL_FRAGMENT = graphql(`
+  fragment NonsiderealItem on Nonsidereal {
+    des
+    keyType
+    key
+  }
+`);
+
 export const BRIGHTNESS_FRAGMENT = graphql(`
   fragment BrightnessItem on BandBrightnessIntegrated {
     band
@@ -157,6 +165,9 @@ export const GET_GUIDE_ENVIRONMENT = graphql(`
             }
             sourceProfile {
               ...SourceProfileItem
+            }
+            nonsidereal {
+              ...NonsiderealItem
             }
           }
         }

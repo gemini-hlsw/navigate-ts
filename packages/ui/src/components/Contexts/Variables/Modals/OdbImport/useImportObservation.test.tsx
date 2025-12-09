@@ -307,6 +307,7 @@ const mocks = [
                     },
                     __typename: 'SourceProfile',
                   },
+                  nonsidereal: null,
                   __typename: 'GuideTarget',
                 },
               ],
