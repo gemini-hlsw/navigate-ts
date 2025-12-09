@@ -19,7 +19,8 @@ import {
 import { operationOutcome } from '@/test/helpers';
 import { renderWithContext } from '@/test/render';
 
-import { Slew, SLEW_MUTATION } from './Buttons';
+import { OIWFS, Slew, SLEW_MUTATION } from './Buttons';
+import { OIWFS_FOLLOW_MUTATION } from './follow';
 import { GET_INSTRUMENT_PORT } from './Instrument';
 
 describe(Slew.name, () => {
@@ -135,6 +136,49 @@ describe(Slew.name, () => {
   });
 });
 
+describe(OIWFS.name, () => {
+  it('should render OIWFS follow state', async () => {
+    const sut = await renderWithContext(
+      <OIWFS state={{ __typename: 'MechSystemState', follow: 'FOLLOWING', parked: 'NOT_PARKED' }} inUse={true} />,
+      {},
+    );
+
+    const button = sut.getByRole('button');
+    expect(button).toBeInTheDocument();
+    expect(button).toHaveAttribute('title', 'Following, Not parked, Used subsystem');
+  });
+
+  it('calls mutation on click', async () => {
+    const sut = await renderWithContext(
+      <OIWFS state={{ __typename: 'MechSystemState', follow: 'NOT_FOLLOWING', parked: 'PARKED' }} inUse={false} />,
+      {
+        mocks: [oiwfsFollowMutationMock],
+      },
+    );
+    const button = sut.getByRole('button');
+    await userEvent.click(button);
+
+    expect(oiwfsFollowMutationMock.request.variables).toHaveBeenCalledExactlyOnceWith({
+      enable: true,
+    });
+  });
+
+  it('calls disable when already following', async () => {
+    const sut = await renderWithContext(
+      <OIWFS state={{ __typename: 'MechSystemState', follow: 'FOLLOWING', parked: 'PARKED' }} inUse={false} />,
+      {
+        mocks: [oiwfsFollowMutationMock],
+      },
+    );
+    const button = sut.getByRole('button');
+    await userEvent.click(button);
+
+    expect(oiwfsFollowMutationMock.request.variables).toHaveBeenCalledExactlyOnceWith({
+      enable: false,
+    });
+  });
+});
+
 const configurationMock = {
   request: {
     query: GET_CONFIGURATION,
@@ -238,3 +282,15 @@ const calParamsMock = {
     },
   },
 } satisfies MockedResponseOf<typeof CAL_PARAMS>;
+
+const oiwfsFollowMutationMock = {
+  request: {
+    query: OIWFS_FOLLOW_MUTATION,
+    variables: vi.fn().mockReturnValue(true),
+  },
+  result: {
+    data: {
+      oiwfsFollow: operationOutcome,
+    },
+  },
+} satisfies MockedResponseOf<typeof OIWFS_FOLLOW_MUTATION>;
