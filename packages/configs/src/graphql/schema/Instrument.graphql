@@ -106,8 +106,5 @@ type Mutation {
     comment: String
   ): InstrumentConfig!
 
-  "Reset the instruments to their default values, removing all temporary configurations"
-  resetInstruments(name: Instrument!): Void
-
   deleteInstrument(pk: PosInt!): Void
 }

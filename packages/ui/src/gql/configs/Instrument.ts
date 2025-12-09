@@ -183,18 +183,6 @@ export function useUpdateInstrument() {
   });
 }
 
-export const RESET_INSTRUMENTS = graphql(`
-  mutation resetInstruments($name: Instrument!) {
-    resetInstruments(name: $name)
-  }
-`);
-
-export function useResetInstruments() {
-  return useMutation(RESET_INSTRUMENTS, {
-    context: { clientName: 'navigateConfigs' },
-  });
-}
-
 const DELETE_INSTRUMENT = graphql(`
   mutation deleteInstrument($pk: PosInt!) {
     deleteInstrument(pk: $pk)

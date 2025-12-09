@@ -147,7 +147,6 @@ export const GET_GUIDE_ENVIRONMENT = graphql(`
       targetEnvironment {
         guideEnvironment {
           posAngle {
-            hms
             degrees
           }
           guideTargets {

@@ -1,15 +1,13 @@
 import { MockedProvider } from '@apollo/client/testing/react';
-import { GET_CONFIGURATION, UPDATE_CONFIGURATION } from '@gql/configs/Configuration';
-import type { Configuration, Rotator } from '@gql/configs/gen/graphql';
-import { RESET_INSTRUMENTS } from '@gql/configs/Instrument';
-import { GET_ROTATOR, UPDATE_ROTATOR } from '@gql/configs/Rotator';
-import { REMOVE_AND_CREATE_BASE_TARGETS, REMOVE_AND_CREATE_WFS_TARGETS } from '@gql/configs/Target';
+import { GET_CONFIGURATION } from '@gql/configs/Configuration';
+import { GET_ROTATOR } from '@gql/configs/Rotator';
+import { DO_IMPORT_OBSERVATION } from '@gql/configs/Target';
 import { GET_CENTRAL_WAVELENGTH, GET_GUIDE_ENVIRONMENT } from '@gql/odb/Observation';
 import type { MockedResponseOf } from '@gql/util';
 import { describe, expect, it, type Mock } from 'vitest';
 import { renderHook, type RenderHookResult } from 'vitest-browser-react';
 
-import { createConfiguration, createRotator, createTarget } from '@/test/create';
+import { createConfiguration, createRotator } from '@/test/create';
 import type { OdbObservationType } from '@/types';
 
 import { useImportObservation } from './useImportObservation';
@@ -21,7 +19,7 @@ describe(useImportObservation.name, () => {
     callback = vi.fn();
     sut = await renderHook(() => useImportObservation(), {
       wrapper: ({ children }) => (
-        <MockedProvider mocks={[...mocks, updateConfigurationMock]}>{children}</MockedProvider>
+        <MockedProvider mocks={[...mocks, doImportObservationMock]}>{children}</MockedProvider>
       ),
     });
     await expect.poll(() => sut.result.current[1].loading).toBe(false);
@@ -38,25 +36,58 @@ describe(useImportObservation.name, () => {
     });
 
     expect(callback).toHaveBeenCalledOnce();
-    expect(updateConfigurationMock.request.variables).toHaveBeenCalledTimes(2);
-    expect(updateConfigurationMock.request.variables).toHaveBeenNthCalledWith(1, {
-      pk: 1,
-      baffleMode: 'AUTO',
-      centralBaffle: null,
-      deployableBaffle: null,
-      obsId: 'o-2e5',
-      obsInstrument: 'GMOS_NORTH',
-      obsReference: 'G-2025B-0571-Q-0003',
-      obsSubtitle: null,
-      obsTitle: 'Mayall V',
-      selectedTarget: 34,
-    });
-    expect(updateConfigurationMock.request.variables).toHaveBeenLastCalledWith({
-      pk: 1,
-      selectedGuiderTarget: null,
-      selectedOiTarget: 35,
-      selectedP1Target: 35,
-      selectedP2Target: 35,
+    expect(doImportObservationMock.request.variables).toHaveBeenCalledExactlyOnceWith({
+      input: {
+        configurationPk: 1,
+        guideEnvironmentAngle: {
+          degrees: 0,
+        },
+        observation: {
+          id: 'o-2e5',
+          instrument: 'GMOS_NORTH',
+          reference: 'G-2025B-0571-Q-0003',
+          subtitle: null,
+          title: 'Mayall V',
+        },
+        rotatorPk: 1,
+        targets: {
+          base: [
+            {
+              band: undefined,
+              coord1: 12.541520033333333,
+              coord2: 41.683620813333334,
+              epoch: 'J2000.000',
+              id: 't-60d',
+              magnitude: undefined,
+              name: 'Mayall V',
+              parallax: 0,
+              pmDec: undefined,
+              pmRa: undefined,
+              radialVelocity: -33200000,
+              type: 'SCIENCE',
+              wavelength: 630,
+            },
+          ],
+          oiwfs: [
+            {
+              band: 'G_RP',
+              coord1: 12.497148925,
+              coord2: 41.697271505555555,
+              epoch: 'J2025.763',
+              id: 't-1',
+              magnitude: 13.935516,
+              name: 'Gaia DR3 375250953351514624',
+              parallax: undefined,
+              pmDec: -6810,
+              pmRa: 1121,
+              radialVelocity: 0,
+              type: 'OIWFS',
+            },
+          ],
+          pwfs1: [],
+          pwfs2: [],
+        },
+      },
     });
   });
 });
@@ -211,60 +242,6 @@ const mocks = [
   } satisfies MockedResponseOf<typeof GET_CENTRAL_WAVELENGTH>,
   {
     request: {
-      query: REMOVE_AND_CREATE_BASE_TARGETS,
-      variables: () => true,
-    },
-    maxUsageCount: Infinity,
-    result: {
-      data: {
-        removeAndCreateBaseTargets: [
-          createTarget({
-            pk: 34,
-          }),
-        ],
-      },
-    },
-  } satisfies MockedResponseOf<typeof REMOVE_AND_CREATE_BASE_TARGETS>,
-  {
-    request: {
-      query: UPDATE_ROTATOR,
-      variables: () => true,
-    },
-    result: (arg) => ({
-      data: {
-        updateRotator: createRotator(arg as Partial<Rotator>),
-      },
-    }),
-  } satisfies MockedResponseOf<typeof UPDATE_ROTATOR>,
-  {
-    request: {
-      query: REMOVE_AND_CREATE_WFS_TARGETS,
-      variables: () => true,
-    },
-    maxUsageCount: Infinity,
-    result: {
-      data: {
-        removeAndCreateWfsTargets: [
-          createTarget({
-            pk: 35,
-          }),
-        ],
-      },
-    },
-  } satisfies MockedResponseOf<typeof REMOVE_AND_CREATE_WFS_TARGETS>,
-  {
-    request: {
-      query: RESET_INSTRUMENTS,
-      variables: () => true,
-    },
-    result: {
-      data: {
-        resetInstruments: null,
-      },
-    },
-  } satisfies MockedResponseOf<typeof RESET_INSTRUMENTS>,
-  {
-    request: {
       query: GET_GUIDE_ENVIRONMENT,
       variables: () => true,
     },
@@ -343,15 +320,18 @@ const mocks = [
   } satisfies MockedResponseOf<typeof GET_GUIDE_ENVIRONMENT>,
 ];
 
-const updateConfigurationMock = {
+const doImportObservationMock = {
   request: {
-    query: UPDATE_CONFIGURATION,
+    query: DO_IMPORT_OBSERVATION,
     variables: vi.fn().mockReturnValue(true),
   },
-  maxUsageCount: Infinity,
-  result: (arg) => ({
+  result: {
     data: {
-      updateConfiguration: createConfiguration(arg as Partial<Configuration>),
+      importObservation: {
+        __typename: 'ImportObservationResult',
+        configuration: createConfiguration(),
+        rotator: createRotator(),
+      },
     },
-  }),
-} satisfies MockedResponseOf<typeof UPDATE_CONFIGURATION>;
+  },
+} satisfies MockedResponseOf<typeof DO_IMPORT_OBSERVATION>;

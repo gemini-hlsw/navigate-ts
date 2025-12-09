@@ -1,12 +1,11 @@
-import { useConfiguration, useUpdateConfiguration } from '@gql/configs/Configuration';
+import { useConfiguration } from '@gql/configs/Configuration';
 import type { TargetType } from '@gql/configs/gen/graphql';
-import { GET_INSTRUMENT, useResetInstruments } from '@gql/configs/Instrument';
-import { useRotator, useUpdateRotator } from '@gql/configs/Rotator';
-import { useRemoveAndCreateBaseTargets, useRemoveAndCreateWfsTargets } from '@gql/configs/Target';
+import { useRotator } from '@gql/configs/Rotator';
+import { useDoImportObservation } from '@gql/configs/Target';
 import { useGetCentralWavelength, useGetGuideEnvironment } from '@gql/odb/Observation';
 
 import { extractMagnitude } from '@/Helpers/bands';
-import { firstIfOnlyOne, isNotNullish } from '@/Helpers/functions';
+import { isNotNullish, when } from '@/Helpers/functions';
 import { extractGuideTargets } from '@/Helpers/guideTargets';
 import { useTransitionPromise } from '@/Helpers/hooks';
 import { extractCentralWavelength } from '@/Helpers/wavelength';
@@ -20,132 +19,75 @@ export function useImportObservation() {
 
   const [getGuideEnvironment, { loading: getGuideEnvironmentLoading }] = useGetGuideEnvironment();
   const [getCentralWavelength, { loading: getCentralWavelengthLoading }] = useGetCentralWavelength();
-  const [removeAndCreateBaseTargets, { loading: removeCreateLoading }] = useRemoveAndCreateBaseTargets();
-  const [updateConfiguration, { loading: updateConfigLoading }] = useUpdateConfiguration();
-  const [updateRotator, { loading: updateRotatorLoading }] = useUpdateRotator();
-  const [removeAndCreateWfsTargets, { loading: wfsTargetsLoading }] = useRemoveAndCreateWfsTargets();
-  const [resetInstruments, { loading: resetInstrumentsLoading }] = useResetInstruments();
+  const [doImportObservation, { loading: doImportObservationLoading }] = useDoImportObservation();
 
   const [isPending, startTransition] = useTransitionPromise();
 
   const loading =
     configurationLoading ||
     rotatorLoading ||
-    updateConfigLoading ||
-    removeCreateLoading ||
-    updateRotatorLoading ||
     getGuideEnvironmentLoading ||
     getCentralWavelengthLoading ||
-    wfsTargetsLoading ||
-    resetInstrumentsLoading ||
+    doImportObservationLoading ||
     isPending;
 
   function importObservation(selectedObservation: OdbObservationType): Promise<void> {
-    if (!configuration) return Promise.resolve();
+    if (!configuration || !rotator) return Promise.resolve();
 
     return startTransition(async () => {
-      // Observation selected
       // First try to get a central wavelength associated to the observation
-      const obsWithWavelength = await getCentralWavelength({
-        context: { clientName: 'odb' },
-        variables: { obsId: selectedObservation.id },
-      });
+      // Get the guide environment separately to avoid large query times for _all_ observations
+      const [obsWithWavelength, guideEnv] = await Promise.all([
+        getCentralWavelength({
+          context: { clientName: 'odb' },
+          variables: { obsId: selectedObservation.id },
+        }),
+        getGuideEnvironment({
+          context: { clientName: 'odb' },
+          variables: { obsId: selectedObservation.id },
+        }),
+      ]);
 
       const wavelength = extractCentralWavelength(selectedObservation.instrument, obsWithWavelength.data);
 
       const { blindOffsetTarget, firstScienceTarget } = selectedObservation.targetEnvironment ?? {};
 
-      const baseTargets = [
+      const base = [
         blindOffsetTarget && { target: blindOffsetTarget, type: 'BLINDOFFSET' as const satisfies TargetType },
         firstScienceTarget && { target: firstScienceTarget, type: 'SCIENCE' as const satisfies TargetType },
       ]
         .filter(isNotNullish)
         .map(({ target, type }) => createBaseTarget(target, type, wavelength));
 
-      // Second create the observation base targets (SCIENCE and BLINDOFFSET)
-      const { data: baseTargetsData } = await removeAndCreateBaseTargets({ variables: { targets: baseTargets } });
+      const { oiwfs, pwfs1, pwfs2 } = extractGuideTargets(guideEnv.data);
 
-      await updateConfiguration({
+      await doImportObservation({
         variables: {
-          pk: configuration.pk,
-          obsId: selectedObservation.id,
-          obsTitle: selectedObservation.title,
-          obsSubtitle: selectedObservation.subtitle,
-          obsInstrument: selectedObservation.instrument,
-          obsReference: selectedObservation.reference?.label,
-          baffleMode: 'AUTO',
-          centralBaffle: null,
-          deployableBaffle: null,
-          selectedTarget: baseTargetsData?.removeAndCreateBaseTargets[0]?.pk,
+          input: {
+            configurationPk: configuration.pk,
+            rotatorPk: rotator.pk,
+            observation: {
+              id: selectedObservation.id,
+              title: selectedObservation.title,
+              subtitle: selectedObservation.subtitle,
+              reference: selectedObservation.reference?.label,
+              instrument: selectedObservation.instrument,
+            },
+            targets: {
+              base: base,
+              oiwfs,
+              pwfs1,
+              pwfs2,
+            },
+            guideEnvironmentAngle: when(
+              guideEnv.data?.observation?.targetEnvironment.guideEnvironment.posAngle.degrees,
+              (degrees) => ({
+                degrees,
+              }),
+            ),
+          },
         },
       });
-
-      // If there is a rotator, retrieve guide targets and create them
-      if (rotator) {
-        // Get the guide environment separately to avoid large query times for _all_ observations
-        const guideEnv = await getGuideEnvironment({
-          context: { clientName: 'odb' },
-          variables: { obsId: selectedObservation.id },
-        });
-
-        const { oiwfs, pwfs1, pwfs2 } = extractGuideTargets(guideEnv.data);
-
-        const [oi, p1, p2] = await Promise.all([
-          removeAndCreateWfsTargets({
-            variables: {
-              wfs: 'OIWFS',
-              targets: oiwfs,
-            },
-          }),
-          removeAndCreateWfsTargets({
-            variables: {
-              wfs: 'PWFS1',
-              targets: pwfs1,
-            },
-          }),
-          removeAndCreateWfsTargets({
-            variables: {
-              wfs: 'PWFS2',
-              targets: pwfs2,
-            },
-          }),
-          updateRotator({
-            variables: {
-              pk: rotator.pk,
-              angle:
-                typeof guideEnv.data?.observation?.targetEnvironment.guideEnvironment.posAngle.degrees === 'string'
-                  ? parseFloat(guideEnv.data?.observation?.targetEnvironment.guideEnvironment.posAngle.degrees)
-                  : (guideEnv.data?.observation?.targetEnvironment.guideEnvironment.posAngle.degrees ?? 0),
-              tracking: 'TRACKING',
-            },
-          }),
-        ]);
-
-        // Set the first of each result as the selected target if there is only 1
-        const selectedOiTarget = firstIfOnlyOne(oi.data?.removeAndCreateWfsTargets)?.pk ?? null;
-        const selectedP1Target = firstIfOnlyOne(p1.data?.removeAndCreateWfsTargets)?.pk ?? null;
-        const selectedP2Target = firstIfOnlyOne(p2.data?.removeAndCreateWfsTargets)?.pk ?? null;
-        const selectedGuiderTarget = firstIfOnlyOne(
-          [selectedOiTarget, selectedP1Target, selectedP2Target].filter(isNotNullish),
-        );
-
-        await updateConfiguration({
-          variables: {
-            pk: configuration.pk,
-            selectedOiTarget,
-            selectedP1Target,
-            selectedP2Target,
-            selectedGuiderTarget,
-          },
-        });
-      }
-
-      if (selectedObservation.instrument) {
-        await resetInstruments({
-          variables: { name: selectedObservation.instrument },
-          refetchQueries: [GET_INSTRUMENT],
-        });
-      }
     });
   }
 
