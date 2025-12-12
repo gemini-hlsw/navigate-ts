@@ -4,7 +4,7 @@ import { page, userEvent } from 'vitest/browser';
 
 import { odbTokenAtom } from '@/components/atoms/auth';
 import { targetEditAtom } from '@/components/atoms/target';
-import { createDec, createTarget } from '@/test/create';
+import { createDec, createSidereal, createTarget } from '@/test/create';
 import { expiredJwt } from '@/test/helpers';
 import { renderWithContext } from '@/test/render';
 import type { TargetType } from '@/types';
@@ -27,7 +27,7 @@ describe(Target.name, () => {
     await expect.element(dialog.getByText(`Edit target ${target.name}`)).toBeVisible();
     const name = dialog.getByLabelText('Name');
     await expect.element(name).toBeEnabled();
-    expect(name).toHaveValue(target.name);
+    await expect.element(name).toHaveValue(target.name);
     expect(dialog.getByRole('button', { name: 'Update' })).toBeEnabled();
   });
 
@@ -58,15 +58,19 @@ describe(Target.name, () => {
     expect(updateTargetMock.request.variables).toHaveBeenCalledExactlyOnceWith({
       ...target,
       name: 'New Target Name',
-      coord1: 12.497148925,
-      coord2: 41.69727150555556,
+      sidereal: {
+        coord1: 12.497148925,
+        coord2: 41.69727150555556,
+      },
     });
     await expect.element(dialog).not.toBeInTheDocument();
   });
 });
 
 const target: TargetType = createTarget({
-  dec: createDec({ degrees: 41.69727150555556, dms: '+41:41:50.177415' }),
+  sidereal: createSidereal({
+    dec: createDec({ degrees: 41.69727150555556, dms: '+41:41:50.177415' }),
+  }),
 });
 
 const updateTargetMock = {

@@ -12,6 +12,14 @@ enum TargetType {
   OIWFS
 }
 
+enum EphemerisKeyType {
+  ASTEROID_NEW
+  ASTEROID_OLD
+  COMET
+  MAJOR_BODY
+  USER_SUPPLIED
+}
+
 type RA {
   degrees: Float!
   hms: String!
@@ -44,6 +52,25 @@ type Target {
   id: TargetId!
   "Name of the target"
   name: String!
+  "Magnitude of the target"
+  magnitude: Float
+  "Magnitude band"
+  band: String
+  "FIXED | SCIENCE | BLINDOFFSET | PWFS1 | PWFS2 | OIWFS"
+  type: TargetType!
+  "Wavelength"
+  wavelength: Int
+
+  sidereal: SiderealTarget
+  nonsidereal: NonsiderealTarget
+
+  "Datetime when it was created"
+  createdAt: DateTime!
+}
+
+type SiderealTarget {
+  "Primary Key"
+  pk: PosInt!
   "Right Ascension"
   ra: RA
   "Azimuth"
@@ -58,38 +85,65 @@ type Target {
   radialVelocity: Float
   "Parallax"
   parallax: Float
-  "Magnitude of the target"
-  magnitude: Float
-  "Magnitude band"
-  band: String
   "Epoch of target"
   epoch: String!
-  "FIXED | SCIENCE | BLINDOFFSET | PWFS1 | PWFS2 | OIWFS"
-  type: TargetType!
-  "Wavelength"
-  wavelength: Int
-  "Datetime when it was created"
-  createdAt: DateTime!
+}
+
+type NonsiderealTarget {
+  "Primary Key"
+  pk: PosInt!
+  "Synthesis of `keyType` and `des`"
+  keyType: EphemerisKeyType!
+  "Human readable designation that discriminates among ephemeris keys of the same type."
+  des: String!
 }
 
 type Query {
-  targets(type: TargetType): [Target!]!
+  targets: [Target!]!
 }
 
 input TargetInput {
   id: TargetId!
   name: String
+  magnitude: Float
+  band: String
+  type: TargetType
+  wavelength: Int
+
+  sidereal: SiderealTargetInput
+  nonsidereal: NonsiderealTargetInput
+}
+
+input SiderealTargetInput {
+  coord1: Float!
+  coord2: Float!
+  pmRa: Float
+  pmDec: Float
+  radialVelocity: Float
+  parallax: Float
+  epoch: String
+}
+
+input NonsiderealTargetInput {
+  "Human readable designation that discriminates among ephemeris keys of the same type."
+  des: String!
+  "Synthesis of `keyType` and `des`"
+  keyType: EphemerisKeyType!
+}
+
+input SiderealTargetUpdateInput {
   coord1: Float
   coord2: Float
   pmRa: Float
   pmDec: Float
   radialVelocity: Float
   parallax: Float
-  magnitude: Float
-  band: String
   epoch: String
-  type: TargetType
-  wavelength: Int
+}
+
+input NonsiderealTargetUpdateInput {
+  des: String
+  keyType: EphemerisKeyType
 }
 
 input ObservationInput {
@@ -125,17 +179,12 @@ type Mutation {
     pk: PosInt!
     id: TargetId
     name: String
-    coord1: Float
-    coord2: Float
-    pmRa: Float
-    pmDec: Float
-    radialVelocity: Float
-    parallax: Float
     magnitude: Float
     band: String
-    epoch: String
     type: TargetType
     wavelength: Int
+    sidereal: SiderealTargetUpdateInput
+    nonsidereal: NonsiderealTargetUpdateInput
   ): Target!
 
   removeAndCreateBaseTargets(targets: [TargetInput!]): [Target!]!

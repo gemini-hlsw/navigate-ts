@@ -46,6 +46,9 @@ export const TARGET_FRAGMENT = graphql(`
     sourceProfile {
       ...SourceProfileItem
     }
+    nonsidereal {
+      ...NonsiderealItem
+    }
   }
 `);
 
