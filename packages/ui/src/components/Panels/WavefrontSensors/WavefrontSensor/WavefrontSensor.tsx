@@ -36,8 +36,8 @@ const DEFAULT_FREQ_OPTIONS = {
   PWFS1: [0.2, 0.33, 0.5, 1, 2, 10, 20, 50, 100],
   PWFS2: [1, 2, 10, 20, 50, 100, 200],
   // Special cases
-  OIWFS_GMOS: [1, 2, 10, 20, 50, 100, 200],
-  OIWFS_FLAMINGOS2: [1, 2, 10, 20, 50, 125, 200],
+  GMOS_OIWFS: [1, 2, 10, 20, 50, 100, 200],
+  FLAMINGOS2_OIWFS: [1, 2, 10, 20, 50, 125, 200],
 };
 
 const DEFAULT_SELECTED_FREQ = {
@@ -75,9 +75,9 @@ export default function WavefrontSensor({
       if (!configuration?.obsInstrument) return;
 
       if (configuration.obsInstrument.includes('GMOS')) {
-        checkFreqList(DEFAULT_FREQ_OPTIONS.OIWFS_GMOS);
+        checkFreqList(DEFAULT_FREQ_OPTIONS.GMOS_OIWFS);
       } else if (configuration.obsInstrument === 'FLAMINGOS2') {
-        checkFreqList(DEFAULT_FREQ_OPTIONS.OIWFS_FLAMINGOS2);
+        checkFreqList(DEFAULT_FREQ_OPTIONS.FLAMINGOS2_OIWFS);
       } else {
         checkFreqList(DEFAULT_FREQ_OPTIONS.OIWFS);
       }
