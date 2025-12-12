@@ -4,13 +4,16 @@ import type {
   CalParams,
   Configuration,
   InstrumentConfig,
+  NonsiderealTarget,
   Rotator,
+  SiderealTarget,
   Target,
   UpdateConfigurationMutationVariables,
 } from '@gql/configs/gen/graphql';
 import { useConfiguredInstrument } from '@gql/configs/Instrument';
 import { useRotator } from '@gql/configs/Rotator';
 import { useTargets } from '@gql/configs/Target';
+import type { NonsiderealInput } from '@gql/odb/gen/graphql';
 import type {
   AzElTargetInput,
   BaffleConfigInput,
@@ -43,23 +46,23 @@ export function createTargetPropertiesInput(target: Target): TargetPropertiesInp
   return {
     id: target.id,
     name: target.name,
-    sidereal: when(target.type !== 'FIXED', () => createSiderealInput(target)),
+    sidereal: when(target.type !== 'FIXED' && target.sidereal, createSiderealInput),
+    nonsidereal: when(target.type !== 'FIXED' && target.nonsidereal, createNonsiderealInput),
     azel: when(target.type === 'FIXED', () => createAzElTargetInput(target)),
-    // nonsidereal: // <- ???
     wavelength: when(target.wavelength, (w) => ({ nanometers: w })),
   };
 }
 
 function createAzElTargetInput(target: Target): AzElTargetInput | undefined {
-  return when(target.az, (az) =>
-    when(target.el, (el) => ({
+  return when(target.sidereal?.az, (az) =>
+    when(target.sidereal?.el, (el) => ({
       azimuth: { degrees: az.degrees },
       elevation: { degrees: el.degrees },
     })),
   );
 }
 
-export function createSiderealInput(target: Target): SiderealInput {
+export function createSiderealInput(target: SiderealTarget): SiderealInput {
   return {
     ra: when(target.ra, ({ hms }) => ({ hms })),
     dec: when(target.dec, ({ dms }) => ({ dms })),
@@ -78,6 +81,13 @@ export function createSiderealInput(target: Target): SiderealInput {
     parallax: when(target.parallax, (p) => ({
       microarcseconds: p,
     })),
+  };
+}
+
+export function createNonsiderealInput(target: NonsiderealTarget): NonsiderealInput {
+  return {
+    des: target.des,
+    keyType: target.keyType,
   };
 }
 
@@ -119,7 +129,8 @@ function createGuiderConfig(target: Target): GuiderConfig {
     },
     target: {
       name: target.name,
-      sidereal: createSiderealInput(target),
+      sidereal: when(target.sidereal, createSiderealInput),
+      nonsidereal: when(target.nonsidereal, createNonsiderealInput),
     },
   };
 }

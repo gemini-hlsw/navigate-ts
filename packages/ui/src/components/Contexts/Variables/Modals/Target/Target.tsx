@@ -6,7 +6,7 @@ import { lazy, startTransition, Suspense, useState } from 'react';
 
 import { useCanEdit } from '@/components/atoms/auth';
 import { useTargetEdit } from '@/components/atoms/target';
-import { isNullish } from '@/Helpers/functions';
+import { isNullish, when } from '@/Helpers/functions';
 import type { TargetType } from '@/types';
 
 import { ModalSolarProgress } from '../ModalSolarProgress';
@@ -63,8 +63,10 @@ function useUpdateObservation() {
     await updateTarget({
       variables: {
         ...target,
-        coord1: target.ra?.degrees ?? target.az?.degrees,
-        coord2: target.dec?.degrees ?? target.el?.degrees,
+        sidereal: when(target.sidereal, (s) => ({
+          coord1: s.ra?.degrees ?? s.az?.degrees,
+          coord2: s.dec?.degrees ?? s.el?.degrees,
+        })),
       },
     });
   }

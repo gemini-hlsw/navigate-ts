@@ -17,6 +17,7 @@ import {
   createInstrumentConfig,
   createRA,
   createRotator,
+  createSidereal,
   createTarget,
 } from '@/test/create';
 import { operationOutcome } from '@/test/helpers';
@@ -65,22 +66,22 @@ describe(TargetSwapButton.name, () => {
             id: selectedOi.id,
             name: selectedOi.name,
             sidereal: {
-              ra: { hms: selectedOi.ra!.hms },
-              dec: { dms: selectedOi.dec!.dms },
-              epoch: selectedOi.epoch,
+              ra: { hms: selectedOi.sidereal!.ra!.hms },
+              dec: { dms: selectedOi.sidereal!.dec!.dms },
+              epoch: selectedOi.sidereal!.epoch,
               properMotion: {
                 ra: {
-                  microarcsecondsPerYear: selectedOi.properMotion?.ra,
+                  microarcsecondsPerYear: selectedOi.sidereal?.properMotion?.ra,
                 },
                 dec: {
-                  microarcsecondsPerYear: selectedOi.properMotion?.dec,
+                  microarcsecondsPerYear: selectedOi.sidereal?.properMotion?.dec,
                 },
               },
               radialVelocity: {
-                centimetersPerSecond: selectedOi.radialVelocity,
+                centimetersPerSecond: selectedOi.sidereal?.radialVelocity,
               },
               parallax: {
-                microarcseconds: selectedOi.parallax,
+                microarcseconds: selectedOi.sidereal?.parallax,
               },
             },
           },
@@ -189,11 +190,13 @@ describe(TargetSwapButton.name, () => {
 });
 
 const selectedTarget = createTarget({
-  ra: createRA({
-    degrees: 56.69542085833334,
-    hms: '03:46:46.901006',
+  sidereal: createSidereal({
+    ra: createRA({
+      degrees: 56.69542085833334,
+      hms: '03:46:46.901006',
+    }),
+    dec: createDec({ degrees: 80.07267194527778, dms: '+80:04:21.618990' }),
   }),
-  dec: createDec({ degrees: 80.07267194527778, dms: '+80:04:21.618990' }),
 });
 
 const selectedOi = createTarget({
