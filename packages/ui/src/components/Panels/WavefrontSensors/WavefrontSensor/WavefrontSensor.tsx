@@ -31,6 +31,21 @@ import { type CSSProperties, useEffect, useId, useState } from 'react';
 import { Play, Stop } from '@/components/Icons';
 import { instrumentToOiwfs } from '@/Helpers/functions';
 
+const DEFAULT_FREQ_OPTIONS = {
+  OIWFS: [1, 2, 10, 20, 50, 100, 125, 200],
+  PWFS1: [0.2, 0.33, 0.5, 1, 2, 10, 20, 50, 100],
+  PWFS2: [1, 2, 10, 20, 50, 100, 200],
+  // Special cases
+  OIWFS_GMOS: [1, 2, 10, 20, 50, 100, 200],
+  OIWFS_FLAMINGOS2: [1, 2, 10, 20, 50, 125, 200],
+};
+
+const DEFAULT_SELECTED_FREQ = {
+  OIWFS: 200,
+  PWFS1: 100,
+  PWFS2: 200,
+};
+
 export default function WavefrontSensor({
   canEdit,
   wfs,
@@ -42,30 +57,32 @@ export default function WavefrontSensor({
 }) {
   const id = useId();
 
-  const [freq, setFreq] = useState(200);
-  const [freqOptions, setFreqOptions] = useState([1, 2, 10, 20, 50, 100, 125, 200]);
+  const [freq, setFreq] = useState(DEFAULT_SELECTED_FREQ[wfs]);
+  const [freqOptions, setFreqOptions] = useState(DEFAULT_FREQ_OPTIONS[wfs]);
 
   const { data: configData, loading: configLoading } = useConfiguration();
   const configuration = configData?.configuration;
 
   useEffect(() => {
-    function checkFreqList(list: number[]) {
-      if (!list.includes(freq)) {
-        setFreq(200);
+    if (wfs === 'OIWFS') {
+      function checkFreqList(list: number[]) {
+        if (!list.includes(freq)) {
+          setFreq(DEFAULT_SELECTED_FREQ.OIWFS);
+        }
+        setFreqOptions(list);
       }
-      setFreqOptions(list);
-    }
 
-    if (!configuration?.obsInstrument) return;
+      if (!configuration?.obsInstrument) return;
 
-    if (configuration.obsInstrument.includes('GMOS')) {
-      checkFreqList([1, 2, 10, 20, 50, 100, 200]);
-    } else if (configuration.obsInstrument === 'FLAMINGOS2') {
-      checkFreqList([1, 2, 10, 20, 50, 125, 200]);
-    } else {
-      checkFreqList([1, 2, 10, 20, 50, 100, 125, 200]);
+      if (configuration.obsInstrument.includes('GMOS')) {
+        checkFreqList(DEFAULT_FREQ_OPTIONS.OIWFS_GMOS);
+      } else if (configuration.obsInstrument === 'FLAMINGOS2') {
+        checkFreqList(DEFAULT_FREQ_OPTIONS.OIWFS_FLAMINGOS2);
+      } else {
+        checkFreqList(DEFAULT_FREQ_OPTIONS.OIWFS);
+      }
     }
-  }, [configuration?.obsInstrument, freq]);
+  }, [configuration?.obsInstrument, freq, wfs]);
 
   let observeButton: React.ReactElement | undefined;
   let skyButton: React.ReactElement | undefined;
