@@ -99,19 +99,19 @@ function createBaseTarget(target: OdbTargetType, type: TargetType, wavelength: n
   return {
     id: target.id,
     name: target.name,
-    coord1:
-      typeof target.sidereal?.ra.degrees === 'string'
-        ? parseFloat(target.sidereal?.ra.degrees)
-        : target.sidereal?.ra.degrees,
-    coord2:
-      typeof target.sidereal?.dec.degrees === 'string'
-        ? parseFloat(target.sidereal?.dec.degrees)
-        : target.sidereal?.dec.degrees,
-    pmRa: target.sidereal?.properMotion?.ra.microarcsecondsPerYear,
-    pmDec: target.sidereal?.properMotion?.dec.microarcsecondsPerYear,
-    radialVelocity: target.sidereal?.radialVelocity?.centimetersPerSecond,
-    parallax: target.sidereal?.parallax?.microarcseconds,
-    epoch: target.sidereal?.epoch,
+    sidereal: when(target.sidereal, (s) => ({
+      coord1: typeof s.ra.degrees === 'string' ? parseFloat(s.ra.degrees) : s.ra.degrees,
+      coord2: typeof s.dec.degrees === 'string' ? parseFloat(s.dec.degrees) : s.dec.degrees,
+      pmRa: s.properMotion?.ra.microarcsecondsPerYear,
+      pmDec: s.properMotion?.dec.microarcsecondsPerYear,
+      radialVelocity: s.radialVelocity?.centimetersPerSecond,
+      parallax: s.parallax?.microarcseconds,
+      epoch: s.epoch,
+    })),
+    nonsidereal: when(target.nonsidereal, (n) => ({
+      des: n.des,
+      keyType: n.keyType,
+    })),
     magnitude,
     band,
     type,

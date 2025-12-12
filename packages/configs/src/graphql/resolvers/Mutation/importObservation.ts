@@ -1,6 +1,6 @@
-import type { Target, WfsType } from '../../../prisma/gen/client.ts';
+import type { Target } from '../../../prisma/gen/client.ts';
 import { firstIfOnlyOne } from '../../../util.ts';
-import type { Configuration, MutationResolvers, TargetInput } from './../../gen/types.generated.js';
+import type { Configuration, MutationResolvers, TargetInput, TargetType } from './../../gen/types.generated.js';
 
 export const importObservation: NonNullable<MutationResolvers['importObservation']> = async (
   _parent,
@@ -26,14 +26,28 @@ export const importObservation: NonNullable<MutationResolvers['importObservation
     await prisma.target.deleteMany({
       where: {},
     });
-    const newTargets = await prisma.target.createManyAndReturn({
-      data: [
-        ...targets.base,
-        ...targets.oiwfs.map(setWfs('OIWFS')),
-        ...targets.pwfs1.map(setWfs('PWFS1')),
-        ...targets.pwfs2.map(setWfs('PWFS2')),
-      ] as Target[],
-    });
+
+    const newTargets: Pick<Target, 'pk' | 'type'>[] = [];
+    for (const t of [
+      ...targets.base,
+      ...targets.oiwfs.map(setWfs('OIWFS')),
+      ...targets.pwfs1.map(setWfs('PWFS1')),
+      ...targets.pwfs2.map(setWfs('PWFS2')),
+    ]) {
+      // Create each target individually to handle sidereal and nonsidereal relations
+      const result = await prisma.target.create({
+        data: {
+          ...t,
+          sidereal: t.sidereal ? { create: { ...t.sidereal, type: t.type } } : undefined,
+          nonsidereal: t.nonsidereal ? { create: t.nonsidereal } : undefined,
+        },
+        select: {
+          pk: true,
+          type: true,
+        },
+      });
+      newTargets.push(result);
+    }
 
     const selectedTarget = newTargets.find((t) => t.type === 'BLINDOFFSET' || t.type === 'SCIENCE')?.pk;
     const selectedOiTarget = firstIfOnlyOne(newTargets.filter((t) => t.type === 'OIWFS'))?.pk;
@@ -68,4 +82,6 @@ export const importObservation: NonNullable<MutationResolvers['importObservation
 /**
  * Helper function to force set the WFS type on a target
  */
-const setWfs = (wfs: WfsType) => (target: TargetInput) => ({ ...target, type: wfs });
+const setWfs =
+  (wfs: TargetType) =>
+  (target: TargetInput): TargetInput => ({ ...target, type: wfs });

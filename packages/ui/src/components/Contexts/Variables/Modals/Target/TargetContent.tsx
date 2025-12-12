@@ -1,3 +1,4 @@
+import type { EphemerisKeyType, NonsiderealTarget, SiderealTarget } from '@gql/configs/gen/graphql';
 import { isBaseTarget } from '@gql/util';
 import { deg2dms, deg2hms, dms2deg, hms2deg } from 'lucuma-core';
 import { Dropdown } from 'primereact/dropdown';
@@ -29,15 +30,15 @@ export function TargetContent({
   useEffect(() => {
     if (targetEdit !== undefined) {
       startTransition(() => {
-        setAuxTarget(targetEdit.target);
+        setAuxTarget(() => targetEdit.target ?? null);
         if (targetEdit.target?.type === 'FIXED') {
-          setc1String(targetEdit.target.az?.dms ?? '');
-          setc2String(targetEdit.target.el?.dms ?? '');
+          setc1String(targetEdit.target.sidereal?.az?.dms ?? '');
+          setc2String(targetEdit.target.sidereal?.el?.dms ?? '');
           setCoordsType('horizontal');
         } else {
           setCoordsType('celestial');
-          setc1String(targetEdit.target?.ra?.hms ?? '');
-          setc2String(targetEdit.target?.dec?.dms ?? '');
+          setc1String(targetEdit.target?.sidereal?.ra?.hms ?? '');
+          setc2String(targetEdit.target?.sidereal?.dec?.dms ?? '');
         }
       });
     }
@@ -55,12 +56,80 @@ export function TargetContent({
         value={auxTarget?.name ?? ''}
         onChange={(e) => setAuxTarget((prev) => ({ ...prev!, name: e.target.value }))}
       />
+
+      {auxTarget?.sidereal && (
+        <SiderealInput
+          type={auxTarget.type}
+          auxTarget={auxTarget.sidereal}
+          setAuxTarget={(setState) =>
+            setAuxTarget((prev) => ({
+              ...prev!,
+              sidereal: setState(prev?.sidereal ?? null),
+            }))
+          }
+          disabled={disabled}
+          loading={loading}
+          isTargetBase={isBaseTarget(auxTarget)}
+          coordsType={coordsType}
+          setCoordsType={setCoordsType}
+          c1String={c1String}
+          setc1String={setc1String}
+          c2String={c2String}
+          setc2String={setc2String}
+        />
+      )}
+      {auxTarget?.nonsidereal && (
+        <NonsiderealInput
+          auxTarget={auxTarget.nonsidereal}
+          setAuxTarget={(setState) =>
+            setAuxTarget((prev) => ({
+              ...prev!,
+              nonsidereal: setState(prev?.nonsidereal ?? null),
+            }))
+          }
+          disabled={disabled}
+          loading={loading}
+        />
+      )}
+    </div>
+  );
+}
+
+function SiderealInput({
+  type,
+  auxTarget,
+  setAuxTarget,
+  disabled,
+  loading,
+  isTargetBase,
+  coordsType,
+  setCoordsType,
+  c1String,
+  setc1String,
+  c2String,
+  setc2String,
+}: {
+  type: string;
+  auxTarget: SiderealTarget | null;
+  setAuxTarget: Dispatch<(prevState: SiderealTarget | null) => SiderealTarget | null>;
+  disabled: boolean;
+  loading: boolean;
+  isTargetBase: boolean;
+  coordsType: string;
+  setCoordsType: Dispatch<SetStateAction<string>>;
+  c1String: string | undefined;
+  setc1String: Dispatch<SetStateAction<string | undefined>>;
+  c2String: string | undefined;
+  setc2String: Dispatch<SetStateAction<string | undefined>>;
+}) {
+  return (
+    <>
       <label htmlFor="coordsType" style={{ gridArea: 'l1' }} className="label">
         Coordinates
       </label>
       <Dropdown
         inputId="coordsType"
-        disabled={!isBaseTarget(auxTarget) || disabled}
+        disabled={!isTargetBase || disabled}
         loading={loading}
         style={{ gridArea: 'd1' }}
         value={coordsType}
@@ -261,9 +330,51 @@ export function TargetContent({
         id="targetEpoch"
         disabled={disabled || loading}
         style={{ gridArea: 's4' }}
-        value={(auxTarget?.type === 'FIXED' ? '' : auxTarget?.epoch) ?? ''}
+        value={(type === 'FIXED' ? '' : auxTarget?.epoch) ?? ''}
         onChange={(e) => setAuxTarget((prev) => ({ ...prev!, epoch: e.target.value }))}
       />
-    </div>
+    </>
+  );
+}
+
+function NonsiderealInput({
+  auxTarget,
+  setAuxTarget,
+  disabled,
+  loading,
+}: {
+  auxTarget: NonsiderealTarget | null;
+  setAuxTarget: Dispatch<(prevState: NonsiderealTarget | null) => NonsiderealTarget | null>;
+  disabled: boolean;
+  loading: boolean;
+}) {
+  const keyTypeOptions: EphemerisKeyType[] = ['ASTEROID_NEW', 'ASTEROID_OLD', 'COMET', 'MAJOR_BODY', 'USER_SUPPLIED'];
+
+  return (
+    <>
+      <label htmlFor="nonsiderealDES" style={{ gridArea: 's5' }} className="label">
+        DES
+      </label>
+      <InputText
+        id="nonsiderealDES"
+        disabled={disabled || loading}
+        style={{ gridArea: 's6' }}
+        value={auxTarget?.des ?? ''}
+        onChange={(e) => setAuxTarget((prev) => ({ ...prev!, des: e.target.value }))}
+      />
+
+      <label htmlFor="nonsiderealKeyType" style={{ gridArea: 's7' }} className="label">
+        Key Type
+      </label>
+      <Dropdown
+        inputId="nonsiderealKeyType"
+        disabled={disabled || loading}
+        style={{ gridArea: 's8' }}
+        value={auxTarget?.keyType ?? null}
+        options={keyTypeOptions}
+        onChange={(e) => setAuxTarget((prev) => ({ ...prev!, keyType: e.value as EphemerisKeyType }))}
+        placeholder="Select key type"
+      />
+    </>
   );
 }
