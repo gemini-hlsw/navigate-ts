@@ -59,7 +59,12 @@ const defaultColumns: ColumnProps[] = [
     filterPlaceholder: 'Filter Blind Offset Target Name',
     visible: false,
   },
-  { field: 'instrument', header: 'Instrument', filterPlaceholder: 'Filter Instrument', visible: false },
+  {
+    field: 'instrument',
+    header: 'Instrument',
+    filterPlaceholder: 'Filter Instrument',
+    visible: false,
+  },
 ];
 
 interface FilterValue {
@@ -72,8 +77,12 @@ export function ObservationTable({ selectedObservation, setSelectedObservation }
   const { site } = useServerConfigValue();
   const observingNight = dateToLocalObservingNight(new Date());
 
-  const [columns, setColumns] = useState(defaultColumns);
-  const visibleColumns = columns.filter((c) => c.visible);
+  const [columns, setColumns] = useState(
+    localStorage.getItem('observationTableColumns')
+      ? JSON.parse(localStorage.getItem('observationTableColumns')!)
+      : defaultColumns,
+  );
+  const visibleColumns = columns.filter((c: ColumnProps) => c.visible);
 
   const [filters, setFilters] = useState(() =>
     defaultColumns.reduce<Filters>(
@@ -100,8 +109,11 @@ export function ObservationTable({ selectedObservation, setSelectedObservation }
       global: { ...prevFilters.global!, value },
     }));
 
-  const onMultiSelectChange = (e: { value: ColumnProps[] }) =>
-    setColumns(columns.map((c) => ({ ...c, visible: e.value.some((v) => v.field === c.field) })));
+  const onMultiSelectChange = (e: { value: ColumnProps[] }) => {
+    const newColumns = columns.map((c: ColumnProps) => ({ ...c, visible: e.value.some((v) => v.field === c.field) }));
+    setColumns(newColumns);
+    localStorage.setItem('observationTableColumns', JSON.stringify(newColumns));
+  };
 
   const header = (
     <div className="header-table">
@@ -148,11 +160,11 @@ export function ObservationTable({ selectedObservation, setSelectedObservation }
         filterDisplay="row"
         loading={loading}
         onFilter={(e) => setFilters(e.filters as Filters)}
-        globalFilterFields={visibleColumns.map((c) => c.field)}
+        globalFilterFields={visibleColumns.map((c: ColumnProps) => c.field)}
         header={header}
         emptyMessage="No observations found."
       >
-        {visibleColumns.map((column) => (
+        {visibleColumns.map((column: ColumnProps) => (
           <Column {...column} key={column.field} filter />
         ))}
       </DataTable>
