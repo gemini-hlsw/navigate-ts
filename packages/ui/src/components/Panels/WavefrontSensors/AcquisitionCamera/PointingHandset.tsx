@@ -6,14 +6,12 @@ import {
   useResetGuidePointingAdjustment,
   useResetLocalPointingAdjustment,
 } from '@gql/server/PointingHandset';
-import { Title } from '@Shared/Title/Title';
 import { Button } from 'primereact/button';
-import { ButtonGroup } from 'primereact/buttongroup';
 import { useState } from 'react';
 
 import { when } from '@/Helpers/functions';
 
-import { AlignAngleInput, AlignmentSelector, CurrentCoordinates, CorrectionTable, InputControls } from './Controls';
+import { AlignAngleInput, AlignmentSelector, CorrectionTable, InputControls } from './Controls';
 import { type Coords, type HandsetStrategy, strategies } from './strategy';
 
 export default function PointingHandset({ canEdit }: { canEdit: boolean }) {

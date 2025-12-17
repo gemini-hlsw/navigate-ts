@@ -6,7 +6,8 @@ import { Dropdown } from 'primereact/dropdown';
 import { InputNumber } from 'primereact/inputnumber';
 import { InputSwitch } from 'primereact/inputswitch';
 import { Slider } from 'primereact/slider';
-import React, { startTransition, useId, useState } from 'react';
+import type React from 'react';
+import { startTransition, useId, useState } from 'react';
 
 import { CaretDown, CaretLeft, CaretRight, CaretUp } from '@/components/Icons';
 import { formatToSignedArcseconds, instrumentToOiwfs, isNotNullish } from '@/Helpers/functions';
