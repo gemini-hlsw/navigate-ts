@@ -137,6 +137,24 @@
           flex-direction: column;
           gap: 12px;
 
+          .correction-table {
+            width: 100%;
+
+            table {
+              width: 100%;
+              border-collapse: collapse;
+              margin-bottom: 6px;
+
+              .center-cell {
+                text-align: center;
+              }
+            }
+
+            .p-button {
+              padding: 5px;
+            }
+          }
+
           .selector-group {
             display: grid;
 
@@ -170,7 +188,8 @@
             gap: 8px;
 
             .apply-button {
-              width: fit-content;
+              width: 100%;
+              padding: 5px;
               grid-column: 1 / span 2;
             }
           }
@@ -210,6 +229,10 @@
             flex-direction: row;
             align-items: center;
             gap: 6px;
+
+            .p-button {
+              padding: 5px;
+            }
           }
 
           .control-row.buttons .p-button {

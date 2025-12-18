@@ -6,14 +6,12 @@ import {
   useResetGuidePointingAdjustment,
   useResetLocalPointingAdjustment,
 } from '@gql/server/PointingHandset';
-import { Title } from '@Shared/Title/Title';
 import { Button } from 'primereact/button';
-import { ButtonGroup } from 'primereact/buttongroup';
 import { useState } from 'react';
 
 import { when } from '@/Helpers/functions';
 
-import { AlignAngleInput, AlignmentSelector, CurrentCoordinates, InputControls } from './Controls';
+import { AlignAngleInput, AlignmentSelector, CorrectionTable, InputControls } from './Controls';
 import { type Coords, type HandsetStrategy, strategies } from './strategy';
 
 export default function PointingHandset({ canEdit }: { canEdit: boolean }) {
@@ -76,33 +74,26 @@ export default function PointingHandset({ canEdit }: { canEdit: boolean }) {
 
       <InputControls loading={loading} handleApply={handleApply} strategy={strategy} canEdit={canEdit} />
 
-      <Title title="Pointing correction" />
-      <CurrentCoordinates
-        horizontal={offset?.local.azimuth.arcseconds}
-        vertical={offset?.local.elevation.arcseconds}
-        horizontalLabel="Az"
-        verticalLabel="El"
-        currentLabel="Current pointing adjustment:"
-      />
-      <div className="control-row buttons">
-        <ButtonGroup>
+      <CorrectionTable
+        localHorizontal={offset?.local.azimuth.arcseconds}
+        localVertical={offset?.local.elevation.arcseconds}
+        guideHorizontal={offset?.guide.azimuth.arcseconds}
+        guideVertical={offset?.guide.elevation.arcseconds}
+        localReset={
           <Button size="small" label="Reset" onClick={() => resetLocalAdjustment()} disabled={loading || !canEdit} />
-        </ButtonGroup>
-      </div>
-      <Title title="Guide correction" />
-      <CurrentCoordinates
-        horizontal={offset?.guide.azimuth.arcseconds}
-        vertical={offset?.guide.elevation.arcseconds}
-        horizontalLabel="Az"
-        verticalLabel="El"
-        currentLabel="Current guide adjustment:"
-      />
-      <div className="control-row buttons">
-        <ButtonGroup>
+        }
+        guideReset={
           <Button size="small" label="Reset" onClick={() => resetGuideAdjustment()} disabled={loading || !canEdit} />
-          <Button size="small" label="Absorb" onClick={() => absorbAdjustment()} disabled={loading || !canEdit} />
-        </ButtonGroup>
-      </div>
+        }
+        guideAbsorb={
+          <Button
+            size="small"
+            label="Absorb guide into local"
+            onClick={() => absorbAdjustment()}
+            disabled={loading || !canEdit}
+          />
+        }
+      />
     </div>
   );
 }

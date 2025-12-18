@@ -6,6 +6,7 @@ import { Dropdown } from 'primereact/dropdown';
 import { InputNumber } from 'primereact/inputnumber';
 import { InputSwitch } from 'primereact/inputswitch';
 import { Slider } from 'primereact/slider';
+import type React from 'react';
 import { startTransition, useId, useState } from 'react';
 
 import { CaretDown, CaretLeft, CaretRight, CaretUp } from '@/components/Icons';
@@ -213,6 +214,52 @@ function ManualInput({
         }}
         disabled={loading || !canEdit}
       />
+    </div>
+  );
+}
+
+export function CorrectionTable({
+  localHorizontal,
+  localVertical,
+  guideHorizontal,
+  guideVertical,
+  localReset,
+  guideReset,
+  guideAbsorb,
+}: {
+  localHorizontal: number | string | undefined;
+  localVertical: number | string | undefined;
+  guideHorizontal: number | string | undefined;
+  guideVertical: number | string | undefined;
+  localReset: React.ReactNode;
+  guideReset: React.ReactNode;
+  guideAbsorb: React.ReactNode;
+}) {
+  return (
+    <div className="correction-table">
+      <table>
+        <tbody>
+          <tr>
+            <td></td>
+            <td className="center-cell">Az</td>
+            <td className="center-cell">El</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>Local</td>
+            <td className="center-cell">{formatToSignedArcseconds(localHorizontal, '')}</td>
+            <td className="center-cell">{formatToSignedArcseconds(localVertical, '')}</td>
+            <td>{localReset}</td>
+          </tr>
+          <tr>
+            <td>Guide</td>
+            <td className="center-cell">{formatToSignedArcseconds(guideHorizontal, '')}</td>
+            <td className="center-cell">{formatToSignedArcseconds(guideVertical, '')}</td>
+            <td>{guideReset}</td>
+          </tr>
+        </tbody>
+      </table>
+      {guideAbsorb}
     </div>
   );
 }
