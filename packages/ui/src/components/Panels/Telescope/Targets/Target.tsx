@@ -69,8 +69,8 @@ export function Target({
             {target.name}
           </span>
           <span>{targetTypeLabel(target.type)}</span>
-          <span className="text-right">{target.az?.dms} Az</span>
-          <span className="text-right">{target.el?.dms} El</span>
+          <span className="text-right">{target.sidereal?.az?.dms} Az</span>
+          <span className="text-right">{target.sidereal?.el?.dms} El</span>
         </div>
       </li>
     );
@@ -82,8 +82,8 @@ export function Target({
             {target.name}
           </span>
           <span>{targetTypeLabel(target.type)}</span>
-          <span className="text-right">{target.ra?.hms}&nbsp;RA</span>
-          <span className="text-right">{target.dec?.dms}&nbsp;Dec</span>
+          <span className="text-right">{target.sidereal?.ra?.hms}&nbsp;RA</span>
+          <span className="text-right">{target.sidereal?.dec?.dms}&nbsp;Dec</span>
           <span className="text-right">
             {target.band}&nbsp;{isNotNullish(target.magnitude) && round(target.magnitude, 2)}
           </span>

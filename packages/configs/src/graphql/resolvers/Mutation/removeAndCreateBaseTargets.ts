@@ -5,11 +5,29 @@ export const removeAndCreateBaseTargets: NonNullable<MutationResolvers['removeAn
   _parent,
   args,
   { prisma },
-) => {
-  await prisma.target.deleteMany({
-    where: {},
+) =>
+  prisma.$transaction(async (prisma) => {
+    await prisma.target.deleteMany({
+      where: {},
+    });
+
+    const newTargets: Target[] = [];
+
+    for (const t of args.targets ?? []) {
+      // Create each target individually to handle sidereal and nonsidereal relations
+      const result = await prisma.target.create({
+        data: {
+          ...t,
+          sidereal: t.sidereal ? { create: t.sidereal } : undefined,
+          nonsidereal: t.nonsidereal ? { create: t.nonsidereal } : undefined,
+        },
+        include: {
+          sidereal: true,
+          nonsidereal: true,
+        },
+      });
+      newTargets.push(result);
+    }
+
+    return newTargets;
   });
-  return prisma.target.createManyAndReturn({
-    data: (args.targets ?? []) as Target[],
-  });
-};
