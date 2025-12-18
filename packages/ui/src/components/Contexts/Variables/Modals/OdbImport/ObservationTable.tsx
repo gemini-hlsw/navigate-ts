@@ -79,10 +79,10 @@ export function ObservationTable({ selectedObservation, setSelectedObservation }
 
   const [columns, setColumns] = useState(
     localStorage.getItem('observationTableColumns')
-      ? JSON.parse(localStorage.getItem('observationTableColumns')!)
+      ? (JSON.parse(localStorage.getItem('observationTableColumns')!) as ColumnProps[])
       : defaultColumns,
   );
-  const visibleColumns = columns.filter((c: ColumnProps) => c.visible);
+  const visibleColumns = columns.filter((c) => c.visible);
 
   const [filters, setFilters] = useState(() =>
     defaultColumns.reduce<Filters>(
@@ -110,7 +110,7 @@ export function ObservationTable({ selectedObservation, setSelectedObservation }
     }));
 
   const onMultiSelectChange = (e: { value: ColumnProps[] }) => {
-    const newColumns = columns.map((c: ColumnProps) => ({ ...c, visible: e.value.some((v) => v.field === c.field) }));
+    const newColumns = columns.map((c) => ({ ...c, visible: e.value.some((v) => v.field === c.field) }));
     setColumns(newColumns);
     localStorage.setItem('observationTableColumns', JSON.stringify(newColumns));
   };
@@ -160,11 +160,11 @@ export function ObservationTable({ selectedObservation, setSelectedObservation }
         filterDisplay="row"
         loading={loading}
         onFilter={(e) => setFilters(e.filters as Filters)}
-        globalFilterFields={visibleColumns.map((c: ColumnProps) => c.field)}
+        globalFilterFields={visibleColumns.map((c) => c.field)}
         header={header}
         emptyMessage="No observations found."
       >
-        {visibleColumns.map((column: ColumnProps) => (
+        {visibleColumns.map((column) => (
           <Column {...column} key={column.field} filter />
         ))}
       </DataTable>
