@@ -59,7 +59,12 @@ const defaultColumns: ColumnProps[] = [
     filterPlaceholder: 'Filter Blind Offset Target Name',
     visible: false,
   },
-  { field: 'instrument', header: 'Instrument', filterPlaceholder: 'Filter Instrument', visible: false },
+  {
+    field: 'instrument',
+    header: 'Instrument',
+    filterPlaceholder: 'Filter Instrument',
+    visible: false,
+  },
 ];
 
 interface FilterValue {
@@ -72,7 +77,11 @@ export function ObservationTable({ selectedObservation, setSelectedObservation }
   const { site } = useServerConfigValue();
   const observingNight = dateToLocalObservingNight(new Date());
 
-  const [columns, setColumns] = useState(defaultColumns);
+  const [columns, setColumns] = useState(
+    localStorage.getItem('observationTableColumns')
+      ? (JSON.parse(localStorage.getItem('observationTableColumns')!) as ColumnProps[])
+      : defaultColumns,
+  );
   const visibleColumns = columns.filter((c) => c.visible);
 
   const [filters, setFilters] = useState(() =>
@@ -100,8 +109,11 @@ export function ObservationTable({ selectedObservation, setSelectedObservation }
       global: { ...prevFilters.global!, value },
     }));
 
-  const onMultiSelectChange = (e: { value: ColumnProps[] }) =>
-    setColumns(columns.map((c) => ({ ...c, visible: e.value.some((v) => v.field === c.field) })));
+  const onMultiSelectChange = (e: { value: ColumnProps[] }) => {
+    const newColumns = columns.map((c) => ({ ...c, visible: e.value.some((v) => v.field === c.field) }));
+    setColumns(newColumns);
+    localStorage.setItem('observationTableColumns', JSON.stringify(newColumns));
+  };
 
   const header = (
     <div className="header-table">
