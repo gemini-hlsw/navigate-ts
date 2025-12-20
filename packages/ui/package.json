@@ -21,11 +21,11 @@
     "codegen": "graphql-codegen --config tasks/codegen.ts"
   },
   "devDependencies": {
-    "@apollo/client": "4.0.9",
+    "@apollo/client": "4.0.11",
     "@fortawesome/pro-regular-svg-icons": "7.1.0",
     "@fortawesome/react-fontawesome": "3.1.1",
     "@graphql-codegen/cli": "catalog:",
-    "@graphql-codegen/client-preset": "5.2.1",
+    "@graphql-codegen/client-preset": "5.2.2",
     "@graphql-typed-document-node/core": "3.2.0",
     "@parcel/watcher": "catalog:",
     "@types/react": "19.2.7",
