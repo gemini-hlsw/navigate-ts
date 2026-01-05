@@ -10,7 +10,7 @@ import type { TargetType, TypeOfTarget } from '@/types';
 export function Target({
   target,
   updateSelectedTarget,
-  selectedTarget = undefined,
+  selectedTarget,
   disabled,
 }: {
   target: TargetType;
