@@ -4,25 +4,18 @@ import type { CodegenConfig } from '@graphql-codegen/cli';
 export default {
   overwrite: true,
   schema: './src/graphql/schema/*.graphql',
-  hooks: {
-    beforeOneFileWrite: (filename: string, content: string) => {
-      if (filename.endsWith('resolvers.generated.ts')) {
-        return content.replace(/\.js'/g, ".ts'");
-      }
-    },
-  },
   generates: {
     'src/graphql/gen': defineConfig({
       typesPluginsConfig: {
-        contextType: '../../server.js#GraphQLContext',
+        contextType: '../../server.ts#GraphQLContext',
         enumsAsTypes: true,
         immutableTypes: true,
         strictScalars: true,
         inputMaybeValue: 'T | undefined',
         skipTypename: true,
         useTypeImports: true,
-        importExtension: '.ts',
       },
+      importExtension: '.ts',
       resolverGeneration: 'minimal',
       resolverRelativeTargetDir: '../resolvers',
       emitLegacyCommonJSImports: false,
