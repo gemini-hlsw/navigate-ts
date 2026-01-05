@@ -47,12 +47,8 @@
     {
       "description": "Schedule schema updates to run daily",
       "matchPackageNames": ["lucuma-schemas"],
-      "schedule": ["* 0-4 * * *"]
-    },
-    {
-      "description": "Immediately process schema updates",
-      "matchPackageNames": ["lucuma-schemas"],
-      "minimumReleaseAge": null
+      "schedule": ["* 0-4 * * *"],
+      "minimumReleaseAge": "0 days"
     }
   ]
 }
