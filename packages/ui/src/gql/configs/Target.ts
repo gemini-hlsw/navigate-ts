@@ -11,6 +11,23 @@ export const TARGET_FRAGMENT = graphql(`
     pk
     id
     name
+    magnitude
+    band
+    type
+    wavelength
+    sidereal {
+      ...SiderealTargetItem
+    }
+    nonsidereal {
+      ...NonsiderealTargetItem
+    }
+    createdAt
+  }
+`);
+
+export const SIDEREAL_TARGET_FRAGMENT = graphql(`
+  fragment SiderealTargetItem on SiderealTarget {
+    pk
     ra {
       degrees
       hms
@@ -33,12 +50,15 @@ export const TARGET_FRAGMENT = graphql(`
     }
     radialVelocity
     parallax
-    magnitude
-    band
     epoch
-    type
-    wavelength
-    createdAt
+  }
+`);
+
+export const NONSIDEREAL_TARGET_FRAGMENT = graphql(`
+  fragment NonsiderealTargetItem on NonsiderealTarget {
+    pk
+    keyType
+    des
   }
 `);
 
@@ -80,33 +100,23 @@ export const UPDATE_TARGET = graphql(`
     $pk: PosInt!
     $id: TargetId
     $name: String
-    $coord1: Float
-    $coord2: Float
-    $pmRa: Float
-    $pmDec: Float
-    $radialVelocity: Float
-    $parallax: Float
     $magnitude: Float
     $band: String
-    $epoch: String
     $type: TargetType
     $wavelength: Int
+    $sidereal: SiderealTargetUpdateInput
+    $nonsidereal: NonsiderealTargetUpdateInput
   ) {
     updateTarget(
       pk: $pk
       id: $id
       name: $name
-      coord1: $coord1
-      coord2: $coord2
-      pmRa: $pmRa
-      pmDec: $pmDec
-      radialVelocity: $radialVelocity
-      parallax: $parallax
       magnitude: $magnitude
       band: $band
-      epoch: $epoch
       type: $type
       wavelength: $wavelength
+      sidereal: $sidereal
+      nonsidereal: $nonsidereal
     ) {
       ...ConfigsTargetItem
     }

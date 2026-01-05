@@ -14,6 +14,7 @@ import {
   createProperMotion,
   createRA,
   createRotator,
+  createSidereal,
   createTarget,
 } from '@/test/create';
 import { operationOutcome } from '@/test/helpers';
@@ -84,6 +85,7 @@ describe(Slew.name, () => {
             "azel": undefined,
             "id": "t-4e16",
             "name": "WG  22",
+            "nonsidereal": undefined,
             "sidereal": {
               "dec": {
                 "dms": "-49:48:00.219525",
@@ -247,13 +249,15 @@ const getTargetsMock = {
           pk: 8,
           id: 't-4e16',
           name: 'WG  22',
-          ra: createRA({ degrees: 189.7074213416667, hms: '12:38:49.781122' }),
-          properMotion: createProperMotion({
-            ra: 123456,
-            dec: 654321,
+          sidereal: createSidereal({
+            ra: createRA({ degrees: 189.7074213416667, hms: '12:38:49.781122' }),
+            properMotion: createProperMotion({
+              ra: 123456,
+              dec: 654321,
+            }),
+            parallax: 789.123,
+            radialVelocity: 321.654,
           }),
-          parallax: 789.123,
-          radialVelocity: 321.654,
           wavelength: 630,
         }),
       ],

@@ -8,7 +8,7 @@ import type { PrismaClient } from './gen/client.ts';
 export function extendPrisma(prisma: PrismaClient) {
   return prisma.$extends({
     result: {
-      target: {
+      siderealTarget: {
         ra: {
           needs: { type: true, coord1: true },
           compute(target) {

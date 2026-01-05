@@ -95,18 +95,31 @@ await describe('importObservation', async () => {
               {
                 id: 't-1',
                 name: 'Base Target',
-                coord1: 10,
-                coord2: 20,
                 type: 'SCIENCE',
+                sidereal: {
+                  coord1: 10,
+                  coord2: 20,
+                },
+              },
+              {
+                id: 't-2',
+                name: 'Base Nonsidereal Target',
+                type: 'BLINDOFFSET',
+                nonsidereal: {
+                  des: '2024 AB',
+                  keyType: 'MAJOR_BODY',
+                },
               },
             ],
             oiwfs: [
               {
-                id: 't-2',
+                id: 't-3',
                 name: 'OIWFS Target',
-                coord1: 30,
-                coord2: 40,
                 type: 'OIWFS',
+                sidereal: {
+                  coord1: 30,
+                  coord2: 40,
+                },
               },
             ],
             pwfs1: [],
@@ -118,10 +131,25 @@ await describe('importObservation', async () => {
     });
 
     assert.deepEqual(
-      (await fixture.prisma.target.findMany()).map((t) => ({ id: t.id, name: t.name, type: t.type })),
+      await fixture.prisma.target.findMany({
+        select: {
+          id: true,
+          name: true,
+          type: true,
+          sidereal: { select: { coord1: true, coord2: true } },
+          nonsidereal: { select: { des: true, keyType: true } },
+        },
+      }),
       [
-        { id: 't-1', name: 'Base Target', type: 'SCIENCE' },
-        { id: 't-2', name: 'OIWFS Target', type: 'OIWFS' },
+        { id: 't-1', name: 'Base Target', type: 'SCIENCE', sidereal: { coord1: 10, coord2: 20 }, nonsidereal: null },
+        {
+          id: 't-2',
+          name: 'Base Nonsidereal Target',
+          type: 'BLINDOFFSET',
+          sidereal: null,
+          nonsidereal: { des: '2024 AB', keyType: 'MAJOR_BODY' },
+        },
+        { id: 't-3', name: 'OIWFS Target', type: 'OIWFS', sidereal: { coord1: 30, coord2: 40 }, nonsidereal: null },
       ],
     );
     assert.deepEqual(await fixture.prisma.configuration.findUnique({ where: { pk: 1 } }), {
@@ -137,8 +165,8 @@ await describe('importObservation', async () => {
       oiGuidingType: 'NORMAL',
       p1GuidingType: 'NORMAL',
       p2GuidingType: 'NORMAL',
-      selectedGuiderTarget: 2,
-      selectedOiTarget: 2,
+      selectedGuiderTarget: 3,
+      selectedOiTarget: 3,
       selectedP1Target: null,
       selectedP2Target: null,
       selectedTarget: 1,

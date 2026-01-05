@@ -13,15 +13,21 @@ export function extractGuideTargets(data: GetGuideEnvironmentQuery | undefined) 
       const auxTarget: Omit<TargetInput, 'type'> = {
         id: `t-${i + 1}`,
         name: t.name,
-        epoch: t.sidereal?.epoch,
-        coord1:
-          typeof t.sidereal?.ra.degrees === 'string' ? parseFloat(t.sidereal?.ra.degrees) : t.sidereal?.ra.degrees,
-        coord2:
-          typeof t.sidereal?.dec.degrees === 'string' ? parseFloat(t.sidereal?.dec.degrees) : t.sidereal?.dec.degrees,
-        pmRa: t.sidereal?.properMotion?.ra.microarcsecondsPerYear,
-        pmDec: t.sidereal?.properMotion?.dec.microarcsecondsPerYear,
-        radialVelocity: t.sidereal?.radialVelocity?.centimetersPerSecond,
-        parallax: t.sidereal?.parallax?.microarcseconds,
+        sidereal: {
+          epoch: t.sidereal?.epoch,
+          coord1:
+            typeof t.sidereal?.ra.degrees === 'string'
+              ? parseFloat(t.sidereal.ra.degrees)
+              : (t.sidereal?.ra.degrees ?? 0),
+          coord2:
+            typeof t.sidereal?.dec.degrees === 'string'
+              ? parseFloat(t.sidereal.dec.degrees)
+              : (t.sidereal?.dec.degrees ?? 0),
+          pmRa: t.sidereal?.properMotion?.ra.microarcsecondsPerYear,
+          pmDec: t.sidereal?.properMotion?.dec.microarcsecondsPerYear,
+          radialVelocity: t.sidereal?.radialVelocity?.centimetersPerSecond,
+          parallax: t.sidereal?.parallax?.microarcseconds,
+        },
         magnitude: magnitude,
         band: band,
       };

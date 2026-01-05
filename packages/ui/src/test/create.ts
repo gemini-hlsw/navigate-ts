@@ -4,9 +4,11 @@ import type {
   Dec,
   GuideAlarm,
   InstrumentConfig,
+  NonsiderealTarget,
   ProperMotion,
   Ra,
   Rotator,
+  SiderealTarget,
 } from '@gql/configs/gen/graphql';
 import type { Angle as OdbAngle } from '@gql/odb/gen/graphql';
 
@@ -200,20 +202,40 @@ export function createTarget(overrides?: OverridePartial<TargetType>): TargetTyp
     pk: 3,
     id: 't-19e',
     name: 'TYC 4517-185-1',
-    ra: createRA(overrides?.ra ?? undefined),
-    dec: createDec(overrides?.dec ?? undefined),
-    properMotion: createProperMotion(overrides?.properMotion ?? undefined),
-    radialVelocity: 0,
-    parallax: 0,
-    az: null,
-    el: null,
-    epoch: 'J2000.000',
+    sidereal: createSidereal(overrides?.sidereal ?? {}),
+    nonsidereal: overrides?.nonsidereal ? createNonsidereal(overrides.nonsidereal) : null,
     type: 'SCIENCE',
     wavelength: 100,
     createdAt: '2024-09-25T11:57:29.410Z',
     band: null,
     magnitude: null,
     __typename: 'Target',
+    ...overrides,
+  };
+}
+
+export function createSidereal(overrides?: OverridePartial<SiderealTarget>): SiderealTarget {
+  return {
+    pk: 1,
+    ra: createRA(),
+    dec: createDec(),
+    az: null,
+    el: null,
+    properMotion: createProperMotion(),
+    radialVelocity: 0,
+    parallax: 0,
+    epoch: 'J2000.000',
+    __typename: 'SiderealTarget',
+    ...overrides,
+  };
+}
+
+export function createNonsidereal(overrides?: OverridePartial<NonsiderealTarget>): NonsiderealTarget {
+  return {
+    pk: 1,
+    keyType: 'MAJOR_BODY',
+    des: '2024-001A',
+    __typename: 'NonsiderealTarget',
     ...overrides,
   };
 }

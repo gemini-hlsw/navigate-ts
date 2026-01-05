@@ -56,6 +56,14 @@ enum DeployableBaffle {
   VISIBLE
 }
 
+enum EphemerisKeyType {
+  ASTEROID_NEW
+  ASTEROID_OLD
+  COMET
+  MAJOR_BODY
+  USER_SUPPLIED
+}
+
 model EngineeringTarget {
   pk               Int               @id @default(autoincrement())
   id               String
@@ -79,21 +87,44 @@ model EngineeringTarget {
 }
 
 model Target {
+  pk         Int        @id @default(autoincrement())
+  id         String
+  name       String     @default("Test")
+  magnitude  Float? // Magnitude number (Brightness)
+  band       String? // Magnitude band
+  type       TargetType @default(SCIENCE)
+  wavelength Int?
+
+  sidereal      SiderealTarget?
+  siderealPk    Int?
+  nonsidereal   NonsiderealTarget?
+  nonsiderealPk Int?
+
+  createdAt DateTime @default(now())
+}
+
+model SiderealTarget {
   pk             Int        @id @default(autoincrement())
-  id             String
-  name           String     @default("Test")
   coord1         Float // RA or Az
   coord2         Float // Dec or El
   pmRa           Float? // Proper Motion RA microArcsec/Year
   pmDec          Float? // Proper Motion Dec microArcsec/Year
   radialVelocity Float? // cm/s
   parallax       Float? // microArcsec
-  magnitude      Float? // Magnitude number (Brightness)
-  band           String? // Magnitude band
   epoch          String     @default("J2000.000")
   type           TargetType @default(SCIENCE)
-  wavelength     Int?
-  createdAt      DateTime   @default(now())
+
+  target   Target @relation(fields: [targetPk], references: [pk], onDelete: Cascade)
+  targetPk Int    @unique
+}
+
+model NonsiderealTarget {
+  pk      Int              @id @default(autoincrement())
+  keyType EphemerisKeyType
+  des     String
+
+  target   Target @relation(fields: [targetPk], references: [pk], onDelete: Cascade)
+  targetPk Int    @unique
 }
 
 enum TargetType {
