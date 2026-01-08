@@ -237,15 +237,18 @@ export function createUpdateSelectedTargetVariables(
   const variables: Pick<
     UpdateConfigurationMutationVariables,
     'pk' | 'selectedOiTarget' | 'selectedP1Target' | 'selectedP2Target' | 'selectedTarget' | 'selectedGuiderTarget'
-  > = { pk: configurationPk, selectedGuiderTarget: targetPk };
+  > = { pk: configurationPk };
   switch (type) {
     case 'OIWFS':
+      variables.selectedGuiderTarget = targetPk;
       variables.selectedOiTarget = targetPk;
       break;
     case 'PWFS1':
+      variables.selectedGuiderTarget = targetPk;
       variables.selectedP1Target = targetPk;
       break;
     case 'PWFS2':
+      variables.selectedGuiderTarget = targetPk;
       variables.selectedP2Target = targetPk;
       break;
     default:
