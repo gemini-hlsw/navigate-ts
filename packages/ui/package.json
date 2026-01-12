@@ -28,7 +28,7 @@
     "@graphql-codegen/client-preset": "5.2.2",
     "@graphql-typed-document-node/core": "3.2.0",
     "@parcel/watcher": "catalog:",
-    "@types/react": "19.2.7",
+    "@types/react": "19.2.8",
     "@types/react-dom": "19.2.3",
     "@vitejs/plugin-react": "5.1.2",
     "@vitest/browser-playwright": "4.0.16",
