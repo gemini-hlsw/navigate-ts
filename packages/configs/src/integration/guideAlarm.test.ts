@@ -33,15 +33,15 @@ await describe('GuideAlarm', async () => {
       guideAlarms: {
         OIWFS: {
           enabled: true,
-          limit: 900,
+          limit: 1000,
         },
         PWFS1: {
           enabled: true,
-          limit: 900,
+          limit: 1000,
         },
         PWFS2: {
           enabled: true,
-          limit: 900,
+          limit: 1000,
         },
       },
     });
