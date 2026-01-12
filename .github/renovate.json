@@ -5,7 +5,6 @@
   "platformAutomerge": true,
   "automergeStrategy": "squash",
   "minimumReleaseAge": "2 days",
-  "prCreation": "not-pending",
   "lockFileMaintenance": {
     "enabled": true
   },
