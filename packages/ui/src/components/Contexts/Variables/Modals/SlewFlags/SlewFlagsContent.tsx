@@ -30,7 +30,7 @@ export function SlewFlagsContent() {
         label="Shortcircuit Mount Filter"
         flag="shortcircuitMountFilter"
       />
-      <SlewFlagInput flags={slewFlags} loading={loading} label="Reset Pointing" flag="resetPointing" />
+      <SlewFlagInput flags={slewFlags} loading={loading} label="Reset Local Pointing" flag="resetPointing" />
       <SlewFlagInput flags={slewFlags} loading={loading} label="Stop Guide" flag="stopGuide" />
       <SlewFlagInput flags={slewFlags} loading={loading} label="Zero Guide Offset" flag="zeroGuideOffset" />
       <SlewFlagInput flags={slewFlags} loading={loading} label="Zero Instrument Offset" flag="zeroInstrumentOffset" />
