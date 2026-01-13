@@ -8,7 +8,7 @@ export const INITIAL_SLEW_FLAGS: Prisma.SlewFlagsCreateInput = {
   zeroMountDiffTrack: true,
   shortcircuitTargetFilter: true,
   shortcircuitMountFilter: true,
-  resetPointing: true,
+  resetPointing: false,
   stopGuide: true,
   zeroGuideOffset: true,
   zeroInstrumentOffset: true,
