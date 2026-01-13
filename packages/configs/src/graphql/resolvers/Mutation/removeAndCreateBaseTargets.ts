@@ -18,7 +18,7 @@ export const removeAndCreateBaseTargets: NonNullable<MutationResolvers['removeAn
       const result = await prisma.target.create({
         data: {
           ...t,
-          sidereal: t.sidereal ? { create: t.sidereal } : undefined,
+          sidereal: t.sidereal ? { create: { ...t.sidereal, type: t.type } } : undefined,
           nonsidereal: t.nonsidereal ? { create: t.nonsidereal } : undefined,
         },
         include: {
