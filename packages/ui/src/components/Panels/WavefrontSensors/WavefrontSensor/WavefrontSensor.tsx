@@ -26,7 +26,7 @@ import { clsx } from 'clsx';
 import { Button } from 'primereact/button';
 import { Checkbox } from 'primereact/checkbox';
 import { Dropdown } from 'primereact/dropdown';
-import { type CSSProperties, useEffect, useId, useState } from 'react';
+import { useEffect, useId, useState } from 'react';
 
 import { Play, Stop } from '@/components/Icons';
 import { instrumentToOiwfs } from '@/Helpers/functions';
@@ -87,7 +87,7 @@ export default function WavefrontSensor({
   let observeButton: React.ReactElement | undefined;
   let skyButton: React.ReactElement | undefined;
   let saveButton: React.ReactElement | undefined;
-  const saveProps: SaveCheckboxProps = { canEdit, inputId: `save-${id}`, style: { gridArea: 'g22' } };
+  const saveProps: SaveCheckboxProps = { canEdit, inputId: `save-${id}` };
   if (wfs === 'OIWFS') {
     observeButton = <OiwfsObserveButton freq={freq} canEdit={canEdit && !configLoading} />;
     skyButton = <TakeSkyButton freq={freq} wfs="GMOS_OIWFS" canEdit={canEdit} />;
@@ -121,10 +121,10 @@ export default function WavefrontSensor({
           onChange={(e) => setFreq(e.value as number)}
         />
         {observeButton}
-        <label htmlFor={`save-${id}`} style={{ gridArea: 'g21' }}>
-          Save
-        </label>
-        {saveButton}
+        <div className="save-inputs">
+          <label htmlFor={`save-${id}`}>Save CB</label>
+          {saveButton}
+        </div>
         {skyButton}
         <Button className="under-construction" disabled={!canEdit} style={{ gridArea: 'g3' }} label="Autoadjust" />
       </div>
@@ -153,10 +153,9 @@ function OiwfsObserveButton({ freq, canEdit }: { freq: number; canEdit: boolean 
 interface SaveCheckboxProps {
   canEdit: boolean;
   inputId: string;
-  style: CSSProperties;
 }
 
-function OiwfsSaveCheckbox({ canEdit, inputId, style }: SaveCheckboxProps) {
+function OiwfsSaveCheckbox({ canEdit, inputId }: SaveCheckboxProps) {
   const { data, loading: dataLoading, setStale } = useOiwfsConfigState();
   const [setOiwfsCircularBuffer, { loading: mutationLoading }] = useSetOiwfsCircularBuffer(setStale);
 
@@ -167,13 +166,12 @@ function OiwfsSaveCheckbox({ canEdit, inputId, style }: SaveCheckboxProps) {
       checked={data?.saving ?? false}
       disabled={!canEdit || loading}
       inputId={inputId}
-      style={style}
       onChange={(e) => setOiwfsCircularBuffer({ variables: { enabled: e.checked ?? false } })}
     />
   );
 }
 
-function Pwfs1SaveCheckbox({ canEdit, inputId, style }: SaveCheckboxProps) {
+function Pwfs1SaveCheckbox({ canEdit, inputId }: SaveCheckboxProps) {
   const { data, loading: dataLoading, setStale } = usePwfs1ConfigState();
   const [setPwfs1CircularBuffer, { loading: mutationLoading }] = useSetPwfs1CircularBuffer(setStale);
 
@@ -184,13 +182,12 @@ function Pwfs1SaveCheckbox({ canEdit, inputId, style }: SaveCheckboxProps) {
       checked={data?.saving ?? false}
       disabled={!canEdit || loading}
       inputId={inputId}
-      style={style}
       onChange={(e) => setPwfs1CircularBuffer({ variables: { enabled: e.checked ?? false } })}
     />
   );
 }
 
-function Pwfs2SaveCheckbox({ canEdit, inputId, style }: SaveCheckboxProps) {
+function Pwfs2SaveCheckbox({ canEdit, inputId }: SaveCheckboxProps) {
   const { data, loading: dataLoading, setStale } = usePwfs2ConfigState();
   const [setPwfs2CircularBuffer, { loading: mutationLoading }] = useSetPwfs2CircularBuffer(setStale);
 
@@ -201,7 +198,6 @@ function Pwfs2SaveCheckbox({ canEdit, inputId, style }: SaveCheckboxProps) {
       checked={data?.saving ?? false}
       disabled={!canEdit || loading}
       inputId={inputId}
-      style={style}
       onChange={(e) => setPwfs2CircularBuffer({ variables: { enabled: e.checked ?? false } })}
     />
   );

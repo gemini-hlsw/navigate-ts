@@ -72,6 +72,13 @@
           gap: 0 4px;
           place-items: center center;
           padding: 2px 4px;
+
+          .save-inputs {
+            grid-column: span 2 / span 2;
+            display: flex;
+            width: 100%;
+            justify-content: space-between;
+          }
         }
 
         > span {
