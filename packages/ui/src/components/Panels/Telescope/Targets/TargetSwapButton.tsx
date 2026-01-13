@@ -38,9 +38,9 @@ export function TargetSwapButton({
 
   const disabled = !canEdit;
 
-  const label =
-    (data?.onSwappedTarget ? 'Point to Base' : 'Point to Guide Star') +
-    (selectedGuider ? ` (${selectedGuider.name})` : '');
+  const label = data?.onSwappedTarget
+    ? `Point to Base${tcsConfig?.sourceATarget ? ` (${tcsConfig.sourceATarget.name})` : ''}`
+    : `Point to Guide Star${selectedGuider ? ` (${selectedGuider.name})` : ''}`;
   const severity = data?.onSwappedTarget ? 'danger' : undefined;
 
   const onClick = async () => {
