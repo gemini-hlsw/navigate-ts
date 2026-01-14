@@ -84,7 +84,7 @@ export function createConfiguration(overrides?: OverridePartial<Configuration>):
 export function createGuideAlarm(overrides?: OverridePartial<GuideAlarm>): GuideAlarm {
   return {
     wfs: 'OIWFS',
-    limit: 900,
+    limit: 1000,
     enabled: true,
     __typename: 'GuideAlarm',
     ...overrides,
@@ -109,7 +109,7 @@ export function createGuideState(overrides: OverridePartial<GuideConfigurationSt
 export function createGuideQuality(overrides?: OverridePartial<GuideQuality>): GuideQuality {
   return {
     centroidDetected: false,
-    flux: 899,
+    flux: 999,
     __typename: 'GuideQuality',
     ...overrides,
   };

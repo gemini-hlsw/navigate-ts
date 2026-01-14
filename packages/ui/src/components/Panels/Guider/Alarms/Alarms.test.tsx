@@ -49,17 +49,17 @@ const mocks: MockLink.MockedResponse[] = [
         guideAlarms: {
           OIWFS: createGuideAlarm({
             wfs: 'OIWFS',
-            limit: 900,
+            limit: 1000,
             enabled: true,
           }),
           PWFS1: createGuideAlarm({
             wfs: 'PWFS1',
-            limit: 901,
+            limit: 1001,
             enabled: false,
           }),
           PWFS2: createGuideAlarm({
             wfs: 'PWFS2',
-            limit: 902,
+            limit: 1002,
             enabled: false,
           }),
           __typename: 'GuideAlarms',
@@ -76,13 +76,13 @@ const mocks: MockLink.MockedResponse[] = [
       data: {
         guidersQualityValues: {
           oiwfs: createGuideQuality({
-            flux: 901,
+            flux: 1001,
           }),
           pwfs1: createGuideQuality({
-            flux: 902,
+            flux: 1002,
           }),
           pwfs2: createGuideQuality({
-            flux: 903,
+            flux: 1003,
           }),
           __typename: 'GuidersQualityValues',
         },
@@ -99,13 +99,13 @@ const mocks: MockLink.MockedResponse[] = [
       data: {
         guidersQualityValues: {
           oiwfs: createGuideQuality({
-            flux: 901,
+            flux: 1001,
           }),
           pwfs1: createGuideQuality({
-            flux: 902,
+            flux: 1002,
           }),
           pwfs2: createGuideQuality({
-            flux: 903,
+            flux: 1003,
           }),
           __typename: 'GuidersQualityValues',
         },
@@ -115,7 +115,7 @@ const mocks: MockLink.MockedResponse[] = [
   {
     request: {
       query: UPDATE_GUIDE_ALARM,
-      variables: { wfs: 'PWFS1', limit: 900 },
+      variables: { wfs: 'PWFS1', limit: 1000 },
     },
     result: (arg) => ({
       data: {

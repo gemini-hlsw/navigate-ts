@@ -16,7 +16,7 @@ describe(evaluateAlarm.name, () => {
       evaluateAlarm(
         createGuideAlarm(),
         createGuideQuality({
-          flux: 900,
+          flux: 1000,
         }),
         undefined,
       ),
@@ -29,7 +29,7 @@ describe(evaluateAlarm.name, () => {
         createGuideAlarm(),
         createGuideQuality({
           centroidDetected: true,
-          flux: 900,
+          flux: 1000,
         }),
         createGuideState(),
       ),
@@ -41,7 +41,7 @@ describe(evaluateAlarm.name, () => {
       evaluateAlarm(
         createGuideAlarm(),
         createGuideQuality({
-          flux: 900,
+          flux: 1000,
         }),
         createGuideState(),
       ),
@@ -54,7 +54,7 @@ describe(evaluateAlarm.name, () => {
         createGuideAlarm(),
         createGuideQuality({
           centroidDetected: true,
-          flux: 899,
+          flux: 999,
         }),
         createGuideState(),
       ),
@@ -67,7 +67,7 @@ describe(evaluateAlarm.name, () => {
         createGuideAlarm(),
         createGuideQuality({
           centroidDetected: true,
-          flux: 899,
+          flux: 999,
         }),
         createGuideState({ oiIntegrating: false }),
       ),
@@ -80,7 +80,7 @@ describe(evaluateAlarm.name, () => {
         createGuideAlarm(),
         createGuideQuality({
           centroidDetected: true,
-          flux: 899,
+          flux: 999,
         }),
         createGuideState({ oiIntegrating: true }),
       ),
@@ -95,7 +95,7 @@ describe(evaluateAlarmSound.name, () => {
         createGuideAlarm(),
         createGuideQuality({
           centroidDetected: true,
-          flux: 899,
+          flux: 999,
         }),
         createGuideState(),
       ),
@@ -110,7 +110,7 @@ describe(evaluateAlarmSound.name, () => {
         }),
         createGuideQuality({
           centroidDetected: true,
-          flux: 899,
+          flux: 999,
         }),
         createGuideState(),
       ),
@@ -123,7 +123,7 @@ describe(evaluateAlarmSound.name, () => {
         createGuideAlarm(),
         createGuideQuality({
           centroidDetected: true,
-          flux: 899,
+          flux: 999,
         }),
         createGuideState({ m2Inputs: [] }),
       ),
@@ -136,7 +136,7 @@ describe(evaluateAlarmSound.name, () => {
         createGuideAlarm(),
         createGuideQuality({
           centroidDetected: true,
-          flux: 899,
+          flux: 999,
         }),
         createGuideState({ mountOffload: false }),
       ),
