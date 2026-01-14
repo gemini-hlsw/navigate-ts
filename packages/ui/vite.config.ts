@@ -1,5 +1,4 @@
 import { execSync } from 'node:child_process';
-import path from 'node:path';
 
 import react from '@vitejs/plugin-react';
 import { playwright } from '@vitest/browser-playwright';
@@ -59,22 +58,18 @@ export default defineConfig(({ mode }) => ({
     'import.meta.env.FRONTEND_VERSION': JSON.stringify(frontendVersion),
   },
   resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './src'),
-      '@Contexts': path.resolve(__dirname, './src/components/Contexts'),
-      '@Telescope': path.resolve(__dirname, './src/components/Panels/Telescope'),
-      '@WavefrontSensors': path.resolve(__dirname, './src/components/Panels/WavefrontSensors'),
-      '@Guider': path.resolve(__dirname, './src/components/Panels/Guider'),
-      '@Shared': path.resolve(__dirname, './src/components/Shared'),
-      '@assets': path.resolve(__dirname, './src/assets'),
-      '@gql': path.resolve(__dirname, './src/gql'),
-    },
+    tsconfigPaths: true,
   },
   build: {
-    rollupOptions: {
+    rolldownOptions: {
       output: {
-        manualChunks(id) {
-          if (id.includes('primereact')) return 'prime';
+        advancedChunks: {
+          groups: [
+            {
+              name: 'prime',
+              test: /node_modules[\\/]primereact/,
+            },
+          ],
         },
       },
     },
