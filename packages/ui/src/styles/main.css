@@ -26,6 +26,14 @@ a {
   height: 100%;
 }
 
+.p-inputnumber {
+  .p-inputtext {
+    font-size: var(--input-font-size);
+    padding: 0;
+    text-align: center;
+  }
+}
+
 /* Smaller inputs */
 .p-dropdown {
   width: 100% !important;
@@ -49,14 +57,6 @@ a {
       padding: 3px;
       line-height: normal;
     }
-  }
-}
-
-.p-inputnumber {
-  .p-inputtext {
-    font-size: var(--input-font-size);
-    padding: 0;
-    text-align: center;
   }
 }
 
