@@ -23,9 +23,10 @@ export type SetStale = ReturnType<typeof useStale>[1];
  * useAudio hook to play audio files
  * @param mp3 - mp3 file path
  * @param webm - webm file path (fallback)
- * @param options - options for the audio player
+ * @param loop - whether to loop the audio
+ * @param loopDelay - delay between loops in milliseconds
  */
-export function useAudio(mp3: string | undefined, webm: string | undefined) {
+export function useAudio(mp3: string | undefined, webm: string | undefined, loop = false, loopDelay = 0) {
   const audio = useMemo(() => {
     if (!mp3 || !webm) return;
 
@@ -34,8 +35,31 @@ export function useAudio(mp3: string | undefined, webm: string | undefined) {
     // Be nicer to developers' ears
     if (import.meta.env.DEV) audio.volume = 0.3;
 
+    // If a delay between loops is requested, don't use native loop
+    if (loop && loopDelay === 0) audio.loop = true;
+    else audio.loop = false;
+
     return audio;
-  }, [mp3, webm]);
+  }, [mp3, webm, loop, loopDelay]);
+
+  useEffect(() => {
+    let timeoutId: NodeJS.Timeout | undefined;
+    const handleEnded = () => {
+      if (loop && loopDelay > 0 && audio) {
+        timeoutId = setTimeout(() => {
+          audio.currentTime = 0;
+          audio.play().catch((err: unknown) => console.log('error playing audio loop:', err));
+        }, loopDelay);
+      }
+    };
+
+    if (audio) audio.addEventListener('ended', handleEnded);
+
+    return () => {
+      if (audio) audio.removeEventListener('ended', handleEnded);
+      if (timeoutId) clearTimeout(timeoutId);
+    };
+  }, [audio, loop, loopDelay]);
 
   useEffect(() => {
     return () => {
