@@ -7,7 +7,7 @@ import { useAlarmValue } from '../atoms/alarm';
 export function useAlarmAudio() {
   const alarm = useAlarmValue();
 
-  const alarmAudio = useAudio(alarm?.mp3, alarm?.webm);
+  const alarmAudio = useAudio(alarm?.mp3, alarm?.webm, true, 1000);
 
   useEffect(() => {
     const checkAlarm = () => {
