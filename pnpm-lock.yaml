@@ -20,8 +20,8 @@ catalogs:
       specifier: 16.12.0
       version: 16.12.0
     lucuma-core:
-      specifier: 0.170.2
-      version: 0.170.2
+      specifier: 0.171.0
+      version: 0.171.0
     lucuma-schemas:
       specifier: 0.177.0-20260119-370d1f06
       version: 0.177.0-20260119-370d1f06
@@ -110,7 +110,7 @@ importers:
         version: 5.18.0(graphql@16.12.0)
       lucuma-core:
         specifier: 'catalog:'
-        version: 0.170.2
+        version: 0.171.0
       prisma:
         specifier: 7.3.0
         version: 7.3.0(@types/react@19.2.9)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(typescript@5.9.3)
@@ -210,7 +210,7 @@ importers:
         version: 2.16.2(@babel/core@7.28.6)(@babel/template@7.28.6)(@types/react@19.2.9)(react@19.2.3)
       lucuma-core:
         specifier: 'catalog:'
-        version: 0.170.2
+        version: 0.171.0
       lucuma-schemas:
         specifier: 'catalog:'
         version: 0.177.0-20260119-370d1f06
@@ -3337,8 +3337,8 @@ packages:
     resolution: {integrity: sha512-Lkk/vx6ak3rYkRR0Nhu4lFUT2VDnQSxBe8Hbl7f36358p6ow8Bnvr8lrLt98H8J1aGxfhbX4Fs5tYg2+FTwr5Q==}
     engines: {bun: '>=1.0.0', deno: '>=1.30.0', node: '>=8.0.0'}
 
-  lucuma-core@0.170.2:
-    resolution: {integrity: sha512-WdRzfaEHzIrXp5U7esVERw0VCOAhEHQho0uAZtNSLqT+AiDTYu4Za89HdYP1JhYid8bU+p8K9fKZ+o+rWZsTFA==}
+  lucuma-core@0.171.0:
+    resolution: {integrity: sha512-RSRE8XD6ovLXeyMFuIumpYp0q9hojWCV8+mL1T7lRtI3J7seq+RW9Yjst+YcVA+IJNYbntFlQPTi5vo7CZN1pg==}
 
   lucuma-schemas@0.177.0-20260119-370d1f06:
     resolution: {integrity: sha512-MvoFjgpxNd9j6HME6Ua4oqbPWqvtRizAm69sb60KKykiKjlWoaOj5sja3qvCjPQMekiaqQ4r+Y/HNI3Ykftfdg==}
@@ -8197,7 +8197,7 @@ snapshots:
 
   lru.min@1.1.3: {}
 
-  lucuma-core@0.170.2: {}
+  lucuma-core@0.171.0: {}
 
   lucuma-schemas@0.177.0-20260119-370d1f06: {}
 
@@ -8300,7 +8300,7 @@ snapshots:
       graphql: 16.12.0
       graphql-scalars: 1.25.0(graphql@16.12.0)
       graphql-yoga: 5.18.0(graphql@16.12.0)
-      lucuma-core: 0.170.2
+      lucuma-core: 0.171.0
       prisma: 7.3.0(@types/react@19.2.9)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(typescript@5.9.3)
     transitivePeerDependencies:
       - '@types/react'
