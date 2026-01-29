@@ -2,7 +2,8 @@ import '@xyflow/react/dist/style.css';
 
 import { useConfiguration } from '@gql/configs/Configuration';
 import type { WfsType } from '@gql/configs/gen/graphql';
-import type { Edge, Node } from '@xyflow/react';
+import { useGetGuideLoop } from '@gql/configs/GuideLoop';
+import { BaseEdge, BezierEdge, type Edge, type EdgeProps, type EdgeTypes, MarkerType, type Node } from '@xyflow/react';
 import { Background, Controls, ReactFlow, ReactFlowProvider, useReactFlow } from '@xyflow/react';
 import { useEffect, useMemo } from 'react';
 
@@ -57,6 +58,10 @@ const initialEdges: Edge[] = [
   },
 ];
 
+const edgeTypes = {
+  selfconnecting: SelfConnecting,
+} satisfies EdgeTypes;
+
 const WFS_LIST: string[] = ['OIWFS', 'PWFS1', 'PWFS2'] satisfies WfsType[];
 
 function Flow() {
@@ -64,6 +69,7 @@ function Flow() {
   const theme = useThemeValue();
   const state = useGetGuideState();
   const configuration = useConfiguration().data?.configuration;
+  const guideLoop = useGetGuideLoop().data?.guideLoop;
 
   const [sourceNodes, sourceEdges] = useMemo<[Node[], Edge[]]>(() => {
     function isSourceActive(source: string | undefined | null): boolean {
@@ -83,6 +89,18 @@ function Flow() {
     const sourceNodes: Node[] = [];
     const sourceEdges: Edge[] = [];
 
+    const [probeSource, probeTarget] = guideLoop?.probeTracking.split('➡').map(guideProbeName) ?? [];
+    if (probeSource && probeTarget) {
+      sourceEdges.push({
+        id: 'edge-self',
+        source: probeSource,
+        target: probeTarget,
+        type: 'selfconnecting',
+        className: 'inactive',
+        markerEnd: { type: MarkerType.ArrowClosed },
+      });
+    }
+
     function changeSourceState(source: string | undefined | null, state: boolean) {
       const node = sourceNodes.find((s) => s.id === source);
       if (!node) return;
@@ -96,7 +114,7 @@ function Flow() {
         data: { label: 'OIWFS' },
         position: { x: sourceNodes.length * 100, y: 0 },
         className: 'inactive',
-        type: 'input',
+        type: probeTarget === 'OIWFS' ? 'default' : 'input',
       });
     }
 
@@ -106,7 +124,7 @@ function Flow() {
         data: { label: 'PWFS1' },
         position: { x: sourceNodes.length * 100, y: 0 },
         className: 'inactive',
-        type: 'input',
+        type: probeTarget === 'PWFS1' ? 'default' : 'input',
       });
     }
 
@@ -116,7 +134,7 @@ function Flow() {
         data: { label: 'PWFS2' },
         position: { x: sourceNodes.length * 100, y: 0 },
         className: 'inactive',
-        type: 'input',
+        type: probeTarget === 'PWFS2' ? 'default' : 'input',
       });
     }
 
@@ -330,13 +348,13 @@ function Flow() {
       [...sourceNodes, ...initialNodes],
       [...sourceEdges, ...initialEdges],
     ];
-  }, [state, configuration]);
+  }, [state, configuration, guideLoop]);
 
   useEffect(() => {
     setNodes(sourceNodes);
     setEdges(sourceEdges);
 
-    const timeout = setTimeout(() => void fitView({ duration: 1000 }), 20);
+    const timeout = setTimeout(() => void fitView({ padding: '30px', duration: 1000 }), 20);
 
     return () => clearTimeout(timeout);
   }, [sourceNodes, sourceEdges, setNodes, setEdges, fitView]);
@@ -344,10 +362,12 @@ function Flow() {
   return (
     <div className="diagram">
       <ReactFlow
+        edgeTypes={edgeTypes}
         defaultNodes={initialNodes}
         defaultEdges={initialEdges}
         proOptions={{ hideAttribution: true }}
         colorMode={theme}
+        fitViewOptions={{ padding: '30px' }}
         fitView
       >
         <Background />
@@ -363,4 +383,32 @@ export default function Diagram() {
       <Flow />
     </ReactFlowProvider>
   );
+}
+
+// ref: https://reactflow.dev/examples/edges/custom-edges
+function SelfConnecting(props: EdgeProps) {
+  // we are using the default bezier edge when source and target ids are different
+  if (props.source !== props.target) {
+    return <BezierEdge {...props} />;
+  }
+
+  const { targetX, targetY, markerEnd } = props;
+  const radiusX = 20;
+  const radiusY = 10;
+  const edgePath = `M ${targetX + 6} ${targetY} A ${radiusX} ${radiusY} 0 1 0 ${targetX} ${targetY}`;
+
+  return <BaseEdge path={edgePath} markerEnd={markerEnd} />;
+}
+
+function guideProbeName(probe: string | undefined) {
+  switch (probe) {
+    case 'OI':
+      return 'OIWFS';
+    case 'P1':
+      return 'PWFS1';
+    case 'P2':
+      return 'PWFS2';
+    default:
+      return null;
+  }
 }
