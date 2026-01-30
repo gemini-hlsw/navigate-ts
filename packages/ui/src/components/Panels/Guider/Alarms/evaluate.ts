@@ -25,8 +25,8 @@ export function evaluateAlarm(
   const isActive = alarmIsActive(guideState, alarm);
 
   if (correctingM1OrM2 && isActive) {
-    if (guideQuality.flux < alarm.limit) return 'GUIDE_COUNTS';
     if (!guideQuality.centroidDetected) return 'SUBAPERTURES_BAD';
+    if (guideQuality.flux < alarm.limit) return 'GUIDE_COUNTS';
   }
   return undefined;
 }
