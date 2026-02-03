@@ -3,6 +3,7 @@ import '@xyflow/react/dist/style.css';
 import { useConfiguration } from '@gql/configs/Configuration';
 import type { WfsType } from '@gql/configs/gen/graphql';
 import { useGetGuideLoop } from '@gql/configs/GuideLoop';
+import type { GuideProbe } from '@gql/server/gen/graphql';
 import { BaseEdge, BezierEdge, type Edge, type EdgeProps, type EdgeTypes, MarkerType, type Node } from '@xyflow/react';
 import { Background, Controls, ReactFlow, ReactFlowProvider, useReactFlow } from '@xyflow/react';
 import { useEffect, useMemo } from 'react';
@@ -89,7 +90,8 @@ function Flow() {
     const sourceNodes: Node[] = [];
     const sourceEdges: Edge[] = [];
 
-    const [probeSource, probeTarget] = guideLoop?.probeTracking.split('➡').map(guideProbeName) ?? [];
+    const probeSource = guideProbeName(state.probeGuide?.from);
+    const probeTarget = guideProbeName(state.probeGuide?.to);
     if (probeSource && probeTarget) {
       sourceEdges.push({
         id: 'edge-self',
@@ -400,15 +402,13 @@ function SelfConnecting(props: EdgeProps) {
   return <BaseEdge path={edgePath} markerEnd={markerEnd} />;
 }
 
-function guideProbeName(probe: string | undefined) {
+function guideProbeName(probe: GuideProbe | null | undefined) {
   switch (probe) {
-    case 'OI':
+    case 'GMOS_OIWFS':
+    case 'FLAMINGOS2_OIWFS':
       return 'OIWFS';
-    case 'P1':
-      return 'PWFS1';
-    case 'P2':
-      return 'PWFS2';
+
     default:
-      return null;
+      return probe;
   }
 }

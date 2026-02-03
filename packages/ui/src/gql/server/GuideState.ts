@@ -13,6 +13,10 @@ export const GUIDE_STATE_FRAGMENT = graphql(`
     p2Integrating
     oiIntegrating
     acIntegrating
+    probeGuide {
+      from
+      to
+    }
   }
 `);
 export const GUIDE_STATE_SUBSCRIPTION = graphql(`

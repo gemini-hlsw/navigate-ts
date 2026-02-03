@@ -15,10 +15,13 @@ export function useGetGuideState() {
       m2TipTiltEnable: false,
       m2TipTiltFocusLink: false,
       m2TipTiltSource: 'OIWFS',
-      probeTracking: 'OI➡OI',
       p1Integrating: false,
       p2Integrating: false,
       oiIntegrating: false,
+      probeGuide: {
+        from: null,
+        to: null,
+      },
     };
 
   return {
@@ -27,14 +30,14 @@ export function useGetGuideState() {
     m1CorrectionsEnable: Boolean(data.m1Input),
     m2ComaEnable: data.m2Coma,
     m2ComaM1CorrectionsSource: data.m1Input,
-    m2FocusEnable: data.m2Inputs ? data.m2Inputs.length : false,
+    m2FocusEnable: data.m2Inputs ? Boolean(data.m2Inputs.length) : false,
     m2FocusSource: 'OIWFS',
-    m2TipTiltEnable: data.m2Inputs ? data.m2Inputs.length : false,
-    m2TipTiltFocusLink: data.m2Inputs ? data.m2Inputs.length : false,
-    m2TipTiltSource: data.m2Inputs ? (data.m2Inputs as string[]).join(',') : 'NONE',
-    probeTracking: 'OI➡OI',
+    m2TipTiltEnable: data.m2Inputs ? Boolean(data.m2Inputs.length) : false,
+    m2TipTiltFocusLink: data.m2Inputs ? Boolean(data.m2Inputs.length) : false,
+    m2TipTiltSource: data.m2Inputs ? data.m2Inputs.join(',') : 'NONE',
     p1Integrating: data.p1Integrating,
     p2Integrating: data.p2Integrating,
     oiIntegrating: data.oiIntegrating,
+    probeGuide: data.probeGuide,
   };
 }
