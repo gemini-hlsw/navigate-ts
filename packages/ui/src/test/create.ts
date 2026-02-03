@@ -102,6 +102,12 @@ export function createGuideState(overrides: OverridePartial<GuideConfigurationSt
     acIntegrating: false,
     p1Integrating: false,
     p2Integrating: false,
+    probeGuide: {
+      from: 'GMOS_OIWFS',
+      to: 'PWFS1',
+      ...overrides.probeGuide,
+      __typename: 'ProbeGuide',
+    },
     ...overrides,
   };
 }
