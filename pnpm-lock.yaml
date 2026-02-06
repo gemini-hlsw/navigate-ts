@@ -23,8 +23,8 @@ catalogs:
       specifier: 0.172.0
       version: 0.172.0
     lucuma-schemas:
-      specifier: 0.177.0-20260203-0fe7a671
-      version: 0.177.0-20260203-0fe7a671
+      specifier: 0.177.0-20260206-6150497e
+      version: 0.177.0-20260206-6150497e
 
 overrides:
   vite: 8.0.0-beta.11
@@ -132,7 +132,7 @@ importers:
         version: 24.10.9
       lucuma-schemas:
         specifier: 'catalog:'
-        version: 0.177.0-20260203-0fe7a671
+        version: 0.177.0-20260206-6150497e
 
   packages/e2e:
     devDependencies:
@@ -213,7 +213,7 @@ importers:
         version: 0.172.0
       lucuma-schemas:
         specifier: 'catalog:'
-        version: 0.177.0-20260203-0fe7a671
+        version: 0.177.0-20260206-6150497e
       lucuma-ui-css:
         specifier: 0.175.0
         version: 0.175.0
@@ -2712,6 +2712,7 @@ packages:
 
   glob@10.5.0:
     resolution: {integrity: sha512-DfXN8DfhJ7NH3Oe7cFmu3NCu1wKbkReJ8TorzSAFbSKrlNaQSKfIzqYqVY8zlbs2NLBbWpRiU52GX2PbaBVNkg==}
+    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
     hasBin: true
 
   global-modules@2.0.0:
@@ -3338,8 +3339,8 @@ packages:
   lucuma-core@0.172.0:
     resolution: {integrity: sha512-WxDf098RYQWGh5Qg+CM/srNVLCKlLi78mYrndEbFBqEgDIFE+ZzcBjUElQ05DcamdzsbotMumVMbWHp2G0ZRrQ==}
 
-  lucuma-schemas@0.177.0-20260203-0fe7a671:
-    resolution: {integrity: sha512-Gv63OBYt70Hi7fsgeysGUG+13I3xkpl0QYvavFI0sFFfpsgNKTHhRi9Z5iaPUCLYs66a+c36Z0nrFkqy6qdJBQ==}
+  lucuma-schemas@0.177.0-20260206-6150497e:
+    resolution: {integrity: sha512-EN0hZOM2H0ZiaHtY28/3Jp0DZClrwiuD2QL4j7oPZSVHZSVByw7ih4EW/b63aqZS7e9fYLjls0VTi/9YoE2Bsg==}
 
   lucuma-ui-css@0.175.0:
     resolution: {integrity: sha512-VwsYLqxRrrC9jdoz8Sg/BwcIuFjC4iWL1QRjQdvSmajGiG+Qdg3h/g7ZWAUR1ZBnKct+Crs2qWAw5BxO5zMLDg==}
@@ -8192,7 +8193,7 @@ snapshots:
 
   lucuma-core@0.172.0: {}
 
-  lucuma-schemas@0.177.0-20260203-0fe7a671: {}
+  lucuma-schemas@0.177.0-20260206-6150497e: {}
 
   lucuma-ui-css@0.175.0: {}
 
