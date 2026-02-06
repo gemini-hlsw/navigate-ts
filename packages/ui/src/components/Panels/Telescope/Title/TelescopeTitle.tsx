@@ -1,7 +1,10 @@
 import { useImportObservation } from '@Contexts/Variables/Modals/OdbImport/useImportObservation';
 import { useConfiguration } from '@gql/configs/Configuration';
 import { useObservationById } from '@gql/odb/Observation';
+import { useRefreshEphemerisFiles } from '@gql/server/Ephemeris';
 import { Title, TitleDropdown } from '@Shared/Title/Title';
+import { subDays } from 'date-fns';
+import { dateToLocalObservingNight } from 'lucuma-core';
 import { Button } from 'primereact/button';
 import { Divider } from 'primereact/divider';
 
@@ -26,6 +29,8 @@ export function TelescopeTitle({ prevPanel, nextPanel }: ParamsInterface) {
   const configuration = configurationData?.configuration;
   const [importObservation, { loading: importLoading }] = useImportObservation();
   const [getObservation, { loading: getObservationLoading }] = useObservationById();
+  const [refreshEphemerisFiles, { loading: refreshLoading }] = useRefreshEphemerisFiles();
+
   const toast = useToast();
 
   async function reimportObservation() {
@@ -53,7 +58,22 @@ export function TelescopeTitle({ prevPanel, nextPanel }: ParamsInterface) {
     }
   }
 
-  const loading = importLoading || getObservationLoading || configurationLoading;
+  async function refreshEphemerides() {
+    const now = new Date();
+    const start = dateToLocalObservingNight(subDays(now, 1));
+    const end = dateToLocalObservingNight(now);
+
+    const { data } = await refreshEphemerisFiles({ variables: { start, end } });
+    if (data?.refreshEphemerisFiles.result === 'SUCCESS') {
+      toast?.show({
+        severity: 'success',
+        summary: 'Success',
+        detail: `Ephemerides refreshed (from ${start} to ${end})`,
+      });
+    }
+  }
+
+  const loading = importLoading || getObservationLoading || configurationLoading || refreshLoading;
 
   return (
     <Title title="TELESCOPE SETUP" prevPanel={prevPanel} nextPanel={nextPanel}>
@@ -66,6 +86,7 @@ export function TelescopeTitle({ prevPanel, nextPanel }: ParamsInterface) {
           onClick={reimportObservation}
         />
         <Button disabled={!canEdit} text label="Import from catalog" onClick={() => setCatalogVisible(true)} />
+        <Button disabled={!canEdit || loading} text label="Refresh TCS ephemerides" onClick={refreshEphemerides} />
         <Divider />
         <Button disabled={!canEdit} className="p-button-text under-construction" label="Edit targets" />
       </TitleDropdown>
