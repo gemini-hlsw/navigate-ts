@@ -40,8 +40,8 @@ importers:
         specifier: 4.4.0
         version: 4.4.0(@types/node@24.10.9)(eslint@9.39.2(jiti@2.6.1))(graphql@16.12.0)(typescript@5.9.3)
       '@tsconfig/node-ts':
-        specifier: 23.6.2
-        version: 23.6.2
+        specifier: 23.6.3
+        version: 23.6.3
       '@tsconfig/node24':
         specifier: 24.0.4
         version: 24.0.4
@@ -1389,8 +1389,8 @@ packages:
   '@ts-morph/common@0.23.0':
     resolution: {integrity: sha512-m7Lllj9n/S6sOkCkRftpM7L24uvmfXQFedlW/4hENcuJH1HHm9u5EgxZb9uVjQSCGrbBWBkOGgcTxNg36r6ywA==}
 
-  '@tsconfig/node-ts@23.6.2':
-    resolution: {integrity: sha512-WcU3KR3tHB8XMotRBpUEGfPLT3W0gAhrHcTxU7mNQ4N1+fwF3LbjpWP07TuhZtN5ehK3bcK/R4Zzqp7Pqd7Nqg==}
+  '@tsconfig/node-ts@23.6.3':
+    resolution: {integrity: sha512-ZnYCOAKQwB90EFAbg8+i7J6UTw3QHuqUO5kYQeiYTs2ALUDL/ujJjR+Jk2FPwpQjKCzWkt+iIisd6+8pndBnzQ==}
 
   '@tsconfig/node24@24.0.4':
     resolution: {integrity: sha512-2A933l5P5oCbv6qSxHs7ckKwobs8BDAe9SJ/Xr2Hy+nDlwmLE1GhFh/g/vXGRZWgxBg9nX/5piDtHR9Dkw/XuA==}
@@ -6057,7 +6057,7 @@ snapshots:
       mkdirp: 3.0.1
       path-browserify: 1.0.1
 
-  '@tsconfig/node-ts@23.6.2': {}
+  '@tsconfig/node-ts@23.6.3': {}
 
   '@tsconfig/node24@24.0.4': {}
 
