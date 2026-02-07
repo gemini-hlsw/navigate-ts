@@ -6,7 +6,7 @@ catalog:
   '@parcel/watcher': 2.5.6
   '@types/node': 24.10.10
   graphql: 16.12.0
-  lucuma-core: 0.172.0
+  lucuma-core: 0.173.0
   lucuma-schemas: 0.177.0-20260206-6150497e
 
 injectWorkspacePackages: true
