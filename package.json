@@ -18,7 +18,7 @@
     "build": "tsc -b",
     "lint": "pnpm lint:prettier && pnpm lint:style && pnpm -r lint:eslint",
     "lint:prettier": "prettier --check .",
-    "lint:style": "stylelint 'packages/ui/src/**/*.css'",
+    "lint:style": "stylelint 'packages/*/src/**/*.css'",
     "tsc:watch": "tsc --build --watch",
     "prepare": "node .husky/install.js"
   },

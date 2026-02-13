@@ -20,9 +20,10 @@ import {
 import { operationOutcome } from '@/test/helpers';
 import { renderWithContext } from '@/test/render';
 
-import { OIWFS, Slew, SLEW_MUTATION } from './Buttons';
+import { OIWFS, Slew } from './Buttons';
 import { OIWFS_FOLLOW_MUTATION } from './follow';
 import { GET_INSTRUMENT_PORT } from './Instrument';
+import { SLEW_MUTATION } from './Slew';
 
 describe(Slew.name, () => {
   it('should call slew mutation when pressed', async () => {

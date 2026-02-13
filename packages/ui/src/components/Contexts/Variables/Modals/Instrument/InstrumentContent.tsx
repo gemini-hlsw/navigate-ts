@@ -8,6 +8,7 @@ import {
 } from '@gql/configs/Instrument';
 import type { Instrument as InstrumentName } from '@gql/odb/gen/graphql';
 import { formatDate } from 'date-fns';
+import { when } from 'lucuma-common-ui';
 import { FilterMatchMode, FilterService } from 'primereact/api';
 import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
@@ -19,7 +20,6 @@ import { MultiSelect } from 'primereact/multiselect';
 import { useRef, useState } from 'react';
 
 import { CircleCheck, CircleXMark, Trash } from '@/components/Icons';
-import { when } from '@/Helpers/functions';
 import type { InstrumentType } from '@/types';
 
 export function InstrumentContent({

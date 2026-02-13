@@ -1,9 +1,17 @@
-# Navigate-ts
+# lucuma-ts
 
-This repository is a [monorepo](https://monorepo.tools/) for Navigate projects written in TypeScript. It contains the following projects:
+This repository is a [monorepo](https://monorepo.tools/) for projects written in TypeScript supporting libs and apps of GPP. It contains the following projects:
+
+### apps
 
 - [navigate-ui](./packages/ui): Web UI used to configure the telescope and its subsystems Navigate UI, written in React.
 - [navigate-configs](./packages/configs): Backend api to manage configurations database using TypeScript, Graphql and Prisma.
+- [resource-ui](./packages/resource): Web UI for Resource, written in React.
+
+### libs
+
+- [common-ui](./packages/common-ui/): Shared code between `navigate-ui` and `resource-ui`
+- [e2e](./packages/e2e): end-to-end tests for navigate. Running `navigate-ui`, `navigate-configs` and a [navigate-server](https://github.com/gemini-hlsw/lucuma-apps/blob/main/navigate/README.md) docker image
 
 # Running a docker Navigate instance (Production and Staging)
 

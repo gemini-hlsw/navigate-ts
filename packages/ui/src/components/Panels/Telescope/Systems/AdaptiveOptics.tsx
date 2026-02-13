@@ -4,11 +4,11 @@ import type {
   UpdateAltairInstrumentMutationVariables,
   UpdateGemsInstrumentMutationVariables,
 } from '@gql/configs/gen/graphql';
+import { isNotNullish } from 'lucuma-common-ui';
 import { Checkbox } from 'primereact/checkbox';
 import { Dropdown } from 'primereact/dropdown';
 import { InputNumber } from 'primereact/inputnumber';
 
-import { isNotNullish } from '@/Helpers/functions';
 import type { AltairInstrumentType, GemsInstrumentType } from '@/types';
 
 import { Title } from '../../../Shared/Title/Title';

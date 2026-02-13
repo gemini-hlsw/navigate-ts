@@ -1,11 +1,11 @@
 import { useCalParams } from '@gql/configs/CalParams';
 import type { AcFilter, AcLens, AcNdFilter, AcWindowSize } from '@gql/server/gen/graphql';
 import { useAcFilter, useAcLens, useAcMechsState, useAcNdFilter, useAcWindowSize } from '@gql/server/MechsState';
+import { isNotNullish, when } from 'lucuma-common-ui';
 import { Dropdown } from 'primereact/dropdown';
 import { useState } from 'react';
 
 import { useServerConfigValue } from '@/components/atoms/config';
-import { isNotNullish, when } from '@/Helpers/functions';
 
 import { useMovingLabel } from './hooks';
 

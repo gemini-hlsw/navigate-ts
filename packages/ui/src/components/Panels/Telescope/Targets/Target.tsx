@@ -1,9 +1,9 @@
 import { clsx } from 'clsx';
+import { isNotNullish, round } from 'lucuma-common-ui';
 import { useRef } from 'react';
 
 import { useCanEdit } from '@/components/atoms/auth';
 import { useSetTargetEdit } from '@/components/atoms/target';
-import { isNotNullish, round } from '@/Helpers/functions';
 import { useLongPress } from '@/Helpers/longPress';
 import type { TargetType, TypeOfTarget } from '@/types';
 

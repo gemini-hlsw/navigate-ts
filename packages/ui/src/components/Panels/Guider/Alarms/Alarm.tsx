@@ -2,6 +2,7 @@ import type { GuideAlarm, UpdateGuideAlarmMutationVariables, WfsType } from '@gq
 import type { GuideQuality } from '@gql/server/gen/graphql';
 import { Title } from '@Shared/Title/Title';
 import { clsx } from 'clsx';
+import { isNotNullish, round } from 'lucuma-common-ui';
 import type { InputNumberValueChangeEvent } from 'primereact/inputnumber';
 import { InputNumber } from 'primereact/inputnumber';
 import type { ToggleButtonChangeEvent } from 'primereact/togglebutton';
@@ -10,7 +11,6 @@ import { useId } from 'react';
 
 import type { AlarmType } from '@/components/atoms/alarm';
 import { Volume, VolumeSlash } from '@/components/Icons';
-import { isNotNullish, round } from '@/Helpers/functions';
 
 export function Alarm({
   wfs,

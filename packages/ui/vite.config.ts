@@ -114,7 +114,11 @@ export default defineConfig(({ mode }) => ({
   test: {
     clearMocks: true,
     globals: true,
-    setupFiles: ['src/gql/dev-messages.ts', 'src/test/setup.ts', 'src/test/disable-animations.css'],
+    setupFiles: [
+      'src/gql/dev-messages.ts',
+      'lucuma-common-ui/test/setup.ts',
+      'lucuma-common-ui/test/disable-animations.css',
+    ],
     onConsoleLog(log) {
       // ignore the dev mode warning in test logs
       if (log.includes('Unknown query named "%s" requested in refetchQueries options.include array')) return false;

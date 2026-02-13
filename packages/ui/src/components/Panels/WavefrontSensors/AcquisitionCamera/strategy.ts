@@ -1,6 +1,5 @@
 import type { GuideProbe, HandsetAdjustmentInput } from '@gql/server/gen/graphql';
-
-import { when } from '@/Helpers/functions';
+import { when } from 'lucuma-common-ui';
 
 import type { Alignment } from './Controls';
 

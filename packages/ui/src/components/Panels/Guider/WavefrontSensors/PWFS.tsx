@@ -8,9 +8,8 @@ import {
   usePwfs2Filter,
   usePwfs2MechsState,
 } from '@gql/server/MechsState';
+import { isNotNullish } from 'lucuma-common-ui';
 import { Dropdown } from 'primereact/dropdown';
-
-import { isNotNullish } from '@/Helpers/functions';
 
 import { useMovingLabel } from './hooks';
 

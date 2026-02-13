@@ -1,8 +1,9 @@
 import { skipToken, useMutation, useQuery } from '@apollo/client/react';
 import { useInstrumentPort } from '@gql/server/Instrument';
 import type { OptionsOf } from '@gql/util';
+import { isNullish } from 'lucuma-common-ui';
 
-import { getConfigWfs, isNullish } from '@/Helpers/functions';
+import { getConfigWfs } from '@/Helpers/functions';
 
 import { useConfiguration } from './Configuration';
 import { graphql } from './gen';

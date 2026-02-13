@@ -2,6 +2,7 @@ import './Navbar.css';
 
 import { useConfiguration } from '@gql/configs/Configuration';
 import { clsx } from 'clsx';
+import { when } from 'lucuma-common-ui';
 import { Button } from 'primereact/button';
 import type { MenuItem } from 'primereact/menuitem';
 import { SplitButton } from 'primereact/splitbutton';
@@ -16,7 +17,6 @@ import { useSetCalParamsVisible } from '@/components/atoms/calparams';
 import { useServerConfigValue } from '@/components/atoms/config';
 import { useTheme } from '@/components/atoms/theme';
 import { ChevronDown, Info, Map, Moon, SignIn, SignOut, Sliders, Sun, User } from '@/components/Icons';
-import { when } from '@/Helpers/functions';
 
 import { ConnectionLost } from './ConnectionLost';
 

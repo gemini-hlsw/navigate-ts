@@ -4,6 +4,7 @@ import { Modals } from '@Contexts/Variables/Modals/Modals';
 import { client } from '@gql/ApolloConfigs';
 import { useServerConfiguration } from '@gql/server/ServerConfiguration';
 import { Provider as AtomProvider } from 'jotai';
+import { when } from 'lucuma-common-ui';
 import { Message } from 'primereact/message';
 import { startTransition, useEffect, useState } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router';
@@ -16,8 +17,7 @@ import Layout from './components/Layout/Layout';
 import Login from './components/Login/Login';
 import { SolarProgress } from './components/SolarProgress';
 import { VersionManager } from './components/VersionManager/VersionManager';
-import { when } from './Helpers/functions';
-import { ToastProvider } from './Helpers/toast';
+import { ToastProvider } from './Helpers/ToastProvider';
 
 const router = createBrowserRouter([
   { path: '/', element: <Layout />, children: [{ index: true, element: <Home /> }] },

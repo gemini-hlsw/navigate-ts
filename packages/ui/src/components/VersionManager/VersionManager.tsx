@@ -1,11 +1,11 @@
 import { useVersion as useConfigsVersion } from '@gql/configs/Version';
 import { useVersion as useServerVersion } from '@gql/server/Version';
+import { isNotNullish } from 'lucuma-common-ui';
 import { Button } from 'primereact/button';
 import type { ToastMessage } from 'primereact/toast';
 import { Toast } from 'primereact/toast';
 import { useCallback, useEffect, useRef } from 'react';
 
-import { isNotNullish } from '@/Helpers/functions';
 import { useToast } from '@/Helpers/toast';
 
 import { RotateRight } from '../Icons';

@@ -1,12 +1,8 @@
-import { atom, useAtomValue, useSetAtom } from 'jotai';
+import { useSetAtom } from 'jotai';
 import { Toast } from 'primereact/toast';
 import { useEffect, useRef } from 'react';
 
-export const toastAtom = atom<Toast | null>(null);
-
-export function useToast() {
-  return useAtomValue(toastAtom);
-}
+import { toastAtom } from './toast';
 
 export function ToastProvider({ children }: React.PropsWithChildren) {
   const ref = useRef<Toast>(null);

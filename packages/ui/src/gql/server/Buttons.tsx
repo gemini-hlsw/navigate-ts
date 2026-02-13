@@ -7,13 +7,13 @@ import { useSlewFlags } from '@gql/configs/SlewFlags';
 import type { VariablesOf } from '@graphql-typed-document-node/core';
 import { useTcsConfigInput } from '@Telescope/Targets/inputs';
 import { clsx } from 'clsx';
+import { when } from 'lucuma-common-ui';
 import type { ButtonProps } from 'primereact/button';
 import { Button } from 'primereact/button';
 import type { ReactNode } from 'react';
 
 import { Crosshairs, CrosshairsSlash, Parking, ParkingSlash } from '@/components/Icons';
 import { BTN_CLASSES } from '@/Helpers/constants';
-import { when } from '@/Helpers/functions';
 import type { SetStale } from '@/Helpers/hooks';
 import type { SlewFlagsType } from '@/types';
 
@@ -25,7 +25,6 @@ import {
   ROTATOR_FOLLOW_MUTATION,
   SCS_FOLLOW_MUTATION,
 } from './follow';
-import { graphql } from './gen';
 import type { MechSystemState, RunSlewMutationVariables, TelescopeState } from './gen/graphql';
 import {
   MOUNT_PARK_MUTATION,
@@ -34,6 +33,7 @@ import {
   PWFS2_PARK_MUTATION,
   ROTATOR_PARK_MUTATION,
 } from './park';
+import { SLEW_MUTATION } from './Slew';
 import { GET_TELESCOPE_STATE } from './TelescopeState';
 
 // Generic mutation button
@@ -250,14 +250,6 @@ export function Pwfs2Park(props: ButtonProps) {
 }
 
 // SLEW
-export const SLEW_MUTATION = graphql(`
-  mutation runSlew($slewOptions: SlewOptionsInput!, $config: TcsConfigInput!, $obsId: ObservationId) {
-    slew(slewOptions: $slewOptions, config: $config, obsId: $obsId) {
-      result
-    }
-  }
-`);
-
 export function Slew(props: ButtonProps) {
   const { data, loading: slewLoading } = useSlewFlags();
   const slewFlags = data?.slewFlags ?? ({} as SlewFlagsType);

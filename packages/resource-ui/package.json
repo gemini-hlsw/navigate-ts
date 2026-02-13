@@ -1,0 +1,38 @@
+{
+  "name": "resource-ui",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "license": "BSD-3-Clause",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gemini-hlsw/navigate-ts.git",
+    "directory": "packages/resource-ui"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "lint:eslint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "19.2.4",
+    "react-dom": "19.2.4"
+  },
+  "devDependencies": {
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "@vitejs/plugin-react": "catalog:",
+    "@vitest/browser-playwright": "catalog:",
+    "babel-plugin-react-compiler": "catalog:",
+    "eslint-plugin-react": "catalog:",
+    "eslint-plugin-react-hooks": "catalog:",
+    "eslint-plugin-react-refresh": "catalog:",
+    "lucuma-common-ui": "workspace:*",
+    "lucuma-ui-css": "catalog:",
+    "sass": "catalog:",
+    "vite": "catalog:",
+    "vitest": "catalog:",
+    "vitest-browser-react": "catalog:"
+  }
+}

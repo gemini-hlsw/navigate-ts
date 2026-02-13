@@ -1,9 +1,9 @@
 import { useRotator, useUpdateRotator } from '@gql/configs/Rotator';
 import { Title } from '@Shared/Title/Title';
+import { isNotNullish } from 'lucuma-common-ui';
 import { Dropdown } from 'primereact/dropdown';
 import { InputNumber } from 'primereact/inputnumber';
 
-import { isNotNullish } from '@/Helpers/functions';
 import type { TrackingType } from '@/types';
 
 export function Rotator({ canEdit }: { canEdit: boolean }) {

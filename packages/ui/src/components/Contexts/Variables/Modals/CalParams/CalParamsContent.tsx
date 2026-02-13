@@ -2,6 +2,7 @@ import { useCalParams, useCalParamsHistory, useCreateCalParams } from '@gql/conf
 import type { CalParamsCreateInput } from '@gql/configs/gen/graphql';
 import { CommentConfirmButton } from '@Shared/CommentConfirmButton';
 import { clsx } from 'clsx';
+import { isNotNullish, when } from 'lucuma-common-ui';
 import { Button } from 'primereact/button';
 import { InputNumber, type InputNumberProps } from 'primereact/inputnumber';
 import { Tooltip } from 'primereact/tooltip';
@@ -11,7 +12,6 @@ import { useCanEdit } from '@/components/atoms/auth';
 import { useSetCalParamsHistoryVisible } from '@/components/atoms/calparams';
 import { useServerConfigValue } from '@/components/atoms/config';
 import { ClockRotateLeft, FloppyDisk, TriangleExclamation } from '@/components/Icons';
-import { isNotNullish, when } from '@/Helpers/functions';
 
 /**
  * Format numbers with at least 2 fraction digits.
