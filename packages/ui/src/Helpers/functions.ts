@@ -1,14 +1,9 @@
 import type { Configuration, WfsType } from '@gql/configs/gen/graphql';
 import type { GuideProbe, Instrument } from '@gql/server/gen/graphql';
+import { isNotNullish, isNullish } from 'lucuma-common-ui';
 import { signedArcSeconds } from 'lucuma-core';
 
-export function isNotNullish<T>(val: T | undefined | null): val is T {
-  return !isNullish(val);
-}
-
-export function isNullish(val: unknown): val is undefined | null {
-  return val === null || val === undefined;
-}
+export { isNotNullish, isNullish };
 
 /**
  * When `condition` is not null or undefined, returns the result of calling `trueCase()`, else

@@ -44,6 +44,7 @@
     "lucuma-core": "catalog:",
     "lucuma-schemas": "catalog:",
     "lucuma-ui-css": "0.175.0",
+    "lucuma-common-ui": "workspace:*",
     "navigate-configs": "workspace:*",
     "playwright": "1.58.2",
     "primereact": "10.9.7",
