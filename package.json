@@ -15,11 +15,11 @@
     "configs": "pnpm --filter navigate-configs",
     "e2e": "pnpm --filter navigate-e2e",
     "all": "pnpm -r",
-    "build": "tsc -b",
+    "build": "tsgo -b",
     "lint": "pnpm lint:prettier && pnpm lint:style && pnpm -r lint:eslint",
     "lint:prettier": "prettier --check .",
     "lint:style": "stylelint 'packages/ui/src/**/*.css'",
-    "tsc:watch": "tsc --build --watch",
+    "tsc:watch": "tsgo --build --watch",
     "prepare": "node .husky/install.js"
   },
   "devDependencies": {
@@ -30,6 +30,7 @@
     "@tsconfig/strictest": "2.0.8",
     "@tsconfig/vite-react": "7.0.2",
     "@types/node": "catalog:",
+    "@typescript/native-preview": "7.0.0-dev.20260209.1",
     "eslint": "9.39.2",
     "eslint-import-resolver-typescript": "4.4.4",
     "eslint-plugin-import-x": "4.16.1",

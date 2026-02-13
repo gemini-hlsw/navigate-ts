@@ -16,6 +16,7 @@ minimumReleaseAge: 2880
 minimumReleaseAgeExclude:
   - 'lucuma-core'
   - 'lucuma-schemas'
+  - '@typescript/*'
 
 trustPolicy: no-downgrade
 trustPolicyExclude:
