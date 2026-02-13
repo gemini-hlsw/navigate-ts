@@ -2,10 +2,21 @@ import '@xyflow/react/dist/style.css';
 
 import { useConfiguration } from '@gql/configs/Configuration';
 import type { WfsType } from '@gql/configs/gen/graphql';
-import { useGetGuideLoop } from '@gql/configs/GuideLoop';
 import type { GuideProbe } from '@gql/server/gen/graphql';
-import { BaseEdge, BezierEdge, type Edge, type EdgeProps, type EdgeTypes, MarkerType, type Node } from '@xyflow/react';
-import { Background, Controls, ReactFlow, ReactFlowProvider, useReactFlow } from '@xyflow/react';
+import {
+  Background,
+  BaseEdge,
+  BezierEdge,
+  Controls,
+  type Edge,
+  type EdgeProps,
+  type EdgeTypes,
+  MarkerType,
+  type Node,
+  ReactFlow,
+  ReactFlowProvider,
+  useReactFlow,
+} from '@xyflow/react';
 import { useEffect, useMemo } from 'react';
 
 import { useThemeValue } from '@/components/atoms/theme';
@@ -70,7 +81,6 @@ function Flow() {
   const theme = useThemeValue();
   const state = useGetGuideState();
   const configuration = useConfiguration().data?.configuration;
-  const guideLoop = useGetGuideLoop().data?.guideLoop;
 
   const [sourceNodes, sourceEdges] = useMemo<[Node[], Edge[]]>(() => {
     function isSourceActive(source: string | undefined | null): boolean {
@@ -350,7 +360,7 @@ function Flow() {
       [...sourceNodes, ...initialNodes],
       [...sourceEdges, ...initialEdges],
     ];
-  }, [state, configuration, guideLoop]);
+  }, [state, configuration]);
 
   useEffect(() => {
     setNodes(sourceNodes);
