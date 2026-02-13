@@ -93,10 +93,14 @@ export function firstIfOnlyOne<T>(arr: T[] | undefined): T | null {
 export function groupBy<K extends PropertyKey, T>(arr: T[], criteria: (element: T) => K): Partial<Record<K, T[]>> {
   if (Object.groupBy) return Object.groupBy(arr, criteria);
   else
-    return arr.reduce((acc: Partial<Record<K, T[]>>, item) => {
-      const key = criteria(item);
-      acc[key] ??= [];
-      acc[key].push(item);
-      return acc;
-    }, {});
+    return arr.reduce(
+      (acc, item) => {
+        const key = criteria(item);
+        acc[key] ??= [];
+        acc[key].push(item);
+        return acc;
+      },
+      // eslint-disable-next-line @typescript-eslint/prefer-reduce-type-parameter
+      Object.create(null) as Partial<Record<K, T[]>>,
+    );
 }
