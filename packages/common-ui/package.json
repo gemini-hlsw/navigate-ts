@@ -1,0 +1,19 @@
+{
+  "name": "lucuma-common-ui",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "type": "module",
+  "private": true,
+  "license": "BSD-3-Clause",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gemini-hlsw/navigate-ts.git",
+    "directory": "packages/common-ui"
+  }
+}

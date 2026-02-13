@@ -16,6 +16,14 @@
       "path": "packages/e2e",
       "name": "e2e",
     },
+    {
+      "path": "packages/common-ui",
+      "name": "common-ui",
+    },
+    {
+      "path": "packages/resource",
+      "name": "resource",
+    },
   ],
   "extensions": {
     "recommendations": [
