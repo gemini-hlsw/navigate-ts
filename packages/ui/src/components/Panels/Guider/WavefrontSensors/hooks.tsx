@@ -1,6 +1,5 @@
+import { isNotNullish, isNullish, when } from 'lucuma-common-ui';
 import { useState } from 'react';
-
-import { isNotNullish, isNullish, when } from '@/Helpers/functions';
 
 const findLabel = <T,>(options: { value: T; label: string }[], value: T | undefined) =>
   options.find((o) => o.value === value)?.label;

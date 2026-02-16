@@ -2,11 +2,11 @@ import { useUpdateConfiguration } from '@gql/configs/Configuration';
 import type { Target } from '@gql/configs/gen/graphql';
 import { useNavigateState } from '@gql/server/NavigateState';
 import { useRestoreTarget, useSwapTarget } from '@gql/server/TargetSwap';
+import { groupBy, isNullish } from 'lucuma-common-ui';
 import { Button } from 'primereact/button';
 import { SplitButton } from 'primereact/splitbutton';
 
 import { useCanEdit } from '@/components/atoms/auth';
-import { groupBy, isNullish } from '@/Helpers/functions';
 import { useToast } from '@/Helpers/toast';
 
 import { createTargetPropertiesInput, createUpdateSelectedTargetVariables, useTcsConfigInput } from './inputs';

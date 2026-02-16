@@ -4,6 +4,7 @@ import { useObservationById } from '@gql/odb/Observation';
 import { useRefreshEphemerisFiles } from '@gql/server/Ephemeris';
 import { Title, TitleDropdown } from '@Shared/Title/Title';
 import { subDays } from 'date-fns';
+import { isNullish } from 'lucuma-common-ui';
 import { dateToLocalObservingNight } from 'lucuma-core';
 import { Button } from 'primereact/button';
 import { Divider } from 'primereact/divider';
@@ -12,7 +13,6 @@ import { useCanEdit } from '@/components/atoms/auth';
 import { useSetCatalogVisible } from '@/components/atoms/catalog';
 import { useSetOdbVisible } from '@/components/atoms/odb';
 import { List } from '@/components/Icons';
-import { isNullish } from '@/Helpers/functions';
 import { useToast } from '@/Helpers/toast';
 
 interface ParamsInterface {

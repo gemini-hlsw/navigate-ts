@@ -3,9 +3,9 @@ import type { TargetType } from '@gql/configs/gen/graphql';
 import { useRotator } from '@gql/configs/Rotator';
 import { useDoImportObservation } from '@gql/configs/Target';
 import { useGetCentralWavelength, useGetGuideEnvironment } from '@gql/odb/Observation';
+import { isNotNullish, when } from 'lucuma-common-ui';
 
 import { extractMagnitude } from '@/Helpers/bands';
-import { isNotNullish, when } from '@/Helpers/functions';
 import { extractGuideTargets } from '@/Helpers/guideTargets';
 import { useTransitionPromise } from '@/Helpers/hooks';
 import { extractCentralWavelength } from '@/Helpers/wavelength';

@@ -1,12 +1,12 @@
 import { useUpdateTarget } from '@gql/configs/Target';
 import { RESET } from 'jotai/utils';
+import { isNullish, when } from 'lucuma-common-ui';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { lazy, startTransition, Suspense, useState } from 'react';
 
 import { useCanEdit } from '@/components/atoms/auth';
 import { useTargetEdit } from '@/components/atoms/target';
-import { isNullish, when } from '@/Helpers/functions';
 import type { TargetType } from '@/types';
 
 import { ModalSolarProgress } from '../ModalSolarProgress';

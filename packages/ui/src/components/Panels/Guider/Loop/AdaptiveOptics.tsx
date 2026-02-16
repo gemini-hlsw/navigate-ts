@@ -5,10 +5,10 @@ import type {
   UpdateGemsGuideLoopMutationVariables,
 } from '@gql/configs/gen/graphql';
 import { Title } from '@Shared/Title/Title';
+import { isNotNullish } from 'lucuma-common-ui';
 import { Checkbox } from 'primereact/checkbox';
 
 import { useCanEdit } from '@/components/atoms/auth';
-import { isNotNullish } from '@/Helpers/functions';
 
 export function Altair() {
   const canEdit = useCanEdit();

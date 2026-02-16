@@ -1,10 +1,10 @@
 import type { UpdateSlewFlagsMutationVariables } from '@gql/configs/gen/graphql';
 import { useSlewFlags, useUpdateSlewFlags } from '@gql/configs/SlewFlags';
+import { isNullish } from 'lucuma-common-ui';
 import { InputSwitch } from 'primereact/inputswitch';
 import { useId } from 'react';
 
 import { useCanEdit } from '@/components/atoms/auth';
-import { isNullish } from '@/Helpers/functions';
 import type { SlewFlagsType } from '@/types';
 
 export function SlewFlagsContent() {

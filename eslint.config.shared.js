@@ -3,7 +3,7 @@
 import eslint from '@eslint/js';
 import { importX } from 'eslint-plugin-import-x';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
-import { defineConfig } from 'eslint/config';
+import { defineConfig, globalIgnores } from 'eslint/config';
 import globals from 'globals';
 import { configs } from 'typescript-eslint';
 
@@ -83,7 +83,5 @@ export default defineConfig(
       },
     },
   },
-  {
-    ignores: ['node_modules', 'dist', 'public', 'reports', 'src/gql/*/gen', 'src/*/gen'],
-  },
+  globalIgnores(['node_modules', 'dist', 'public', 'reports', 'src/gql/*/gen', 'src/*/gen']),
 );

@@ -6,10 +6,9 @@ import {
   useResetGuidePointingAdjustment,
   useResetLocalPointingAdjustment,
 } from '@gql/server/PointingHandset';
+import { when } from 'lucuma-common-ui';
 import { Button } from 'primereact/button';
 import { useState } from 'react';
-
-import { when } from '@/Helpers/functions';
 
 import { AlignAngleInput, AlignmentSelector, CorrectionTable, InputControls } from './Controls';
 import { type Coords, type HandsetStrategy, strategies } from './strategy';

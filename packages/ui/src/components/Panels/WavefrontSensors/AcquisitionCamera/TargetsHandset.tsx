@@ -8,12 +8,11 @@ import {
   useResetTargetAdjustment,
   useTargetAdjustmentOffsets,
 } from '@gql/server/TargetsHandset';
+import { isNotNullish, when } from 'lucuma-common-ui';
 import { Button } from 'primereact/button';
 import { ButtonGroup } from 'primereact/buttongroup';
 import { Dropdown } from 'primereact/dropdown';
 import { useState } from 'react';
-
-import { isNotNullish, when } from '@/Helpers/functions';
 
 import {
   AlignAngleInput,

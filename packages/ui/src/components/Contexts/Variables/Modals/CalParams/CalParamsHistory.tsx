@@ -2,13 +2,13 @@ import { useRevertCalParams } from '@gql/configs/CalParams';
 import type { CalParamsHistory as CalParamsHistoryType } from '@gql/configs/gen/graphql';
 import { CommentConfirmButton } from '@Shared/CommentConfirmButton';
 import { formatDate } from 'date-fns';
+import { when } from 'lucuma-common-ui';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { lazy, startTransition, Suspense, useState } from 'react';
 
 import { useCanEdit } from '@/components/atoms/auth';
 import { useCalParamsHistoryVisible } from '@/components/atoms/calparams';
-import { when } from '@/Helpers/functions';
 import { useToast } from '@/Helpers/toast';
 
 import { ModalSolarProgress } from '../ModalSolarProgress';

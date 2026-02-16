@@ -1,5 +1,6 @@
 import { useConfiguration } from '@gql/configs/Configuration';
 import type { WfsType } from '@gql/configs/gen/graphql';
+import { formatToSignedArcseconds, isNotNullish } from 'lucuma-common-ui';
 import { Button } from 'primereact/button';
 import { Divider } from 'primereact/divider';
 import { Dropdown } from 'primereact/dropdown';
@@ -10,7 +11,7 @@ import type React from 'react';
 import { startTransition, useId, useState } from 'react';
 
 import { CaretDown, CaretLeft, CaretRight, CaretUp } from '@/components/Icons';
-import { formatToSignedArcseconds, instrumentToOiwfs, isNotNullish } from '@/Helpers/functions';
+import { instrumentToOiwfs } from '@/Helpers/functions';
 
 import type { Coords, HandsetStrategy } from './strategy';
 import { strategies, wfsStrategy } from './strategy';

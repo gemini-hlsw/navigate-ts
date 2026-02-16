@@ -24,9 +24,9 @@ import type {
   TargetPropertiesInput,
   TcsConfigInput,
 } from '@gql/server/gen/graphql';
+import { when } from 'lucuma-common-ui';
 
 import { useServerConfigValue } from '@/components/atoms/config';
-import { when } from '@/Helpers/functions';
 import type { TypeOfTarget } from '@/types';
 
 export function createRotatorTrackingInput(rotator: Rotator): RotatorTrackingInput {

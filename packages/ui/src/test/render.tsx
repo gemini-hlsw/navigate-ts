@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import type { MockLink } from '@apollo/client/testing';
 import { MockedProvider } from '@apollo/client/testing/react';
 import { makeCache } from '@gql/ApolloConfigs';

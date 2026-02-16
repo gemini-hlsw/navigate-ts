@@ -5,11 +5,10 @@ import {
   useOriginAdjustmentOffset,
   useResetOriginAdjustment,
 } from '@gql/server/OriginHandset';
+import { when } from 'lucuma-common-ui';
 import { Button } from 'primereact/button';
 import { ButtonGroup } from 'primereact/buttongroup';
 import { useState } from 'react';
-
-import { when } from '@/Helpers/functions';
 
 import {
   AlignAngleInput,

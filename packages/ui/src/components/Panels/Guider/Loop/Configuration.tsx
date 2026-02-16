@@ -3,6 +3,7 @@ import type { GuideLoop, UpdateGuideLoopMutationVariables } from '@gql/configs/g
 import { useGetGuideLoop, useUpdateGuideLoop } from '@gql/configs/GuideLoop';
 import type { GuideConfigurationInput, GuideProbe, M1CorrectionSource, TipTiltSource } from '@gql/server/gen/graphql';
 import { useGuideDisable, useGuideEnable } from '@gql/server/GuideState';
+import { isNotNullish } from 'lucuma-common-ui';
 import { Button } from 'primereact/button';
 import { Checkbox } from 'primereact/checkbox';
 import { Dropdown } from 'primereact/dropdown';
@@ -13,7 +14,7 @@ import { useCallback, useEffect, useMemo } from 'react';
 
 import { useCanEdit } from '@/components/atoms/auth';
 import { useServerConfigValue } from '@/components/atoms/config';
-import { instrumentToOiwfs, isNotNullish } from '@/Helpers/functions';
+import { instrumentToOiwfs } from '@/Helpers/functions';
 
 import { Altair, GeMS } from './AdaptiveOptics';
 import { BrokenChain, ConnectedChain } from './Chain';

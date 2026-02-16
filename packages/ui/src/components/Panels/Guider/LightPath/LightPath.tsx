@@ -3,11 +3,11 @@ import { useGetGuideLoop, useUpdateGuideLoop } from '@gql/configs/GuideLoop';
 import type { LightSink, LightSource } from '@gql/server/gen/graphql';
 import { useLightpathConfig } from '@gql/server/Lightpath';
 import { Title } from '@Shared/Title/Title';
+import { isNotNullish } from 'lucuma-common-ui';
 import { Button } from 'primereact/button';
 
 import { useCanEdit } from '@/components/atoms/auth';
 import { Check } from '@/components/Icons';
-import { isNotNullish } from '@/Helpers/functions';
 
 /**
  * | UI Option               | LightSource | LightSink |
