@@ -1,5 +1,6 @@
 import { execSync } from 'node:child_process';
 
+import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import { playwright } from '@vitest/browser-playwright';
 import type { Plugin } from 'vite';
@@ -110,6 +111,7 @@ export default defineConfig(({ mode }) => ({
     mode === 'development' &&
       mkcert({ hosts: ['localhost', 'local.lucuma.xyz', 'navigate.lucuma.xyz', 'navigate.gemini.edu'] }),
     mode === 'production' && buildVersionFile,
+    tailwindcss(),
   ],
   test: {
     clearMocks: true,

@@ -20,6 +20,7 @@
     "react-dom": "19.2.4"
   },
   "devDependencies": {
+    "@tailwindcss/vite": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "@vitejs/plugin-react": "catalog:",
@@ -31,6 +32,8 @@
     "lucuma-common-ui": "workspace:*",
     "lucuma-ui-css": "catalog:",
     "sass": "catalog:",
+    "tailwind-merge": "catalog:",
+    "tailwindcss": "catalog:",
     "vite": "catalog:",
     "vitest": "catalog:",
     "vitest-browser-react": "catalog:"
