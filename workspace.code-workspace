@@ -32,6 +32,7 @@
       "ms-playwright.playwright",
       "prisma.prisma",
       "stylelint.vscode-stylelint",
+      "bradlc.vscode-tailwindcss",
     ],
   },
   "settings": {
@@ -48,6 +49,7 @@
         "source.fixAll.stylelint": "explicit",
       },
     },
+    "tailwindCSS.classFunctions": ["cn", "twMerge"],
   },
   "tasks": {
     "version": "2.0.0",

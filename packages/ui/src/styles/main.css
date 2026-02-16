@@ -1,5 +1,6 @@
 @import url('./lucuma-ui.scss');
 @import url('./helpers.css');
+@import 'tailwindcss';
 
 :root {
   --navigate-accent-color: rgb(144 238 144 / 80%);
@@ -204,18 +205,6 @@ button.under-construction {
   border-color: var(--yellow-400) !important;
   color: var(--yellow-400) !important;
   cursor: not-allowed;
-}
-
-/* Content only visible to screenreaders */
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  white-space: nowrap;
-  border-width: 0;
 }
 
 .error-container {
