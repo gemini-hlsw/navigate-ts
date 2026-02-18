@@ -31,19 +31,19 @@
   "dependencies": {
     "@prisma/adapter-pg": "7.3.0",
     "@prisma/client": "7.3.0",
-    "graphql": "catalog:",
+    "graphql": "16.12.0",
     "graphql-scalars": "1.25.0",
     "graphql-yoga": "5.18.0",
-    "lucuma-core": "catalog:",
+    "lucuma-core": "0.173.0",
     "prisma": "7.3.0"
   },
   "devDependencies": {
     "@eddeee888/gcg-typescript-resolver-files": "0.15.0",
-    "@graphql-codegen/cli": "catalog:",
-    "@parcel/watcher": "catalog:",
+    "@graphql-codegen/cli": "6.1.1",
+    "@parcel/watcher": "2.5.6",
     "@testcontainers/postgresql": "11.11.0",
-    "@types/node": "catalog:",
-    "lucuma-schemas": "catalog:"
+    "@types/node": "24.10.13",
+    "lucuma-schemas": "0.177.0-20260217-2e3d340a"
   },
   "files": [
     "dist",
