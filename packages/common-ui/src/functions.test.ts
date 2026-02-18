@@ -1,4 +1,12 @@
-import { formatToSignedArcseconds, isNotNullish, isNullish, round, when } from './functions.ts';
+import {
+  firstIfOnlyOne,
+  formatDateTime,
+  formatToSignedArcseconds,
+  isNotNullish,
+  isNullish,
+  round,
+  when,
+} from './functions.ts';
 
 describe(isNullish.name, () => {
   it('should return true for null or undefined', () => {
@@ -107,5 +115,41 @@ describe(when.name, () => {
         () => 'default',
       ),
     ).toBe('default');
+  });
+});
+
+describe(firstIfOnlyOne.name, () => {
+  it('should return the first element if there is only one', () => {
+    expect(firstIfOnlyOne([1])).toBe(1);
+    expect(firstIfOnlyOne(['a'])).toBe('a');
+  });
+
+  it('should return null if there are multiple elements', () => {
+    expect(firstIfOnlyOne([1, 2])).toBeNull();
+    expect(firstIfOnlyOne(['a', 'b'])).toBeNull();
+  });
+
+  it('should return null for an empty array', () => {
+    expect(firstIfOnlyOne([])).toBeNull();
+  });
+
+  it('should return null for undefined input', () => {
+    expect(firstIfOnlyOne(undefined)).toBeNull();
+  });
+});
+
+describe(formatDateTime.name, () => {
+  it('should format date with seconds', () => {
+    const date = new Date('2024-01-01 12:34:56');
+    expect(formatDateTime(date)).toBe('2024-01-01 12:34:56');
+  });
+
+  it('should format date without seconds', () => {
+    const date = new Date('2024-01-01 12:34:56');
+    expect(formatDateTime(date, false)).toBe('2024-01-01 12:34');
+  });
+
+  it('should handle string input', () => {
+    expect(formatDateTime('2024-01-01 12:34:56')).toBe('2024-01-01 12:34:56');
   });
 });

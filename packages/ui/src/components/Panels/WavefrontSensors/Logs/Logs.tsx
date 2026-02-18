@@ -1,7 +1,8 @@
 import type { LogMessage } from '@gql/server/gen/graphql';
 import { useLogMessages } from '@gql/server/Logs';
 import { Title } from '@Shared/Title/Title';
-import { formatDate } from 'date-fns';
+import { parseJSON } from 'date-fns';
+import { formatDateTime } from 'lucuma-common-ui';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 
@@ -25,8 +26,8 @@ export default function Logs() {
         <Column
           field="timestamp"
           header="Timestamp"
-          className="text-small"
-          body={(t: LogMessage) => formatDate(new Date(t.timestamp), 'Ppp')}
+          className="text-small text-nowrap"
+          body={(t: LogMessage) => formatDateTime(parseJSON(t.timestamp), true)}
         ></Column>
         <Column field="message" header="Message" className="log-message text-small"></Column>
       </DataTable>
