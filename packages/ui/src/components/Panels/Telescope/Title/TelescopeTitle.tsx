@@ -3,7 +3,6 @@ import { useConfiguration } from '@gql/configs/Configuration';
 import { useObservationById } from '@gql/odb/Observation';
 import { useRefreshEphemerisFiles } from '@gql/server/Ephemeris';
 import { Title, TitleDropdown } from '@Shared/Title/Title';
-import { subDays } from 'date-fns';
 import { isNullish } from 'lucuma-common-ui';
 import { dateToLocalObservingNight } from 'lucuma-core';
 import { Button } from 'primereact/button';
@@ -59,16 +58,14 @@ export function TelescopeTitle({ prevPanel, nextPanel }: ParamsInterface) {
   }
 
   async function refreshEphemerides() {
-    const now = new Date();
-    const start = dateToLocalObservingNight(subDays(now, 1));
-    const end = dateToLocalObservingNight(now);
+    const observingNight = dateToLocalObservingNight(new Date());
 
-    const { data } = await refreshEphemerisFiles({ variables: { start, end } });
+    const { data } = await refreshEphemerisFiles({ variables: { observingNight } });
     if (data?.refreshEphemerisFiles.result === 'SUCCESS') {
       toast?.show({
         severity: 'success',
         summary: 'Success',
-        detail: `Ephemerides refreshed (from ${start} to ${end})`,
+        detail: `Ephemerides refreshed (for ${observingNight})`,
       });
     }
   }
