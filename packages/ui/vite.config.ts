@@ -1,6 +1,5 @@
 import { execSync } from 'node:child_process';
 
-import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import { playwright } from '@vitest/browser-playwright';
 import type { Plugin } from 'vite';
@@ -25,7 +24,7 @@ const frontendVersion = `${version}+${formatDate(buildTime)}.${commitHash}`;
 /**
  * Adds a 'version.txt' file with the current version to the build output
  */
-const buildVersionFile: Plugin = {
+const buildVersionFile = (): Plugin => ({
   name: 'build-version-file',
   apply: 'build',
   buildStart() {
@@ -36,7 +35,7 @@ const buildVersionFile: Plugin = {
       source: frontendVersion,
     });
   },
-};
+});
 
 function fixCssRoot() {
   return {
@@ -64,7 +63,7 @@ export default defineConfig(({ mode }) => ({
   build: {
     rolldownOptions: {
       output: {
-        advancedChunks: {
+        codeSplitting: {
           groups: [
             {
               name: 'prime',
@@ -110,8 +109,7 @@ export default defineConfig(({ mode }) => ({
     }),
     mode === 'development' &&
       mkcert({ hosts: ['localhost', 'local.lucuma.xyz', 'navigate.lucuma.xyz', 'navigate.gemini.edu'] }),
-    mode === 'production' && buildVersionFile,
-    tailwindcss(),
+    mode === 'production' && buildVersionFile(),
   ],
   test: {
     clearMocks: true,

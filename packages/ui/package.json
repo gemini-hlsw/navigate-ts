@@ -28,7 +28,6 @@
     "@graphql-codegen/client-preset": "5.2.2",
     "@graphql-typed-document-node/core": "3.2.0",
     "@parcel/watcher": "catalog:",
-    "@tailwindcss/vite": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "@vitejs/plugin-react": "catalog:",
