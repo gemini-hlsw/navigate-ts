@@ -29,7 +29,7 @@
     "@tsconfig/node24": "24.0.4",
     "@tsconfig/strictest": "2.0.8",
     "@tsconfig/vite-react": "7.0.2",
-    "@types/node": "catalog:",
+    "@types/node": "24.10.13",
     "eslint": "9.39.2",
     "eslint-import-resolver-typescript": "4.4.4",
     "eslint-plugin-import-x": "4.16.1",

@@ -5,87 +5,6 @@ settings:
   excludeLinksFromLockfile: false
   injectWorkspacePackages: true
 
-catalogs:
-  default:
-    '@graphql-codegen/cli':
-      specifier: 6.1.1
-      version: 6.1.1
-    '@parcel/watcher':
-      specifier: 2.5.6
-      version: 2.5.6
-    '@tailwindcss/vite':
-      specifier: 4.1.18
-      version: 4.1.18
-    '@types/node':
-      specifier: 24.10.13
-      version: 24.10.13
-    '@types/react':
-      specifier: 19.2.14
-      version: 19.2.14
-    '@types/react-dom':
-      specifier: 19.2.3
-      version: 19.2.3
-    '@vitejs/plugin-react':
-      specifier: 5.1.4
-      version: 5.1.4
-    '@vitest/browser-playwright':
-      specifier: 4.0.18
-      version: 4.0.18
-    babel-plugin-react-compiler:
-      specifier: 1.0.0
-      version: 1.0.0
-    eslint-plugin-react:
-      specifier: 7.37.5
-      version: 7.37.5
-    eslint-plugin-react-hooks:
-      specifier: 7.0.1
-      version: 7.0.1
-    eslint-plugin-react-refresh:
-      specifier: 0.5.0
-      version: 0.5.0
-    graphql:
-      specifier: 16.12.0
-      version: 16.12.0
-    lucuma-core:
-      specifier: 0.173.0
-      version: 0.173.0
-    lucuma-schemas:
-      specifier: 0.177.0-20260217-2e3d340a
-      version: 0.177.0-20260217-2e3d340a
-    lucuma-ui-css:
-      specifier: 0.175.0
-      version: 0.175.0
-    playwright:
-      specifier: 1.58.2
-      version: 1.58.2
-    react:
-      specifier: 19.2.4
-      version: 19.2.4
-    react-dom:
-      specifier: 19.2.4
-      version: 19.2.4
-    react-router:
-      specifier: 7.13.0
-      version: 7.13.0
-    sass:
-      specifier: 1.97.3
-      version: 1.97.3
-    tailwind-merge:
-      specifier: 3.4.0
-      version: 3.4.0
-    tailwindcss:
-      specifier: 4.1.18
-      version: 4.1.18
-    vite-plugin-mkcert:
-      specifier: 1.17.9
-      version: 1.17.9
-    vitest:
-      specifier: 4.0.18
-      version: 4.0.18
-    vitest-browser-react:
-      specifier: 2.0.5
-      version: 2.0.5
-
 overrides:
   vite: 8.0.0-beta.14
 
@@ -112,7 +31,7 @@ importers:
         specifier: 7.0.2
         version: 7.0.2
       '@types/node':
-        specifier: 'catalog:'
+        specifier: 24.10.13
         version: 24.10.13
       eslint:
         specifier: 9.39.2
@@ -160,53 +79,53 @@ importers:
         specifier: 4.1.0
         version: 4.1.0
       lucuma-core:
-        specifier: 'catalog:'
+        specifier: 0.173.0
         version: 0.173.0
     devDependencies:
       '@types/react':
-        specifier: 'catalog:'
+        specifier: 19.2.14
         version: 19.2.14
       '@types/react-dom':
-        specifier: 'catalog:'
+        specifier: 19.2.3
         version: 19.2.3(@types/react@19.2.14)
       '@vitejs/plugin-react':
-        specifier: 'catalog:'
+        specifier: 5.1.4
         version: 5.1.4(vite@8.0.0-beta.14(@types/node@24.10.13)(jiti@2.6.1)(sass@1.97.3)(yaml@2.8.2))
       '@vitest/browser-playwright':
-        specifier: 'catalog:'
+        specifier: 4.0.18
         version: 4.0.18(playwright@1.58.2)(vite@8.0.0-beta.14(@types/node@24.10.13)(jiti@2.6.1)(sass@1.97.3)(yaml@2.8.2))(vitest@4.0.18)
       eslint-plugin-react:
-        specifier: 'catalog:'
+        specifier: 7.37.5
         version: 7.37.5(eslint@9.39.2(jiti@2.6.1))
       eslint-plugin-react-hooks:
-        specifier: 'catalog:'
+        specifier: 7.0.1
         version: 7.0.1(eslint@9.39.2(jiti@2.6.1))
       eslint-plugin-react-refresh:
-        specifier: 'catalog:'
+        specifier: 0.5.0
         version: 0.5.0(eslint@9.39.2(jiti@2.6.1))
       playwright:
-        specifier: 'catalog:'
+        specifier: 1.58.2
         version: 1.58.2
       react:
-        specifier: 'catalog:'
+        specifier: 19.2.4
         version: 19.2.4
       react-dom:
-        specifier: 'catalog:'
+        specifier: 19.2.4
         version: 19.2.4(react@19.2.4)
       tailwind-merge:
-        specifier: 'catalog:'
+        specifier: 3.4.0
         version: 3.4.0
       tailwindcss:
-        specifier: 'catalog:'
+        specifier: 4.1.18
         version: 4.1.18
       vite:
         specifier: 8.0.0-beta.14
         version: 8.0.0-beta.14(@types/node@24.10.13)(jiti@2.6.1)(sass@1.97.3)(yaml@2.8.2)
       vitest:
-        specifier: 'catalog:'
+        specifier: 4.0.18
         version: 4.0.18(@types/node@24.10.13)(@vitest/browser-playwright@4.0.18)(jiti@2.6.1)(sass@1.97.3)(yaml@2.8.2)
       vitest-browser-react:
-        specifier: 'catalog:'
+        specifier: 2.0.5
         version: 2.0.5(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(vitest@4.0.18)
 
   packages/configs:
@@ -218,7 +137,7 @@ importers:
         specifier: 7.3.0
         version: 7.3.0(prisma@7.3.0(typescript@5.9.3))(typescript@5.9.3)
       graphql:
-        specifier: 'catalog:'
+        specifier: 16.12.0
         version: 16.12.0
       graphql-scalars:
         specifier: 1.25.0
@@ -227,7 +146,7 @@ importers:
         specifier: 5.18.0
         version: 5.18.0(graphql@16.12.0)
       lucuma-core:
-        specifier: 'catalog:'
+        specifier: 0.173.0
         version: 0.173.0
       prisma:
         specifier: 7.3.0
@@ -237,19 +156,19 @@ importers:
         specifier: 0.15.0
         version: 0.15.0(graphql@16.12.0)
       '@graphql-codegen/cli':
-        specifier: 'catalog:'
+        specifier: 6.1.1
         version: 6.1.1(@parcel/watcher@2.5.6)(@types/node@24.10.13)(graphql@16.12.0)(typescript@5.9.3)
       '@parcel/watcher':
-        specifier: 'catalog:'
+        specifier: 2.5.6
         version: 2.5.6
       '@testcontainers/postgresql':
         specifier: 11.11.0
         version: 11.11.0
       '@types/node':
-        specifier: 'catalog:'
+        specifier: 24.10.13
         version: 24.10.13
       lucuma-schemas:
-        specifier: 'catalog:'
+        specifier: 0.177.0-20260217-2e3d340a
         version: 0.177.0-20260217-2e3d340a
 
   packages/e2e:
@@ -258,7 +177,7 @@ importers:
         specifier: 1.58.2
         version: 1.58.2
       '@types/node':
-        specifier: 'catalog:'
+        specifier: 24.10.13
         version: 24.10.13
       navigate-configs:
         specifier: workspace:*
@@ -267,62 +186,62 @@ importers:
   packages/resource-ui:
     dependencies:
       react:
-        specifier: 'catalog:'
+        specifier: 19.2.4
         version: 19.2.4
       react-dom:
-        specifier: 'catalog:'
+        specifier: 19.2.4
         version: 19.2.4(react@19.2.4)
     devDependencies:
       '@tailwindcss/vite':
-        specifier: 'catalog:'
+        specifier: 4.1.18
         version: 4.1.18(vite@8.0.0-beta.14(@types/node@24.10.13)(jiti@2.6.1)(sass@1.97.3)(yaml@2.8.2))
       '@types/react':
-        specifier: 'catalog:'
+        specifier: 19.2.14
         version: 19.2.14
       '@types/react-dom':
-        specifier: 'catalog:'
+        specifier: 19.2.3
         version: 19.2.3(@types/react@19.2.14)
       '@vitejs/plugin-react':
-        specifier: 'catalog:'
+        specifier: 5.1.4
         version: 5.1.4(vite@8.0.0-beta.14(@types/node@24.10.13)(jiti@2.6.1)(sass@1.97.3)(yaml@2.8.2))
       '@vitest/browser-playwright':
-        specifier: 'catalog:'
+        specifier: 4.0.18
         version: 4.0.18(playwright@1.58.2)(vite@8.0.0-beta.14(@types/node@24.10.13)(jiti@2.6.1)(sass@1.97.3)(yaml@2.8.2))(vitest@4.0.18)
       babel-plugin-react-compiler:
-        specifier: 'catalog:'
+        specifier: 1.0.0
         version: 1.0.0
       eslint-plugin-react:
-        specifier: 'catalog:'
+        specifier: 7.37.5
         version: 7.37.5(eslint@9.39.2(jiti@2.6.1))
       eslint-plugin-react-hooks:
-        specifier: 'catalog:'
+        specifier: 7.0.1
         version: 7.0.1(eslint@9.39.2(jiti@2.6.1))
       eslint-plugin-react-refresh:
-        specifier: 'catalog:'
+        specifier: 0.5.0
         version: 0.5.0(eslint@9.39.2(jiti@2.6.1))
       lucuma-common-ui:
         specifier: workspace:*
         version: link:../common-ui
       lucuma-ui-css:
-        specifier: 'catalog:'
+        specifier: 0.175.0
         version: 0.175.0
       sass:
-        specifier: 'catalog:'
+        specifier: 1.97.3
         version: 1.97.3
       tailwind-merge:
-        specifier: 'catalog:'
+        specifier: 3.4.0
         version: 3.4.0
       tailwindcss:
-        specifier: 'catalog:'
+        specifier: 4.1.18
         version: 4.1.18
       vite:
         specifier: 8.0.0-beta.14
         version: 8.0.0-beta.14(@types/node@24.10.13)(jiti@2.6.1)(sass@1.97.3)(yaml@2.8.2)
       vitest:
-        specifier: 'catalog:'
+        specifier: 4.0.18
         version: 4.0.18(@types/node@24.10.13)(@vitest/browser-playwright@4.0.18)(jiti@2.6.1)(sass@1.97.3)(yaml@2.8.2)
       vitest-browser-react:
-        specifier: 'catalog:'
+        specifier: 2.0.5
         version: 2.0.5(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(vitest@4.0.18)
 
   packages/ui:
@@ -340,7 +259,7 @@ importers:
         specifier: 3.2.0
         version: 3.2.0(@fortawesome/fontawesome-svg-core@7.2.0)(react@19.2.4)
       '@graphql-codegen/cli':
-        specifier: 'catalog:'
+        specifier: 6.1.1
         version: 6.1.1(@parcel/watcher@2.5.6)(@types/node@24.10.13)(graphql@16.12.0)(typescript@5.9.3)
       '@graphql-codegen/client-preset':
         specifier: 5.2.2
@@ -349,22 +268,22 @@ importers:
         specifier: 3.2.0
         version: 3.2.0(graphql@16.12.0)
       '@parcel/watcher':
-        specifier: 'catalog:'
+        specifier: 2.5.6
         version: 2.5.6
       '@tailwindcss/vite':
-        specifier: 'catalog:'
+        specifier: 4.1.18
         version: 4.1.18(vite@8.0.0-beta.14(@types/node@24.10.13)(jiti@2.6.1)(sass@1.97.3)(yaml@2.8.2))
       '@types/react':
-        specifier: 'catalog:'
+        specifier: 19.2.14
         version: 19.2.14
       '@types/react-dom':
-        specifier: 'catalog:'
+        specifier: 19.2.3
         version: 19.2.3(@types/react@19.2.14)
       '@vitejs/plugin-react':
-        specifier: 'catalog:'
+        specifier: 5.1.4
         version: 5.1.4(vite@8.0.0-beta.14(@types/node@24.10.13)(jiti@2.6.1)(sass@1.97.3)(yaml@2.8.2))
       '@vitest/browser-playwright':
-        specifier: 'catalog:'
+        specifier: 4.0.18
         version: 4.0.18(playwright@1.58.2)(vite@8.0.0-beta.14(@types/node@24.10.13)(jiti@2.6.1)(sass@1.97.3)(yaml@2.8.2))(vitest@4.0.18)
       '@xyflow/react':
         specifier: 12.10.0
@@ -379,16 +298,16 @@ importers:
         specifier: 4.1.0
         version: 4.1.0
       eslint-plugin-react:
-        specifier: 'catalog:'
+        specifier: 7.37.5
         version: 7.37.5(eslint@9.39.2(jiti@2.6.1))
       eslint-plugin-react-hooks:
-        specifier: 'catalog:'
+        specifier: 7.0.1
         version: 7.0.1(eslint@9.39.2(jiti@2.6.1))
       eslint-plugin-react-refresh:
-        specifier: 'catalog:'
+        specifier: 0.5.0
         version: 0.5.0(eslint@9.39.2(jiti@2.6.1))
       graphql:
-        specifier: 'catalog:'
+        specifier: 16.12.0
         version: 16.12.0
       graphql-ws:
         specifier: 6.0.7
@@ -400,52 +319,52 @@ importers:
         specifier: workspace:*
         version: link:../common-ui
       lucuma-core:
-        specifier: 'catalog:'
+        specifier: 0.173.0
         version: 0.173.0
       lucuma-schemas:
-        specifier: 'catalog:'
+        specifier: 0.177.0-20260217-2e3d340a
         version: 0.177.0-20260217-2e3d340a
       lucuma-ui-css:
-        specifier: 'catalog:'
+        specifier: 0.175.0
         version: 0.175.0
       navigate-configs:
         specifier: workspace:*
         version: link:../configs
       playwright:
-        specifier: 'catalog:'
+        specifier: 1.58.2
         version: 1.58.2
       primereact:
         specifier: 10.9.7
         version: 10.9.7(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       react:
-        specifier: 'catalog:'
+        specifier: 19.2.4
         version: 19.2.4
       react-dom:
-        specifier: 'catalog:'
+        specifier: 19.2.4
         version: 19.2.4(react@19.2.4)
       react-router:
-        specifier: 'catalog:'
+        specifier: 7.13.0
         version: 7.13.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       sass:
-        specifier: 'catalog:'
+        specifier: 1.97.3
         version: 1.97.3
       tailwind-merge:
-        specifier: 'catalog:'
+        specifier: 3.4.0
         version: 3.4.0
       tailwindcss:
-        specifier: 'catalog:'
+        specifier: 4.1.18
         version: 4.1.18
       vite:
         specifier: 8.0.0-beta.14
         version: 8.0.0-beta.14(@types/node@24.10.13)(jiti@2.6.1)(sass@1.97.3)(yaml@2.8.2)
       vite-plugin-mkcert:
-        specifier: 'catalog:'
+        specifier: 1.17.9
         version: 1.17.9(vite@8.0.0-beta.14(@types/node@24.10.13)(jiti@2.6.1)(sass@1.97.3)(yaml@2.8.2))
       vitest:
-        specifier: 'catalog:'
+        specifier: 4.0.18
         version: 4.0.18(@types/node@24.10.13)(@vitest/browser-playwright@4.0.18)(jiti@2.6.1)(sass@1.97.3)(yaml@2.8.2)
       vitest-browser-react:
-        specifier: 'catalog:'
+        specifier: 2.0.5
         version: 2.0.5(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(vitest@4.0.18)
 
 packages:

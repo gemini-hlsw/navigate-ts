@@ -1,35 +1,6 @@
 packages:
   - packages/*
 
-catalog:
-  '@graphql-codegen/cli': 6.1.1
-  '@parcel/watcher': 2.5.6
-  '@tailwindcss/vite': 4.1.18
-  '@types/node': 24.10.13
-  '@types/react-dom': 19.2.3
-  '@types/react': 19.2.14
-  '@vitejs/plugin-react': 5.1.4
-  '@vitest/browser-playwright': 4.0.18
-  babel-plugin-react-compiler: 1.0.0
-  eslint-plugin-react-hooks: 7.0.1
-  eslint-plugin-react-refresh: 0.5.0
-  eslint-plugin-react: 7.37.5
-  graphql: 16.12.0
-  lucuma-core: 0.173.0
-  lucuma-schemas: 0.177.0-20260217-2e3d340a
-  lucuma-ui-css: 0.175.0
-  playwright: 1.58.2
-  react-dom: 19.2.4
-  react-router: 7.13.0
-  react: 19.2.4
-  sass: 1.97.3
-  tailwind-merge: 3.4.0
-  tailwindcss: 4.1.18
-  vite-plugin-mkcert: 1.17.9
-  vite: 8.0.0-beta.14
-  vitest-browser-react: 2.0.5
-  vitest: 4.0.18
-
 injectWorkspacePackages: true
 
 # 2 days, in minutes
