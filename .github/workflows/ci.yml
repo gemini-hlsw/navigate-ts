@@ -135,6 +135,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           load: true
+          provenance: false
 
       - name: Smoke test
         run: |
@@ -192,6 +193,7 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          provenance: false
 
   deploy-server:
     environment:
