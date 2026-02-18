@@ -4,4 +4,13 @@ export default {
   rules: {
     'import-notation': null,
   },
+  languageOptions: {
+    syntax: {
+      atRules: {
+        'custom-variant': {
+          comment: 'Tailwind custom variant',
+        },
+      },
+    },
+  },
 };

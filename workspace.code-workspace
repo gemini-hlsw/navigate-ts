@@ -38,7 +38,7 @@
   "settings": {
     "editor.formatOnSave": true,
     "files.associations": {
-      "*.css": "css",
+      "*.css": "tailwindcss",
     },
     "editor.codeActionsOnSave": {
       "source.fixAll.eslint": "explicit",

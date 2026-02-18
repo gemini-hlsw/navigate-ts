@@ -1,4 +1,5 @@
 import './gql/dev-messages';
+import './styles/global.css';
 import './styles/main.css';
 
 import { PrimeReactProvider } from 'primereact/api';

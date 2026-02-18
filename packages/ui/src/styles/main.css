@@ -1,5 +1,4 @@
 @import url('./lucuma-ui.scss');
-@import url('./helpers.css');
 
 :root {
   --navigate-accent-color: rgb(144 238 144 / 80%);
