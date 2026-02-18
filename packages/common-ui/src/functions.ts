@@ -1,3 +1,4 @@
+import { formatDate } from 'date-fns';
 import { signedArcSeconds } from 'lucuma-core';
 
 export function isNotNullish<T>(val: T | undefined | null): val is T {
@@ -76,4 +77,11 @@ export function groupBy<K extends PropertyKey, T>(arr: T[], criteria: (element: 
       // eslint-disable-next-line @typescript-eslint/prefer-reduce-type-parameter
       Object.create(null) as Partial<Record<K, T[]>>,
     );
+}
+
+/**
+ * Format a date to a string with the format "yyyy-MM-dd HH:mm:ss" or "yyyy-MM-dd HH:mm" if `includeSeconds` is false.
+ */
+export function formatDateTime(date: Date | string, includeSeconds = true): string {
+  return formatDate(new Date(date), includeSeconds ? 'yyyy-MM-dd HH:mm:ss' : 'yyyy-MM-dd HH:mm');
 }

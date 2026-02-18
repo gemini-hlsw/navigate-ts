@@ -1,6 +1,6 @@
 import { useCalParamsHistory, useDeleteCalParams } from '@gql/configs/CalParams';
 import type { CalParamsHistory as CalParamsHistoryType } from '@gql/configs/gen/graphql';
-import { formatDate } from 'date-fns';
+import { formatDateTime } from 'lucuma-common-ui';
 import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
 import { ConfirmPopup, confirmPopup } from 'primereact/confirmpopup';
@@ -59,7 +59,7 @@ export function CalParamsHistoryContent({
           header="Created"
           sortable
           dataType="date"
-          body={(c: CalParamsHistoryType) => formatDate(new Date(c.createdAt), 'Pp')}
+          body={(c: CalParamsHistoryType) => formatDateTime(c.createdAt, false)}
         />
         <Column
           field="comment"

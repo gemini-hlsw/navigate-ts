@@ -7,8 +7,7 @@ import {
   useInstruments,
 } from '@gql/configs/Instrument';
 import type { Instrument as InstrumentName } from '@gql/odb/gen/graphql';
-import { formatDate } from 'date-fns';
-import { when } from 'lucuma-common-ui';
+import { formatDateTime, when } from 'lucuma-common-ui';
 import { FilterMatchMode, FilterService } from 'primereact/api';
 import { Button } from 'primereact/button';
 import { Column } from 'primereact/column';
@@ -143,7 +142,7 @@ function InstrumentTable({
           header="Created"
           sortable
           dataType="date"
-          body={(i: InstrumentType) => formatDate(new Date(i.createdAt), 'Pp')}
+          body={(i: InstrumentType) => formatDateTime(i.createdAt, false)}
         />
         <Column
           field="wfs"

@@ -1,8 +1,7 @@
 import { useRevertCalParams } from '@gql/configs/CalParams';
 import type { CalParamsHistory as CalParamsHistoryType } from '@gql/configs/gen/graphql';
 import { CommentConfirmButton } from '@Shared/CommentConfirmButton';
-import { formatDate } from 'date-fns';
-import { when } from 'lucuma-common-ui';
+import { formatDateTime, when } from 'lucuma-common-ui';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { lazy, startTransition, Suspense, useState } from 'react';
@@ -42,8 +41,7 @@ export function CalParamsHistory() {
         onConfirm={(msg) => onRevertParams(msg, selection!).then(close)}
         initialComment={when(
           selection,
-          ({ createdAt, comment }) =>
-            `Reverted to parameters from ${formatDate(new Date(createdAt), 'Pp')}\n\n${comment}`,
+          ({ createdAt, comment }) => `Reverted to parameters from ${formatDateTime(createdAt, false)}\n\n${comment}`,
         )}
       />
     </div>

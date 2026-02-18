@@ -20,6 +20,7 @@
     "lint:eslint": "eslint ."
   },
   "dependencies": {
+    "date-fns": "4.1.0",
     "lucuma-core": "catalog:"
   },
   "devDependencies": {
