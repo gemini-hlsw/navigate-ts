@@ -3,5 +3,5 @@
   "printWidth": 120,
   "plugins": ["prettier-plugin-tailwindcss"],
   "tailwindFunctions": ["cn", "twMerge", "clsx"],
-  "tailwindStylesheet": "./packages/resource-ui/src/styles/main.css"
+  "tailwindStylesheet": "./packages/resource-ui/src/styles/global.css"
 }
